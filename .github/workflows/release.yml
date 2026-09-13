@@ -76,7 +76,14 @@ jobs:
           git clone "$UPSTREAM_REPO" build/recipe-lab-sony-pmca
           cd build/recipe-lab-sony-pmca
           git checkout "$UPSTREAM_SHA"
-          git submodule update --init --recursive
+          # NOT --recursive, and that is deliberate. jni/platform (OpenMemories-Platform)
+          # is required — Android.mk includes platform/vars.mk and compiles its driver
+          # sources. But it carries a nested submodule pinned to
+          # git.code.sf.net/p/stlport/code, which no longer resolves, so a recursive
+          # init fails the job. The stlport we actually link against is the one NDK r16b
+          # ships (APP_STL := stlport_static); the submodule copy is for the platform
+          # repo's own builds. Do not "fix" this back to --recursive.
+          git submodule update --init
 
       - name: generate Recipes.java from the catalog
         run: python tools/gen_recipes.py --fork build/recipe-lab-sony-pmca
