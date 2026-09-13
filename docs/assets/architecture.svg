@@ -53,7 +53,7 @@
   <path class="arrow" d="M540 79 L578 79"/>
 
   <rect class="box" x="582" y="48" width="174" height="62" rx="7"/>
-  <text class="t" x="669" y="72" text-anchor="middle">RecipeLab.apk</text>
+  <text class="t" x="669" y="72" text-anchor="middle">SonySOOCRecipes.apk</text>
   <text class="s" x="669" y="89" text-anchor="middle">built by CI, JDK 17 +</text>
   <text class="s" x="669" y="102" text-anchor="middle">build-tools 30.0.3 + NDK r16b</text>
 

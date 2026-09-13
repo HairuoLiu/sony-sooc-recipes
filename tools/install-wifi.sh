@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Install a Recipe Lab APK onto a Sony PMCA camera over Wi-Fi ADB.
+# Install a Sony SOOC Recipes APK onto a Sony PMCA camera over Wi-Fi ADB.
 #
 #   tools/install-wifi.sh <apk> <camera-ip> [port]
 #
@@ -83,7 +83,7 @@ echo "==> installing $(basename "$APK")"
 adb -s "$TARGET" install -r "$APK"
 
 echo
-echo "==> done. Open 'Recipe Lab' from the camera's Application List."
+echo "==> done. Open 'Sony SOOC Recipes' from the camera's Application List."
 echo
 cat <<EOF
 Before you walk away:

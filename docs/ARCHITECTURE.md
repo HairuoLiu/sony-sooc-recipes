@@ -24,7 +24,7 @@ single JSON file becomes colours on a ten-year-old sensor, and where that path s
 The repository holds **99 filters** across **13 groups** and **2 engines**:
 
 - **84** are compiled into the app (engine `recipe-lab`): **77** transcribed verbatim from the
-  upstream Recipe Lab project, plus **7** authored in this repository.
+  upstream project, plus **7** authored in this repository.
 - **15** are reference-only entries (engine `film-studio-matrix`) — catalogued by name, never
   compiled, never parameterised.
 
@@ -45,12 +45,12 @@ catalog/filters.json
         │
         │  tools/gen_recipes.py
         ▼
-build/recipe-lab-sony-pmca/src/com/voxivoid/recipelab/Recipes.java
+build/recipe-lab-sony-pmca/src/com/hairuoliu/sonysoocrecipes/Recipes.java
         │
         │  tools/build_apk.sh  →  upstream build.sh
         │  (JDK 17 + Android SDK build-tools 30.0.3 + platform API 28 + NDK r16b)
         ▼
-RecipeLab-<tag>.apk          ──  signing key stays local, never committed
+SonySOOCRecipes-<tag>.apk          ──  signing key stays local, never committed
         │
         │  Sony-PMCA-RE (USB)   or   adb install -r (Wi-Fi)
         ▼
@@ -72,7 +72,7 @@ different things.** They are not two flavours of the same trick.
   <br><sub>Figure: the settings-store engine vs. the hardware-matrix engine</sub>
 </p>
 
-| | Recipe Lab | Film Studio / 胶片工坊 |
+| | upstream project | Film Studio / 胶片工坊 |
 |---|---|---|
 | Author | [voxivoid](https://github.com/voxivoid/recipe-lab-sony-pmca) | [ukiki0718-netizen](https://github.com/ukiki0718-netizen/sony-a5100-film-studio) |
 | Changes | The camera's **persistent settings store**: Creative Style + sat/con/sharp, WB + fine tune, EV, DRO, Picture Effect, plus a colour-matrix switch Sony never exposed in the menu | The in-camera image **pipeline**: a 3×3 hardware colour matrix + a shared 1024-point gamma curve |
@@ -84,7 +84,7 @@ different things.** They are not two flavours of the same trick.
 | License | **MIT** | **PolyForm Noncommercial 1.0.0** (non-OSI, no commercial use) + Fuji/Sony rights reserved |
 | Redistributable | ✅ yes | ❌ no |
 
-### Why this repository makes Recipe Lab its engine
+### Why this repository uses the upstream project as its engine
 
 1. **Clean licence.** MIT — you can fork, redistribute, and ship the APK freely.
 2. **Wide coverage.** One APK covers every PMCA body, instead of being pinned to one firmware.
@@ -280,7 +280,7 @@ Steps in order:
    third-party hotlink (status badges excepted), or a mis-named sample in `docs/assets/samples/`.
 8. On a `v*` tag, `release.yml` re-runs gates 1+1b, then clones upstream at the **pinned
    `UPSTREAM_SHA`**, regenerates, builds with JDK 17 + build-tools 30.0.3 + NDK r16b, and attaches
-   `RecipeLab-<tag>.apk` + a SHA-256 sum to the GitHub Release.
+   `SonySOOCRecipes-<tag>.apk` + a SHA-256 sum to the GitHub Release.
 
 > **Honest note.** The upstream revision is pinned in **two** places — `catalog/filters.json`
 > (`sources.recipe-lab.fetched_rev`) and `release.yml` (`UPSTREAM_SHA`) — and `test_catalog.py`
@@ -348,7 +348,7 @@ The generated Java is produced in CI (and locally, on demand) and uploaded as an
 produced only by `release.yml` and attached to a GitHub Release, never checked in. The signing key is
 local and never committed.
 
-**Provenance is enforced, not documented.** The line between MIT (Recipe Lab, transcribed verbatim and
+**Provenance is enforced, not documented.** The line between MIT (the upstream project, transcribed verbatim and
 locked by fidelity checks) and PolyForm Noncommercial (Film Studio, name-only) is a *test*, not a
 paragraph. Blurring it is the one mistake that would make the repository unsafe to host, so
 `validate_catalog.py` and `test_catalog.py` fail the build over it.

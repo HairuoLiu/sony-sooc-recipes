@@ -5,7 +5,7 @@
 
   "engines": {
     "recipe-lab": {
-      "label": "Settings-store engine (Recipe Lab)",
+      "label": "Settings-store engine (this project)",
       "what_it_does": "把配方写进相机的持久化设置存储区：创意风格及其饱和度/对比度/锐度、白平衡与微调、曝光补偿、DRO、图片效果，外加一个索尼从未在菜单里公开的色彩矩阵开关。",
       "applies_to": "应用关闭后依然生效，覆盖 P/A/S/M 与录像全部模式。",
       "limits": "只能使用该机型「存得下来」的项目。无色调曲线、无 LUT 文件、无 Log。所有风格都是近似，不是别家色彩科学的复制品。",
@@ -167,7 +167,7 @@
     { "id": "gr-hi-contrast-bw", "name": "GR Hi-Contrast B&W", "name_zh": "GR 高反差黑白", "group": "ricoh-gr", "engine": "recipe-lab", "source": "recipe-lab", "tone": "mono", "verified": true, "cross_ref": "fs-gr-hcbw", "recipe": { "style": "MONO", "sat": 0, "con": 3, "sharp": 1, "matrix": 0, "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 }, "pe": 7, "sub": 0, "ev": 0, "dro": 6 } },
     { "id": "gr-hard-monotone", "name": "GR Hard Monotone", "group": "ricoh-gr", "engine": "recipe-lab", "source": "recipe-lab", "tone": "mono", "verified": true, "recipe": { "style": "MONO", "sat": 0, "con": 2, "sharp": 2, "matrix": 0, "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 }, "pe": 0, "sub": 0, "ev": 0, "dro": 6 } },
     { "id": "gr-soft-monotone", "name": "GR Soft Monotone", "group": "ricoh-gr", "engine": "recipe-lab", "source": "recipe-lab", "tone": "mono", "verified": true, "recipe": { "style": "MONO", "sat": 0, "con": -2, "sharp": -1, "matrix": 0, "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 }, "pe": 0, "sub": 0, "ev": 0, "dro": 6 } },
-    { "id": "gr-moriyama", "name": "GR Moriyama (grainy B&W)", "name_zh": "GR 森山风", "group": "ricoh-gr", "engine": "recipe-lab", "source": "authored-here", "tone": "mono", "verified": false, "cross_ref": "fs-gr-moriyama", "note": "本仓库新写的配方，用于补上游唯一缺口（胶片工坊有、Recipe Lab 没有）。未在实机上验证，落地前请先在可丢弃素材上试拍。", "recipe": { "style": "MONO", "sat": 0, "con": 3, "sharp": 1, "matrix": 0, "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 }, "pe": 7, "sub": 0, "ev": -1, "dro": 6 } },
+    { "id": "gr-moriyama", "name": "GR Moriyama (grainy B&W)", "name_zh": "GR 森山风", "group": "ricoh-gr", "engine": "recipe-lab", "source": "authored-here", "tone": "mono", "verified": false, "cross_ref": "fs-gr-moriyama", "note": "本仓库新写的配方，用于补上游唯一缺口（胶片工坊有、上游项目没有）。未在实机上验证，落地前请先在可丢弃素材上试拍。", "recipe": { "style": "MONO", "sat": 0, "con": 3, "sharp": 1, "matrix": 0, "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 }, "pe": 7, "sub": 0, "ev": -1, "dro": 6 } },
     { "id": "gr4-cinema-green", "name": "GR Cinema Green", "name_zh": "GR 电影绿", "group": "ricoh-gr", "engine": "recipe-lab", "source": "authored-here", "tone": "color", "verified": false, "note": "本仓库自写，瞄准 GR 街拍圈常见的青绿电影调：NEUTRAL 底压两档饱和，白平衡向绿偏移 制造青调，DRO 抬一点黑位保留阴影层次。不是任何相机菜单里的既有模式，是对这种观感的独立近似。不含任何第三方 LUT 数据。未在实机验证。", "recipe": { "style": "NEUTRAL", "sat": -2, "con": 1, "sharp": 0, "matrix": 0, "wb": { "mode": "AUTO", "kelvin": 0, "ab": -1, "gm": -2 }, "pe": 0, "sub": 0, "ev": 0, "dro": 5 } },
     { "id": "gr4-cinema-yellow", "name": "GR Cinema Yellow", "name_zh": "GR 电影黄", "group": "ricoh-gr", "engine": "recipe-lab", "source": "authored-here", "tone": "color", "verified": false, "note": "本仓库自写，瞄准 GR 街拍圈常见的暖黄电影调：琥珀色白平衡微调 + 两档反差，DRO 抬黑位。不是任何相机菜单里的既有模式，是对这种观感的独立近似。不含任何第三方 LUT 数据。未在实机验证。", "recipe": { "style": "NEUTRAL", "sat": -1, "con": 2, "sharp": 0, "matrix": 0, "wb": { "mode": "AUTO", "kelvin": 0, "ab": 2, "gm": 1 }, "pe": 0, "sub": 0, "ev": 0, "dro": 5 } },
 
@@ -264,7 +264,7 @@
     { "id": "fs-gr-positive", "name": "GR Positive Film", "name_zh": "GR 正片", "group": "ricoh-gr", "engine": "film-studio-matrix", "source": "film-studio", "tone": "color", "verified": true, "cross_ref": "gr-positive-film", "strengths": [30, 50, 70, 100], "note": "参数来自 bonyback1 社区模组（Apache-2.0），非理光官方 LUT。" },
     { "id": "fs-gr-negative", "name": "Negative Film", "name_zh": "负片", "group": "ricoh-gr", "engine": "film-studio-matrix", "source": "film-studio", "tone": "color", "verified": true, "cross_ref": "gr-negative-film", "strengths": [30, 50, 70, 100] },
     { "id": "fs-gr-hcbw", "name": "High Contrast B&W", "name_zh": "高反差黑白", "group": "ricoh-gr", "engine": "film-studio-matrix", "source": "film-studio", "tone": "mono", "verified": true, "cross_ref": "gr-hi-contrast-bw", "strengths": [30, 50, 70, 100], "note": "低于 100% 会保留部分颜色。" },
-    { "id": "fs-gr-moriyama", "name": "Moriyama Daido Style", "name_zh": "森山风", "group": "ricoh-gr", "engine": "film-studio-matrix", "source": "film-studio", "tone": "mono", "verified": true, "cross_ref": "gr-moriyama", "strengths": [30, 50, 70, 100], "note": "上游两个项目之间唯一真正互补的一项：Recipe Lab 原版没有这个风格。本仓库已用设置存储区参数补写近似版本 gr-moriyama。" },
+    { "id": "fs-gr-moriyama", "name": "Moriyama Daido Style", "name_zh": "森山风", "group": "ricoh-gr", "engine": "film-studio-matrix", "source": "film-studio", "tone": "mono", "verified": true, "cross_ref": "gr-moriyama", "strengths": [30, 50, 70, 100], "note": "上游两个项目之间唯一真正互补的一项：上游项目原版没有这个风格。本仓库已用设置存储区参数补写近似版本 gr-moriyama。" },
     { "id": "fs-gr-cross", "name": "Cross Process", "name_zh": "正负逆冲", "group": "ricoh-gr", "engine": "film-studio-matrix", "source": "film-studio", "tone": "color", "verified": true, "cross_ref": "gr-cross-process", "strengths": [30, 50, 70, 100] }
   ]
 }

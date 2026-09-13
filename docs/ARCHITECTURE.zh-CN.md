@@ -19,7 +19,7 @@
 
 本仓库共有 **99 款配方**，分 **13 组**、走 **两套引擎**：
 
-- **84 款**会编译进 App（引擎 `recipe-lab`）：其中 **77 款**逐值抄自上游 Recipe Lab 项目，**7 款**
+- **84 款**会编译进 App（引擎 `recipe-lab`）：其中 **77 款**逐值抄自开源上游项目，**7 款**
   由本仓库自写。
 - **15 款**是「只登记」的条目（引擎 `film-studio-matrix`）：只记名字，不编译、不写参数。
 
@@ -39,12 +39,12 @@ catalog/filters.json
         │
         │  tools/gen_recipes.py
         ▼
-build/recipe-lab-sony-pmca/src/com/voxivoid/recipelab/Recipes.java
+build/recipe-lab-sony-pmca/src/com/hairuoliu/sonysoocrecipes/Recipes.java
         │
         │  tools/build_apk.sh  →  上游 build.sh
         │  (JDK 17 + Android SDK build-tools 30.0.3 + platform API 28 + NDK r16b)
         ▼
-RecipeLab-<tag>.apk          ──  签名密钥只在本机，永不入库
+SonySOOCRecipes-<tag>.apk          ──  签名密钥只在本机，永不入库
         │
         │  Sony-PMCA-RE (USB)   或   adb install -r (Wi-Fi)
         ▼
@@ -65,7 +65,7 @@ RecipeLab-<tag>.apk          ──  签名密钥只在本机，永不入库
   <br><sub>图：写设置的引擎 vs. 改硬件矩阵的引擎</sub>
 </p>
 
-| | Recipe Lab | 胶片工坊 / Film Studio |
+| | 上游项目 | 胶片工坊 / Film Studio |
 |---|---|---|
 | 作者 | [voxivoid](https://github.com/voxivoid/recipe-lab-sony-pmca) | [ukiki0718-netizen](https://github.com/ukiki0718-netizen/sony-a5100-film-studio) |
 | 改什么 | **相机持久化设置存储区**：创意风格 + 饱和度/对比度/锐度、白平衡与微调、曝光补偿、DRO、图片效果，外加一个索尼从未在菜单公开的色彩矩阵开关 | 机内**图像处理管线**：3×3 硬件色彩矩阵 + 1024 点共同 Gamma 曲线 |
@@ -77,7 +77,7 @@ RecipeLab-<tag>.apk          ──  签名密钥只在本机，永不入库
 | 许可 | **MIT** | **PolyForm Noncommercial 1.0.0**（非 OSI 开源，禁止商用）+ 富士/索尼权利独立保留 |
 | 能否再分发 | ✅ 可以 | ❌ 不能 |
 
-### 为什么本项目以 Recipe Lab 为引擎
+### 为什么本项目以「上游项目」为引擎
 
 1. **许可干净**：MIT，可以自由 fork、再分发、发布 APK。
 2. **覆盖面广**：一个 APK 覆盖全部 PMCA 机型，而不是绑死一台固件。
@@ -261,7 +261,7 @@ RecipeLab-<tag>.apk          ──  签名密钥只在本机，永不入库
 7. 关卡 6 扫描所有 README 与 `docs/*.md` 里的图片引用，遇到指向不存在的文件、第三方外链
    （状态徽章除外）、或 `docs/assets/samples/` 下命名错误的样例时失败。
 8. 推送 `v*` tag 时，`release.yml` 重跑关卡 1+1b，然后按**固定的 `UPSTREAM_SHA`** 克隆上游、
-   重新生成、用 JDK 17 + build-tools 30.0.3 + NDK r16b 构建，并把 `RecipeLab-<tag>.apk` 与
+   重新生成、用 JDK 17 + build-tools 30.0.3 + NDK r16b 构建，并把 `SonySOOCRecipes-<tag>.apk` 与
    SHA-256 校验和挂到 GitHub Release。
 
 > **实话实说。** 上游版本固定在**两处**——`catalog/filters.json`（`sources.recipe-lab.fetched_rev`）
@@ -326,6 +326,6 @@ sony-sooc-recipes/
 关卡 1b / 关卡 3 正是为了抓这种漂移而存在。生成的 Java 在 CI（以及本地按需）产出并作为 artifact
 上传；APK 只由 `release.yml` 产出并挂到 GitHub Release，从不入库。签名密钥只在本机，永不入库。
 
-**来源诚实是「测出来」的，不是「写出来」的。** MIT（Recipe Lab，逐值抄录、由保真检查锁死）与
+**来源诚实是「测出来」的，不是「写出来」的。** MIT（上游项目，逐值抄录、由保真检查锁死）与
 PolyForm Noncommercial（胶片工坊，只记名字）之间的那条线，是一个**测试**，不是一段话。模糊它
 是本仓库唯一会变得不宜托管的错误，所以 `validate_catalog.py` 与 `test_catalog.py` 会为此让构建失败。

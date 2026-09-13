@@ -1,10 +1,10 @@
 {
-  "$comment": "Pinned expected values for the recipes this repository authors itself. Upstream recipes are locked separately by tools/check_fidelity.py against Recipe Lab's Recipes.java; these have no upstream to compare against, so this file IS their specification. Rule enforced by tests/test_catalog.py::TestAuthoredHaveCases: an entry with source=authored-here that has no case here fails the suite, and a case pointing at anything else is dead weight. Change a value here and in catalog/filters.json together, deliberately.",
+  "$comment": "Pinned expected values for the recipes this repository authors itself. Upstream recipes are locked separately by tools/check_fidelity.py against the upstream project's Recipes.java; these have no upstream to compare against, so this file IS their specification. Rule enforced by tests/test_catalog.py::TestAuthoredHaveCases: an entry with source=authored-here that has no case here fails the suite, and a case pointing at anything else is dead weight. Change a value here and in catalog/filters.json together, deliberately.",
 
   "cases": [
     {
       "id": "gr-moriyama",
-      "why": "The one look the film-studio project has that Recipe Lab does not. Written here to close that gap: hard mono, grain via rough-mono, pulled a third of a stop so highlights do not clip.",
+      "why": "The one look the film-studio project has that the upstream project does not. Written here to close that gap: hard mono, grain via rough-mono, pulled a third of a stop so highlights do not clip.",
       "fields": {
         "name": "GR Moriyama (grainy B&W)",
         "group": "ricoh-gr",

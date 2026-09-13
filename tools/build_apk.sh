@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build RecipeLab.apk from catalog/filters.json.
+# Build SonySOOCRecipes.apk from catalog/filters.json.
 #
 #   tools/build_apk.sh [ --fork DIR ] [ --release ]
 #
@@ -71,7 +71,7 @@ python "$ROOT/tools/gen_recipes.py" --fork "$FORK"
 
 echo "==> verifying recipes against upstream"
 python "$ROOT/tools/check_fidelity.py" \
-  --upstream "$FORK/src/com/voxivoid/recipelab/Recipes.java.orig" 2>/dev/null || true
+  --upstream "$FORK/src/com/hairuoliu/sonysoocrecipes/Recipes.java.orig" 2>/dev/null || true
 
 # --- 4. build ------------------------------------------------------------------------
 echo "==> building"

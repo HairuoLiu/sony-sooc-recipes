@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate Recipe Lab's Recipes.java from catalog/filters.json.
+"""Generate the app's Recipes.java from catalog/filters.json.
 
 The camera app needs its recipes as a compiled Java array. Rather than hand-editing
 Recipes.java in the upstream fork — which is how recipes get lost — this generator is
@@ -11,7 +11,7 @@ the only thing that writes it. Add a filter to catalog/filters.json, run this, r
 
 Layout it expects in the fork:
 
-    <fork>/src/com/voxivoid/recipelab/Recipes.java
+    <fork>/src/com/hairuoliu/sonysoocrecipes/Recipes.java
 """
 
 from __future__ import annotations
@@ -23,7 +23,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CATALOG = ROOT / "catalog" / "filters.json"
-RELATIVE_TARGET = Path("src/com/voxivoid/recipelab/Recipes.java")
+RELATIVE_TARGET = Path("src/com/hairuoliu/sonysoocrecipes/Recipes.java")
 
 # group id -> the Java constant name the generated static block refers to.
 # Order here is irrelevant; order comes from the catalog's `groups` array.
@@ -44,14 +44,14 @@ GROUP_JAVA = {
     "app-look": "APPLOOK",
 }
 
-# default values baked into Recipe Lab's 10-argument constructor; we drop back to the
+# default values baked into the base app's 10-argument constructor; we drop back to the
 # short form whenever a recipe matches them, so the generated file reads like upstream's.
 DEFAULT_PE = 0
 DEFAULT_EV = 0
 DEFAULT_DRO = 6
 DRO_AUTO = 6
 
-HEADER = '''package com.voxivoid.recipelab;
+HEADER = '''package com.hairuoliu.sonysoocrecipes;
 
 /**
  * GENERATED FILE — do not edit by hand.

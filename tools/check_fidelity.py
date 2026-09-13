@@ -34,7 +34,7 @@ from gen_recipes import DEFAULT_CATALOG, generate  # noqa: E402
 CALL = re.compile(r"new Recipe\(\s*(.*?)\s*\)\s*,", re.S)
 HEAD = re.compile(r'^\s*([A-Z][A-Z0-9_]*)\s*,\s*"([^"]*)"')
 
-# Recipe Lab's constructors, as value counts after group and name are peeled off.
+# The upstream project's constructors, as value counts after group and name are peeled off.
 SHORT = 9    # style sat con sharp matrix wbMode kelvin ab gm
 MEDIUM = 12  # ... pe ev dro
 LONG = 13    # ... sub

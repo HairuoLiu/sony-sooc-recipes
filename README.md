@@ -17,7 +17,7 @@
 <p align="center">
   <a href="https://github.com/HairuoLiu/sony-sooc-recipes/actions/workflows/ci.yml"><img src="https://github.com/HairuoLiu/sony-sooc-recipes/actions/workflows/ci.yml/badge.svg" alt="catalog gates"></a>
   <a href="https://github.com/HairuoLiu/sony-sooc-recipes/actions/workflows/release.yml"><img src="https://github.com/HairuoLiu/sony-sooc-recipes/actions/workflows/release.yml/badge.svg" alt="release build"></a>
-  <a href="https://github.com/HairuoLiu/sony-sooc-recipes/releases/latest"><img src="https://img.shields.io/badge/download-RecipeLab.apk-2f81f7" alt="download APK"></a>
+  <a href="https://github.com/HairuoLiu/sony-sooc-recipes/releases/latest"><img src="https://img.shields.io/badge/download-SonySOOCRecipes.apk-2f81f7" alt="download APK"></a>
   <img src="https://img.shields.io/badge/license-MIT-3fb950" alt="MIT licence">
 </p>
 
@@ -132,7 +132,7 @@ Counts include looks that are registered by name only; **140** are compiled into
   <img src="docs/assets/install-flow.svg" width="760" alt="installation flow">
 </p>
 
-1. Download `RecipeLab.apk` from the [Releases page](https://github.com/HairuoLiu/sony-sooc-recipes/releases).
+1. Download `SonySOOCRecipes.apk` from the [Releases page](https://github.com/HairuoLiu/sony-sooc-recipes/releases).
 2. Confirm the body has `MENU → Application`. If it does not, stop.
 3. Install over **USB** with [Sony-PMCA-RE](https://github.com/ma1co/Sony-PMCA-RE). Offline, universal, no prerequisites.
 4. Open the app, pick a look with the control wheel, store it with the centre button, **power-cycle the body**.
@@ -143,7 +143,7 @@ Full walkthrough with per-OS prerequisites and a troubleshooting table:
 
 > **Before you install.** The APK is signed with a key CI generates per build. An APK
 > signed with a different key **cannot be installed over an existing one** — if the body
-> already has a RecipeLab from somewhere else, remove it first.
+> already has a Sony SOOC Recipes from somewhere else, remove it first.
 
 ---
 

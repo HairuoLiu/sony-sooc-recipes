@@ -4,7 +4,7 @@
   <b>English</b> · <a href="INSTALL.zh-CN.md">简体中文</a>
 </p>
 
-This guide walks you through installing **Recipe Lab** — an app that writes a catalog of
+This guide walks you through installing **Sony SOOC Recipes** — an app that writes a catalog of
 film-style recipes (Creative Style, Picture Effect, white balance, DRO…) into your camera,
 so older Sony bodies can produce film-like output straight out of the camera.
 
@@ -51,11 +51,11 @@ method in this repository can install anything on it.
 
 ### Get the APK
 
-Download `RecipeLab-<version>.apk` from the project's Releases page:
+Download `SonySOOCRecipes-<version>.apk` from the project's Releases page:
 
 https://github.com/HairuoLiu/sony-sooc-recipes/releases
 
-(The current release is `RecipeLab-v0.2.0.apk`, about 101 KB. The repository publishes only the
+(The current release is `SonySOOCRecipes-v0.2.0.apk`, about 101 KB. The repository publishes only the
 recipe data and build tooling; the APK is produced by CI from `catalog/filters.json`. If no
 release exists yet, build it yourself — see [ARCHITECTURE.md](ARCHITECTURE.md).)
 
@@ -63,15 +63,15 @@ release exists yet, build it yourself — see [ARCHITECTURE.md](ARCHITECTURE.md)
 >
 > 1. **The signing key is single-use.** CI has no keystore configured, so every build generates
 >    a fresh key. APKs signed with *different* keys **cannot overwrite** each other — if your
->    camera already has a Recipe Lab from somewhere else, remove it in the camera first, then
+>    camera already has a Sony SOOC Recipes from somewhere else, remove it in the camera first, then
 >    install this one.
 > 2. **Seven recipes are unverified on real hardware:** `gr-moriyama`,
 >    `kodak-vision2-500T`, Toy Camera (warm/cold), Part Color (red), Posterization, Teal Mood.
 >    They show `NOT VERIFIED` in the app. Try them on discardable footage before trusting them
 >    on something you cannot reshoot.
 >
-> The version number shown inside the app is the **upstream** version, not this repository's
-> tag. The upstream reads its version from `AndroidManifest.xml`; this repo only swaps the
+> The version number shown inside the app is the **base app's** version, not this repository's
+> tag. The base app reads its version from `AndroidManifest.xml`; this repo only swaps the
 > recipe table. Trust the release tag, not the in-app number.
 
 ---
@@ -121,7 +121,7 @@ the camera.
 
 **Command line** (prefix with `sudo` on Linux):
 ```bash
-python pmca-console.py install -f RecipeLab-<version>.apk
+python pmca-console.py install -f SonySOOCRecipes-<version>.apk
 ```
 
 The camera will blank to black and switch modes a few times — **this is normal, do not press
@@ -133,13 +133,13 @@ anything.** After about a minute the computer prints `Task completed successfull
 ### 4. Finish
 
 Unplug, **power off and on again.** The app now lives at
-`MENU → Application → Application List → Recipe Lab`.
+`MENU → Application → Application List → Sony SOOC Recipes`.
 
 ---
 
 ## Verify it worked
 
-1. Open `MENU → Application → Application List` and confirm **Recipe Lab** is listed.
+1. Open `MENU → Application → Application List` and confirm **Sony SOOC Recipes** is listed.
 2. Launch it. You should see a recipe list; turning the dial changes the live preview
    immediately.
 3. To confirm a recipe is really written into the camera: pick a recipe, press the **center
@@ -192,7 +192,7 @@ No firmware update or service mode needed.
 ```bash
 adb connect CAMERA_IP:5555      # replace with the camera's shown address, keep :5555
 adb devices                     # the target should show as "device"
-adb -s CAMERA_IP:5555 install -r RecipeLab-<version>.apk
+adb -s CAMERA_IP:5555 install -r SonySOOCRecipes-<version>.apk
 ```
 
 The repository also ships a helper: `tools/install-wifi.sh <apk> <camera-ip>` — it connects,
@@ -235,7 +235,7 @@ the daemon on the camera keeps running until you disable it in Tweak.
 | Driver won't install (Windows) | Missing/blocked USB driver | Follow ma1co's README driver steps: https://github.com/ma1co/Sony-PMCA-RE |
 | Stuck at `Waiting for camera to switch...` | Mid-handshake glitch | Unplug, power cycle the camera, reconnect, rerun |
 | Badge shows `PROTECTED` | Setting storage write-protected | Install OpenMemories-Tweak, turn off *Backup protection*, retry |
-| Installed but can't find the app | Looking in wrong menu | It is at `MENU → Application → Application List → Recipe Lab` |
+| Installed but can't find the app | Looking in wrong menu | It is at `MENU → Application → Application List → Sony SOOC Recipes` |
 | App won't open / `no live preview: ...` | Another program holds the camera | Quit Photos/Image Capture/etc., reopen the app |
 | Stored a recipe but no effect | Camera hasn't re-read settings | **Power off and on** |
 | Garbled text `Â·` | Old APK build | Install the latest release APK |

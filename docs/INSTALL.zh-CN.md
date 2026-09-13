@@ -4,7 +4,7 @@
   <a href="INSTALL.md">English</a> · <b>简体中文</b>
 </p>
 
-这份指南带你把 **Recipe Lab** 装进相机——这个应用会把一整份胶片风格配方（Creative Style、
+这份指南带你把 **Sony SOOC Recipes** 装进相机——这个应用会把一整份胶片风格配方（Creative Style、
 Picture Effect、白平衡、DRO……）写进你的相机，让你的老索尼微单直出就有胶片味。
 
 **预计耗时：** 第一次走 USB 约 10–15 分钟，加上你从没在相机上装过任何东西时的几分钟准备。
@@ -44,22 +44,22 @@ Apps（PMCA）通道，能收应用；没有，就到此为止——本仓库没
 
 ### 拿到 APK
 
-从本仓库的 Releases 下载 `RecipeLab-<版本>.apk`：
+从本仓库的 Releases 下载 `SonySOOCRecipes-<版本>.apk`：
 
 https://github.com/HairuoLiu/sony-sooc-recipes/releases
 
-（当前发布是 `RecipeLab-v0.2.0.apk`，约 101 KB。本仓库只发布配方数据和构建工具；APK 由 CI
+（当前发布是 `SonySOOCRecipes-v0.2.0.apk`，约 101 KB。本仓库只发布配方数据和构建工具；APK 由 CI
 依据 `catalog/filters.json` 生成。若还没有发布版本，见 [架构说明](ARCHITECTURE.md) 自行构建。）
 
 > **实话实说。** 两条会真咬人的：
 >
 > 1. **签名用的一次性 key。** CI 没配 keystore，每次构建临时生成一把。用不同 key 签的 APK
->    **无法覆盖安装**——如果相机上已经装过别处来的 Recipe Lab，得先在相机里把它删掉再装这个。
+>    **无法覆盖安装**——如果相机上已经装过别处来的 Sony SOOC Recipes，得先在相机里把它删掉再装这个。
 > 2. **有 7 款配方没上机验证过**：`gr-moriyama`、`kodak-vision2-500T`、Toy Camera 暖/冷、
 >    Part Color 红、Posterization、Teal Mood。它们在相机里显示为 `NOT VERIFIED`。先在可丢弃的
 >    素材上试，别拿去拍不能重来的东西。
 >
-> APK 里显示的版本号是**上游**的，不是本仓库的 tag。上游从 `AndroidManifest.xml` 读版本，
+> APK 里显示的版本号是**基础应用**的，不是本仓库的 tag。基础应用从 `AndroidManifest.xml` 读版本，
 > 本仓库只替换配方表；认 tag 就行。
 
 ---
@@ -104,7 +104,7 @@ https://github.com/HairuoLiu/sony-sooc-recipes/releases
 
 **命令行**（Linux 前加 `sudo`）：
 ```bash
-python pmca-console.py install -f RecipeLab-<版本>.apk
+python pmca-console.py install -f SonySOOCRecipes-<版本>.apk
 ```
 
 过程中相机会闪黑、自己切换模式几次——**这是正常的，不要按任何键**。约一分钟后电脑
@@ -115,13 +115,13 @@ python pmca-console.py install -f RecipeLab-<版本>.apk
 
 ### 4. 收尾
 
-拔线，**关机再开机**。应用现在位于 `MENU → Application → Application List → Recipe Lab`。
+拔线，**关机再开机**。应用现在位于 `MENU → Application → Application List → Sony SOOC Recipes`。
 
 ---
 
 ## 装上之后怎么验证成功
 
-1. 进 `MENU → Application → Application List`，确认列出了 **Recipe Lab**。
+1. 进 `MENU → Application → Application List`，确认列出了 **Sony SOOC Recipes**。
 2. 打开它。你会看到配方列表；转波轮时实时画面立刻变化。
 3. 确认配方真的写进去了：选一个配方，按**中心键**存下，然后**关机再开机**。这个风格就成了
    相机在 P/A/S/M 和录像**所有模式**下的默认，应用关着也生效。
@@ -168,7 +168,7 @@ python pmca-console.py install -f RecipeLab-<版本>.apk
 ```bash
 adb connect CAMERA_IP:5555      # 换成相机此刻显示的地址，保留 :5555
 adb devices                     # 目标应显示为 device
-adb -s CAMERA_IP:5555 install -r RecipeLab-<版本>.apk
+adb -s CAMERA_IP:5555 install -r SonySOOCRecipes-<版本>.apk
 ```
 
 仓库自带一个把手：`tools/install-wifi.sh <apk> <相机IP>`，会做连接、就绪检查、安装、并提醒你
@@ -206,7 +206,7 @@ adb disconnect CAMERA_IP:5555
 | 驱动装不上（Windows） | USB 驱动缺失/被拦 | 按 ma1co 的 README 装驱动：https://github.com/ma1co/Sony-PMCA-RE |
 | 卡在 `Waiting for camera to switch...` | 握手中途抽风 | 拔线，相机关机再开，重连，重跑 |
 | 徽标显示 `PROTECTED` | 设置存储区写保护 | 装 OpenMemories-Tweak，关掉 *Backup protection*，重试 |
-| 装完找不到应用 | 找错菜单 | 它在 `MENU → Application → Application List → Recipe Lab` |
+| 装完找不到应用 | 找错菜单 | 它在 `MENU → Application → Application List → Sony SOOC Recipes` |
 | 应用打不开 / `no live preview: ...` | 有别程序占着相机 | 退出照片/图像捕捉等，重开应用 |
 | 存了但风格没生效 | 相机还没重读设置 | **关机再开机** |
 | 文字显示 `Â·` | 旧版本 | 装最新 Release 的 APK |

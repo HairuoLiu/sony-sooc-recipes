@@ -18,7 +18,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CATALOG = ROOT / "catalog" / "filters.json"
 
-# --- constraint tables, mirrored from Recipe Lab's Recipes.java ---------------------
+# --- constraint tables, mirrored from the upstream project's Recipes.java ---------------------
 VALID_STYLES = {
     "STD", "VIVID", "NEUTRAL", "PORTRAIT", "LANDSCAPE", "MONO",
     "CLEAR", "DEEP", "LIGHT", "SUNSET", "NIGHT", "AUTUMN", "SEPIA",
@@ -59,7 +59,7 @@ class Report:
     errors   — the catalog is broken or dishonest; the build must stop.
     warnings — worth a look before this ships.
     notes    — by-design consequences of the engine that a recipe author needs to know.
-               Recipe Lab's own recipes trip these on purpose, so they are not defects.
+               The upstream project's own recipes trip these on purpose, so they are not defects.
     """
 
     def __init__(self) -> None:

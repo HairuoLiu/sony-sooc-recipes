@@ -219,7 +219,7 @@ class TestParameters(unittest.TestCase):
 class TestProvenance(unittest.TestCase):
     """Keep the repository honest about where each look came from.
 
-    Two upstreams, two very different licences. Recipe Lab is MIT and its numbers
+    Two upstreams, two very different licences. The upstream project is MIT and its numbers
     are transcribed verbatim (locked by check_fidelity.py). The film-studio project
     is PolyForm Noncommercial and ships no base APK, so its looks are recorded by
     name and never by parameter. Blurring that line is the one mistake that would
@@ -250,7 +250,7 @@ class TestProvenance(unittest.TestCase):
                                 f"{f['id']} needs a note explaining what it approximates")
 
     def test_upstream_recipe_count_is_stable(self):
-        """77 is the number Recipe Lab ships. A different number means a merge
+        """77 is the number the upstream project ships. A different number means a merge
         dropped or duplicated something, not that the project grew."""
         n = sum(1 for f in FILTERS if f.get("source") == "recipe-lab")
         self.assertEqual(n, 77, "upstream-sourced recipe count changed unexpectedly")
