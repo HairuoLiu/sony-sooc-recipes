@@ -47,6 +47,8 @@
 
 按 `MENU`，看有没有一个 **`Application`** 菜单项。有，就说明你的相机能收应用，这套能用；没有 `Application` 菜单，就停下——本仓库任何方法都装不进去。
 
+安装时如果报 `This camera does not support apps. Please check the compatibility list.`，说的就是这件事：工具请相机切到「应用安装模式」，相机拒绝了，安装器只是把这句拒绝转述出来。这是相机侧的回答，不是 APK 的问题——重装、重编多少次都一样。
+
 | 有 `MENU → Application`（支持） | 没有（不支持） |
 |---|---|
 | a6000 · a6300 · a6500 · a5100 · a5000<br>a7 / a7R / a7S / a7 II / a7R II / a7S II<br>NEX-5R · NEX-5T · NEX-6<br>RX100 III / IV / V · RX10 II / III · RX1R II<br>HX60 / HX90 / HX400 · WX500<br>a68 · a77 II · a99 II | a6100 · a6400 · a6600 · a6700 · ZV-E10<br>a7 III 及之后全部 · a9 系列 · a1 系列<br>RX100 VA 及之后 · RX10 IV · RX0 · HX99 · ZV-1 系列 |

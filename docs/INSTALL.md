@@ -231,6 +231,7 @@ the daemon on the camera keeps running until you disable it in Tweak.
 
 | Symptom | Likely cause | What to do |
 |---|---|---|
+| `This camera does not support apps` | The camera **refused** the "switch to app-install mode" USB command — its firmware has no app channel. The installer only relays that refusal; the wording is its own. | Nothing on the APK side to fix. Press `MENU` and look for `Application`. If it is missing, the body cannot run apps at all — see the model list in `docs/FAQ.md`. |
 | `No devices found` | USB not in **Mass Storage**, no card, camera off, or wrong cable/port | Set Mass Storage, insert card, power on to **USB Mode**, try another cable/port |
 | Driver won't install (Windows) | Missing/blocked USB driver | Follow ma1co's README driver steps: https://github.com/ma1co/Sony-PMCA-RE |
 | Stuck at `Waiting for camera to switch...` | Mid-handshake glitch | Unplug, power cycle the camera, reconnect, rerun |

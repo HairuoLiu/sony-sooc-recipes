@@ -202,6 +202,7 @@ adb disconnect CAMERA_IP:5555
 
 | 现象 | 可能原因 | 怎么办 |
 |---|---|---|
+| `This camera does not support apps` | 相机**拒绝**了「切到应用安装模式」这条 USB 命令——它的固件里没有应用通道。安装器只是转述这次拒绝，这句英文是安装器自己的说法。 | APK 侧没有任何可修的地方。按 `MENU` 看有没有 `Application`；没有的话这台机器根本装不了应用，机型清单见 `docs/FAQ.zh-CN.md`。 |
 | `No devices found` | USB 不是 **Mass Storage**、没插卡、相机没开，或线/口不对 | 设成 Mass Storage、插卡、开机显示 **USB Mode**、换线换口 |
 | 驱动装不上（Windows） | USB 驱动缺失/被拦 | 按 ma1co 的 README 装驱动：https://github.com/ma1co/Sony-PMCA-RE |
 | 卡在 `Waiting for camera to switch...` | 握手中途抽风 | 拔线，相机关机再开，重连，重跑 |
