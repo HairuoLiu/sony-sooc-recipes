@@ -48,7 +48,7 @@ Apps（PMCA）通道，能收应用；没有，就到此为止——本仓库没
 
 https://github.com/HairuoLiu/sony-sooc-recipes/releases
 
-（当前发布是 `SonySOOCRecipes-v0.2.0.apk`，约 101 KB。本仓库只发布配方数据和构建工具；APK 由 CI
+（当前发布是 `SonySOOCRecipes-v0.5.0.apk`，约 102 KB。本仓库只发布配方数据和构建工具；APK 由 CI
 依据 `catalog/filters.json` 生成。若还没有发布版本，见 [架构说明](ARCHITECTURE.md) 自行构建。）
 
 > **实话实说。** 两条会真咬人的：

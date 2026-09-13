@@ -55,7 +55,7 @@ Download `SonySOOCRecipes-<version>.apk` from the project's Releases page:
 
 https://github.com/HairuoLiu/sony-sooc-recipes/releases
 
-(The current release is `SonySOOCRecipes-v0.2.0.apk`, about 101 KB. The repository publishes only the
+(The current release is `SonySOOCRecipes-v0.5.0.apk`, about 102 KB. The repository publishes only the
 recipe data and build tooling; the APK is produced by CI from `catalog/filters.json`. If no
 release exists yet, build it yourself — see [ARCHITECTURE.md](ARCHITECTURE.md).)
 

@@ -21,7 +21,7 @@ Two things before you start:
 
 ## 1. When you should add one — and when you should not
 
-The catalog already holds **99 recipes across 13 groups / two engines** (v0.2.0). Many
+The catalog already holds **155 recipes across 14 groups / two engines**. Many
 style intervals are already saturated. Adding "another faded warm negative" does not
 increase coverage — it dilutes it. The catalog is a reference, not a pile.
 
@@ -36,7 +36,7 @@ bands. The bands that are **already full** (do not add more of these):
   kodak-portra-400/800, fuji-superia-400, agfa-vista-200, leica-classic).
 
 By contrast, §1.3 of that document names intervals that are **genuinely empty and worth
-filling** — these are the only self-authored entries that passed review in v0.2.0:
+filling** — these are the only self-authored entries that passed review in the initial catalog:
 
 | Look to add | `pe` | Why it is not a duplicate |
 |---|---|---|
