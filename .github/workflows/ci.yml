@@ -6,11 +6,13 @@ on:
     paths:
       - 'catalog/**'
       - 'tools/**'
+      - 'tests/**'
       - '.github/workflows/ci.yml'
   pull_request:
     paths:
       - 'catalog/**'
       - 'tools/**'
+      - 'tests/**'
       - '.github/workflows/ci.yml'
   workflow_dispatch:
 
@@ -31,6 +33,12 @@ jobs:
       # Gate 1 — is the registry internally legal, and is its provenance honest?
       - name: validate catalog
         run: python tools/validate_catalog.py
+
+      # Gate 1b — regression cases. Upstream recipes are locked by the fidelity
+      #          check below; the ones this repository authors itself have no
+      #          upstream to compare against, so tests/cases.json is their spec.
+      - name: run catalog test cases
+        run: python tests/test_catalog.py
 
       # Gate 2 — does the catalog still generate the same Java the fork ships?
       #          Fails if someone hand-edited Recipes.java or forgot to regenerate.

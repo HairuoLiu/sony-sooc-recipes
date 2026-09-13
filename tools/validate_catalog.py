@@ -50,12 +50,6 @@ ENGINES = {"recipe-lab", "film-studio-matrix"}
 SOURCES = {"recipe-lab", "film-studio", "authored-here"}
 TONES = {"color", "mono"}
 
-KNOWN_GROUPS = {
-    "sony", "fuji-sim", "fuji-film", "kodak", "cine",
-    "ricoh-gr", "leica", "hasselblad", "canon-nikon",
-    "pana-olympus", "other-stocks", "ilford",
-}
-
 EXPECTED_UPSTREAM_RECIPES = 77
 
 
@@ -96,6 +90,15 @@ def validate(catalog: dict) -> Report:
     if catalog.get("engines", {}).get("film-studio-matrix", {}).get("license", "").startswith("MIT"):
         report.error("catalog", "film-studio-matrix must not be described as MIT")
 
+    # Groups are declared in the catalog itself. Reading them from there instead of
+    # keeping a second list here means adding a group is a one-file change; a
+    # duplicated list would silently reject every new group until someone found it.
+    declared = catalog.get("groups")
+    if not isinstance(declared, list) or not declared:
+        report.error("catalog", "groups must be a non-empty list")
+        return report
+    known_groups = {g.get("id") for g in declared}
+
     filters = catalog.get("filters")
     if not isinstance(filters, list) or not filters:
         report.error("catalog", "filters must be a non-empty list")
@@ -122,7 +125,7 @@ def validate(catalog: dict) -> Report:
             report.error(where, "missing name")
 
         group = f.get("group")
-        if group not in KNOWN_GROUPS:
+        if group not in known_groups:
             report.error(where, f"unknown group {group!r}")
         elif f.get("engine") == "recipe-lab":
             if not group_order or group_order[-1] != group:

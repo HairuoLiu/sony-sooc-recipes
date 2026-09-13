@@ -29,8 +29,9 @@ CI 配置 —— 均为本项目原创，采用 **[MIT](LICENSE)**。
   - `Recipes.java` 的**类结构**（构造函数重载、常量表、`GROUP_START`/`GROUP_COUNT` 静态块）
     —— 生成的 `Recipes.java` 是它的直接派生物，因此保留 MIT 头与署名
 - **作者**：André Domingues（[voxivoid](https://github.com/voxivoid)）
-- **本项目做的改动**：新增 1 款配方（`gr-moriyama`，标 `verified: false`）；
-  把配方表从手写 Java 改为由 JSON 生成
+- **本项目做的改动**：新增 7 款配方（`gr-moriyama`、`kodak-vision2-500t`、
+  `toy-camera-warm`、`toy-camera-cool`、`part-color-red`、`posterization-color`、
+  `teal-mood`，全部标 `verified: false`）；把配方表从手写 Java 改为由 JSON 生成
 
 ### ukiki0718-netizen/sony-a5100-film-studio — 15 款风格的登记
 
@@ -97,6 +98,27 @@ Panasonic、Olympus、Agfa、Ilford、Cinestill、Polaroid、Instax 等，均为
 基准。Recipe Lab 里的数值是为 a6000 能存下的东西**重新推导**的，不是他的配方。
 本项目沿用这一关系，在此一并致谢。
 
+### Liit（DAZZ PTE. LTD.）— 仅作为风格灵感，其数据未进入本仓库
+
+- **性质**：闭源商业 App（iOS / macOS），免费 + Liit Pro 订阅。**不是开源项目**，
+  公开渠道下不存在其源代码仓库。
+- **可否再分发**：不可以。
+- **本项目使用了什么**：
+  - 其公开描述中提到的一个风格名「Kodak Vision 2」——只是一个名字。
+  - 对「手机滤镜 App 常见观感」（暗角、局部色彩、偏色、扁平化）这一**审美类别**的
+    归纳，用于判断本仓库缺什么。
+- **本项目明确没有做什么**：
+  - **未下载、解包、逆向或以任何方式提取其 IPA、LUT、曲线或配置文件**
+  - **未复制其任何滤镜名称**（除上述公开描述里已写明的「Kodak Vision 2」外）
+  - **未使用其任何数值**
+- **为什么做不到，也不该做**：
+  1. 法律上，它的滤镜是私有资产，提取并再分发会侵犯其权利。
+  2. 技术上，即便拿到其 3D LUT 或曲线，a6000 的设置存储区也**无法承载**——没有 LUT
+     通道、没有 Picture Profile、存不下曲线。拿来了也用不上。
+- **因此本仓库的做法是**：以「手机 App 风」这一审美方向为参考，在相机能存的参数空间里
+  **重新写**近似配方（`source: authored-here`、`verified: false`），并把它们归入
+  App Look 组。它们是**本仓库的原创近似**，不是 Liit 滤镜的移植。
+
 ---
 
 ## 三、汇总
@@ -104,11 +126,12 @@ Panasonic、Olympus、Agfa、Ilford、Cinestill、Polaroid、Instax 等，均为
 | 材料 | 来源 | 许可 | 本仓库是否分发其内容 |
 |---|---|---|---|
 | 本仓库代码与文档 | 原创 | MIT | ✔ |
-| 78 款可编译配方参数 | voxivoid（77）+ 本项目（1） | MIT | ✔ |
+| 84 款可编译配方参数 | voxivoid（77）+ 本项目（7） | MIT | ✔ |
 | `Recipes.java` 类结构 | voxivoid | MIT | ✔（生成物，保留署名） |
 | 15 款胶片工坊风格 | ukiki0718 | PolyForm NC | ✘ 仅名称与来源标注 |
 | 理光模组方法论 | bonyback1 | Apache-2.0 | ✘ 仅参考 |
 | 外部安装工具 | ma1co | MIT | ✘ 用户自行获取 |
+| Liit（DAZZ PTE. LTD.） | 闭源商业 | 专有 | ✘ 仅风格方向启发，见上文 |
 
 ---
 

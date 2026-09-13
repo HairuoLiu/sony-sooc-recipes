@@ -1,12 +1,12 @@
 # Sony SOOC Recipes · 索尼直出配方
 
-<!-- counts: total=93 compiled=78 -->
+<!-- counts: total=99 compiled=84 -->
 <!-- The line above is checked against catalog/filters.json by CI. If you change the
      catalog, update it — a mismatch fails the build. Do not reword it. -->
 
 **把胶片滤镜编译成 APK，装进你那台老索尼，让直出就能看。**
 
-针对索尼 PlayMemories Camera Apps（PMCA）机型（a6000 · a6300 · a6500 · a5100 · NEX · RX100 III–V · a7 II 一代），一个装进相机内部的应用：**93 款**胶片与机型风格配方，其中 **78 款可直接编译进 APK**。
+针对索尼 PlayMemories Camera Apps（PMCA）机型（a6000 · a6300 · a6500 · a5100 · NEX · RX100 III–V · a7 II 一代），一个装进相机内部的应用：**99 款**胶片与机型风格配方，其中 **84 款可直接编译进 APK**。
 
 关掉应用、关机重启，风格依然是相机在 P/A/S/M 和录像**全部模式**下的默认。
 直出的 JPEG 就带滤镜。
@@ -49,7 +49,7 @@ python tools/gen_recipes.py --stdout # 看一眼会生成什么
 
 ## 配方一览
 
-93 款，12 个品牌组。完整可筛选的列表打开 **[滤镜浏览器](catalog/index.html)**。
+99 款，13 个组（12 个品牌/胶片组 + 1 个 App Look 组）。完整可筛选的列表打开 **[滤镜浏览器](catalog/index.html)**。
 （GitHub 上直接打开是源码，下载后用浏览器打开即可。）
 
 | 品牌组 | 数量 | 代表 |
@@ -57,7 +57,7 @@ python tools/gen_recipes.py --stdout # 看一眼会生成什么
 | **Sony** | 8 | FL (film-like) · IN (instant) · VV2 |
 | **Fuji Sim** | 26 | Classic Chrome · Nostalgic Neg · Acros +R |
 | **Fuji Film** | 5 | Pro 400H · Superia 400 · Natura 1600 |
-| **Kodak** | 14 | Portra 400 · Gold 200 · Ektar 100 · Tri-X |
+| **Kodak** | 15 | Portra 400 · Gold 200 · Ektar 100 · Tri-X · Vision2 500T |
 | **Cine** | 4 | Cinestill 800T · Cinestill 50D · Rec709 |
 | **Ricoh GR** | 13 | GR 正片 · 高反差黑白 · 森山风 |
 | **Leica** | 4 | Monochrom · Classic · Eternal |
@@ -66,8 +66,9 @@ python tools/gen_recipes.py --stdout # 看一眼会生成什么
 | **Pana / Olympus** | 4 | L.Monochrome D · Pop Art |
 | **Other Stocks** | 3 | Agfa Vista 200 · Polaroid / Instax |
 | **Ilford** | 5 | HP5 · Delta 3200 · Pan F 50 |
+| **App Look** | 5 | Toy Camera 暖/冷 · Part Color 红 · Posterization · Teal Mood |
 
-（数量含仅登记的胶片工坊风格；编译进 APK 的是 78 款。）
+（数量含仅登记的胶片工坊风格；编译进 APK 的是 84 款。）
 
 ---
 

@@ -40,6 +40,7 @@ GROUP_JAVA = {
     "pana-olympus": "PANOLY",
     "other-stocks": "OTHER",
     "ilford": "ILFORD",
+    "app-look": "APPLOOK",
 }
 
 # default values baked into Recipe Lab's 10-argument constructor; we drop back to the

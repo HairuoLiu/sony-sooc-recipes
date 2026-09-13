@@ -1,6 +1,6 @@
 {
   "$comment": "SONY SOOC RECIPES — 单一事实来源。所有滤镜配方都登记在这里，APK 由工具从此文件生成，不要手改生成的 Recipes.java。",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "updated": "2026-09-13",
 
   "engines": {
@@ -89,7 +89,8 @@
     { "id": "canon-nikon", "label": "Canon / Nikon" },
     { "id": "pana-olympus","label": "Pana / Olympus" },
     { "id": "other-stocks","label": "Other Stocks" },
-    { "id": "ilford",      "label": "Ilford" }
+    { "id": "ilford",      "label": "Ilford" },
+    { "id": "app-look",    "label": "App Look" }
   ],
 
   "filters": [
@@ -135,6 +136,7 @@
     { "id": "kodak-ektachrome-e100", "name": "Kodak Ektachrome E100", "group": "kodak", "engine": "recipe-lab", "source": "recipe-lab", "tone": "color", "verified": true, "recipe": { "style": "CLEAR", "sat": 2, "con": 1, "sharp": 0, "matrix": 0, "wb": { "mode": "AUTO", "kelvin": 0, "ab": -1, "gm": 0 }, "pe": 0, "sub": 0, "ev": -1, "dro": 6 } },
     { "id": "kodachrome-64", "name": "Kodachrome 64", "group": "kodak", "engine": "recipe-lab", "source": "recipe-lab", "tone": "color", "verified": true, "recipe": { "style": "DEEP", "sat": 1, "con": 2, "sharp": 1, "matrix": 0, "wb": { "mode": "AUTO", "kelvin": 0, "ab": 1, "gm": -1 }, "pe": 0, "sub": 0, "ev": -1, "dro": 6 } },
     { "id": "kodak-vision3-500t", "name": "Kodak Vision3 500T (daylight)", "group": "kodak", "engine": "recipe-lab", "source": "recipe-lab", "tone": "color", "verified": true, "recipe": { "style": "NEUTRAL", "sat": -1, "con": 0, "sharp": 0, "matrix": 0, "wb": { "mode": "K", "kelvin": 3200, "ab": 0, "gm": 0 }, "pe": 0, "sub": 0, "ev": 1, "dro": 3 } },
+    { "id": "kodak-vision2-500t", "name": "Kodak Vision2 500T (tungsten)", "group": "kodak", "engine": "recipe-lab", "source": "authored-here", "tone": "color", "verified": false, "note": "本仓库自写。起因是 Liit（DAZZ PTE. LTD. 的闭源商业 App）在其公开描述里提到 'Kodak Vision 2'；官方没有说明是哪一款 Vision2，本条目按 500T 的钨丝灯取向写：比 Vision3 500T 更绿、反差更低。这是「以公开描述为灵感重新近似」，不含 Liit 的任何数据。未在实机验证。", "recipe": { "style": "NEUTRAL", "sat": -2, "con": -1, "sharp": 0, "matrix": 0, "wb": { "mode": "K", "kelvin": 3200, "ab": 0, "gm": 1 }, "pe": 0, "sub": 0, "ev": 1, "dro": 3 } },
     { "id": "kodak-vision-200t-asteroid-city", "name": "Kodak Vision 200T (Asteroid City)", "group": "kodak", "engine": "recipe-lab", "source": "recipe-lab", "tone": "color", "verified": true, "recipe": { "style": "STD", "sat": 0, "con": 0, "sharp": 0, "matrix": 0, "wb": { "mode": "K", "kelvin": 4300, "ab": 1, "gm": 2 }, "pe": 4, "sub": 0, "ev": 0, "dro": 6 } },
     { "id": "kodak-trix-400", "name": "Kodak Tri-X 400", "group": "kodak", "engine": "recipe-lab", "source": "recipe-lab", "tone": "mono", "verified": true, "recipe": { "style": "MONO", "sat": 0, "con": 2, "sharp": 2, "matrix": 0, "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 }, "pe": 0, "sub": 0, "ev": 1, "dro": 6 } },
     { "id": "kodak-tmax", "name": "Kodak T-Max", "group": "kodak", "engine": "recipe-lab", "source": "recipe-lab", "tone": "mono", "verified": true, "recipe": { "style": "MONO", "sat": 0, "con": 2, "sharp": 3, "matrix": 0, "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 }, "pe": 0, "sub": 0, "ev": 0, "dro": 6 } },
@@ -182,6 +184,12 @@
     { "id": "ilford-delta-100", "name": "Ilford Delta 100", "group": "ilford", "engine": "recipe-lab", "source": "recipe-lab", "tone": "mono", "verified": true, "recipe": { "style": "MONO", "sat": 0, "con": 1, "sharp": 1, "matrix": 0, "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 }, "pe": 0, "sub": 0, "ev": 0, "dro": 6 } },
     { "id": "ilford-delta-3200", "name": "Ilford Delta 3200", "group": "ilford", "engine": "recipe-lab", "source": "recipe-lab", "tone": "mono", "verified": true, "recipe": { "style": "MONO", "sat": 0, "con": 3, "sharp": -2, "matrix": 0, "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 }, "pe": 0, "sub": 0, "ev": 2, "dro": 6 } },
     { "id": "ilford-pan-f-50", "name": "Ilford Pan F 50", "group": "ilford", "engine": "recipe-lab", "source": "recipe-lab", "tone": "mono", "verified": true, "recipe": { "style": "MONO", "sat": 0, "con": 2, "sharp": 2, "matrix": 0, "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 }, "pe": 0, "sub": 0, "ev": 0, "dro": 6 } },
+
+    { "id": "toy-camera-warm", "name": "Toy Camera (warm)", "name_zh": "玩具相机·暖", "group": "app-look", "engine": "recipe-lab", "source": "authored-here", "tone": "color", "verified": false, "note": "本仓库自写。手机滤镜 App 里最常见的「暗角 + 偏色 + 轻微过曝」组合，在 a6000 上唯一能沾边的就是索尼的 pe=1 玩具相机（自带暗角与偏色，sub=2 取暖调）。注意：这是近似，不是漏光——设置存储区里没有叠加层。pe 生效时相机会忽略创意风格，所以 sat/con/sharp 一律记 0。未在实机验证。", "recipe": { "style": "STD", "sat": 0, "con": 0, "sharp": 0, "matrix": 0, "wb": { "mode": "AUTO", "kelvin": 0, "ab": 2, "gm": 0 }, "pe": 1, "sub": 2, "ev": 1, "dro": 6 } },
+    { "id": "toy-camera-cool", "name": "Toy Camera (cool)", "name_zh": "玩具相机·冷", "group": "app-look", "engine": "recipe-lab", "source": "authored-here", "tone": "color", "verified": false, "note": "本仓库自写。与 toy-camera-warm 同一效果、sub=1 取冷调，配合 ab-1 把整体再往蓝端推一点。pe 生效时创意风格被忽略，sat/con/sharp 记 0。未在实机验证。", "recipe": { "style": "STD", "sat": 0, "con": 0, "sharp": 0, "matrix": 0, "wb": { "mode": "AUTO", "kelvin": 0, "ab": -1, "gm": 0 }, "pe": 1, "sub": 1, "ev": 0, "dro": 6 } },
+    { "id": "part-color-red", "name": "Part Color (red)", "name_zh": "局部色彩·红", "group": "app-look", "engine": "recipe-lab", "source": "authored-here", "tone": "color", "verified": false, "note": "本仓库自写。手机 App 的「只保留红色、其余去色」在相机里只有 pe=6 局部色彩能办到（sub=0 取红）。全库此前没有任何配方用过 pe=6。pe 生效时创意风格被忽略。未在实机验证。", "recipe": { "style": "STD", "sat": 0, "con": 0, "sharp": 0, "matrix": 0, "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 }, "pe": 6, "sub": 0, "ev": 0, "dro": 6 } },
+    { "id": "posterization-color", "name": "Posterization (color)", "name_zh": "海报化·彩色", "group": "app-look", "engine": "recipe-lab", "source": "authored-here", "tone": "color", "verified": false, "note": "本仓库自写。色阶分离带来的扁平插画感，对应 pe=3 海报化（sub=0 取彩色版）。全库此前未使用 pe=3。pe 生效时创意风格被忽略。未在实机验证。", "recipe": { "style": "STD", "sat": 0, "con": 0, "sharp": 0, "matrix": 0, "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 }, "pe": 3, "sub": 0, "ev": 0, "dro": 6 } },
+    { "id": "teal-mood", "name": "Teal Mood", "name_zh": "青调", "group": "app-look", "engine": "recipe-lab", "source": "authored-here", "tone": "color", "verified": false, "note": "本仓库自写。手机 App 常见的青橙冷调，在 a6000 上做不到真正的分色调（没有曲线、只有全局 ab/gm），这里给的是一个干净的全局偏青：ab-2 往蓝、gm+1 往绿、NEUTRAL 底降饱和 3 档。与 gr-cross-process（偏绿品红、强反差）是两种不同的偏色。未在实机验证。", "recipe": { "style": "NEUTRAL", "sat": -3, "con": 0, "sharp": 0, "matrix": 0, "wb": { "mode": "AUTO", "kelvin": 0, "ab": -2, "gm": 1 }, "pe": 0, "sub": 0, "ev": 0, "dro": 6 } },
 
     { "id": "fs-provia", "name": "PROVIA", "group": "fuji-sim", "engine": "film-studio-matrix", "source": "film-studio", "tone": "color", "verified": true, "cross_ref": "provia", "strengths": [30, 50, 70, 100], "note": "富士官方 GFX ETERNA 55 v1.10 LUT 拟合的 3x3 矩阵 + 1024 点 Gamma。100% 保留上游参数。" },
     { "id": "fs-velvia", "name": "Velvia", "group": "fuji-sim", "engine": "film-studio-matrix", "source": "film-studio", "tone": "color", "verified": true, "cross_ref": "velvia", "strengths": [30, 50, 70, 100] },
