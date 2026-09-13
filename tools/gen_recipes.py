@@ -37,6 +37,7 @@ GROUP_JAVA = {
     "leica": "LEICA",
     "hasselblad": "HASSEL",
     "canon-nikon": "CANIK",
+    "pentax": "PENTAX",
     "pana-olympus": "PANOLY",
     "other-stocks": "OTHER",
     "ilford": "ILFORD",

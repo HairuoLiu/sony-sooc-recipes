@@ -176,6 +176,456 @@
         "ev": 0,
         "dro": 6
       }
+    },
+
+    {
+      "id": "gr4-cinema-green",
+      "why": "A teal-and-amber cinema grade in the GR street family: NEUTRAL pulled two stops of chroma, WB nudged green for the cyan cast, DRO lifting the blacks a touch.",
+      "fields": {
+        "name": "GR Cinema Green",
+        "group": "ricoh-gr",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": -2,
+        "con": 1,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": -1, "gm": -2 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 5
+      }
+    },
+
+    {
+      "id": "gr4-cinema-yellow",
+      "why": "The amber half of the cinema pair: WB trimmed amber+magenta, +2 contrast, DRO keeping the lifted blacks that make it read as a grade rather than a warm photo.",
+      "fields": {
+        "name": "GR Cinema Yellow",
+        "group": "ricoh-gr",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": -1,
+        "con": 2,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 2, "gm": 1 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 5
+      }
+    },
+
+    {
+      "id": "leica-m9-ccd",
+      "why": "The M9's CCD is famous for warm rendering, rich reds and high microcontrast; approximated with STD +1 sat +1 con +1 sharp and a touch of amber.",
+      "fields": {
+        "name": "Leica M9 CCD",
+        "group": "leica",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "STD",
+        "sat": 1,
+        "con": 1,
+        "sharp": 1,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 1, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 3
+      }
+    },
+
+    {
+      "id": "leica-m240-std",
+      "why": "The M240 went CMOS and more neutral than the M9; same family, less warmth, no extra sharpness.",
+      "fields": {
+        "name": "Leica M240 STD",
+        "group": "leica",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "STD",
+        "sat": 1,
+        "con": 1,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 3
+      }
+    },
+
+    {
+      "id": "hasselblad-hncs-lowsat",
+      "why": "HN CS is skin-first and restrained; this variant pulls saturation two stops under NEUTRAL and keeps DRO wide open for shadow detail.",
+      "fields": {
+        "name": "Hasselblad HNCS LowSat",
+        "group": "hasselblad",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": -2,
+        "con": -1,
+        "sharp": -1,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 6
+      }
+    },
+
+    {
+      "id": "hasselblad-hncs-hicontrast",
+      "why": "HN CS with teeth: contrast +1, DRO nearly off. Palette stays Hasselblad-muted.",
+      "fields": {
+        "name": "Hasselblad HNCS HiContrast",
+        "group": "hasselblad",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": -1,
+        "con": 1,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 1
+      }
+    },
+
+    {
+      "id": "hasselblad-hncs-hc-lowsat",
+      "why": "The two Hasselblad variants crossed: -2 sat, +1 con, DRO off.",
+      "fields": {
+        "name": "Hasselblad HNCS HiContrast LowSat",
+        "group": "hasselblad",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": -2,
+        "con": 1,
+        "sharp": -1,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 1
+      }
+    },
+
+    {
+      "id": "pentax-bleach-bypass",
+      "why": "Pentax describes this mode as 'low-key, high-contrast images with subdued colors'. Saturation to the floor, DRO off, a third of a stop pulled.",
+      "fields": {
+        "name": "Pentax Bleach Bypass",
+        "group": "pentax",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": -3,
+        "con": 2,
+        "sharp": 1,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": -1,
+        "dro": 1
+      }
+    },
+
+    {
+      "id": "pentax-muted",
+      "why": "Pentax's own words: 'high-key, low-contrast finishing touch with toned-down saturation' - LIGHT style, +1 EV, DRO wide open.",
+      "fields": {
+        "name": "Pentax Muted",
+        "group": "pentax",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "LIGHT",
+        "sat": -2,
+        "con": -2,
+        "sharp": -1,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 1,
+        "dro": 6
+      }
+    },
+
+    {
+      "id": "pentax-radiant",
+      "why": "Pentax: 'high in saturation and contrast... exaggerate each hue and deliver brighter images'. VIVID with saturation pinned and a third of a stop of extra exposure.",
+      "fields": {
+        "name": "Pentax Radiant",
+        "group": "pentax",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "VIVID",
+        "sat": 3,
+        "con": 2,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 1,
+        "dro": 1
+      }
+    },
+
+    {
+      "id": "pentax-reversal-film",
+      "why": "Pentax stresses this mode earns its richness 'via contrast adjustment rather than by arbitrarily raising the saturation' - hence only +1 sat against +3 con and DRO 0.",
+      "fields": {
+        "name": "Pentax Reversal Film",
+        "group": "pentax",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "VIVID",
+        "sat": 1,
+        "con": 3,
+        "sharp": 1,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 0
+      }
+    },
+
+    {
+      "id": "pentax-satobi",
+      "why": "'Similar to color photos from the 60s and 70s: distinctive cyan blue, dull yellow, faded red.' Muted with a green-leaning trim for the aged cyan.",
+      "fields": {
+        "name": "Pentax Satobi",
+        "group": "pentax",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": -2,
+        "con": 0,
+        "sharp": -1,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": -1 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 4
+      }
+    },
+
+    {
+      "id": "pentax-katen",
+      "why": "Special-edition mode for 'the rich blues of summer skies and the fine details of dazzling white clouds' - LANDSCAPE style, +2 contrast, DRO nearly off.",
+      "fields": {
+        "name": "Pentax Katen (summer sky)",
+        "group": "pentax",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "LANDSCAPE",
+        "sat": 1,
+        "con": 2,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 1
+      }
+    },
+
+    {
+      "id": "pentax-kyushu",
+      "why": "Autumn special edition: red-tinted blues, deepened greens, a fleeting-season feel. AUTUMN style, everything eased back a stop.",
+      "fields": {
+        "name": "Pentax Kyushu (nine autumns)",
+        "group": "pentax",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "AUTUMN",
+        "sat": -1,
+        "con": -1,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 1, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 4
+      }
+    },
+
+    {
+      "id": "pentax-fuyuno",
+      "why": "'Sharp, high-key images' of winter: LIGHT style, +1 EV, saturation down, one extra notch of sharpness for the cold glare.",
+      "fields": {
+        "name": "Pentax Fuyuno (winter field)",
+        "group": "pentax",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "LIGHT",
+        "sat": -1,
+        "con": -1,
+        "sharp": 1,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 1,
+        "dro": 6
+      }
+    },
+
+    {
+      "id": "pentax-harubeni",
+      "why": "Spring-rouge special edition for cherry blossoms: hue shifted red, contrast raised, but sharpness eased so the petals stay soft. PORTRAIT + amber/magenta trim.",
+      "fields": {
+        "name": "Pentax Harubeni (spring rouge)",
+        "group": "pentax",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "PORTRAIT",
+        "sat": -1,
+        "con": 1,
+        "sharp": -1,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 1, "gm": 1 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 4
+      }
+    },
+
+    {
+      "id": "pentax-gold",
+      "why": "Special edition tuned for 'yellow tones more intense in highlighted areas': AUTUMN base, amber WB trim, lifted and flattened.",
+      "fields": {
+        "name": "Pentax Gold",
+        "group": "pentax",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "AUTUMN",
+        "sat": -1,
+        "con": -2,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 2, "gm": 1 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 1,
+        "dro": 5
+      }
+    },
+
+    {
+      "id": "pentax-miyabi",
+      "why": "'Elegant' restraint: NEUTRAL at native saturation, contrast -2, sharpness -1, high DRO. The quietest recipe in the Pentax set.",
+      "fields": {
+        "name": "Pentax Miyabi",
+        "group": "pentax",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": 0,
+        "con": -2,
+        "sharp": -1,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 5
+      }
     }
   ]
 }

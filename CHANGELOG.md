@@ -7,6 +7,52 @@
 
 ---
 
+## v0.3.0 — 2026-09-13 · 相机模拟批次
+
+**新增 18 款「相机调色模拟」配方**（99 → 117，可编译 84 → 102），新增组 `pentax`。
+全部 `source: authored-here` + `verified: false`，测试用例 7 → 25 条。
+
+这批配方的定位：模拟**其他相机机身 / 机身内色彩模式**的观感——宾得 Custom Image、
+哈苏 HN CS、徕卡机身默认渲染、GR 系的电影调。
+
+### 新增组 Pentax（11 款）
+
+宾得 Custom Image 目录的近似，参数依据**宾得官方对各模式的公开描述**：
+
+| id | 官方描述要点 |
+|---|---|
+| `pentax-bleach-bypass` | 低调、高反差、色彩收敛（漂白旁路冲洗） |
+| `pentax-muted` | 高调、低反差、饱和收敛 |
+| `pentax-radiant` | 高饱和高反差、整体提亮、夸大色相 |
+| `pentax-reversal-film` | 黑位深，靠反差而非饱和度还原反转片 |
+| `pentax-satobi` | 60-70 年代彩照：青蓝、暗黄、褪色红 |
+| `pentax-katen` | 夏空的浓郁蓝与白云细节（特别版） |
+| `pentax-kyushu` | 秋意的红调蓝与深绿（特别版） |
+| `pentax-fuyuno` | 高调冬景、饱和收敛（特别版） |
+| `pentax-harubeni` | 樱花粉、色相向红偏移（特别版） |
+| `pentax-gold` | 高光区黄调更浓郁（K-1 II 特别版） |
+| `pentax-miyabi` | 雅致、低反差、颜色不抢戏 |
+
+### 既有组的扩充
+
+- **Hasselblad**（1→4）：HNCS LowSat · HiContrast · HiContrast LowSat
+- **Leica**（4→6）：M9 CCD（暖调 CCD 渲染）· M240 STD
+- **Ricoh GR**（14→16）：GR Cinema Green · GR Cinema Yellow（GR 街拍圈常见的青绿/暖黄电影调）
+
+### 合规边界（这批配方为什么这样写）
+
+用户提供了一批「相机模拟 LUT」作参考。其中哈苏/徕卡 M9/M240/宾得/理光一套的
+许可为 **BY-NC-ND（禁止演绎）**——把 LUT 数值转换后发布即构成衍生作品，不可以。
+但**相机模式本身是事实而非表达**：宾得官方页面公开描述每个 Custom Image 的观感，
+我们按这些公开描述自写参数，不含任何第三方 LUT 的数据。Dehancer 胶片 68 款与出处
+不明的 Leica 缩写名合集未收录（前者是商业插件专有 profile 且与现有胶片组大量重复）。
+
+### 其他改动
+
+- `tools/gen_recipes.py`：`GROUP_JAVA` 补 `pentax` 常量（生成器每个组需要一个 Java 标识符）
+
+---
+
 ## v0.2.1 — 2026-09-13 · 文档
 
 配方与 APK 一行未改（99 款 / 84 款可编译，APK 仍是 v0.2.0 那个）。这一版只动文档。
