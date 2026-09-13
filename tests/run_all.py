@@ -13,8 +13,9 @@ Gates, cheapest and most informative first:
   3. generated Java Recipes.java on disk is what the catalog would produce
   4. browser        index.html is regenerated and renders (needs node)
   5. readme counts  the numbers in README.md match the catalog
+  6. assets         every image a document points at exists, and nothing is hotlinked
 
-Gates 3-5 are skipped rather than failed when their prerequisite is missing (no
+Gates 3-4 are skipped rather than failed when their prerequisite is missing (no
 upstream checkout, no node on PATH) — a missing tool is not a broken catalog. The
 skip is printed loudly so it cannot be mistaken for a pass.
 """
@@ -53,33 +54,34 @@ def main() -> int:
         if not ok:
             failures.append(label)
 
-    gate("1/5  validate catalog", [PY, "tools/validate_catalog.py"])
-    gate("2/5  catalog test cases", [PY, "tests/test_catalog.py"])
+    gate("1/6  validate catalog", [PY, "tools/validate_catalog.py"])
+    gate("2/6  catalog test cases", [PY, "tests/test_catalog.py"])
 
     fork = ROOT / "build" / "recipe-lab-sony-pmca"
     if fork.exists():
-        gate("3/5  generated Java is current",
+        gate("3/6  generated Java is current",
              [PY, "tools/gen_recipes.py", "--check", "--fork", str(fork)])
     else:
-        skipped.append("3/5  generated Java is current (no build/recipe-lab-sony-pmca checkout)")
+        skipped.append("3/6  generated Java is current (no build/recipe-lab-sony-pmca checkout)")
         skipped.append("     also skipped: fidelity check, needs upstream Recipes.java")
 
     node = shutil.which("node")
     if node:
-        ok, _ = run("4/5  regenerate browser", [PY, "tools/gen_browser.py"])
+        ok, _ = run("4/6  browser — regenerate", [PY, "tools/gen_browser.py"])
         if not ok:
-            failures.append("4/5  regenerate browser")
+            failures.append("4/6  browser — regenerate")
         else:
             diff = subprocess.run(["git", "diff", "--exit-code", "catalog/index.html"],
                                   cwd=ROOT, capture_output=True, text=True)
             if diff.returncode != 0:
                 print("catalog/index.html changed — it was stale. Commit the new one.")
-                failures.append("4/5  browser was stale")
-            gate("4/5  browser smoke test", [node, "tests/smoke_browser.js"])
+                failures.append("4/6  browser was stale")
+            gate("4/6  browser — smoke test", [node, "tests/smoke_browser.js"])
     else:
-        skipped.append("4/5  browser smoke test (node is not on PATH)")
+        skipped.append("4/6  browser smoke test (node is not on PATH)")
 
-    gate("5/5  README counts", [PY, "tools/check_readme_counts.py"])
+    gate("5/6  README counts", [PY, "tools/check_readme_counts.py"])
+    gate("6/6  assets", [PY, "tools/check_assets.py"])
 
     print("\n" + "=" * 66)
     for s in skipped:

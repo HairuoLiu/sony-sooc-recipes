@@ -3,7 +3,54 @@
 每个条目记一次上传到 GitHub 的版本。版本号遵循语义化版本，但**配方值本身的变化**也视
 为 minor——对使用者来说，一款滤镜的参数变了，比加个函数影响更大。
 
-发布前必须跑 `python tests/run_all.py`，五道关卡全绿才允许打 tag。
+发布前必须跑 `python tests/run_all.py`，六道关卡全绿才允许打 tag。
+
+---
+
+## v0.2.1 — 2026-09-13 · 文档
+
+配方与 APK 一行未改（99 款 / 84 款可编译，APK 仍是 v0.2.0 那个）。这一版只动文档。
+
+**不打 tag。** 打 `v*` 会触发 `release.yml` 重新构建并发布 APK，而 APK 没有任何变化——
+只为文档跑一次 3 GB 工具链没有意义。要装相机就去 v0.2.0 的 Release 页下载。
+
+**主页改成英文，中文作为子页面**
+
+`README.md` 重写为英文主页，`README.zh-CN.md` 是同一份内容的中文版，两页顶部都有
+`English · 简体中文` 切换。**计数标记 `<!-- counts: total=99 compiled=84 -->` 两个文件
+各有一份**，`check_readme_counts.py` 现在两边都查——翻译页悄悄留着旧数字，比没有翻译更糟。
+
+**docs/ 全部补成中英双份**
+
+| 文档 | 内容 |
+|---|---|
+| `docs/INSTALL.md` | 5 步安装流程、各系统前置条件、13 行排错表 |
+| `docs/ARCHITECTURE.md` | 数据流、两个引擎的机制差别、许可边界 |
+| `docs/FAQ.md` | 21 个问答，安全类问题排在最前 |
+| `docs/ADDING-FILTERS.md` | 完整参数表、测试用例要求、新增组要同步的 3 处 |
+
+每个都有 `.zh-CN.md` 兄弟文件。
+
+**4 张 SVG 图**
+
+`docs/assets/`：`parameters.svg`（配方能改什么、改不了什么）、`install-flow.svg`、
+`architecture.svg`、`engines.svg`。全部带 `@media (prefers-color-scheme: dark)`，
+GitHub 深色模式下不会变成黑底黑字。
+
+**新增第 6 道关卡：`tools/check_assets.py`**
+
+扫所有文档里的 `<img>` 和 markdown 图片，四类问题直接失败：
+
+1. 外链图片（图片必须进 `docs/assets/`，不许挂第三方图床）——**状态徽章是唯一例外**，
+   它是按请求生成的，本地化就等于把构建状态冻住；
+2. 引用了不存在的文件；
+3. `samples/` 里命名不合规（必须是 `<配方 id>--off.jpg` / `--on.jpg`，且 id 在目录里存在）；
+4. 只报不拦：磁盘上有但没有任何文档引用的孤儿图。
+
+**样张还没到位**
+
+`docs/assets/samples/` 目前是空的。命名规则和投稿方式写在 `docs/assets/README.md`：
+同一场景、同一曝光、同一白平衡，只有「上没上配方」这一个变量。
 
 ---
 

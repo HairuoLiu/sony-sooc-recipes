@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 360" width="780" height="360" role="img" aria-label="The two engines: settings store versus hardware colour matrix">
+  <title>Two engines</title>
+  <style>
+    .bg    { fill: #ffffff; }
+    .col   { fill: #f6f8fa; stroke: #d0d7de; }
+    .col-a { fill: #ddf4ff; stroke: #54aeff; }
+    .col-b { fill: #fff8c5; stroke: #d4a72c; }
+    .chip  { fill: #eaeef2; stroke: #d0d7de; }
+    .t     { font: 600 14px -apple-system, "Segoe UI", Arial, sans-serif; fill: #1f2328; }
+    .h     { font: 600 12px -apple-system, "Segoe UI", Arial, sans-serif; fill: #1f2328; }
+    .s     { font: 11px -apple-system, "Segoe UI", Arial, sans-serif; fill: #656d76; }
+    .tag   { font: 600 10px -apple-system, "Segoe UI", Arial, sans-serif; fill: #57606a; }
+    .foot  { font: 11px -apple-system, "Segoe UI", Arial, sans-serif; fill: #57606a; }
+    @media (prefers-color-scheme: dark) {
+      .bg    { fill: #0d1117; }
+      .col   { fill: #161b22; stroke: #30363d; }
+      .col-a { fill: #0c2d6b; stroke: #388bfd; }
+      .col-b { fill: #272115; stroke: #9e6a03; }
+      .chip  { fill: #21262d; stroke: #30363d; }
+      .t { fill: #e6edf3; } .h { fill: #e6edf3; }
+      .s { fill: #8b949e; } .tag { fill: #8b949e; } .foot { fill: #8b949e; }
+    }
+  </style>
+  <rect class="bg" width="780" height="360" rx="8"/>
+
+  <!-- left: recipe-lab -->
+  <rect class="col-a" x="24" y="24" width="356" height="264" rx="9"/>
+  <text class="t" x="44" y="52">recipe-lab</text>
+  <text class="s" x="44" y="70">writes the settings store</text>
+
+  <rect class="chip" x="44" y="84" width="112" height="20" rx="10"/>
+  <text class="tag" x="100" y="98" text-anchor="middle">MIT</text>
+  <rect class="chip" x="164" y="84" width="88" height="20" rx="10"/>
+  <text class="tag" x="208" y="98" text-anchor="middle">84 compiled</text>
+  <rect class="chip" x="260" y="84" width="100" height="20" rx="10"/>
+  <text class="tag" x="310" y="98" text-anchor="middle">wide models</text>
+
+  <text class="h" x="44" y="128">How</text>
+  <text class="s" x="44" y="146">Writes ordinary camera settings into persistent storage:</text>
+  <text class="s" x="44" y="162">Creative Style, saturation, contrast, sharpness, white</text>
+  <text class="s" x="44" y="178">balance with A-B / G-M trim, exposure comp, DRO,</text>
+  <text class="s" x="44" y="194">Picture Effect, and one hidden colour matrix.</text>
+
+  <text class="h" x="44" y="222">You get</text>
+  <text class="s" x="44" y="240">Stays applied after you close the app. Covers P / A / S / M</text>
+  <text class="s" x="44" y="256">and video. No strength slider — one look, one value.</text>
+  <text class="s" x="44" y="272">Every value is an ordinary menu item you can overwrite.</text>
+
+  <!-- right: film-studio -->
+  <rect class="col-b" x="400" y="24" width="356" height="264" rx="9"/>
+  <text class="t" x="420" y="52">film-studio-matrix</text>
+  <text class="s" x="420" y="70">rewrites the image pipeline</text>
+
+  <rect class="chip" x="420" y="84" width="152" height="20" rx="10"/>
+  <text class="tag" x="496" y="98" text-anchor="middle">PolyForm Noncommercial</text>
+  <rect class="chip" x="580" y="84" width="76" height="20" rx="10"/>
+  <text class="tag" x="618" y="98" text-anchor="middle">15 registered</text>
+
+  <text class="h" x="420" y="128">How</text>
+  <text class="s" x="420" y="146">Replaces the hardware 3×3 colour matrix and the shared</text>
+  <text class="s" x="420" y="162">1024-point gamma curve. Real per-pixel processing with</text>
+  <text class="s" x="420" y="178">30 / 50 / 70 / 100 % strength steps — not settings.</text>
+
+  <text class="h" x="420" y="222">What this repo does with it</text>
+  <text class="s" x="420" y="240">Records the names. Nothing else. It needs a base APK this</text>
+  <text class="s" x="420" y="256">repo does not distribute, and it is verified only on</text>
+  <text class="s" x="420" y="272">a5100 firmware 1.10 — so no parameters are transcribed.</text>
+
+  <text class="foot" x="24" y="316">Both engines are approximations. Neither is anybody's colour science.</text>
+  <text class="foot" x="24" y="336">An a6000 has no Picture Profile menu and cannot store a tone curve, so no route here can be exact.</text>
+</svg>

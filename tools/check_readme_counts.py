@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check that the numbers the README advertises match catalog/filters.json.
+"""Check that the numbers the READMEs advertise match catalog/filters.json.
 
 A README that says 93 recipes when the catalog holds 91 is a documentation bug nobody
 notices by eye, and it is exactly the kind of drift that accumulates in a project whose
@@ -11,6 +11,9 @@ parsed: prose gets rewrapped, and a regex over a wrapped sentence breaks silentl
     <!-- counts: total=93 compiled=78 -->
 
 This script also checks that the marker agrees with the prose a reader actually sees.
+Both READMEs are checked, each in its own language — the English page is the front door,
+and a translated page that quietly still says the old number is worse than no
+translation at all.
 
     python tools/check_readme_counts.py
 """
@@ -24,9 +27,20 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 CATALOG = ROOT / "catalog" / "filters.json"
-README = ROOT / "README.md"
 
 MARKER = re.compile(r"<!--\s*counts:\s*total=(\d+)\s+compiled=(\d+)\s*-->")
+
+# name -> the two phrases a reader must be able to see, given (total, compiled)
+READMES = {
+    "README.md": (
+        "{total} looks",
+        "{compiled} compiled into the APK",
+    ),
+    "README.zh-CN.md": (
+        "**{total} 款**",
+        "**{compiled} 款可直接编译进 APK**",
+    ),
+}
 
 
 def main() -> int:
@@ -35,32 +49,39 @@ def main() -> int:
     total = len(filters)
     compiled = sum(1 for f in filters if f["engine"] == "recipe-lab")
 
-    readme = README.read_text(encoding="utf-8")
-    m = MARKER.search(readme)
-    if not m:
-        print("README.md has no '<!-- counts: total=N compiled=M -->' marker")
-        return 1
-
-    stated_total, stated_compiled = int(m.group(1)), int(m.group(2))
     ok = True
-
-    if stated_total != total:
-        print(f"marker says {stated_total} recipes, catalog has {total}")
-        ok = False
-    if stated_compiled != compiled:
-        print(f"marker says {stated_compiled} compiled, catalog has {compiled}")
-        ok = False
-
-    # the prose a reader sees must agree with the marker
-    for phrase in (f"**{total} 款**", f"**{compiled} 款可直接编译进 APK**"):
-        if phrase not in readme:
-            print(f"visible README text does not contain {phrase!r}")
+    for name, phrases in READMES.items():
+        path = ROOT / name
+        if not path.exists():
+            print(f"{name}: missing")
             ok = False
+            continue
+
+        readme = path.read_text(encoding="utf-8")
+        m = MARKER.search(readme)
+        if not m:
+            print(f"{name}: no '<!-- counts: total=N compiled=M -->' marker")
+            ok = False
+            continue
+
+        stated_total, stated_compiled = int(m.group(1)), int(m.group(2))
+        if stated_total != total:
+            print(f"{name}: marker says {stated_total} recipes, catalog has {total}")
+            ok = False
+        if stated_compiled != compiled:
+            print(f"{name}: marker says {stated_compiled} compiled, catalog has {compiled}")
+            ok = False
+
+        for template in phrases:
+            phrase = template.format(total=total, compiled=compiled)
+            if phrase not in readme:
+                print(f"{name}: visible text does not contain {phrase!r}")
+                ok = False
 
     if not ok:
         return 1
 
-    print(f"ok — README advertises {total} catalogued, {compiled} compiled")
+    print(f"ok — {len(READMES)} READMEs advertise {total} catalogued, {compiled} compiled")
     return 0
 
 

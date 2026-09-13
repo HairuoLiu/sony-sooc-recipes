@@ -1,74 +1,44 @@
-# 架构：为什么这样做，以及它能做到什么、做不到什么
+# Architecture: why it is built this way, and what it can and cannot do
 
-## 一、两个上游项目，两种完全不同的原理
+<p align="center"><b>English</b> · <a href="ARCHITECTURE.zh-CN.md">简体中文</a></p>
 
-这是理解整个项目最重要的一件事：**它们改的不是同一个东西。**
+> **Honest note.** This project does not replicate another brand's colour science. It collects
+> film-style "recipes" into one data file, compiles them into an APK, and installs them on pre-2017
+> Sony bodies (a6000 / a6300 / a6500 / a5100 / NEX / RX100 III–V / a7 II). Every look below is an
+> *approximation built only from settings the camera can store persistently* — not a copy of a LUT, a
+> Log curve, or a matrix from another vendor. Read [§5](#5-the-engine-ceiling--what-this-camera-cannot-do)
+> before you expect anything specific.
 
-|  | Recipe Lab | 胶片工坊 / Film Studio |
-|---|---|---|
-| 作者 | [voxivoid](https://github.com/voxivoid/recipe-lab-sony-pmca) | [ukiki0718-netizen](https://github.com/ukiki0718-netizen/sony-a5100-film-studio) |
-| 改什么 | **相机设置存储区**：创意风格 + 饱和度/对比度/锐度、白平衡与微调、曝光补偿、DRO、图片效果，外加一个索尼从未在菜单公开的色彩矩阵开关 | **图像处理管线**：3×3 硬件色彩矩阵 + 1024 点共同 Gamma 曲线 |
-| 本质 | 等于「帮你飞快地在菜单里设好一堆值」 | 真正的逐像素色彩处理 |
-| 生效范围 | 关机重启后依然是相机默认，**P/A/S/M 与录像全模式**，应用关着也生效 | 拍照与实验性录像，带 30/50/70/100% 强度 |
-| 强度档位 | 无（一组固定值） | 有，四档 |
-| 机型覆盖 | a6000 / a6500 / a5100 / a7 II 已实机验证 | **只有 a5100 固件 1.10** |
-| 依赖 | 无额外依赖 | 需要一个**不随仓库分发**的基础 APK（bonyback1 的 Ricoh 模组，基于索尼「照片效果+」） |
-| 许可 | **MIT** | **PolyForm Noncommercial 1.0.0**（非 OSI 开源，禁止商用）+ 富士/索尼权利独立保留 |
-| 能否自由再分发 | 可以 | 不能 |
-
-### Recipe Lab 的天花板，必须先说清楚
-
-a6000 没有 Picture Profile 菜单，也存不下色调曲线。所以每一款配方**只能用这台相机
-存得下来的东西拼出来**：创意风格、饱和度、对比度、锐度、白平衡、曝光补偿、图片效果，
-和一个隐藏色彩开关。
-
-**因此这些是「某个味道的近似」，不是别家色彩科学的复制品。**
-
-明确做不到的：
-- Log 曲线（S-Log、V-Log、Blackmagic Film、Cinelike D）
-- 带色调的黑白（硒调、蓝晒）
-- 索尼摄像机那条 *Cinematone* gamma —— 固件里有，但 a6000 的相机层既不列出也不接受
-
-### 为什么本项目选 Recipe Lab 引擎
-
-1. **许可干净**：MIT，可以自由 fork、再分发、发布 APK。
-2. **覆盖面广**：一个 APK 覆盖全部 PMCA 机型，而不是绑死一台固件。
-3. **可生成**：77 款配方就是一个 Java 数组里的 77 行，天生适合从数据生成。
-4. **可反复安装**：不依赖任何需要单独获取的基础 APK，不存在「你自己去找个 base.apk」的
-   法律灰区。
-
-胶片工坊的路线更「硬核」——色彩矩阵是真处理——但它绑死一台固件、需要一个不分发的
-基础 APK、且许可是非商用。所以本仓库把它作为**参考目录**收录（见下），不作为引擎。
+This document explains the architecture: the two engines, what a recipe actually writes into the
+camera, the hard limits of the hardware, the data model, the CI pipeline, and *why* the project is
+shaped the way it is. If you only want to add a filter, read [`docs/ADDING-FILTERS.md`](ADDING-FILTERS.md)
+instead.
 
 ---
 
-## 二、目录结构
+## 1. What this document is for
 
-```
-sony-sooc-recipes/
-├── catalog/
-│   ├── filters.json          ★ 唯一事实来源。所有配方都登记在这里
-│   ├── index.html            可浏览的滤镜浏览器（单文件，无依赖）
-│   └── README.md             字段说明
-├── docs/
-│   ├── INSTALL.md            双通道安装
-│   ├── CHANNEL-COMPARISON.md USB vs Wi-Fi ADB，含结论
-│   ├── ARCHITECTURE.md       本文件
-│   └── ADDING-FILTERS.md     加滤镜的完整流程
-├── tools/
-│   ├── validate_catalog.py   校验注册表（CI 关卡 1）
-│   ├── gen_recipes.py        注册表 → Recipes.java（CI 关卡 2）
-│   ├── check_fidelity.py     与真实上游逐值比对（CI 关卡 3）
-│   ├── install-wifi.sh       Wi-Fi ADB 安装把手
-│   └── build_apk.sh          调上游 build.sh 并套用生成的 Recipes.java
-├── .github/workflows/ci.yml  三道关卡
-├── LICENSE                   MIT（本仓库代码）
-└── NOTICE.md                 上游归属与许可边界
-```
+This section orients you. The rest of the file is reference: by the end you should understand how a
+single JSON file becomes colours on a ten-year-old sensor, and where that path stops.
+
+The repository holds **99 filters** across **13 groups** and **2 engines**:
+
+- **84** are compiled into the app (engine `recipe-lab`): **77** transcribed verbatim from the
+  upstream Recipe Lab project, plus **7** authored in this repository.
+- **15** are reference-only entries (engine `film-studio-matrix`) — catalogued by name, never
+  compiled, never parameterised.
 
 ---
 
-## 三、数据流
+## 2. The big picture — data flows from a registry to the camera's settings store
+
+This section shows the whole path in one picture. One file, `catalog/filters.json`, is the single
+source of truth; everything downstream is generated from it.
+
+<p align="center">
+  <img src="assets/architecture.svg" width="760" alt="architecture">
+  <br><sub>Figure: the path from the registry to the camera's settings store</sub>
+</p>
 
 ```
 catalog/filters.json
@@ -77,62 +47,308 @@ catalog/filters.json
         ▼
 build/recipe-lab-sony-pmca/src/com/voxivoid/recipelab/Recipes.java
         │
-        │  tools/build_apk.sh  →  上游 build.sh
+        │  tools/build_apk.sh  →  upstream build.sh
         │  (JDK 17 + Android SDK build-tools 30.0.3 + platform API 28 + NDK r16b)
         ▼
-RecipeLab-<版本>.apk     ──  签名密钥只在本机，永不入库
+RecipeLab-<tag>.apk          ──  signing key stays local, never committed
         │
-        │  Sony-PMCA-RE (USB)   或   adb install -r (Wi-Fi)
+        │  Sony-PMCA-RE (USB)   or   adb install -r (Wi-Fi)
         ▼
-相机设置存储区  ──  关机重启后依然生效
+camera settings store  ──  persists after power-off
 ```
 
-**手改 `Recipes.java` 是错的。** 它随时可以被重新生成、被 CI 判定为过期。要加滤镜，
-改的是 `catalog/filters.json`。
+**Editing `Recipes.java` by hand is wrong.** It is regenerated on demand and rejected by CI as stale.
+To change a filter, change `catalog/filters.json`.
 
 ---
 
-## 四、三道 CI 关卡
+## 3. Two engines, two completely different mechanisms
 
-| 关卡 | 脚本 | 拦住什么 |
+This section is the single most important thing to understand: **the two upstream projects change
+different things.** They are not two flavours of the same trick.
+
+<p align="center">
+  <img src="assets/engines.svg" width="760" alt="engines">
+  <br><sub>Figure: the settings-store engine vs. the hardware-matrix engine</sub>
+</p>
+
+| | Recipe Lab | Film Studio / 胶片工坊 |
 |---|---|---|
-| 1. 注册表合法 | `validate_catalog.py` | 枚举值写错、数值越界、分组顺序断裂、许可声明不诚实 |
-| 2. 生成可用 | `gen_recipes.py --check` | 有人手改了 `Recipes.java`，或忘了重新生成 |
-| 3. 保真 | `check_fidelity.py` | **某个配方的数值被悄悄改动**，导致 APK 拍出来的颜色和上游不一致 |
+| Author | [voxivoid](https://github.com/voxivoid/recipe-lab-sony-pmca) | [ukiki0718-netizen](https://github.com/ukiki0718-netizen/sony-a5100-film-studio) |
+| Changes | The camera's **persistent settings store**: Creative Style + sat/con/sharp, WB + fine tune, EV, DRO, Picture Effect, plus a colour-matrix switch Sony never exposed in the menu | The in-camera image **pipeline**: a 3×3 hardware colour matrix + a shared 1024-point gamma curve |
+| Nature | Like setting a stack of menu values very fast | Real per-pixel colour processing |
+| Effective scope | Persists after reboot; covers **P/A/S/M and video**; works with the app closed | Photo + experimental video, with **30 / 50 / 70 / 100%** strength |
+| Strength steps | None (one fixed set) | ✅ four steps |
+| Model coverage | a6000 / a6500 / a5100 / a7 II verified (per `catalog`); targets all PMCA bodies | **a5100 fw 1.10 only** |
+| Dependency | None | Needs a **base APK not shipped with this repo** (bonyback1's Ricoh module, built on Sony "Photo Effect+") |
+| License | **MIT** | **PolyForm Noncommercial 1.0.0** (non-OSI, no commercial use) + Fuji/Sony rights reserved |
+| Redistributable | ✅ yes | ❌ no |
 
-第 3 关是最关键的一关。它把上游 `Recipes.java` 拉下来，把双方的配方**展开成完整
-15 值形式**后逐个比对——上游偶尔把默认值写全（比如 `Provia` 和 `Kodak T-Max` 明明
-`pe=0,ev=0,dro=6` 却写满 14 个参数），我们的生成器按简写惯例折叠，两者语义相同，
-所以比对必须在**语义层**做，否则会误报。
+### Why this repository makes Recipe Lab its engine
 
-当前状态：**77 条上游配方逐值一致，0 漂移。**
+1. **Clean licence.** MIT — you can fork, redistribute, and ship the APK freely.
+2. **Wide coverage.** One APK covers every PMCA body, instead of being pinned to one firmware.
+3. **Generatable.** 77 recipes are just 77 lines in a Java array — naturally produced from data.
+4. **Reinstallable.** No separately-fetched base APK, so no "go find base.apk yourself" legal grey zone.
+
+Film Studio is the "harder" route — its matrix is genuine processing — but it is tied to one firmware,
+needs an undistributed base APK, and is noncommercial. So this repository keeps it as a **reference
+catalogue** (see [§6](#6-the-data-model--what-one-filter-looks-like)), never as an engine.
+
+> **Honest note.** The 15 Film Studio looks are recorded by *name and orientation only*. Their fitted
+> numbers are never transcribed into this repo — not only because of the licence, but because those
+> numbers were fitted to a different pipeline (matrix + gamma) and would be meaningless inside a
+> settings-store engine. `validate_catalog.py` fails the build if a `film-studio` entry ever carries a
+> `recipe` object.
 
 ---
 
-## 五、胶片工坊的 15 款风格怎么处理
+## 4. What a recipe actually changes
 
-| 情况 | 处理 |
+This section lists every field a `recipe-lab` recipe writes, with the legal range the camera (or the
+upstream engine) actually enforces. These ranges come straight from `tools/validate_catalog.py`.
+
+| Field | Legal range | What it does |
+|---|---|---|
+| `style` | `STD` `VIVID` `NEUTRAL` `PORTRAIT` `LANDSCAPE` `MONO` `CLEAR` `DEEP` `LIGHT` `SUNSET` `NIGHT` `AUTUMN` `SEPIA` | Creative Style (the stored enum) |
+| `sat` `con` `sharp` | −16…+16 | Creative Style sliders. The menu only shows −3…+3; the camera core accepts more, but the on-screen slider snaps to the nearest menu value and touching it loses the extra punch |
+| `matrix` | `0` \| `1` | `1` = the alternate (PP3) colour matrix, ~+45% chroma with blue/green cross-talk. Only takes effect on `VIVID` `CLEAR` `DEEP` `LIGHT` `SUNSET` `NIGHT` `AUTUMN` |
+| `wb.mode` | `AUTO` \| `K` | `AUTO` must carry `kelvin: 0`; `K` sets a colour temperature |
+| `wb.kelvin` | 2500…9900 | Colour temperature in Kelvin (only when `wb.mode = "K"`) |
+| `wb.ab` `wb.gm` | −7…+7 | WB fine tune: `ab` amber(+)/blue(−), `gm` green(+)/magenta(−) |
+| `pe` | `0`…`13` | Picture Effect index. **When `pe != 0` the camera ignores Creative Style and disables RAW — JPEG only** |
+| `sub` | depends on `pe` | Effect sub-parameter. `pe=0` forces `sub=0`. Only `pe` ∈ {1,3,5,6} expose one (counts 5/2/3/4) |
+| `ev` | −5…+5 | Exposure bias, in 1/3-EV steps (persistent) |
+| `dro` | `0`…`6` | DRO: `0` off, `1`–`5` level, `6` auto (persistent) |
+
+### The one engine behaviour you must remember
+
+> **Honest note.** When `pe != 0`, the camera **ignates Creative Style** — so `sat` / `con` / `sharp`
+> and `matrix` are stored but have no visible effect, and RAW is silently dropped. A `pe` recipe can
+> only shoot JPEG. This is upstream camera behaviour, not a bug in this repo, and `validate_catalog.py`
+> emits a `note` (not an error) when it sees it.
+
+---
+
+## 5. The engine ceiling — what this camera cannot do
+
+This section is written without polish on purpose. You need the boundaries, not praise. The root cause
+is hardware: the a6000 has **no Picture Profile menu**, so it cannot store any tone curve. A recipe can
+only use what the body can persist.
+
+**Everything is an approximation, never a reproduction.** Specifically, the following are impossible on
+these bodies through this project:
+
+- **Log curves** (S-Log, V-Log, Blackmagic Film, Cinelike D) — no tone curve can be stored.
+- **Tinted black & white** (selenium, cyanotype) — only global `ab`/`gm`, which cannot target tone.
+- **Sony camcorder *Cinematone* gamma** — present in firmware, but the a6000 camera layer neither lists
+  nor accepts it.
+- **Real (colour) film grain** — the settings store has no overlay layer. `pe=7` (rough mono) fakes a
+  grain *feel* in B&W only.
+- **Light leak / genuine vignette as an overlay** — a vignette is reachable *only* via `pe=1` toy-camera,
+  which also forces its own colour cast; there is no independent leakage layer.
+- **LUT files** — the camera has no LUT support at all.
+- **HSL per-channel** — only a global saturation slider plus a global `ab`/`gm` shift.
+- **True split-toning** (teal/orange) — only a single global `ab`/`gm` lean is possible; you can fake a
+  teal mood (see `teal-mood`) but never a real dual-tone curve.
+- **Local adjustments** — no region-aware processing exists in this engine.
+- **RAW with a Picture Effect or matrix look** — RAW/RAW+JPEG silently discard them; JPEG only.
+
+> **Honest note.** If a look you want needs any of the above, this camera + this engine cannot deliver
+> it. That is the ceiling, stated plainly so you do not waste a shoot finding out.
+
+---
+
+## 6. The data model — what one filter looks like
+
+This section shows the shape of `catalog/filters.json` and three real entries (values copied verbatim
+from the file, not invented).
+
+### Top-level fields
+
+| Field | Purpose |
 |---|---|
-| 10 款富士参考风格 | 与 Recipe Lab 已有配方**一一对应**（`cross_ref` 字段），仅登记名称与来源 |
-| 理光 正片/负片/高反差黑白/正负逆冲 | 同样已有对应配方 |
-| **理光 森山风（Moriyama Daido Style）** | **Recipe Lab 原版没有** —— 这是两个项目间唯一真正互补的一项 |
+| `version` | Registry format version |
+| `engines` | Description, limits, and licence of each engine |
+| `sources` | Per-upstream author, licence, fetched revision, redistributable flag |
+| `style_constants` / `pe_constants` / `dro_constants` | Stored enums (reverse-engineered from upstream) |
+| `groups` | Brand groupings — **order here is the order inside the APK** |
+| `filters` | Every filter |
 
-因此本仓库补写了 `gr-moriyama`，用 Recipe Lab 的参数空间做近似（粗颗粒黑白效果）。
-它标着 `"verified": false`，**未在实机上验证**，落地前请在可丢弃素材上先试拍。
+### One filter
 
-那 15 款的**拟合参数一律不转录**。原因不只是许可，还有技术层面的：胶片工坊的数值是
-针对它的矩阵/Gamma 管线拟合的，放进「写设置」的引擎里根本不成立。`validate_catalog.py`
-里有硬性检查——`source: film-studio` 的条目一旦带上 `recipe` 字段就直接报错。
+| Field | Required | Value | Meaning |
+|---|---|---|---|
+| `id` | ✔ | kebab-case, unique | Reference key for the generator and docs |
+| `name` | ✔ | string | Name shown in the camera app |
+| `name_zh` | | string | Chinese name, browser only |
+| `group` | ✔ | a `groups[].id` | Brand grouping |
+| `engine` | ✔ | `recipe-lab` \| `film-studio-matrix` | Which mechanism |
+| `source` | ✔ | `recipe-lab` \| `authored-here` \| `film-studio` | Provenance |
+| `tone` | ✔ | `color` \| `mono` | Browser filter |
+| `verified` | ✔ | `true` \| `false` | **Validated on real hardware?** |
+| `cross_ref` | | another `id` | The twin look in the other engine |
+| `note` | | string | Shown in the browser |
+| `recipe` | recipe-lab only | object | The parameters (see §4) |
+| `strengths` | film-studio only | `[30,50,70,100]` | The four steps |
+
+A `film-studio-matrix` entry **must not** carry `recipe` — `validate_catalog.py` errors on it.
+
+### Real example — a minimal recipe-lab filter (the zero baseline)
+
+```json
+{
+  "id": "factory-st", "name": "FACTORY (ST)", "name_zh": "出厂标准",
+  "group": "sony", "engine": "recipe-lab", "source": "recipe-lab",
+  "tone": "color", "verified": true,
+  "recipe": { "style": "STD", "sat": 0, "con": 0, "sharp": 0, "matrix": 0,
+              "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+              "pe": 0, "sub": 0, "ev": 0, "dro": 6 }
+}
+```
+
+### Real example — WB fine tune + exposure bias, still Creative Style
+
+```json
+{
+  "id": "kodak-gold-200", "name": "Kodak Gold 200", "name_zh": "柯达金 200",
+  "group": "kodak", "engine": "recipe-lab", "source": "recipe-lab",
+  "tone": "color", "verified": true,
+  "recipe": { "style": "STD", "sat": 2, "con": 1, "sharp": 0, "matrix": 0,
+              "wb": { "mode": "AUTO", "kelvin": 0, "ab": 3, "gm": 1 },
+              "pe": 0, "sub": 0, "ev": 1, "dro": 6 }
+}
+```
+
+### Real example — matrix switch on + cross-engine twin
+
+```json
+{
+  "id": "velvia", "name": "Velvia", "group": "fuji-sim",
+  "engine": "recipe-lab", "source": "recipe-lab", "tone": "color",
+  "verified": true, "cross_ref": "fs-velvia",
+  "recipe": { "style": "VIVID", "sat": 5, "con": 1, "sharp": 0, "matrix": 1,
+              "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+              "pe": 0, "sub": 0, "ev": 0, "dro": 6 }
+}
+```
+
+### Real example — a film-studio-matrix entry (name only, no parameters)
+
+```json
+{
+  "id": "fs-provia", "name": "PROVIA", "group": "fuji-sim",
+  "engine": "film-studio-matrix", "source": "film-studio", "tone": "color",
+  "verified": true, "cross_ref": "provia",
+  "strengths": [30, 50, 70, 100],
+  "note": "Fujifilm GFX ETERNA 55 v1.10 LUT fitted to a 3x3 matrix + 1024-pt gamma. 100% upstream params."
+}
+```
+
+### Group order is constrained
+
+`recipe-lab` entries **must sit contiguously per group, in the `groups` order** — the generator emits a
+`GROUP_START` / `GROUP_COUNT` static block that depends on it, and breaks otherwise. `film-studio-matrix`
+entries may interleave with their brand's `recipe-lab` twins (they compile nowhere), which keeps each
+brand together in the browser.
 
 ---
 
-## 六、已知限制（诚实清单）
+## 7. The pipeline and its gates — from editing one number to a published APK
 
-1. **色彩是近似，不是复制。** 一台 2014 年的机器存不下富士或柯达的色彩科学。
-2. **没有强度调节。** 想淡一点，只能在应用里手动改芯片值，或者不用这款。
-3. **PE 类配方要 JPEG。** 图片效果开启时创意风格会被相机忽略，且 RAW / RAW+JPEG 下
-   效果会被静默丢弃。应用里标 **PE** 的就是这类。
-4. **a5100 少了两个键。** 它没有 Fn 也没有 AEL，所以品牌列表浏览和隐藏面板用不了，
-   但波轮能滚完全部配方。
-5. **`gr-moriyama` 未验证。**
-6. **本项目不改固件**，不解锁任何东西，只写相机设置存储区里你本来就能手设的那些值。
+This section traces one change from `filters.json` to a signed APK, and names every gate that can stop
+it. There are **six CI gates** plus the release build.
+
+| # | Gate | Script | What it blocks |
+|---|---|---|---|
+| 1 | Registry legal | `validate_catalog.py` | Wrong enum, out-of-range value, broken group contiguity, dishonest licence claim, a `film-studio` entry carrying parameters |
+| 1b | Authored cases | `tests/test_catalog.py` | A home-grown recipe with no pinned case in `tests/cases.json`, or a value that drifted from its case. `TestAuthoredHaveCases` fails the suite if `source: authored-here` has no case |
+| 3 | Fidelity | `check_fidelity.py` | **A recipe value silently changed** vs. upstream — the APK would then shoot different colours than the project it builds on. Compares every recipe value-for-value, expanded to full 15-value form so shorthand spelling matches |
+| 4 | Browser | `gen_browser.py` + `tests/smoke_browser.js` | A typo in the single-file browser that would ship a blank page; also fails if `catalog/index.html` is stale |
+| 5 | README counts | `check_readme_counts.py` | The README's filter counts no longer match the catalog |
+| 6 | Assets | `check_assets.py` | A document pointing at an image that does not exist; an image hotlinked from a third-party host (status badges excepted — they are generated per request, so vendoring one would freeze a build status); a sample in `docs/assets/samples/` not named `<recipe-id>--off.jpg` / `--on.jpg` with an id that exists in the catalog |
+
+Steps in order:
+
+1. You edit `catalog/filters.json` (never `Recipes.java`).
+2. Gate 1 + 1b run on every push/PR to `catalog/`, `tools/`, `tests/`.
+3. Gate 3 fetches upstream `Recipes.java` and checks value-for-value fidelity.
+4. `gen_recipes.py` regenerates `Recipes.java`; the artifact is uploaded for inspection.
+5. Gate 4 regenerates and smoke-tests the browser.
+6. Gate 5 checks README counts.
+7. Gate 6 scans every README and `docs/*.md` for image references and fails on a missing file, a
+   third-party hotlink (status badges excepted), or a mis-named sample in `docs/assets/samples/`.
+8. On a `v*` tag, `release.yml` re-runs gates 1+1b, then clones upstream at the **pinned
+   `UPSTREAM_SHA`**, regenerates, builds with JDK 17 + build-tools 30.0.3 + NDK r16b, and attaches
+   `RecipeLab-<tag>.apk` + a SHA-256 sum to the GitHub Release.
+
+> **Honest note.** The upstream revision is pinned in **two** places — `catalog/filters.json`
+> (`sources.recipe-lab.fetched_rev`) and `release.yml` (`UPSTREAM_SHA`) — and `test_catalog.py`
+> (`TestPinnedUpstream`) fails if they disagree. A tag must always build the exact upstream it was
+> validated against; an unpinned clone could build a different APK next month.
+
+---
+
+## 8. Repository layout
+
+This section maps the tree so the paths above make sense.
+
+```
+sony-sooc-recipes/
+├── catalog/
+│   ├── filters.json          ★ single source of truth — all filters live here
+│   ├── index.html            browsable filter browser (single file, no deps)
+│   └── README.md             field reference
+├── docs/
+│   ├── INSTALL.md                  dual-channel install
+│   ├── INSTALL.zh-CN.md            Chinese install guide
+│   ├── ARCHITECTURE.md             this file (English)
+│   ├── ARCHITECTURE.zh-CN.md       中文版
+│   ├── ADDING-FILTERS.md           full "add a filter" flow
+│   ├── ADDING-FILTERS.zh-CN.md     Chinese version
+│   ├── FAQ.md                      frequently asked questions
+│   ├── FAQ.zh-CN.md                Chinese FAQ
+│   ├── CHANNEL-COMPARISON.md       USB vs Wi-Fi ADB, with a verdict
+│   ├── MAPPING-RECIPES.md          maps a desired look to achievable camera settings
+│   └── assets/                     diagrams + README (architecture.svg, engines.svg, parameters.svg, install-flow.svg)
+├── tools/
+│   ├── validate_catalog.py   registry gate (CI gate 1)
+│   ├── gen_recipes.py        registry → Recipes.java (CI gate 2 step)
+│   ├── check_fidelity.py     value-for-value vs upstream (CI gate 3)
+│   ├── gen_browser.py        browser generator (CI gate 4)
+│   ├── check_readme_counts.py README counts (CI gate 5)
+│   ├── check_assets.py       image / asset references (CI gate 6)
+│   ├── install-wifi.sh       Wi-Fi ADB install helper
+│   └── build_apk.sh          calls upstream build.sh with the generated Recipes.java
+├── tests/
+│   ├── test_catalog.py       33 cases + invariants (CI gate 1b)
+│   ├── cases.json            pinned values for authored-here recipes
+│   └── smoke_browser.js      browser smoke test (CI gate 4)
+├── .github/workflows/
+│   ├── ci.yml                six gates
+│   └── release.yml           tag → build APK → attach to Release
+├── LICENSE                   MIT (this repo's code)
+└── NOTICE.md                 upstream attribution and licence boundaries
+```
+
+---
+
+## 9. Why it is designed this way
+
+This section justifies the two non-obvious decisions: a single source of truth, and generated artifacts
+that are **not** committed.
+
+**One source of truth.** Recipes used to get lost because people hand-edited `Recipes.java` in the
+upstream fork. Making `catalog/filters.json` the only place a filter is defined means there is exactly
+one thing to edit, review, and trust. The generator is the *only* writer of `Recipes.java`.
+
+**Generated artifacts stay out of the repo.** `Recipes.java` and the APK are build outputs. Committing
+them would let them drift from the catalog — and CI gate 1b / gate 3 exist precisely to catch that drift.
+The generated Java is produced in CI (and locally, on demand) and uploaded as an artifact; the APK is
+produced only by `release.yml` and attached to a GitHub Release, never checked in. The signing key is
+local and never committed.
+
+**Provenance is enforced, not documented.** The line between MIT (Recipe Lab, transcribed verbatim and
+locked by fidelity checks) and PolyForm Noncommercial (Film Studio, name-only) is a *test*, not a
+paragraph. Blurring it is the one mistake that would make the repository unsafe to host, so
+`validate_catalog.py` and `test_catalog.py` fail the build over it.

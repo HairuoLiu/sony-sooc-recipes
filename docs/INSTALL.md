@@ -1,187 +1,272 @@
-# 安装：把滤镜装进索尼相机
+# Installation: putting film recipes on your Sony camera
 
-两条通道，**先读 [通道对比](CHANNEL-COMPARISON.md) 再动手**。简版结论：第一次装走 A，之后想反复重装再开 B。
+<p align="center">
+  <b>English</b> · <a href="INSTALL.zh-CN.md">简体中文</a>
+</p>
 
-- [通道 A：USB + Sony-PMCA-RE（推荐，通用）](#通道-ausb--sony-pmca-re)
-- [通道 B：Wi-Fi ADB（可选，仅用于反复迭代）](#通道-bwi-fi-adb)
-- [装上之后怎么用](#装上之后怎么用)
-- [排错表](#排错表)
+This guide walks you through installing **Recipe Lab** — an app that writes a catalog of
+film-style recipes (Creative Style, Picture Effect, white balance, DRO…) into your camera,
+so older Sony bodies can produce film-like output straight out of the camera.
+
+**What this takes:** about 10–15 minutes for the first run over USB, plus a couple of minutes
+if you have never installed any app on your camera before. Channel B (Wi-Fi ADB) is only for
+later, repeated reinstalls and takes seconds each time.
+
+Read [CHANNEL-COMPARISON.md](CHANNEL-COMPARISON.md) first if you want to understand *why* there
+are two paths. The short version: **first install goes through Channel A; open Channel B only
+when you need to iterate.**
+
+<p align="center">
+  <img src="assets/install-flow.svg" width="720" alt="installation flow">
+  <br><sub>Figure: the complete path from downloading the APK to having it in your camera</sub>
+</p>
 
 ---
 
-## 前置检查：你的相机能不能装
+## Before you start
 
-按 `MENU` 找 **`Application`（应用程序）** 这一项。
+### Confirm your camera is supported
 
-| 有 `MENU → Application` | 没有 |
+Press `MENU` and look for an **`Application`** entry. If it is there, your camera uses the
+PlayMemories Camera Apps (PMCA) channel and can receive apps. If it is not, stop here — no
+method in this repository can install anything on it.
+
+| Has `MENU → Application` | Does not |
 |---|---|
-| a6000 · a6300 · a6500 · a5100 · a5000<br>a7 / a7R / a7S / a7 II / a7R II / a7S II<br>NEX-5R · NEX-5T · NEX-6<br>RX100 III / IV / V · RX10 II / III · RX1R II<br>HX60 / HX90 / HX400 · WX500<br>a68 · a77 II · a99 II | a6100 · a6400 · a6600 · a6700 · ZV-E10<br>a7 III 及之后全部 · a9 全系 · a1 全系<br>RX100 VA 及之后 · RX10 IV · RX0 · HX99 · ZV-1 全系 |
+| a6000 · a6300 · a6500 · a5100 · a5000<br>a7 / a7R / a7S / a7 II / a7R II / a7S II<br>NEX-5R · NEX-5T · NEX-6<br>RX100 III / IV / V · RX10 II / III · RX1R II<br>HX60 / HX90 / HX400 · WX500<br>a68 · a77 II · a99 II | a6100 · a6400 · a6600 · a6700 · ZV-E10<br>a7 III and everything after · a9 series · a1 series<br>RX100 VA and after · RX10 IV · RX0 · HX99 · ZV-1 series |
 
-**没有这个菜单项 = 装不了。** 索尼 2021 年就关了自家应用商店，2016 年末之后的机型
-（a6500、a99 II 是最后两台）全部是签名固件，任何应用都装不进去——本项目不行，
-索尼自己也不行。网上说在 a6400 上跑起来的都是误传。
+> **Honest note.** "No `Application` menu" means you cannot install apps, full stop. Sony shut
+> down its own app store in 2021, and every body from late 2016 onward (a6500 and a99 II were
+> the last two) ships signed firmware that rejects apps — not just this project, Sony itself
+> cannot load apps onto them. Reports of people running this on an a6400 are mistaken.
 
-> 副产物：这些机型也不可能有 4K 菜单、Log 曲线或机内 LUT 文件。能用什么，取决于
-> 相机**存得下来**什么，详见 [架构说明](ARCHITECTURE.md)。
+### What you need
+
+- A computer (Windows, macOS, or Linux).
+- A **data-capable USB cable** (a6000 uses micro-USB; the charging-only wire in a 3-in-1 kit
+  will not work).
+- A **memory card** inserted in the camera.
+- A **fully charged battery.** Installation toggles the camera's mode a few times. If power
+  dies mid-install, recovery is unpleasant — charge first.
+
+### Get the APK
+
+Download `RecipeLab-<version>.apk` from the project's Releases page:
+
+https://github.com/HairuoLiu/sony-sooc-recipes/releases
+
+(The current release is `RecipeLab-v0.2.0.apk`, about 101 KB. The repository publishes only the
+recipe data and build tooling; the APK is produced by CI from `catalog/filters.json`. If no
+release exists yet, build it yourself — see [ARCHITECTURE.md](ARCHITECTURE.md).)
+
+> **Honest note.** Two things actually bite people:
+>
+> 1. **The signing key is single-use.** CI has no keystore configured, so every build generates
+>    a fresh key. APKs signed with *different* keys **cannot overwrite** each other — if your
+>    camera already has a Recipe Lab from somewhere else, remove it in the camera first, then
+>    install this one.
+> 2. **Seven recipes are unverified on real hardware:** `gr-moriyama`,
+>    `kodak-vision2-500T`, Toy Camera (warm/cold), Part Color (red), Posterization, Teal Mood.
+>    They show `NOT VERIFIED` in the app. Try them on discardable footage before trusting them
+>    on something you cannot reshoot.
+>
+> The version number shown inside the app is the **upstream** version, not this repository's
+> tag. The upstream reads its version from `AndroidManifest.xml`; this repo only swaps the
+> recipe table. Trust the release tag, not the in-app number.
 
 ---
 
-## 通道 A：USB + Sony-PMCA-RE
+## Channel A: USB + Sony-PMCA-RE
 
-**这是所有人第一次安装都应该走的通道。** 全程离线，不暴露任何网络服务，对所有
-PMCA 机型通用，且不需要任何前置应用。
+**This is the path every first-time install should take.** Fully offline, exposes no network
+service, works on every PMCA body, and requires no pre-installed app.
 
-### 1. 拿到 APK
+### 1. Get the installer, Sony-PMCA-RE
 
-从本仓库的 Releases 下载 `RecipeLab-<版本>.apk`。
+This is ma1co's tool. It uses the very same channel Sony's own app store used to push apps into
+the camera.
 
-（本仓库只发布滤镜数据与构建工具；APK 由 CI 依据 `catalog/filters.json` 生成。
-若还没有发布版本，见 [架构说明](ARCHITECTURE.md) 自行构建。）
-
-> **装之前，两条会真咬人的：**
->
-> 1. **签名用的一次性 key。** CI 没配 keystore，每次构建临时生成一把。用不同 key 签的
->    APK **无法覆盖安装**——如果相机上已经装过别处来的 RecipeLab，得先在相机里把它删掉
->    再装这个。
-> 2. **有 7 款配方没上机验证过**：`gr-moriyama`、`kodak-vision2-500T`、Toy Camera
->    暖/冷、Part Color 红、Posterization、Teal Mood。它们在相机里显示为
->    `NOT VERIFIED`。先在可丢弃的素材上试，别拿去拍不能重来的东西。
->
-> APK 里显示的版本号是**上游**的，不是本仓库的 tag。上游从 `AndroidManifest.xml`
-> 读版本，本仓库只替换配方表；认 tag 就行。
-
-### 2. 拿到安装器 Sony-PMCA-RE
-
-这是 ma1co 做的工具，用索尼自家应用商店同一条通道把应用写进相机。
-
-- **Windows**：从 [ma1co/Sony-PMCA-RE releases](https://github.com/ma1co/Sony-PMCA-RE/releases)
-  下载 `pmca-gui.exe`。免安装，直接运行。
-- **macOS**：同一页面有 macOS 版，测试程度不如 Windows。**先关掉所有会占用 USB 设备的程序**
-  （照片、图像捕捉、Dropbox、Google Drive 等），否则相机会被它们先抢走。
-- **Linux**：用 Python 源码
+- **Windows:** download `pmca-gui.exe` from
+  [ma1co/Sony-PMCA-RE releases](https://github.com/ma1co/Sony-PMCA-RE/releases). No install —
+  just run it. You also need the USB driver; install it per ma1co's README
+  (https://github.com/ma1co/Sony-PMCA-RE).
+- **macOS:** the same page has a macOS build, though it is less tested than Windows. **Close
+  every app that grabs the USB device first** (Photos, Image Capture, Dropbox, Google Drive…),
+  or they snatch the camera before the installer can.
+- **Linux:** use the Python source (also installs the libraries, including `libusb`):
   ```bash
   git clone https://github.com/ma1co/Sony-PMCA-RE.git
   cd Sony-PMCA-RE && pip install -r requirements.txt
   ```
+  Platform-specific driver/permission details follow ma1co's README; if `libusb` or device
+  permissions misbehave, that README is the authority.
 
-### 3. 设置相机
+> **Honest note.** Exact driver and permission steps differ per OS and can change. When in
+> doubt, follow ma1co's README: https://github.com/ma1co/Sony-PMCA-RE
 
-1. 电池充满，**装上存储卡**
-2. `Setup（工具箱图标）→ USB Connection → **Mass Storage**`
-3. 开机，插上 USB 线（a6000 是 **micro-USB**，三合一数据线里只有能传数据的那根能用）
-4. 相机屏幕显示 **USB Mode** 即为就绪
+### 2. Prepare the camera
 
-### 4. 安装
+1. Charge the battery and **insert the memory card**.
+2. `Setup (the toolbox icon) → USB Connection → **Mass Storage**`.
+3. Power on, plug in the USB cable (a6000 is **micro-USB**; use the wire in the 3-in-1 kit that
+   actually transfers data).
+4. The screen shows **USB Mode** — you are ready.
 
-**图形界面**：打开 `pmca-gui.exe` → **Install app from file** → 选 APK → 等待
+> **Honest note.** If you later follow Channel B, this setting changes to **MTP**. Keep it on
+> Mass Storage for Channel A.
 
-**命令行**（Linux 前加 `sudo`）：
+### 3. Install
+
+**Graphical interface:** open `pmca-gui.exe` → **Install app from file** → select the APK → wait.
+
+**Command line** (prefix with `sudo` on Linux):
 ```bash
-python pmca-console.py install -f RecipeLab-<版本>.apk
+python pmca-console.py install -f RecipeLab-<version>.apk
 ```
 
-过程中相机会闪黑、自己切换模式几次——**这是正常的，不要按任何键**。约一分钟后电脑
-打印 `Task completed successfully`。
+The camera will blank to black and switch modes a few times — **this is normal, do not press
+anything.** After about a minute the computer prints `Task completed successfully`.
 
-> **以电脑的输出为准。** 相机通常停在 `Application Download / Connecting via USB...`
-> 的界面上，看起来像卡死，其实不是。
+> **Honest note.** **Trust the computer's output.** The camera usually sits on an
+> `Application Download / Connecting via USB...` screen that looks frozen. It is not.
 
-### 5. 收尾
+### 4. Finish
 
-拔线，**关机再开机**。应用现在位于 `MENU → Application → Application List → Recipe Lab`。
+Unplug, **power off and on again.** The app now lives at
+`MENU → Application → Application List → Recipe Lab`.
 
 ---
 
-## 通道 B：Wi-Fi ADB
+## Verify it worked
 
-**只在通道 A 已打通、且你需要反复重装时才用。** 它是开发快车道，不是给终端用户准备的。
+1. Open `MENU → Application → Application List` and confirm **Recipe Lab** is listed.
+2. Launch it. You should see a recipe list; turning the dial changes the live preview
+   immediately.
+3. To confirm a recipe is really written into the camera: pick a recipe, press the **center
+   button** to store it, then **power off and on.** The style now applies as the camera's
+   default in **every** mode (P/A/S/M and movie), even with the app closed.
 
-> **安全前提**：ADB 打开期间，同一局域网内任何机器都能对相机执行 adb 命令。只在可信
-> 网络上开，用完立刻关。见 [通道对比 §安全提示](CHANNEL-COMPARISON.md#安全提示)。
+Badges you may see in the app:
 
-### 1. 先用通道 A 装上 OpenMemories:Tweak
+| Badge | Meaning |
+|---|---|
+| `ACTIVE` | These values are already in the camera |
+| `PREVIEW` | Just previewing; press center to save |
+| `PROTECTED` | The camera's setting storage is write-protected — install [OpenMemories-Tweak](https://github.com/ma1co/OpenMemories-Tweak) and turn off *Backup protection* |
 
-相机 USB 模式设为 **MTP**（注意不是 Mass Storage），接上电脑，打开 `pmca-gui`：
+---
 
-1. 选 **Install app** 页
-2. 在应用列表里选 **OpenMemories: Tweak**
-3. 点 **Install selected app**
+## Channel B: Wi-Fi ADB
 
-不需要用固件更新或服务模式。
+**Only use this after Channel A works and you need to reinstall repeatedly.** It is the
+developer fast lane, not something an end user needs.
 
-### 2. 在相机上开 ADB
+> **Honest note.** While ADB is on, any machine on the same LAN can run `adb` commands against
+> your camera. Turn it on only on a trusted network and turn it off the moment you are done —
+> see the Security note in [CHANNEL-COMPARISON.md](CHANNEL-COMPARISON.md).
 
-1. 安全断开 USB，在 `MENU → Application → Application List` 打开 **OpenMemories: Tweak**
-2. 相机先配好 Wi-Fi 接入点
-3. 进 Tweak 的 **Developer** 页，打开 **Enable Wifi** 和 **Enable ADB**，**记下显示的 IP**
-4. 电脑连同一个局域网，把相机休眠时间调长
+### 1. Install OpenMemories:Tweak via Channel A first
 
-> 本应用只需要 ADB。**不用**开 Telnet、不用解除设置保护、不用改地区、不用解除录制时限、
-> 不用改固件。
+Set the camera USB mode to **MTP** (not Mass Storage), connect, open `pmca-gui`:
 
-### 3. 用 adb 安装
+1. Go to the **Install app** tab.
+2. Pick **OpenMemories: Tweak** from the list.
+3. Click **Install selected app**.
+
+No firmware update or service mode needed.
+
+### 2. Enable ADB on the camera
+
+1. Safely disconnect USB, open **OpenMemories: Tweak** from
+   `MENU → Application → Application List`.
+2. Connect the camera to a Wi-Fi access point first.
+3. In Tweak's **Developer** page, enable **Enable Wifi** and **Enable ADB**, and **note the IP
+   shown**.
+4. Put the computer on the same LAN; lengthen the camera's sleep timer.
+
+> **Honest note.** This app needs only ADB. You do **not** need Telnet, setting protection
+> off, region change, record-limit removal, or firmware modification.
+
+### 3. Install over ADB
 
 ```bash
-adb connect CAMERA_IP:5555      # 换成相机此刻显示的地址，保留 :5555
-adb devices                     # 目标应显示为 device
-adb -s CAMERA_IP:5555 install -r RecipeLab-<版本>.apk
+adb connect CAMERA_IP:5555      # replace with the camera's shown address, keep :5555
+adb devices                     # the target should show as "device"
+adb -s CAMERA_IP:5555 install -r RecipeLab-<version>.apk
 ```
 
-仓库自带一个把手：`tools/install-wifi.sh <apk> <相机IP>`，会做连接、就绪检查、安装、
-并提醒你收尾关掉 ADB。
+The repository also ships a helper: `tools/install-wifi.sh <apk> <camera-ip>` — it connects,
+checks readiness, installs, and reminds you to shut ADB down afterward.
 
-### 4. 收尾
+### 4. Finish
 
 ```bash
 adb disconnect CAMERA_IP:5555
 ```
 
-**再去 Tweak 里关掉 ADB。** `adb disconnect` 只断开电脑这一侧，相机上的守护进程还在跑。
+**Then go back into Tweak and turn ADB off.** `adb disconnect` only drops the computer's side;
+the daemon on the camera keeps running until you disable it in Tweak.
 
 ---
 
-## 装上之后怎么用
+## Updating and uninstalling
 
-在 `MENU → Application → Application List` 打开 **Recipe Lab**。
+- **Update over USB (Channel A):** just run the install again.
+- **Update over ADB (Channel B):** `adb install -r` is near-instant.
+- **Signature warning (important):** because CI signs with a throwaway key, an APK signed with
+  a *different* key cannot overwrite an existing install. If you see
+  `INSTALL_FAILED_UPDATE_INCOMPATIBLE`, either rebuild with the same key or **uninstall the
+  same-package-name app in the camera's app management first** (uninstalling clears the app's
+  settings), then reinstall.
+- **Uninstall:** remove the app from the camera's Application management. This clears the app's
+  stored settings.
 
-| 按键 | 作用 |
-|---|---|
-| **波轮** | 滚动配方，任何位置都能用；实时画面立刻变化 |
-| **Fn** | 打开品牌列表（左品牌 / 右配方）—— **a5100 没有 Fn 键，用不到** |
-| **中心键** | **存储**当前正在预览的配方 |
-| **AEL** | 隐藏面板 —— **a5100 没有 AEL 键** |
-| **上下** | 在配方行和参数芯片行之间移动 |
-| **TRASH** | 暂存出厂风格，再按中心键存储 |
-| **快门** | 对当前预览拍一张 |
-| **MENU** | 退出应用 |
-
-**存完之后关机再开机**，这个风格就成了相机在 P/A/S/M 和录像**所有模式**下的默认，
-应用关着也生效。
-
-**徽标含义**：
-
-| 徽标 | 含义 |
-|---|---|
-| `ACTIVE` | 相机里已经是这些值 |
-| `PREVIEW` | 只是在看，按中心键才会保存 |
-| `PROTECTED` | 相机设置存储区被写保护——装 [OpenMemories-Tweak](https://github.com/ma1co/OpenMemories-Tweak) 关掉 *Backup protection* |
-
-**换回原样**：应用里按 TRASH + 中心键 + 关机重启；或 `Setup → Setting Reset → Camera Settings Reset`。
+> **Honest note.** Uninstalling the app does **not** automatically revert a recipe you already
+> stored into the camera's settings. To go back to stock: in the app press TRASH + center,
+> then power-cycle; or `Setup → Setting Reset → Camera Settings Reset`.
 
 ---
 
-## 排错表
+## Troubleshooting
 
-| 现象 | 处理 |
-|---|---|
-| `No devices found` | USB 必须是 **Mass Storage**；卡要插着；相机开机且显示 **USB Mode**；换线换口 |
-| 卡在 `Waiting for camera to switch...` | 拔线，相机关机再开，重连，重跑 |
-| 徽标显示 `PROTECTED` | 装 OpenMemories-Tweak，关掉 *Backup protection*，重试 |
-| 存了但风格没生效 | **关机再开机** |
-| 面板显示 `no live preview: ...` | 有别的程序占着相机，退出应用重开 |
-| 文字显示 `Â·` | 旧版本，装最新 Release 的 APK |
-| `adb: offline` / 超时 / 找不到设备 | 相机休眠了 / IP 变了 / 不在同一 Wi-Fi / ADB 没开；`adb disconnect` 后重连；检查访客网络隔离、VPN、终端本地网络权限 |
-| MTP 正常但 adb 找不到 | MTP 和 Wi-Fi ADB 是**两条不同的连接**；按通道 B 第 2 步开 ADB |
-| `INSTALL_FAILED_UPDATE_INCOMPATIBLE` | 签名不同。用同一密钥重建；或备份后在相机应用管理里卸载同包名旧应用（**卸载会清掉应用设置**） |
-| RAW 文件套不上效果 | Picture Effect 类配方（应用里标 **PE**）只在 **JPEG** 画质下生效，RAW / RAW+JPEG 会被相机静默丢弃 |
-| 饱和度滑块一碰就「掉档」 | 部分配方把饱和度推得比菜单滑块范围（±3）更远。菜单显示最接近的值，你一动滑块它就弹回正常范围，那份额外的力度就丢了 —— 从应用里重新存储即可 |
+| Symptom | Likely cause | What to do |
+|---|---|---|
+| `No devices found` | USB not in **Mass Storage**, no card, camera off, or wrong cable/port | Set Mass Storage, insert card, power on to **USB Mode**, try another cable/port |
+| Driver won't install (Windows) | Missing/blocked USB driver | Follow ma1co's README driver steps: https://github.com/ma1co/Sony-PMCA-RE |
+| Stuck at `Waiting for camera to switch...` | Mid-handshake glitch | Unplug, power cycle the camera, reconnect, rerun |
+| Badge shows `PROTECTED` | Setting storage write-protected | Install OpenMemories-Tweak, turn off *Backup protection*, retry |
+| Installed but can't find the app | Looking in wrong menu | It is at `MENU → Application → Application List → Recipe Lab` |
+| App won't open / `no live preview: ...` | Another program holds the camera | Quit Photos/Image Capture/etc., reopen the app |
+| Stored a recipe but no effect | Camera hasn't re-read settings | **Power off and on** |
+| Garbled text `Â·` | Old APK build | Install the latest release APK |
+| `adb: offline` / timeout / no device | Camera slept, IP changed, not same Wi-Fi, ADB off, or guest-network/VPN isolation | `adb disconnect` then reconnect; check guest isolation, VPN, and terminal local-network permission |
+| MTP works but `adb` can't find it | MTP and Wi-Fi ADB are **two different connections** | Enable ADB per Channel B step 2 |
+| `INSTALL_FAILED_UPDATE_INCOMPATIBLE` | Different signing key | Same key rebuild, or uninstall the same-package app first (clears settings) |
+| RAW not affected by effect | Picture Effect recipes (marked **PE**) apply only to **JPEG** | Use JPEG quality; RAW / RAW+JPEG silently drops the effect |
+| Saturation slider "drops a notch" when touched | Some recipes push saturation beyond the menu range (±3) | Menu shows the closest value; re-store from the app to keep the extra punch |
+
+---
+
+## FAQ
+
+**Will this brick my camera?**
+No. The app writes settings through Sony's official app channel; it does not touch firmware or
+bootloader.
+
+**Does it modify the firmware?**
+No. Nothing in this process flashes or alters firmware. The signed-firmware bodies in the
+"Does not" column simply cannot receive apps at all.
+
+**Is it still there after a factory reset?**
+A recipe you stored lives in the camera's settings. `Setup → Setting Reset → Camera Settings
+Reset` clears it; a full initialization clears it too. The app itself is removed by
+uninstalling.
+
+**Does it affect RAW files?**
+Picture Effect class recipes (marked **PE** in the app) only take effect in **JPEG** output; on
+RAW or RAW+JPEG the camera silently ignores them. Other recipes (Creative Style, white balance,
+DRO) are camera settings and apply regardless of file format.
+
+**Is it reversible / safe for warranty?**
+It uses the same channel Sony's store used and uninstalls cleanly. Whether it affects warranty
+is a question for Sony; the install mechanism itself is non-destructive and removable.

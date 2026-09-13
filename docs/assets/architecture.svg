@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 300" width="780" height="300" role="img" aria-label="Data flow from the catalog to the camera settings store">
+  <title>sony-sooc-recipes architecture</title>
+  <style>
+    .bg    { fill: #ffffff; }
+    .box   { fill: #f6f8fa; stroke: #d0d7de; stroke-width: 1; }
+    .box-h { fill: #ddf4ff; stroke: #54aeff; stroke-width: 1; }
+    .arrow { stroke: #8c959f; stroke-width: 1.5; fill: none; marker-end: url(#a); }
+    .t     { font: 600 13px -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif; fill: #1f2328; }
+    .s     { font: 11px -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif; fill: #656d76; }
+    .lane  { font: 600 11px -apple-system, "Segoe UI", Arial, sans-serif; fill: #8c959f; letter-spacing: .08em; }
+    .rule  { stroke: #d0d7de; stroke-width: 1; stroke-dasharray: 3 3; }
+    @media (prefers-color-scheme: dark) {
+      .bg    { fill: #0d1117; }
+      .box   { fill: #161b22; stroke: #30363d; }
+      .box-h { fill: #0c2d6b; stroke: #388bfd; }
+      .arrow { stroke: #6e7681; }
+      .t     { fill: #e6edf3; }
+      .s     { fill: #8b949e; }
+      .lane  { fill: #6e7681; }
+      .rule  { stroke: #30363d; }
+    }
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 1 L7 4 L0 7 z" fill="#8c959f"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="780" height="300" rx="8"/>
+
+  <text class="lane" x="24" y="34">IN THIS REPOSITORY</text>
+  <line class="rule" x1="150" y1="30" x2="756" y2="30"/>
+
+  <rect class="box-h" x="24" y="48" width="140" height="62" rx="7"/>
+  <text class="t" x="94" y="72" text-anchor="middle">filters.json</text>
+  <text class="s" x="94" y="89" text-anchor="middle">99 looks, 13 groups</text>
+  <text class="s" x="94" y="102" text-anchor="middle">single source of truth</text>
+
+  <path class="arrow" d="M168 79 L206 79"/>
+
+  <rect class="box" x="210" y="48" width="140" height="62" rx="7"/>
+  <text class="t" x="280" y="72" text-anchor="middle">gen_recipes.py</text>
+  <text class="s" x="280" y="89" text-anchor="middle">emits Recipes.java</text>
+  <text class="s" x="280" y="102" text-anchor="middle">shortest ctor form</text>
+
+  <path class="arrow" d="M354 79 L392 79"/>
+
+  <rect class="box" x="396" y="48" width="140" height="62" rx="7"/>
+  <text class="t" x="466" y="72" text-anchor="middle">Recipes.java</text>
+  <text class="s" x="466" y="89" text-anchor="middle">dropped into the</text>
+  <text class="s" x="466" y="102" text-anchor="middle">upstream fork</text>
+
+  <path class="arrow" d="M540 79 L578 79"/>
+
+  <rect class="box" x="582" y="48" width="174" height="62" rx="7"/>
+  <text class="t" x="669" y="72" text-anchor="middle">RecipeLab.apk</text>
+  <text class="s" x="669" y="89" text-anchor="middle">built by CI, JDK 17 +</text>
+  <text class="s" x="669" y="102" text-anchor="middle">build-tools 30.0.3 + NDK r16b</text>
+
+  <path class="arrow" d="M669 114 L669 148"/>
+
+  <text class="lane" x="24" y="176">ON YOUR CAMERA</text>
+  <line class="rule" x1="140" y1="172" x2="756" y2="172"/>
+
+  <rect class="box" x="24" y="192" width="330" height="76" rx="7"/>
+  <text class="t" x="189" y="216" text-anchor="middle">what you actually get</text>
+  <text class="s" x="189" y="234" text-anchor="middle">the look is just stored camera settings</text>
+  <text class="s" x="189" y="249" text-anchor="middle">you can inspect or overwrite any of them</text>
+  <text class="s" x="189" y="262" text-anchor="middle">in the ordinary body menus — no firmware is touched</text>
+
+  <path class="arrow" d="M358 230 L392 230"/>
+
+  <rect class="box-h" x="396" y="192" width="360" height="76" rx="7"/>
+  <text class="t" x="576" y="216" text-anchor="middle">camera settings store</text>
+  <text class="s" x="576" y="234" text-anchor="middle">Creative Style · saturation · contrast · sharpness · white balance</text>
+  <text class="s" x="576" y="249" text-anchor="middle">+ A-B / G-M trim · exposure comp · DRO · Picture Effect · hidden matrix</text>
+  <text class="s" x="576" y="262" text-anchor="middle">survives closing the app — applies to P / A / S / M and video</text>
+</svg>

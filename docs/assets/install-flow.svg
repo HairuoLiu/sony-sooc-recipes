@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 430" width="780" height="430" role="img" aria-label="Installation flow: download, check the model, install over USB, verify, then optionally switch to Wi-Fi ADB">
+  <title>Installation flow</title>
+  <style>
+    .bg    { fill: #ffffff; }
+    .box   { fill: #f6f8fa; stroke: #d0d7de; }
+    .box-g { fill: #dafbe1; stroke: #4ac26b; }
+    .box-y { fill: #fff8c5; stroke: #d4a72c; }
+    .box-r { fill: #ffebe9; stroke: #ff8182; }
+    .arrow { stroke: #8c959f; stroke-width: 1.5; fill: none; marker-end: url(#ar); }
+    .aside { stroke: #d0d7de; stroke-dasharray: 3 3; stroke-width: 1; fill: none; }
+    .t     { font: 600 13px -apple-system, "Segoe UI", Arial, sans-serif; fill: #1f2328; }
+    .s     { font: 11px -apple-system, "Segoe UI", Arial, sans-serif; fill: #656d76; }
+    .n     { font: 600 11px -apple-system, "Segoe UI", Arial, sans-serif; fill: #8c959f; }
+    @media (prefers-color-scheme: dark) {
+      .bg    { fill: #0d1117; }
+      .box   { fill: #161b22; stroke: #30363d; }
+      .box-g { fill: #0f2913; stroke: #3fb950; }
+      .box-y { fill: #272115; stroke: #9e6a03; }
+      .box-r { fill: #25171c; stroke: #f85149; }
+      .arrow { stroke: #6e7681; }
+      .aside { stroke: #30363d; }
+      .t     { fill: #e6edf3; }
+      .s     { fill: #8b949e; }
+      .n     { fill: #6e7681; }
+    }
+  </style>
+  <defs>
+    <marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 1 L7 4 L0 7 z" fill="#8c959f"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="780" height="430" rx="8"/>
+
+  <!-- 1 -->
+  <rect class="box" x="60" y="26" width="300" height="52" rx="7"/>
+  <text class="n" x="76" y="46">1</text>
+  <text class="t" x="96" y="48">Download RecipeLab.apk</text>
+  <text class="s" x="96" y="64">from the Releases page — CI builds it, you do not</text>
+
+  <path class="arrow" d="M210 82 L210 106"/>
+
+  <!-- 2 -->
+  <rect class="box" x="60" y="110" width="300" height="52" rx="7"/>
+  <text class="n" x="76" y="130">2</text>
+  <text class="t" x="96" y="132">Check the camera</text>
+  <text class="s" x="96" y="148">MENU → Application must exist</text>
+
+  <!-- side: no menu -->
+  <path class="aside" d="M360 136 L430 136"/>
+  <rect class="box-r" x="430" y="110" width="290" height="52" rx="7"/>
+  <text class="t" x="446" y="132">No Application menu → stop</text>
+  <text class="s" x="446" y="148">a6400, a7 III and later are signed-firmware. Nothing</text>
+  <text class="s" x="446" y="162">fits — not this project, not Sony's own store either.</text>
+
+  <path class="arrow" d="M210 166 L210 190"/>
+
+  <!-- 3 -->
+  <rect class="box-g" x="60" y="194" width="300" height="52" rx="7"/>
+  <text class="n" x="76" y="214">3</text>
+  <text class="t" x="96" y="216">Install over USB</text>
+  <text class="s" x="96" y="232">Sony-PMCA-RE · offline · no prerequisites</text>
+
+  <path class="aside" d="M360 220 L430 220"/>
+  <rect class="box" x="430" y="194" width="290" height="52" rx="7"/>
+  <text class="t" x="446" y="216">Use this the first time</text>
+  <text class="s" x="446" y="232">Every other route depends on it. ADB needs</text>
+  <text class="s" x="446" y="246">OpenMemories:Tweak, which itself installs over USB.</text>
+
+  <path class="arrow" d="M210 250 L210 274"/>
+
+  <!-- 4 -->
+  <rect class="box" x="60" y="278" width="300" height="52" rx="7"/>
+  <text class="n" x="76" y="298">4</text>
+  <text class="t" x="96" y="300">Verify on the body</text>
+  <text class="s" x="96" y="316">open the app, pick a look, shoot, check the menus</text>
+
+  <path class="arrow" d="M210 334 L210 358"/>
+
+  <!-- 5 -->
+  <rect class="box-y" x="60" y="362" width="300" height="52" rx="7"/>
+  <text class="n" x="76" y="382">5</text>
+  <text class="t" x="96" y="384">Only if you reinstall a lot</text>
+  <text class="s" x="96" y="400">switch to Wi-Fi ADB for the iteration loop</text>
+
+  <path class="aside" d="M360 388 L430 388"/>
+  <rect class="box-y" x="430" y="362" width="290" height="52" rx="7"/>
+  <text class="t" x="446" y="384">Costs a network service</text>
+  <text class="s" x="446" y="400">the camera exposes an ADB daemon on port 5555</text>
+  <text class="s" x="446" y="414">to your LAN. Prefer USB unless it is slowing you down.</text>
+</svg>

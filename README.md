@@ -1,156 +1,309 @@
-# Sony SOOC Recipes · 索尼直出配方
+<h1 align="center">sony-sooc-recipes</h1>
+
+<p align="center">
+  <b>Film looks, compiled into an APK, installed inside a Sony camera Sony stopped updating.</b>
+  <br>
+  <sub>99 looks · 84 compiled into the APK · 13 groups · straight-out-of-camera JPEG</sub>
+</p>
 
 <!-- counts: total=99 compiled=84 -->
-<!-- The line above is checked against catalog/filters.json by CI. If you change the
-     catalog, update it — a mismatch fails the build. Do not reword it. -->
+<!-- The line above is checked against catalog/filters.json by CI. Change the catalog,
+     change this line — a mismatch fails the build. Do not reword it. -->
 
-**把胶片滤镜编译成 APK，装进你那台老索尼，让直出就能看。**
+<p align="center">
+  <b>English</b> · <a href="README.zh-CN.md">简体中文</a>
+</p>
 
-针对索尼 PlayMemories Camera Apps（PMCA）机型（a6000 · a6300 · a6500 · a5100 · NEX · RX100 III–V · a7 II 一代），一个装进相机内部的应用：**99 款**胶片与机型风格配方，其中 **84 款可直接编译进 APK**。
-
-关掉应用、关机重启，风格依然是相机在 P/A/S/M 和录像**全部模式**下的默认。
-直出的 JPEG 就带滤镜。
-
-> SOOC = Straight Out Of Camera，直出。
-> 这不是「后期套 LUT」，是把风格写进相机，拍的时候就定了。
-
----
-
-## 它解决什么问题
-
-a6000 的直出和屏幕有多难看你心里有数。索尼 2021 年关了应用商店，这批老机器在软件
-层面被彻底放弃——但它们有 Android 底层，装得进东西。
-
-本项目把散落在社区里的配方汇总成**一份数据**，再编译成 APK 装回去。
+<p align="center">
+  <a href="https://github.com/HairuoLiu/sony-sooc-recipes/actions/workflows/ci.yml"><img src="https://github.com/HairuoLiu/sony-sooc-recipes/actions/workflows/ci.yml/badge.svg" alt="catalog gates"></a>
+  <a href="https://github.com/HairuoLiu/sony-sooc-recipes/actions/workflows/release.yml"><img src="https://github.com/HairuoLiu/sony-sooc-recipes/actions/workflows/release.yml/badge.svg" alt="release build"></a>
+  <a href="https://github.com/HairuoLiu/sony-sooc-recipes/releases/latest"><img src="https://img.shields.io/badge/download-RecipeLab.apk-2f81f7" alt="download APK"></a>
+  <img src="https://img.shields.io/badge/license-MIT-3fb950" alt="MIT licence">
+</p>
 
 ---
 
-## 快速开始
+## What this is
 
-```bash
-git clone https://github.com/HairuoLiu/sony-sooc-recipes.git
-cd sony-sooc-recipes
-python tools/validate_catalog.py     # 校验配方表
-python tools/gen_recipes.py --stdout # 看一眼会生成什么
-```
+Sony shut its PlayMemories Camera Apps store in 2021. Every body made before late 2016
+lost its app channel — but those bodies still run an Android userspace, and that means
+they can still be given things.
 
-**只想把滤镜装进相机？** 直接看 **[安装指南](docs/INSTALL.md)**：
+This repository collects the film-look recipes the community has worked out for those
+cameras into **one data file**, and builds them into an APK you install once. After that
+the look is not an app running in the background — it is simply what the camera does.
 
-1. 按 `MENU` 找有没有 **`Application`** 这一项 —— 没有就装不了，别往下走了
-2. 走 **USB + Sony-PMCA-RE** 通道（全程离线、通用、无需前置应用）
-3. 打开应用，波轮选配方，中心键存储，**关机再开机**
+Close the app, power-cycle the body, and the look is still there in **P, A, S, M and
+video**. Your JPEG comes out of the camera already graded.
 
-**两条安装通道的区别**（这是本项目被问得最多的一个问题）：
-见 **[通道对比](docs/CHANNEL-COMPARISON.md)**。
-一句话：**USB 是「能不能装上」，Wi-Fi ADB 是「装上多快」**。ADB 永远无法取代 USB，
-因为开 ADB 所需的 OpenMemories:Tweak 本身就得用 USB 装。**第一次走 USB。**
+> **Honest note.** These are approximations, not copies of anybody's colour science.
+> An a6000 has no Picture Profile menu and cannot store a tone curve, so every look here
+> is assembled from what the body can actually hold. See
+> [what a look can be made of](#what-a-look-can-be-made-of).
 
 ---
 
-## 配方一览
+## Contents
 
-99 款，13 个组（12 个品牌/胶片组 + 1 个 App Look 组）。完整可筛选的列表打开 **[滤镜浏览器](catalog/index.html)**。
-（GitHub 上直接打开是源码，下载后用浏览器打开即可。）
+1. [Does your camera work?](#does-your-camera-work)
+2. [What a look can be made of](#what-a-look-can-be-made-of)
+3. [The looks](#the-looks)
+4. [Install](#install)
+5. [Using it](#using-it)
+6. [How it works](#how-it-works)
+7. [Sample gallery](#sample-gallery)
+8. [Adding a look](#adding-a-look)
+9. [Building the APK](#building-the-apk)
+10. [Safety](#safety)
+11. [FAQ](#faq)
+12. [Where the data comes from](#where-the-data-comes-from)
 
-| 品牌组 | 数量 | 代表 |
+---
+
+## Does your camera work?
+
+Press `MENU` and look for an **`Application`** entry.
+
+| It has `MENU → Application` | It does not |
+|---|---|
+| a6000 · a6300 · a6500 · a5100 · a5000<br>a7 · a7R · a7S · a7 II · a7R II · a7S II<br>NEX-5R · NEX-5T · NEX-6<br>RX100 III / IV / V · RX10 II / III · RX1R II<br>HX60 / HX90 / HX400 · WX500<br>a68 · a77 II · a99 II | a6100 · a6400 · a6600 · a6700 · ZV-E10<br>a7 III and everything after it · a9 · a1<br>RX100 VA and later · RX10 IV · RX0 · HX99 · ZV-1 |
+
+**No `Application` entry means nothing fits, and that is final.** Bodies after late 2016
+run signed firmware. Not this project, not Sony's own store. Reports of this working on an
+a6400 are misreports.
+
+> The same limitation is why these bodies can never have a 4K menu, a Log curve, or an
+> in-camera LUT. What is possible is bounded by what the camera can *store*.
+
+---
+
+## What a look can be made of
+
+<p align="center">
+  <img src="docs/assets/parameters.svg" width="760" alt="what a look can be made of, and what no recipe can do">
+</p>
+
+A recipe is a set of ordinary camera settings written into persistent storage:
+
+| Field | What it moves |
+|---|---|
+| `style` | Creative Style — STD, VIVID, NEUTRAL, PORTRAIT, LANDSCAPE, MONO, CLEAR, DEEP, LIGHT, SUNSET, NIGHT, AUTUMN, SEPIA |
+| `sat` · `con` · `sharp` | saturation, contrast, sharpness relative to the style's default |
+| `matrix` | a second colour matrix Sony never exposed in any menu |
+| `wb` | AUTO, or a kelvin value, plus A-B (amber/blue) and G-M (green/magenta) trim |
+| `pe` · `sub` | Picture Effect and its sub-mode — **when a Picture Effect is on, the camera ignores Creative Style** |
+| `ev` · `dro` | exposure compensation in ⅓ EV steps, and DRO |
+
+Because these are ordinary settings, you can walk into the body menus and see or overwrite
+any of them. That is the point: nothing is hidden, and nothing is permanent.
+
+---
+
+## The looks
+
+99 looks in 13 groups. Open **[the filter browser](catalog/index.html)** for the full,
+searchable list — it is a single self-contained HTML file, so download it and open it
+locally rather than viewing the source on GitHub.
+
+| Group | Count | Representative looks |
 |---|---|---|
 | **Sony** | 8 | FL (film-like) · IN (instant) · VV2 |
 | **Fuji Sim** | 26 | Classic Chrome · Nostalgic Neg · Acros +R |
 | **Fuji Film** | 5 | Pro 400H · Superia 400 · Natura 1600 |
 | **Kodak** | 15 | Portra 400 · Gold 200 · Ektar 100 · Tri-X · Vision2 500T |
 | **Cine** | 4 | Cinestill 800T · Cinestill 50D · Rec709 |
-| **Ricoh GR** | 13 | GR 正片 · 高反差黑白 · 森山风 |
+| **Ricoh GR** | 14 | GR Positive Film · High-contrast B&W · Moriyama |
 | **Leica** | 4 | Monochrom · Classic · Eternal |
 | **Hasselblad** | 1 | HNCS Natural |
 | **Canon / Nikon** | 5 | Canon Faithful · Nikon Flat |
 | **Pana / Olympus** | 4 | L.Monochrome D · Pop Art |
 | **Other Stocks** | 3 | Agfa Vista 200 · Polaroid / Instax |
 | **Ilford** | 5 | HP5 · Delta 3200 · Pan F 50 |
-| **App Look** | 5 | Toy Camera 暖/冷 · Part Color 红 · Posterization · Teal Mood |
+| **App Look** | 5 | Toy Camera warm/cool · Part Color red · Posterization · Teal Mood |
 
-（数量含仅登记的胶片工坊风格；编译进 APK 的是 84 款。）
-
----
-
-## 必须先说清楚的限制
-
-**这些是「某个味道的近似」，不是别家色彩科学的复制品。**
-
-a6000 没有 Picture Profile 菜单，也存不下色调曲线。每一款配方只能用这台相机
-**存得下来**的东西拼：创意风格、饱和度、对比度、锐度、白平衡与微调、曝光补偿、
-DRO、图片效果，外加一个索尼从未在菜单里公开的色彩矩阵开关。
-
-**做不到的**（不是没做，是这台机器做不到）：Log 曲线（S-Log / V-Log / Blackmagic）、
-带色调的黑白（硒调、蓝晒）、真正的胶片颗粒、索尼摄像机那条 *Cinematone* gamma。
-
-其他已知限制：
-
-- **没有强度档位**。想淡一点只能在应用里手改参数芯片，或不用这款
-- **PE 类配方要 JPEG**。图片效果开启时相机忽略创意风格，且 RAW / RAW+JPEG 下效果被静默丢弃
-- **a5100 少了 Fn 和 AEL 两个键**，品牌列表浏览和隐藏面板用不了，波轮能滚完全部配方
-- **本项目不改固件**，不解锁任何东西，只写你本来就能手设的那些值
-- 详见 [架构说明 §已知限制](docs/ARCHITECTURE.md#六已知限制诚实清单)
+Counts include looks that are registered by name only; **84** are compiled into the APK.
 
 ---
 
-## 项目结构
+## Install
 
-```
-catalog/filters.json   ★ 唯一事实来源 —— 所有配方都登记在这里
-catalog/index.html       可浏览的滤镜浏览器（单文件，无依赖，浅色主题）
-docs/                    安装 · 通道对比 · 架构 · 加滤镜流程
-tools/                   校验器 · 代码生成器 · 保真比对 · 安装把手 · 构建脚本
-```
+<p align="center">
+  <img src="docs/assets/install-flow.svg" width="760" alt="installation flow">
+</p>
 
-**数据流**：`catalog/filters.json` →（生成）→ `Recipes.java` →（编译）→ APK →（USB / ADB）→ 相机
+1. Download `RecipeLab.apk` from the [Releases page](https://github.com/HairuoLiu/sony-sooc-recipes/releases).
+2. Confirm the body has `MENU → Application`. If it does not, stop.
+3. Install over **USB** with [Sony-PMCA-RE](https://github.com/ma1co/Sony-PMCA-RE). Offline, universal, no prerequisites.
+4. Open the app, pick a look with the control wheel, store it with the centre button, **power-cycle the body**.
+5. Only switch to Wi-Fi ADB if you find yourself reinstalling constantly.
 
-手改 `Recipes.java` 是错的——它随时会被重新生成。要加滤镜，改注册表。
-见 **[加一款滤镜](docs/ADDING-FILTERS.md)**。
+Full walkthrough with per-OS prerequisites and a troubleshooting table:
+**[docs/INSTALL.md](docs/INSTALL.md)**.
 
-### 三道 CI 关卡
+> **Before you install.** The APK is signed with a key CI generates per build. An APK
+> signed with a different key **cannot be installed over an existing one** — if the body
+> already has a RecipeLab from somewhere else, remove it first.
 
-| 关卡 | 拦住什么 |
+---
+
+## Using it
+
+Open the app, pick a group, scroll with the control wheel, press the centre button to
+store. That is the whole loop. Then power-cycle — some settings only settle after a restart.
+
+Things worth knowing:
+
+- **There is no strength slider.** A look is one set of values. To go lighter, edit the
+  values in the app before storing, or use a different look.
+- **Picture Effect looks need JPEG.** With a Picture Effect active, RAW and RAW+JPEG
+  quietly discard the effect.
+- **The a5100 has no Fn or AEL button**, so brand-list browsing and the hidden panel are
+  unreachable there. The control wheel still reaches every look.
+
+---
+
+## How it works
+
+<p align="center">
+  <img src="docs/assets/architecture.svg" width="760" alt="data flow from the catalog to the camera settings store">
+</p>
+
+`catalog/filters.json` is the single source of truth. Everything else is generated from it,
+and `Recipes.java` in particular is never edited by hand — it is rebuilt on every run.
+
+Two engines appear in the catalog:
+
+<p align="center">
+  <img src="docs/assets/engines.svg" width="760" alt="the two engines compared">
+</p>
+
+| | `recipe-lab` | `film-studio-matrix` |
+|---|---|---|
+| Mechanism | writes the settings store | replaces the hardware colour matrix and gamma curve |
+| Looks | 84, compiled into the APK | 15, **registered by name only** |
+| Licence | MIT | PolyForm Noncommercial |
+| Verified on | a6000, a6500, a5100, a7 II | a5100 firmware 1.10 only |
+| In this repo | full parameters | name and provenance only — **never parameters** |
+
+> **Honest note.** The second engine's numbers were fitted for its own matrix pipeline.
+> Copying them into a settings-store engine would not mean anything even if the licence
+> allowed it, which it does not. `tools/validate_catalog.py` fails the build if any entry
+> sourced from it carries a `recipe` field.
+
+### The gates — six locally, one more in CI
+
+Every change runs through `python tests/run_all.py`, and again in CI. Six gates run
+anywhere; the fidelity check needs to fetch upstream, so CI runs it.
+
+| Gate | What it stops |
 |---|---|
-| `validate_catalog.py` | 枚举写错、数值越界、分组顺序断裂、**许可声明不诚实** |
-| `gen_recipes.py --check` | 有人手改了 `Recipes.java`，或忘了重新生成 |
-| `check_fidelity.py` | **某个配方的数值被悄悄改动** —— 最关键的一关 |
+| `validate_catalog.py` | bad enums, out-of-range values, broken group order, **dishonest provenance** |
+| `tests/test_catalog.py` | 33 cases: invariants, ranges, generator round-trip, upstream pin drift |
+| `check_fidelity.py` | **a recipe value silently changed** — all 77 upstream recipes, value for value *(CI only)* |
+| `gen_recipes.py --check` | someone hand-edited `Recipes.java`, or forgot to regenerate |
+| `smoke_browser.js` | a typo that would ship a blank filter browser |
+| `check_readme_counts.py` | the READMEs advertising a number the catalog no longer holds |
+| `check_assets.py` | a document pointing at a picture that does not exist — or at somebody's image host |
 
-保真比对会把上游 `Recipes.java` 拉下来，双方**展开成完整 15 值形式**后逐个对照
-（上游偶尔把默认值写全，必须按语义比对而非文本）。当前状态：
+Current state of the fidelity check:
 
-> **77 条上游配方逐值一致，0 漂移。**
+> **All 77 upstream recipes reproduced value for value. Zero drift.**
 
 ---
 
-## 数据来自哪里
+## Sample gallery
 
-| 上游 | 贡献 | 许可 | 可否再分发 |
+**This is the section most in need of your camera.** Every look here is a set of numbers
+until somebody points a body at a scene and shows what came out.
+
+Sample photos are not in the repository yet. They go in `docs/assets/samples/`, named so
+that a pair is obviously a pair:
+
+```
+docs/assets/samples/
+  kodak-gold-200--off.jpg     same scene, same settings, look not applied
+  kodak-gold-200--on.jpg      ...and applied
+```
+
+Same scene, same exposure, same white balance — that is the only rule that makes a
+before/after worth anything. See **[docs/assets/README.md](docs/assets/README.md)** for
+the full convention and how to contribute a pair.
+
+---
+
+## Adding a look
+
+Read **[docs/ADDING-FILTERS.md](docs/ADDING-FILTERS.md)**. The short version:
+
+1. Check the look is not already covered — several style ranges are saturated, and another
+   flat desaturated recipe dilutes the set rather than improving it.
+2. Add an entry to `catalog/filters.json`, inside its group's contiguous run.
+3. If it is one you wrote yourself, it must be `source: "authored-here"`, `verified: false`,
+   with a `note` — **and it must have a pinned case in `tests/cases.json`**, or CI fails.
+4. Run `python tests/run_all.py`.
+
+---
+
+## Building the APK
+
+You do not have to. CI builds it and attaches it to the release whenever a `v*` tag is
+pushed — see **[docs/INSTALL.md](docs/INSTALL.md)** for the download, or the Releases page.
+
+If you want to anyway, the toolchain is JDK 17, Android build-tools 30.0.3, platform 28
+and **NDK r16b** — the last NDK carrying the GCC toolchain an Android 2.3.7 / API 10 target
+needs. About 3 GB. `.github/workflows/release.yml` is the working recipe; read it rather
+than improvising.
+
+---
+
+## Safety
+
+- **No firmware is touched.** Nothing is unlocked or jailbroken. The app writes values you
+  could set by hand in the body menus.
+- **Everything is reversible.** Restore your original settings from the backup the app
+  offers, or just set the values back yourself.
+- **The app is installed through the same channel Sony's own store used**, reverse
+  engineered and documented by ma1co.
+
+> **Honest note.** This is third-party software on hardware with no supported update path.
+> The installation channel is well understood and widely used, but "well understood" is not
+> "warranted". Keep a full backup of anything you care about.
+
+---
+
+## FAQ
+
+**[docs/FAQ.md](docs/FAQ.md)** — 21 questions, including *will this brick my camera*,
+*what happens if the battery dies mid-install*, *is this the same as a Fujifilm simulation*,
+and *why is there no grain*.
+
+---
+
+## Where the data comes from
+
+| Upstream | Contribution | Licence | Redistributed |
 |---|---|---|---|
-| [voxivoid/recipe-lab-sony-pmca](https://github.com/voxivoid/recipe-lab-sony-pmca) | **77 款配方参数**、设置存储区反向工程、应用本体 | **MIT** | ✔ |
-| [ukiki0718-netizen/sony-a5100-film-studio](https://github.com/ukiki0718-netizen/sony-a5100-film-studio) | 15 款风格的取向与命名、四档强度设计、机型验证范围与许可披露方式 | PolyForm Noncommercial | ✘ 仅登记 |
-| [bonyback1/sony-pmca-ricoh-mod](https://github.com/bonyback1/sony-pmca-ricoh-mod) | 硬件色彩矩阵与共同 Gamma 的处理方法 | Apache-2.0 | ✔ |
-| [ma1co/Sony-PMCA-RE](https://github.com/ma1co/Sony-PMCA-RE) | 应用安装通道、固件与设置转储 | MIT | ✔ |
-| [ma1co/OpenMemories-Tweak](https://github.com/ma1co/OpenMemories-Tweak) | Wi-Fi ADB 与开发者开关 | MIT | ✔ |
+| [voxivoid/recipe-lab-sony-pmca](https://github.com/voxivoid/recipe-lab-sony-pmca) | **77 recipe parameter sets**, the settings-store reverse engineering, the app itself | **MIT** | ✔ |
+| [ukiki0718-netizen/sony-a5100-film-studio](https://github.com/ukiki0718-netizen/sony-a5100-film-studio) | names and provenance of 15 looks, the four-step strength design, an exemplary licence disclosure | PolyForm Noncommercial | ✘ name only |
+| [bonyback1/sony-pmca-ricoh-mod](https://github.com/bonyback1/sony-pmca-ricoh-mod) | the hardware matrix + shared gamma method | Apache-2.0 | ✘ reference only |
+| [ma1co/Sony-PMCA-RE](https://github.com/ma1co/Sony-PMCA-RE) | the install channel, firmware and settings dumping | MIT | ✘ external tool |
+| [ma1co/OpenMemories-Tweak](https://github.com/ma1co/OpenMemories-Tweak) | Wi-Fi ADB and developer toggles | MIT | ✘ external tool |
 
-**没有 ma1co 就没有这一切。** 他公开地反向工程了索尼的 PlayMemories 平台并给出了
-宽松许可——本项目只是站在上面。
+Brand names in recipe names — Sony, Fujifilm, Kodak, Ricoh, Leica, Hasselblad, Canon,
+Nikon, Panasonic, Olympus, Agfa, Ilford, Cinestill, Polaroid, Instax — are trademarks of
+their owners, used here only to describe the look a recipe aims at. **This project is not
+affiliated with or endorsed by any of them.** Every value is a community-derived
+approximation, not official colour science.
 
-**筛选与许可边界见 [NOTICE.md](NOTICE.md)。** 简版：
-
-- 本仓库**自己的代码**是 MIT
-- 上游 `recipe-lab` 的配方参数是 MIT，可自由再分发
-- 胶片工坊的 15 款**只登记名称与来源，不转录其拟合参数**——许可（非商用）与技术
-  （数值是给它的矩阵/Gamma 管线拟合的，放进「写设置」的引擎根本不成立）两重原因
-- 那 15 款里，Recipe Lab 唯缺的是理光**森山风**，本仓库补写了近似版 `gr-moriyama`，
-  标着 `verified: false`（**未在实机验证**）
-
-**本项目与索尼、富士、柯达、理光等公司无任何关联，未获其背书。**
+Full provenance and licence boundaries: **[NOTICE.md](NOTICE.md)** ·
+**[CHANGELOG](CHANGELOG.md)**.
 
 ---
 
-## 授权
+## Licence
 
-本仓库代码 MIT。**本项目不改固件**，只写相机设置存储区里你本来就能手设的值。
+This repository's own code, data structure and documentation: **[MIT](LICENSE)**.
 
-装任何东西前先备份存储卡，先用可丢弃的素材试拍。软件按现状提供，
-不保证兼容性、色彩准确性或无侵权。
+Recipe *values* come from upstream and keep the upstream licence — see
+[NOTICE.md](NOTICE.md). The 15 matrix looks are recorded by name only and are **not**
+redistributable.
