@@ -5,6 +5,9 @@
 
 发布前必须跑 `python tests/run_all.py`，六道关卡全绿才允许打 tag。
 
+> `v0.5.0` 是本仓库对外发布的**首个版本**。它之前完成的开发批次没有对应的 Release，
+> 因此不带版本号，以「开发批次」列在下方，内容与许可判断原样保留以便追溯。
+
 ---
 
 ## v0.5.0 — 2026-09-13 · 重命名为 Sony SOOC Recipes
@@ -16,7 +19,7 @@
 - 安装说明、README、架构文档、工具脚本与生成的目录浏览器均改用新名称；正文对上游 voxivoid 项目的引用改写为「上游项目 / upstream project」。
 - 保留 `NOTICE.md` 的 MIT 法定署名，以及 CI / `check_fidelity.py` 联网抓取上游源码所用的 raw-URL。
 
-## v0.4.0 — 2026-09-13 · 胶片批次
+## 开发批次 · 胶片（2026-09-13，新增 38 款）
 
 **新增 38 款**（117 → 155，可编译 102 → 140），测试用例 25 → 63。分组不变。
 
@@ -53,7 +56,7 @@ Natural · Silver（柔）· Teal · Vivid。
 
 ---
 
-## v0.3.0 — 2026-09-13 · 相机模拟批次
+## 开发批次 · 相机模拟（2026-09-13，新增 18 款）
 
 **新增 18 款「相机调色模拟」配方**（99 → 117，可编译 84 → 102），新增组 `pentax`。
 全部 `source: authored-here` + `verified: false`，测试用例 7 → 25 条。
@@ -99,12 +102,12 @@ Natural · Silver（柔）· Teal · Vivid。
 
 ---
 
-## v0.2.1 — 2026-09-13 · 文档
+## 开发批次 · 文档（2026-09-13）
 
-配方与 APK 一行未改（99 款 / 84 款可编译，APK 仍是 v0.2.0 那个）。这一版只动文档。
+配方与 APK 一行未改（99 款 / 84 款可编译，APK 仍是上一版那个）。这一版只动文档。
 
 **不打 tag。** 打 `v*` 会触发 `release.yml` 重新构建并发布 APK，而 APK 没有任何变化——
-只为文档跑一次 3 GB 工具链没有意义。要装相机就去 v0.2.0 的 Release 页下载。
+只为文档跑一次 3 GB 工具链没有意义。要装相机就用最新 Release 的 APK。
 
 **主页改成英文，中文作为子页面**
 
@@ -146,7 +149,7 @@ GitHub 深色模式下不会变成黑底黑字。
 
 ---
 
-## v0.2.0 — 2026-09-13
+## 开发批次 · 首批自写配方（2026-09-13，新增 6 款）
 
 **新增 6 款自写配方**（93 → 99，可编译 78 → 84）
 
@@ -174,7 +177,7 @@ https://github.com/HairuoLiu/sony-sooc-recipes/releases
 ```
 
 产物已核验：有效 zip、`AndroidManifest.xml` 为二进制 AXML、`classes.dex` 52 KB、
-`lib/armeabi/librecipelab.so` 30 KB（armeabi 正是 2.3.7 的 ABI）、v1 签名齐全
+`lib/armeabi/libsonysoocrecipes.so` 30 KB（armeabi 正是 2.3.7 的 ABI）、v1 签名齐全
 （`--min-sdk-version 10`，相机不认 v2/v3）。
 
 **两个坑，都写在配置文件的注释里了**
@@ -206,7 +209,7 @@ https://github.com/HairuoLiu/sony-sooc-recipes/releases
 
 ---
 
-## v0.1.0 — 2026-09-13
+## 开发批次 · 初始目录（2026-09-13，93 款）
 
 首个版本。
 
