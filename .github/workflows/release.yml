@@ -94,13 +94,27 @@ jobs:
           git -C jni/platform checkout "$PLATFORM_SHA"
 
       - name: rebrand fork to Sony SOOC Recipes
+        # The upstream tree hard-codes its package, native library and product names well
+        # beyond the Java sources: res/layout names custom views by fully-qualified class,
+        # jni.cpp looks the exception class up by path, and build.sh / build.cmd name both the
+        # .so and the output APK. Miss any one and the build dies, or the app crashes on launch.
+        #
+        # 'voxivoid' -> 'hairuoliu' in a single pass rewrites every separator form
+        # (com.voxivoid.recipelab, com/voxivoid/recipelab, com\voxivoid\recipelab,
+        # com_voxivoid_recipelab) without relying on sed backslash escaping, which silently
+        # mis-handled the Windows form in build.cmd.
         run: |
           cd build/recipe-lab-sony-pmca
-          find src jni res \( -name '*.cpp' -o -name '*.c' -o -name '*.h' \) -exec sed -i 's/com_voxivoid_recipelab/com_hairuoliu_sonysoocrecipes/g; s/com\.voxivoid\.recipelab/com.hairuoliu.sonysoocrecipes/g' {} +
-          find src -name '*.java' -exec sed -i 's/com\.voxivoid\.recipelab/com.hairuoliu.sonysoocrecipes/g; s#com/voxivoid/recipelab#com/hairuoliu/sonysoocrecipes#g' {} +
-          sed -i 's/package="com\.voxivoid\.recipelab"/package="com.hairuoliu.sonysoocrecipes"/' AndroidManifest.xml
-          sed -i 's#<string name="app_name">Recipe Lab</string>#<string name="app_name">Sony SOOC Recipes</string>#' res/values/strings.xml
-          grep -rl 'recipelab' --include='*.mk' --include='*.java' src jni res | xargs -r sed -i 's/recipelab/sonysoocrecipes/g' || true
+          pattern=(
+            -e 's/voxivoid/hairuoliu/g'
+            -e 's/Recipe Lab/Sony SOOC Recipes/g'
+            -e 's/RecipeLab/SonySOOCRecipes/g'
+            -e 's/recipelab/sonysoocrecipes/g'
+          )
+          find src jni res -type f \
+            \( -name '*.java' -o -name '*.cpp' -o -name '*.c' -o -name '*.h' \
+               -o -name '*.mk' -o -name '*.xml' \) -exec sed -i "${pattern[@]}" {} +
+          sed -i "${pattern[@]}" AndroidManifest.xml build.sh build.cmd tools/check-version.sh
           mkdir -p src/com/hairuoliu
           git mv src/com/voxivoid/recipelab src/com/hairuoliu/sonysoocrecipes
 
