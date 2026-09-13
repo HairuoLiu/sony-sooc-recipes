@@ -261,8 +261,8 @@ SonySOOCRecipes-<tag>.apk          ──  签名密钥只在本机，永不入�
 7. 关卡 6 扫描所有 README 与 `docs/*.md` 里的图片引用，遇到指向不存在的文件、第三方外链
    （状态徽章除外）、或 `docs/assets/samples/` 下命名错误的样例时失败。
 8. 推送 `v*` tag 时，`release.yml` 重跑关卡 1+1b，然后按**固定的 `UPSTREAM_SHA`** 克隆上游、
-   重新生成、用 JDK 17 + build-tools 30.0.3 + NDK r16b 构建，并把 `SonySOOCRecipes-<tag>.apk` 与
-   SHA-256 校验和挂到 GitHub Release。
+   改包名、把 `assets/app-icon/` 里的启动图标拷进 fork、重新生成、用 JDK 17 + build-tools 30.0.3
+   + NDK r16b 构建，并把 `SonySOOCRecipes-<tag>.apk` 与 SHA-256 校验和挂到 GitHub Release。
 
 > **实话实说。** 上游版本固定在**两处**——`catalog/filters.json`（`sources.recipe-lab.fetched_rev`）
 > 和 `release.yml`（`UPSTREAM_SHA`）——而且 `test_catalog.py`（`TestPinnedUpstream`）会在两处不一致时
@@ -276,6 +276,7 @@ SonySOOCRecipes-<tag>.apk          ──  签名密钥只在本机，永不入�
 
 ```
 sony-sooc-recipes/
+├── assets/app-icon/          启动图标集——透明 RGBA，4 个密度 + 512 px 主图
 ├── catalog/
 │   ├── filters.json          ★ 唯一事实来源。所有配方都登记在这里
 │   ├── index.html            可浏览的滤镜浏览器（单文件，无依赖）
@@ -301,7 +302,8 @@ sony-sooc-recipes/
 │   ├── check_readme_counts.py 核对 README 计数（CI 关卡 5）
 │   ├── check_assets.py       文档图片 / 资源引用（CI 关卡 6）
 │   ├── install-wifi.sh       Wi-Fi ADB 安装把手
-│   └── build_apk.sh          调上游 build.sh 并套用生成的 Recipes.java
+│   ├── build_app_icon.py     按源照片重新生成启动图标集
+│   └── build_apk.sh          调上游 build.sh 并套用生成的 Recipes.java 与图标
 ├── tests/
 │   ├── test_catalog.py       33 条用例 + 不变量（CI 关卡 1b）
 │   ├── cases.json            自写配方的钉死值

@@ -5,9 +5,10 @@
 #
 # Steps:
 #   1. make sure the upstream checkout exists and is on the pinned revision
-#   2. generate Recipes.java from the catalog into it
-#   3. run the upstream build (ndk-build, aapt, javac, d8, zipalign, apksigner)
-#   4. copy the APK out
+#   2. apply the app icon from assets/app-icon/
+#   3. generate Recipes.java from the catalog into it
+#   4. run the upstream build (ndk-build, aapt, javac, d8, zipalign, apksigner)
+#   5. copy the APK out
 #
 # Toolchain, and there is no way around it: JDK 17, Android SDK build-tools 30.0.3,
 # platform API 28, and NDK r16b. r16b is the LAST NDK with the GCC toolchain this
@@ -34,7 +35,7 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --fork)    FORK="$2"; shift 2 ;;
     --release) RELEASE=1; shift ;;
-    -h|--help) sed -n '2,25p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    -h|--help) sed -n '2,26p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) echo "unknown argument: $1" >&2; exit 2 ;;
   esac
 done
@@ -65,7 +66,17 @@ else
   echo "==> upstream checkout already at $FORK"
 fi
 
-# --- 3. generate Recipes.java from the catalog --------------------------------------
+# --- 3. apply the app icon ----------------------------------------------------------
+# A fresh clone carries upstream's icon; ours lives in assets/app-icon/ and is a build
+# input of this repository, exactly like catalog/filters.json. Same step the release
+# workflow runs, so a local build and a tagged build look identical.
+echo "==> applying assets/app-icon into the fork"
+for d in mdpi hdpi xhdpi xxhdpi; do
+  cp "$ROOT/assets/app-icon/ic_launcher-$d.png" "$FORK/res/drawable-$d/ic_launcher.png"
+done
+cp "$ROOT/assets/app-icon/icon-512.png" "$FORK/dist/icon-512.png"
+
+# --- 4. generate Recipes.java from the catalog --------------------------------------
 echo "==> generating Recipes.java from catalog/filters.json"
 python "$ROOT/tools/gen_recipes.py" --fork "$FORK"
 
@@ -73,7 +84,7 @@ echo "==> verifying recipes against upstream"
 python "$ROOT/tools/check_fidelity.py" \
   --upstream "$FORK/src/com/hairuoliu/sonysoocrecipes/Recipes.java.orig" 2>/dev/null || true
 
-# --- 4. build ------------------------------------------------------------------------
+# --- 5. build ------------------------------------------------------------------------
 echo "==> building"
 pushd "$FORK" >/dev/null
 if (( RELEASE )); then

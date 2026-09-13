@@ -118,6 +118,20 @@ jobs:
           mkdir -p src/com/hairuoliu
           git mv src/com/voxivoid/recipelab src/com/hairuoliu/sonysoocrecipes
 
+      - name: apply the app icon
+        # The icon is a build input owned by this repository, not by the upstream checkout.
+        # It lives in assets/app-icon/ and has to be copied in *after* the clone and after
+        # the rebrand, because a fresh `git clone` in the previous step has no memory of it.
+        # Everything is already RGBA with a transparent background, sized per density —
+        # see assets/app-icon/README.md. Update the set with tools/build_app_icon.py.
+        run: |
+          F=build/recipe-lab-sony-pmca
+          cp assets/app-icon/ic_launcher-mdpi.png    "$F/res/drawable-mdpi/ic_launcher.png"
+          cp assets/app-icon/ic_launcher-hdpi.png    "$F/res/drawable-hdpi/ic_launcher.png"
+          cp assets/app-icon/ic_launcher-xhdpi.png   "$F/res/drawable-xhdpi/ic_launcher.png"
+          cp assets/app-icon/ic_launcher-xxhdpi.png  "$F/res/drawable-xxhdpi/ic_launcher.png"
+          cp assets/app-icon/icon-512.png            "$F/dist/icon-512.png"
+
       - name: generate Recipes.java from the catalog
         run: python tools/gen_recipes.py --fork build/recipe-lab-sony-pmca
 

@@ -280,7 +280,8 @@ Steps in order:
 7. Gate 6 scans every README and `docs/*.md` for image references and fails on a missing file, a
    third-party hotlink (status badges excepted), or a mis-named sample in `docs/assets/samples/`.
 8. On a `v*` tag, `release.yml` re-runs gates 1+1b, then clones upstream at the **pinned
-   `UPSTREAM_SHA`**, regenerates, builds with JDK 17 + build-tools 30.0.3 + NDK r16b, and attaches
+   `UPSTREAM_SHA`**, rebrands the fork, copies our launcher icon in from `assets/app-icon/`,
+   regenerates, builds with JDK 17 + build-tools 30.0.3 + NDK r16b, and attaches
    `SonySOOCRecipes-<tag>.apk` + a SHA-256 sum to the GitHub Release.
 
 > **Honest note.** The upstream revision is pinned in **two** places — `catalog/filters.json`
@@ -296,6 +297,7 @@ This section maps the tree so the paths above make sense.
 
 ```
 sony-sooc-recipes/
+├── assets/app-icon/          launcher icon set — transparent RGBA, 4 densities + 512 px master
 ├── catalog/
 │   ├── filters.json          ★ single source of truth — all filters live here
 │   ├── index.html            browsable filter browser (single file, no deps)
@@ -321,7 +323,8 @@ sony-sooc-recipes/
 │   ├── check_readme_counts.py README counts (CI gate 5)
 │   ├── check_assets.py       image / asset references (CI gate 6)
 │   ├── install-wifi.sh       Wi-Fi ADB install helper
-│   └── build_apk.sh          calls upstream build.sh with the generated Recipes.java
+│   ├── build_app_icon.py     regenerates the launcher icon set from a source photo
+│   └── build_apk.sh          calls upstream build.sh with the generated Recipes.java + our icon
 ├── tests/
 │   ├── test_catalog.py       33 cases + invariants (CI gate 1b)
 │   ├── cases.json            pinned values for authored-here recipes
