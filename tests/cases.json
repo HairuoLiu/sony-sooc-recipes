@@ -626,6 +626,956 @@
         "ev": 0,
         "dro": 5
       }
+    },
+
+    {
+      "id": "kodak-aerocolor-iv-125",
+      "why": "Kodak's aerial survey negative: punchy but with lifted blacks and restrained chroma. STD -1 sat, +1 con, DRO 5.",
+      "fields": {
+        "name": "Kodak Aerocolor IV 125",
+        "group": "kodak",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "STD",
+        "sat": -1,
+        "con": 1,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 5
+      }
+    },
+
+    {
+      "id": "kodak-double-x-5222",
+      "why": "The B&W cine negative half of Hollywood still shoots. Hard mono, +1 sharp, DRO 3 keeps some shadow.",
+      "fields": {
+        "name": "Kodak Eastman Double-X 5222",
+        "group": "kodak",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "mono",
+        "verified": false
+      },
+      "recipe": {
+        "style": "MONO",
+        "sat": 0,
+        "con": 2,
+        "sharp": 1,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 3
+      }
+    },
+
+    {
+      "id": "kodak-plus-x-125",
+      "why": "The softer classic B&W negative next to Tri-X: flat contrast, sharpness eased.",
+      "fields": {
+        "name": "Kodak Plus-X Pan 125",
+        "group": "kodak",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "mono",
+        "verified": false
+      },
+      "recipe": {
+        "style": "MONO",
+        "sat": 0,
+        "con": 0,
+        "sharp": -1,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 4
+      }
+    },
+
+    {
+      "id": "kodak-ektar-25",
+      "why": "The legendary ultra-fine-grain 1990s negative - a different stock from the Ektar 100 already catalogued. Clean, dense, +1 sharp.",
+      "fields": {
+        "name": "Kodak Ektar 25",
+        "group": "kodak",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "STD",
+        "sat": 0,
+        "con": 0,
+        "sharp": 1,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 4
+      }
+    },
+
+    {
+      "id": "kodak-supra-100",
+      "why": "Consumer print film, gentler than the professional stocks: -1 contrast.",
+      "fields": {
+        "name": "Kodak Supra 100",
+        "group": "kodak",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "STD",
+        "sat": 0,
+        "con": -1,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 4
+      }
+    },
+
+    {
+      "id": "fuji-reala-500d",
+      "why": "Fuji's motion-picture negative: neutral-cool, measured contrast 1.24 / saturation 0.83. Distinct from the Reala Ace film sim.",
+      "fields": {
+        "name": "Fuji Reala 500D",
+        "group": "fuji-film",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": -1,
+        "con": 1,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 4
+      }
+    },
+
+    {
+      "id": "fuji-cdu-2-cross",
+      "why": "A graphic-arts chrome run through C-41: high contrast, warm, odd in a good way. +2 con, amber trim.",
+      "fields": {
+        "name": "Fujichrome CDU-II (cross)",
+        "group": "fuji-film",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "STD",
+        "sat": 0,
+        "con": 2,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 1, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 2
+      }
+    },
+
+    {
+      "id": "fuji-film-100",
+      "why": "Plain consumer Fujicolor: balanced, saturation -1, slight black lift.",
+      "fields": {
+        "name": "Fujicolor 100",
+        "group": "fuji-film",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "STD",
+        "sat": -1,
+        "con": 0,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 4
+      }
+    },
+
+    {
+      "id": "fuji-print-industrial-100",
+      "why": "The industrial print stock is punchier than consumer Fuji: +1 contrast at native saturation.",
+      "fields": {
+        "name": "Fujicolor Print Industrial 100",
+        "group": "fuji-film",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "STD",
+        "sat": 0,
+        "con": 1,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 3
+      }
+    },
+
+    {
+      "id": "fuji-print-industrial-400",
+      "why": "The 400-speed industrial print stock, harder still (measured contrast 1.28).",
+      "fields": {
+        "name": "Fujicolor Print Industrial 400",
+        "group": "fuji-film",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "STD",
+        "sat": 0,
+        "con": 2,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 3
+      }
+    },
+
+    {
+      "id": "adox-color-implosion-100",
+      "why": "Adox's deliberately 'broken' negative: shifted, muted, flat. NEUTRAL -2 sat -1 con.",
+      "fields": {
+        "name": "Adox Color Implosion 100",
+        "group": "other-stocks",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": -2,
+        "con": -1,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 4
+      }
+    },
+
+    {
+      "id": "ambrotype",
+      "why": "1850s wet plate: warm near-mono, soft. MONO + amber trim is the closest the settings store gets.",
+      "fields": {
+        "name": "Ambrotype (wet plate)",
+        "group": "other-stocks",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "mono",
+        "verified": false
+      },
+      "recipe": {
+        "style": "MONO",
+        "sat": 0,
+        "con": 0,
+        "sharp": -1,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 2, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 5
+      }
+    },
+
+    {
+      "id": "astrum-cn-125",
+      "why": "Ukrainian Astrum negative: neutral with a green lean (measured R-G -0.037).",
+      "fields": {
+        "name": "Astrum Color Negative 125",
+        "group": "other-stocks",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "STD",
+        "sat": -1,
+        "con": 0,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 4
+      }
+    },
+
+    {
+      "id": "konica-centuria-100",
+      "why": "Konica consumer negative: easy contrast, honest colour.",
+      "fields": {
+        "name": "Konica Centuria 100",
+        "group": "other-stocks",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "STD",
+        "sat": 0,
+        "con": -1,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 4
+      }
+    },
+
+    {
+      "id": "konica-vx400-super",
+      "why": "High-speed negative, the flattest of the set (measured 0.84): NEUTRAL -2 con.",
+      "fields": {
+        "name": "Konica Minolta VX400 Super",
+        "group": "other-stocks",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": -1,
+        "con": -2,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 5
+      }
+    },
+
+    {
+      "id": "konica-impresa-50",
+      "why": "Konica's slow slide film: saturated and proud (measured 1.02). VIVID +1 +1.",
+      "fields": {
+        "name": "Konica Impresa 50",
+        "group": "other-stocks",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "VIVID",
+        "sat": 1,
+        "con": 1,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 3
+      }
+    },
+
+    {
+      "id": "lomochrome-metropolis",
+      "why": "Lomography's desaturated city film: chroma way down, contrast up, green-leaning trim for the cyan cast.",
+      "fields": {
+        "name": "Lomochrome Metropolis",
+        "group": "other-stocks",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": -2,
+        "con": 2,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": -1 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 3
+      }
+    },
+
+    {
+      "id": "lomochrome-purple",
+      "why": "The green-to-purple swap film. No Sony setting can remap one hue, so this is the mood - magenta/amber trim over crushed contrast - not the map.",
+      "fields": {
+        "name": "Lomochrome Purple",
+        "group": "other-stocks",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": -2,
+        "con": 3,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 1, "gm": 2 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 2
+      }
+    },
+
+    {
+      "id": "orwo-chrom-ut21",
+      "why": "East German chrome with muted skin (measured skin saturation 0.53): STD -1 sat +1 con.",
+      "fields": {
+        "name": "ORWO Chrom UT21",
+        "group": "other-stocks",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "STD",
+        "sat": -1,
+        "con": 1,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 4
+      }
+    },
+
+    {
+      "id": "polaroid-type100-sepia",
+      "why": "The sepia peel-apart pack: +1 EV, contrast -2, the softest recipe in this batch.",
+      "fields": {
+        "name": "Polaroid Type 100 Sepia",
+        "group": "other-stocks",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "mono",
+        "verified": false
+      },
+      "recipe": {
+        "style": "SEPIA",
+        "sat": 0,
+        "con": -2,
+        "sharp": -1,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 1,
+        "dro": 6
+      }
+    },
+
+    {
+      "id": "prokudin-gorskiy-1906",
+      "why": "Three-plate early colour: soft pastel with a hint of misregistration. Sharpness eased.",
+      "fields": {
+        "name": "Prokudin-Gorskiy 1906",
+        "group": "other-stocks",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": -1,
+        "con": 1,
+        "sharp": -1,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 4
+      }
+    },
+
+    {
+      "id": "rollei-cn200",
+      "why": "Rollei colour negative: cool-green lean, moderate contrast.",
+      "fields": {
+        "name": "Rollei CN 200",
+        "group": "other-stocks",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": -1,
+        "con": 1,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 4
+      }
+    },
+
+    {
+      "id": "rollei-ortho-25",
+      "why": "Orthochromatic: reds record dark. The camera cannot do ortho response - this keeps only the hard, bright-sky character, and the note says so.",
+      "fields": {
+        "name": "Rollei Ortho 25",
+        "group": "other-stocks",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "mono",
+        "verified": false
+      },
+      "recipe": {
+        "style": "MONO",
+        "sat": 0,
+        "con": 2,
+        "sharp": 1,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 2
+      }
+    },
+
+    {
+      "id": "svema-type-42",
+      "why": "Soviet B&W, measured almost pure mono (0.11 chroma) at high contrast (1.28).",
+      "fields": {
+        "name": "Svema Type-42",
+        "group": "other-stocks",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "mono",
+        "verified": false
+      },
+      "recipe": {
+        "style": "MONO",
+        "sat": 0,
+        "con": 2,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 3
+      }
+    },
+
+    {
+      "id": "leica-bw-hc",
+      "why": "High-contrast mono from the Leica pack: +2 con, DRO 1.",
+      "fields": {
+        "name": "Leica B&W HC",
+        "group": "leica",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "mono",
+        "verified": false
+      },
+      "recipe": {
+        "style": "MONO",
+        "sat": 0,
+        "con": 2,
+        "sharp": 1,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 1
+      }
+    },
+
+    {
+      "id": "leica-bw-nat",
+      "why": "Natural-contrast mono: flat, DRO 4.",
+      "fields": {
+        "name": "Leica B&W Natural",
+        "group": "leica",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "mono",
+        "verified": false
+      },
+      "recipe": {
+        "style": "MONO",
+        "sat": 0,
+        "con": 0,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 4
+      }
+    },
+
+    {
+      "id": "leica-greg-wlm",
+      "why": "Warm mono (measured R-G +0.014): MONO with a touch of amber, kept under the original 'Greg WLM' name.",
+      "fields": {
+        "name": "Leica Greg WLM (warm mono)",
+        "group": "leica",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "mono",
+        "verified": false
+      },
+      "recipe": {
+        "style": "MONO",
+        "sat": 0,
+        "con": 1,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 1, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 3
+      }
+    },
+
+    {
+      "id": "leica-ia",
+      "why": "The hardest mono in the pack (measured 1.25): contrast pinned, DRO off.",
+      "fields": {
+        "name": "Leica IA (hard mono)",
+        "group": "leica",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "mono",
+        "verified": false
+      },
+      "recipe": {
+        "style": "MONO",
+        "sat": 0,
+        "con": 3,
+        "sharp": 1,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 0
+      }
+    },
+
+    {
+      "id": "leica-blu",
+      "why": "Cool mono (measured 0.19 chroma, blue lean): MONO with a blue-leaning trim.",
+      "fields": {
+        "name": "Leica Blu (cool mono)",
+        "group": "leica",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "mono",
+        "verified": false
+      },
+      "recipe": {
+        "style": "MONO",
+        "sat": 0,
+        "con": 0,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": -2, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 3
+      }
+    },
+
+    {
+      "id": "leica-sel",
+      "why": "Pale silver: near-mono, lifted blacks, +1 EV.",
+      "fields": {
+        "name": "Leica Sel (pale silver)",
+        "group": "leica",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "mono",
+        "verified": false
+      },
+      "recipe": {
+        "style": "MONO",
+        "sat": 0,
+        "con": 0,
+        "sharp": -1,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 1,
+        "dro": 5
+      }
+    },
+
+    {
+      "id": "leica-sep",
+      "why": "Warm sepia from the pack - Sony's own SEPIA style does this directly.",
+      "fields": {
+        "name": "Leica Sepia",
+        "group": "leica",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "mono",
+        "verified": false
+      },
+      "recipe": {
+        "style": "SEPIA",
+        "sat": 0,
+        "con": 0,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 4
+      }
+    },
+
+    {
+      "id": "leica-ble",
+      "why": "Bleach-bypass flavour: saturation floored, blacks lifted (0.092), slight cool.",
+      "fields": {
+        "name": "Leica Bleach (bleach bypass)",
+        "group": "leica",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": -3,
+        "con": 0,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": -1, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 5
+      }
+    },
+
+    {
+      "id": "leica-chr",
+      "why": "Chrome flavour: muted slide look, contrast +1, blacks lifted.",
+      "fields": {
+        "name": "Leica Chrome",
+        "group": "leica",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "STD",
+        "sat": -1,
+        "con": 1,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 3
+      }
+    },
+
+    {
+      "id": "leica-brs",
+      "why": "Warm and punchy: measured contrast 1.21 with an amber cast.",
+      "fields": {
+        "name": "Leica BRS (warm punch)",
+        "group": "leica",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "STD",
+        "sat": 0,
+        "con": 2,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 2, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 2
+      }
+    },
+
+    {
+      "id": "leica-nat",
+      "why": "Natural baseline of the pack: nothing exaggerated.",
+      "fields": {
+        "name": "Leica Natural",
+        "group": "leica",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": -1,
+        "con": 0,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 4
+      }
+    },
+
+    {
+      "id": "leica-slv",
+      "why": "The softest look in the pack (measured 0.81): LIGHT style, everything eased.",
+      "fields": {
+        "name": "Leica Silver (soft)",
+        "group": "leica",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "LIGHT",
+        "sat": -1,
+        "con": -2,
+        "sharp": -1,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 5
+      }
+    },
+
+    {
+      "id": "leica-tel",
+      "why": "Teal grade: blue-green lean measured on both cast and hue.",
+      "fields": {
+        "name": "Leica Teal",
+        "group": "leica",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": -1,
+        "con": 1,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": -1, "gm": -1 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 3
+      }
+    },
+
+    {
+      "id": "leica-viv",
+      "why": "Vivid baseline: +1 saturation on VIVID, otherwise untouched.",
+      "fields": {
+        "name": "Leica Vivid",
+        "group": "leica",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "VIVID",
+        "sat": 1,
+        "con": 0,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "AUTO", "kelvin": 0, "ab": 0, "gm": 0 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 4
+      }
     }
   ]
 }

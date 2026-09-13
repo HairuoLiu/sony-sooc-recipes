@@ -3,10 +3,10 @@
 <p align="center">
   <b>Film looks, compiled into an APK, installed inside a Sony camera Sony stopped updating.</b>
   <br>
-  <sub>117 looks · 102 compiled into the APK · 14 groups · straight-out-of-camera JPEG</sub>
+  <sub>155 looks · 140 compiled into the APK · 14 groups · straight-out-of-camera JPEG</sub>
 </p>
 
-<!-- counts: total=117 compiled=102 -->
+<!-- counts: total=155 compiled=140 -->
 <!-- The line above is checked against catalog/filters.json by CI. Change the catalog,
      change this line — a mismatch fails the build. Do not reword it. -->
 
@@ -101,7 +101,7 @@ any of them. That is the point: nothing is hidden, and nothing is permanent.
 
 ## The looks
 
-117 looks in 14 groups. Open **[the filter browser](catalog/index.html)** for the full,
+155 looks in 14 groups. Open **[the filter browser](catalog/index.html)** for the full,
 searchable list — it is a single self-contained HTML file, so download it and open it
 locally rather than viewing the source on GitHub.
 
@@ -109,20 +109,20 @@ locally rather than viewing the source on GitHub.
 |---|---|---|
 | **Sony** | 8 | FL (film-like) · IN (instant) · VV2 |
 | **Fuji Sim** | 26 | Classic Chrome · Nostalgic Neg · Acros +R |
-| **Fuji Film** | 5 | Pro 400H · Superia 400 · Natura 1600 |
-| **Kodak** | 15 | Portra 400 · Gold 200 · Ektar 100 · Tri-X · Vision2 500T |
+| **Fuji Film** | 10 | Pro 400H · Reala 500D · Industrial Print 400 |
+| **Kodak** | 20 | Portra 400 · Gold 200 · Double-X 5222 · Vision3 · Ektar 25 |
 | **Cine** | 4 | Cinestill 800T · Cinestill 50D · Rec709 |
 | **Ricoh GR** | 16 | GR Positive Film · High-contrast B&W · Moriyama · Cinema Green/Yellow |
-| **Leica** | 6 | Monochrom · Classic · M9 CCD |
+| **Leica** | 20 | Monochrom · M9 CCD · B&W HC · Chrome · Teal |
 | **Hasselblad** | 4 | HNCS Natural · LowSat · HiContrast |
 | **Canon / Nikon** | 5 | Canon Faithful · Nikon Flat |
 | **Pentax** | 11 | Bleach Bypass · Radiant · Reversal Film · Harubeni · Fuyuno |
 | **Pana / Olympus** | 4 | L.Monochrome D · Pop Art |
-| **Other Stocks** | 3 | Agfa Vista 200 · Polaroid / Instax |
+| **Other Stocks** | 17 | Adox · Lomochrome · ORWO · Rollei · Svema · Ambrotype |
 | **Ilford** | 5 | HP5 · Delta 3200 · Pan F 50 |
 | **App Look** | 5 | Toy Camera warm/cool · Part Color red · Posterization · Teal Mood |
 
-Counts include looks that are registered by name only; **102** are compiled into the APK.
+Counts include looks that are registered by name only; **140** are compiled into the APK.
 
 ---
 
@@ -181,7 +181,7 @@ Two engines appear in the catalog:
 | | `recipe-lab` | `film-studio-matrix` |
 |---|---|---|
 | Mechanism | writes the settings store | replaces the hardware colour matrix and gamma curve |
-| Looks | 102, compiled into the APK | 15, **registered by name only** |
+| Looks | 140, compiled into the APK | 15, **registered by name only** |
 | Licence | MIT | PolyForm Noncommercial |
 | Verified on | a6000, a6500, a5100, a7 II | a5100 firmware 1.10 only |
 | In this repo | full parameters | name and provenance only — **never parameters** |

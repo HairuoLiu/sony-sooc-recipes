@@ -7,6 +7,43 @@
 
 ---
 
+## v0.4.0 — 2026-09-13 · 胶片批次
+
+**新增 38 款**（117 → 155，可编译 102 → 140），测试用例 25 → 63。分组不变。
+
+背景：用户确认其 LUT 收藏（相机模拟系列与徕卡缩写名合集）为本人（Roger Wang 笔名）
+创作、可自由使用，此前跳过的两批于是补齐。Dehancer 胶片合集按胶片种类观感做参考。
+
+### 胶片 24 款（去重后）
+
+与现有目录比对：Dehancer 68 个文件里 30 个胶片已覆盖（Portra/Gold/HP5/Velvia/
+Acros/Cinestill/Instax 等），收录**未覆盖**的 24 款：
+
+- **Kodak +5**：Aerocolor IV 125（航空负片）· Eastman Double-X 5222（cine 黑白）·
+  Plus-X Pan 125 · Ektar 25（与 Ektar 100 是两支胶片）· Supra 100
+- **Fuji +5**：Reala 500D（电影负片）· CDU-II 交叉冲洗 · Fujicolor 100 ·
+  工业打印 100 / 400
+- **Other Stocks +14**：Adox Color Implosion · 安布罗湿版 · Astrum CN 125 ·
+  柯尼卡 Centuria / VX400 / Impresa · Lomochrome Metropolis / Purple ·
+  ORWO Chrom UT21 · 宝丽来 Type 100 褐调 · Prokudin-Gorskiy 1906 ·
+  Rollei CN200 / Ortho 25 · Svema Type-42
+
+### 徕卡包 14 款（去重后）
+
+缩写名解码：CNT/CLS/ETN = Contemporary/Classic/Eternal，与现有目录重复，跳过。
+收录其余 14 款：B&W HC · B&W Natural · Greg WLM（暖调黑白）· IA（硬黑白）·
+Blu（冷调黑白）· Sel（淡银）· Sepia · Bleach · Chrome · BRS（暖调高反差）·
+Natural · Silver（柔）· Teal · Vivid。
+
+### 诚实说明（写进了各条目 note）
+
+- **Lomochrome Purple 的绿→紫置换**：索尼设置区做不了逐色相置换，只能用品红+琥珀
+  白平衡整体偏移近似气质——note 里写明了。
+- **Rollei Ortho 25 的正色响应**（红光不感光）：无法复现，只保留高反差硬朗观感。
+- 全批 `authored-here` + `verified: false`，note 附参考测量值（反差/饱和/色偏）。
+
+---
+
 ## v0.3.0 — 2026-09-13 · 相机模拟批次
 
 **新增 18 款「相机调色模拟」配方**（99 → 117，可编译 84 → 102），新增组 `pentax`。

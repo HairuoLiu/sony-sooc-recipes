@@ -4,13 +4,13 @@
   <a href="README.md">English</a> · <b>简体中文</b>
 </p>
 
-<!-- counts: total=117 compiled=102 -->
+<!-- counts: total=155 compiled=140 -->
 <!-- The line above is checked against catalog/filters.json by CI. If you change the
      catalog, update it — a mismatch fails the build. Do not reword it. -->
 
 **把胶片滤镜编译成 APK，装进你那台老索尼，让直出就能看。**
 
-针对索尼 PlayMemories Camera Apps（PMCA）机型（a6000 · a6300 · a6500 · a5100 · NEX · RX100 III–V · a7 II 一代），一个装进相机内部的应用：**117 款**胶片与机型风格配方，其中 **102 款可直接编译进 APK**。
+针对索尼 PlayMemories Camera Apps（PMCA）机型（a6000 · a6300 · a6500 · a5100 · NEX · RX100 III–V · a7 II 一代），一个装进相机内部的应用：**155 款**胶片与机型风格配方，其中 **140 款可直接编译进 APK**。
 
 关掉应用、关机重启，风格依然是相机在 P/A/S/M 和录像**全部模式**下的默认。
 直出的 JPEG 就带滤镜。
@@ -61,27 +61,27 @@ python tools/gen_recipes.py --stdout # 看一眼会生成什么
 
 ## 配方一览
 
-117 款，14 个组（13 个品牌/胶片组 + 1 个 App Look 组）。完整可筛选的列表打开 **[滤镜浏览器](catalog/index.html)**。
+155 款，14 个组（13 个品牌/胶片组 + 1 个 App Look 组）。完整可筛选的列表打开 **[滤镜浏览器](catalog/index.html)**。
 （GitHub 上直接打开是源码，下载后用浏览器打开即可。）
 
 | 品牌组 | 数量 | 代表 |
 |---|---|---|
 | **Sony** | 8 | FL (film-like) · IN (instant) · VV2 |
 | **Fuji Sim** | 26 | Classic Chrome · Nostalgic Neg · Acros +R |
-| **Fuji Film** | 5 | Pro 400H · Superia 400 · Natura 1600 |
-| **Kodak** | 15 | Portra 400 · Gold 200 · Ektar 100 · Tri-X · Vision2 500T |
+| **Fuji Film** | 10 | Pro 400H · Reala 500D · 工业打印 400 |
+| **Kodak** | 20 | Portra 400 · Gold 200 · Double-X 5222 · Vision3 · Ektar 25 |
 | **Cine** | 4 | Cinestill 800T · Cinestill 50D · Rec709 |
 | **Ricoh GR** | 16 | GR 正片 · 高反差黑白 · 森山风 · 电影绿/电影黄 |
-| **Leica** | 6 | Monochrom · Classic · M9 CCD |
+| **Leica** | 20 | Monochrom · M9 CCD · 黑白 HC · Chrome · Teal |
 | **Hasselblad** | 4 | HNCS Natural · 低饱和 · 高反差 |
 | **Canon / Nikon** | 5 | Canon Faithful · Nikon Flat |
 | **Pentax** | 11 | 漂白旁路 · 明艳 · 反转片 · 春红 · 冬野 |
 | **Pana / Olympus** | 4 | L.Monochrome D · Pop Art |
-| **Other Stocks** | 3 | Agfa Vista 200 · Polaroid / Instax |
+| **Other Stocks** | 17 | Adox · Lomochrome · ORWO · Rollei · Svema · 湿版 |
 | **Ilford** | 5 | HP5 · Delta 3200 · Pan F 50 |
 | **App Look** | 5 | Toy Camera 暖/冷 · Part Color 红 · Posterization · Teal Mood |
 
-（数量含仅登记的胶片工坊风格；编译进 APK 的是 102 款。）
+（数量含仅登记的胶片工坊风格；编译进 APK 的是 140 款。）
 
 ---
 
