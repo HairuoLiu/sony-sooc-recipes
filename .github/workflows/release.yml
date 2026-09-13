@@ -76,14 +76,22 @@ jobs:
           git clone "$UPSTREAM_REPO" build/recipe-lab-sony-pmca
           cd build/recipe-lab-sony-pmca
           git checkout "$UPSTREAM_SHA"
-          # NOT --recursive, and that is deliberate. jni/platform (OpenMemories-Platform)
-          # is required — Android.mk includes platform/vars.mk and compiles its driver
-          # sources. But it carries a nested submodule pinned to
-          # git.code.sf.net/p/stlport/code, which no longer resolves, so a recursive
-          # init fails the job. The stlport we actually link against is the one NDK r16b
-          # ships (APP_STL := stlport_static); the submodule copy is for the platform
-          # repo's own builds. Do not "fix" this back to --recursive.
-          git submodule update --init
+
+          # jni/platform is required — Android.mk includes platform/vars.mk and compiles
+          # its driver sources. It is upstream's only submodule (OpenMemories-Platform).
+          #
+          # It is cloned directly rather than with `git submodule update --init`, and
+          # that is deliberate. OpenMemories-Platform carries a nested submodule pinned
+          # to git.code.sf.net/p/stlport/code, which no longer resolves; git recurses
+          # into it even without --recursive and aborts the whole job. The stlport this
+          # build links against is the one NDK r16b ships (APP_STL := stlport_static in
+          # jni/Application.mk) — the nested copy exists for the platform repo's own
+          # builds, not ours. Do not "simplify" this back to a submodule update.
+          PLATFORM_SHA="$(git rev-parse "$UPSTREAM_SHA:jni/platform")"
+          echo "jni/platform pinned at $PLATFORM_SHA"
+          rm -rf jni/platform
+          git clone https://github.com/ma1co/OpenMemories-Platform.git jni/platform
+          git -C jni/platform checkout "$PLATFORM_SHA"
 
       - name: generate Recipes.java from the catalog
         run: python tools/gen_recipes.py --fork build/recipe-lab-sony-pmca
