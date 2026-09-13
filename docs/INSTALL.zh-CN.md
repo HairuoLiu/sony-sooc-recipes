@@ -29,11 +29,15 @@ Apps（PMCA）通道，能收应用；没有，就到此为止——本仓库没
 
 | 有 `MENU → Application` | 没有 |
 |---|---|
-| a6000 · a6300 · a6500 · a5100 · a5000<br>a7 / a7R / a7S / a7 II / a7R II / a7S II<br>NEX-5R · NEX-5T · NEX-6<br>RX100 III / IV / V · RX10 II / III · RX1R II<br>HX60 / HX90 / HX400 · WX500<br>a68 · a77 II · a99 II | a6100 · a6400 · a6600 · a6700 · ZV-E10<br>a7 III 及之后全部 · a9 全系 · a1 全系<br>RX100 VA 及之后 · RX10 IV · RX0 · HX99 · ZV-1 全系 |
+| a6000 · a6300 · a6500 · a5100 · a5000<br>a7 / a7R / a7S / a7 II / a7R II / a7S II<br>NEX-5R · NEX-5T · NEX-6<br>RX100 III / IV / V · RX10 II / III · RX1R II<br>HX60 / HX90 / HX400 · WX500<br>a68 · a77 II · a99 II | 2012 年前的 NEX（NEX-3 / 5 / 5N / F3 / 3N / **7**）· a3000 · a3500<br>a6100 · a6400 · a6600 · a6700 · ZV-E10<br>a7 III 及之后全部 · a9 全系 · a1 全系<br>RX100 VA 及之后 · RX10 IV · RX0 · HX99 · ZV-1 全系 |
 
 > **实话实说。** 没有 `Application` 菜单 = 装不了，句号。索尼 2021 年就关了自家应用商店，
 > 2016 年末之后的机型（a6500、a99 II 是最后两台）全是签名固件，任何应用都进不去——不是本项目
 > 不行，索尼自己也不行。网上说在 a6400 上跑起来的都是误传。
+>
+> 另一端也有边界：**PMCA 是从 2012 年秋的 NEX-5R / NEX-6 才开始的**。更早的 NEX-7、
+> NEX-3 / 5 / 5N / F3、以及 a3000 / a3500 没有 Android 子系统，同样没有 `Application`
+> 菜单——它们不在上表「支持」那一列里，**不是漏写**。
 
 ### 你需要准备
 

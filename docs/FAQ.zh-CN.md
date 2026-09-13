@@ -51,9 +51,13 @@
 
 | 有 `MENU → Application`（支持） | 没有（不支持） |
 |---|---|
-| a6000 · a6300 · a6500 · a5100 · a5000<br>a7 / a7R / a7S / a7 II / a7R II / a7S II<br>NEX-5R · NEX-5T · NEX-6<br>RX100 III / IV / V · RX10 II / III · RX1R II<br>HX60 / HX90 / HX400 · WX500<br>a68 · a77 II · a99 II | a6100 · a6400 · a6600 · a6700 · ZV-E10<br>a7 III 及之后全部 · a9 系列 · a1 系列<br>RX100 VA 及之后 · RX10 IV · RX0 · HX99 · ZV-1 系列 |
+| a6000 · a6300 · a6500 · a5100 · a5000<br>a7 / a7R / a7S / a7 II / a7R II / a7S II<br>NEX-5R · NEX-5T · NEX-6<br>RX100 III / IV / V · RX10 II / III · RX1R II<br>HX60 / HX90 / HX400 · WX500<br>a68 · a77 II · a99 II | 2012 年前的 NEX（NEX-3 / 5 / 5N / F3 / 3N / **7**）· a3000 · a3500<br>a6100 · a6400 · a6600 · a6700 · ZV-E10<br>a7 III 及之后全部 · a9 系列 · a1 系列<br>RX100 VA 及之后 · RX10 IV · RX0 · HX99 · ZV-1 系列 |
 
 > **实话实说。**「没有 `Application` 菜单」等于装不了应用，句号。索尼 2021 年关了自家应用商店，2016 年末之后的机型（a6500 和 a99 II 是最后两台）都是签名固件、拒绝应用——不止本项目装不了，索尼自己都装不进去。
+
+**边界在 2012 年秋。** PMCA 应用平台从 **NEX-5R / NEX-6**（2012 年 8–9 月发布）才开始——那两台第一次带 Android 子系统。更早的 **NEX-7**（2011 年 8 月）、NEX-3 / NEX-5 / NEX-5N / NEX-F3，以及 a3000 / a3500 都没有这个子系统，菜单里根本没有 `Application`。它们和上表「支持」那一列长得很像，但装不了；安装器报 `This camera does not support apps. Please check the compatibility list.` 说的就是这件事。**它们不在「支持」列里不是漏写。**
+
+**这些机器还有别的路吗？** 有一条，但不是本项目的支持路径。配方本质就是一组 Creative Style（基色 + 对比 / 饱和 / 锐度）＋白平衡微调＋DRO 的数值，[`catalog/index.html`](../catalog/index.html) 里逐条都印着，可以照着手动在相机菜单里设——NEX-7 这几项都在（Creative Style 的对比 / 饱和 / 锐度各 ±3 档，白平衡 A–B / G–M 各 ±7 档，DRO Lv1–5）。代价：没有一键存入、没有应用里的预览和批量管理，超出 ±3 的值会被菜单钳到上限，PE（Picture Effect）类配方的档位对应关系未经实测。
 
 ### a6400 / a7 III 为什么不行？有没有别的办法？
 

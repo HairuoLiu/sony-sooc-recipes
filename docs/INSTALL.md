@@ -33,12 +33,16 @@ method in this repository can install anything on it.
 
 | Has `MENU → Application` | Does not |
 |---|---|
-| a6000 · a6300 · a6500 · a5100 · a5000<br>a7 / a7R / a7S / a7 II / a7R II / a7S II<br>NEX-5R · NEX-5T · NEX-6<br>RX100 III / IV / V · RX10 II / III · RX1R II<br>HX60 / HX90 / HX400 · WX500<br>a68 · a77 II · a99 II | a6100 · a6400 · a6600 · a6700 · ZV-E10<br>a7 III and everything after · a9 series · a1 series<br>RX100 VA and after · RX10 IV · RX0 · HX99 · ZV-1 series |
+| a6000 · a6300 · a6500 · a5100 · a5000<br>a7 / a7R / a7S / a7 II / a7R II / a7S II<br>NEX-5R · NEX-5T · NEX-6<br>RX100 III / IV / V · RX10 II / III · RX1R II<br>HX60 / HX90 / HX400 · WX500<br>a68 · a77 II · a99 II | Pre-2012 NEX (NEX-3 / 5 / 5N / F3 / 3N / **7**) · a3000 · a3500<br>a6100 · a6400 · a6600 · a6700 · ZV-E10<br>a7 III and everything after · a9 series · a1 series<br>RX100 VA and after · RX10 IV · RX0 · HX99 · ZV-1 series |
 
 > **Honest note.** "No `Application` menu" means you cannot install apps, full stop. Sony shut
 > down its own app store in 2021, and every body from late 2016 onward (a6500 and a99 II were
 > the last two) ships signed firmware that rejects apps — not just this project, Sony itself
 > cannot load apps onto them. Reports of people running this on an a6400 are mistaken.
+>
+> There is a boundary on the other end too: **PMCA starts with the autumn-2012 NEX-5R / NEX-6.**
+> The earlier NEX-7, NEX-3 / 5 / 5N / F3, and the a3000 / a3500 have no Android subsystem and
+> no `Application` menu either — their absence from the supported column above is **not an omission**.
 
 ### What you need
 

@@ -51,9 +51,13 @@ This is also exactly what the installer means when it prints `This camera does n
 
 | Has `MENU → Application` (supported) | Does not (unsupported) |
 |---|---|
-| a6000 · a6300 · a6500 · a5100 · a5000<br>a7 / a7R / a7S / a7 II / a7R II / a7S II<br>NEX-5R · NEX-5T · NEX-6<br>RX100 III / IV / V · RX10 II / III · RX1R II<br>HX60 / HX90 / HX400 · WX500<br>a68 · a77 II · a99 II | a6100 · a6400 · a6600 · a6700 · ZV-E10<br>a7 III and everything after · a9 series · a1 series<br>RX100 VA and after · RX10 IV · RX0 · HX99 · ZV-1 series |
+| a6000 · a6300 · a6500 · a5100 · a5000<br>a7 / a7R / a7S / a7 II / a7R II / a7S II<br>NEX-5R · NEX-5T · NEX-6<br>RX100 III / IV / V · RX10 II / III · RX1R II<br>HX60 / HX90 / HX400 · WX500<br>a68 · a77 II · a99 II | Pre-2012 NEX (NEX-3 / 5 / 5N / F3 / 3N / **7**) · a3000 · a3500<br>a6100 · a6400 · a6600 · a6700 · ZV-E10<br>a7 III and everything after · a9 series · a1 series<br>RX100 VA and after · RX10 IV · RX0 · HX99 · ZV-1 series |
 
 > **Honest note.** "No `Application` menu" means you cannot install apps, full stop. Sony shut its own app store in 2021, and every body from late 2016 onward (a6500 and a99 II were the last two) ships signed firmware that rejects apps — not just this project, Sony itself cannot load apps onto them.
+
+**The boundary is autumn 2012.** The PMCA app platform starts with the **NEX-5R / NEX-6** (announced August–September 2012) — the first bodies with the Android subsystem. The earlier **NEX-7** (August 2011), NEX-3 / NEX-5 / NEX-5N / NEX-F3, and the a3000 / a3500 have no such subsystem and no `Application` menu at all. They look a lot like the "supported" column above, but they cannot take an app — which is exactly what the installer means when it prints `This camera does not support apps. Please check the compatibility list.` **Their absence from the supported column is not an omission.**
+
+**Is there another way for those bodies?** One, but this project does not support it. A recipe is just a set of Creative Style values (base look + contrast / saturation / sharpness), white-balance fine tuning and DRO — every value is printed in [`catalog/index.html`](../catalog/index.html), so you can dial them in by hand in the camera menu. The NEX-7 has all of those controls (Creative Style contrast / saturation / sharpness ±3 each, WB fine tune A–B / G–M ±7 each, DRO Lv1–5). The cost: no one-key store, no in-app preview or bulk management, values beyond ±3 are clipped by the menu, and the Picture Effect (PE) tier mapping has not been tested.
 
 ### Why won't it run on my a6400 / a7 III? Is there any workaround?
 
