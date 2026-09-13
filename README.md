@@ -1,10 +1,12 @@
 # Sony SOOC Recipes · 索尼直出配方
 
+<!-- counts: total=93 compiled=78 -->
+<!-- The line above is checked against catalog/filters.json by CI. If you change the
+     catalog, update it — a mismatch fails the build. Do not reword it. -->
+
 **把胶片滤镜编译成 APK，装进你那台老索尼，让直出就能看。**
 
-针对索尼 PlayMemories Camera Apps（PMCA）机型 —— a6000 · a6300 · a6500 · a5100 ·
-NEX · RX100 III–V · a7 II 一代 —— 一个装进相机内部的应用，**93 款**胶片与机型风格配方，
-其中 **78 款可直接编译进 APK**。
+针对索尼 PlayMemories Camera Apps（PMCA）机型（a6000 · a6300 · a6500 · a5100 · NEX · RX100 III–V · a7 II 一代），一个装进相机内部的应用：**93 款**胶片与机型风格配方，其中 **78 款可直接编译进 APK**。
 
 关掉应用、关机重启，风格依然是相机在 P/A/S/M 和录像**全部模式**下的默认。
 直出的 JPEG 就带滤镜。

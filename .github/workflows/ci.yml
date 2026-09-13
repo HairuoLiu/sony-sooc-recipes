@@ -66,7 +66,8 @@ jobs:
           node tests/smoke_browser.js
 
   # A mismatch between the README's numbers and the catalog is a documentation bug
-  # that reviewers never catch by eye.
+  # that reviewers never catch by eye. The README carries a machine-readable marker
+  # rather than prose, because parsing a wrapped sentence breaks on any rewording.
   counts:
     name: README counts match the catalog
     runs-on: ubuntu-latest
@@ -76,31 +77,4 @@ jobs:
         with:
           python-version: '3.12'
       - name: check
-        run: |
-          python - <<'PY'
-          import json, re, pathlib, sys
-
-          catalog = json.loads(pathlib.Path("catalog/filters.json").read_text(encoding="utf-8"))
-          filters = catalog["filters"]
-          total = len(filters)
-          compiled = sum(1 for f in filters if f["engine"] == "recipe-lab")
-          readme = pathlib.Path("README.md").read_text(encoding="utf-8")
-
-          # the README states "**N 款**胶片与机型风格配方，其中 **M 款可直接编译进 APK**"
-          stated = re.findall(r"\*\*(\d+) 款\*\*胶片与机型风格配方，其中 \*\*(\d+) 款", readme)
-          if not stated:
-              print("could not find the totals sentence in README.md")
-              sys.exit(1)
-          stated_total, stated_compiled = (int(x) for x in stated[0])
-
-          ok = True
-          if stated_total != total:
-              print(f"README says {stated_total} recipes, catalog has {total}")
-              ok = False
-          if stated_compiled != compiled:
-              print(f"README says {stated_compiled} compiled, catalog has {compiled}")
-              ok = False
-          if not ok:
-              sys.exit(1)
-          print(f"ok — {total} catalogued, {compiled} compiled")
-          PY
+        run: python tools/check_readme_counts.py
