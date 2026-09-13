@@ -17,10 +17,10 @@
 这一节帮你定位。文件其余部分是参考：读完你应该明白，一份 JSON 怎么变成十年前那块传感器上的
 颜色，以及这条路的终点在哪。
 
-本仓库共有 **99 款配方**，分 **13 组**、走 **两套引擎**：
+本仓库共有 **155 款配方**，分 **14 组**、走 **两套引擎**：
 
-- **84 款**会编译进 App（引擎 `recipe-lab`）：其中 **77 款**逐值抄自开源上游项目，**7 款**
-  由本仓库自写。
+- **140 款**会编译进 App（引擎 `recipe-lab`）：其中 **77 款**逐值抄自开源上游项目，**63 款**
+  由本仓库自写（含相机模拟、胶片、品牌包与手机 App 风几个批次）。
 - **15 款**是「只登记」的条目（引擎 `film-studio-matrix`）：只记名字，不编译、不写参数。
 
 ---
@@ -291,6 +291,7 @@ sony-sooc-recipes/
 │   ├── FAQ.zh-CN.md                中文常见问题
 │   ├── CHANNEL-COMPARISON.md       USB vs Wi-Fi ADB，含结论
 │   ├── MAPPING-RECIPES.md          把想要的风格映射到相机可复现的设置
+│   ├── LUT-TO-SETTINGS.md          一个 .cube 怎么变成配方，以及过程中丢了什么
 │   └── assets/                     配图 + README（architecture.svg、engines.svg、parameters.svg、install-flow.svg）
 ├── tools/
 │   ├── validate_catalog.py   校验注册表（CI 关卡 1）

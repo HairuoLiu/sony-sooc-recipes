@@ -21,10 +21,11 @@ instead.
 This section orients you. The rest of the file is reference: by the end you should understand how a
 single JSON file becomes colours on a ten-year-old sensor, and where that path stops.
 
-The repository holds **99 filters** across **13 groups** and **2 engines**:
+The repository holds **155 filters** across **14 groups** and **2 engines**:
 
-- **84** are compiled into the app (engine `recipe-lab`): **77** transcribed verbatim from the
-  upstream project, plus **7** authored in this repository.
+- **140** are compiled into the app (engine `recipe-lab`): **77** transcribed verbatim from the
+  upstream project, plus **63** authored in this repository (the camera-simulation, film, brand-pack
+  and app-look batches).
 - **15** are reference-only entries (engine `film-studio-matrix`) — catalogued by name, never
   compiled, never parameterised.
 
@@ -310,6 +311,7 @@ sony-sooc-recipes/
 │   ├── FAQ.zh-CN.md                Chinese FAQ
 │   ├── CHANNEL-COMPARISON.md       USB vs Wi-Fi ADB, with a verdict
 │   ├── MAPPING-RECIPES.md          maps a desired look to achievable camera settings
+│   ├── LUT-TO-SETTINGS.md          how a .cube becomes a recipe, and what is lost doing it
 │   └── assets/                     diagrams + README (architecture.svg, engines.svg, parameters.svg, install-flow.svg)
 ├── tools/
 │   ├── validate_catalog.py   registry gate (CI gate 1)

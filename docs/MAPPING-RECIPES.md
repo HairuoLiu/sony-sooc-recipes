@@ -8,7 +8,16 @@
 
 ## 增补（写在前面）
 
-第 1 部分的清单是**最初的 93 款**。此后新增 6 款，达 **99 款 / 13 组**：
+第 1 部分的清单是**最初的 93 款**（快照，保留原样，不计入下面的增量）。此后的三个批次：
+
+| 批次 | 新增 | 涉及组 |
+|---|---|---|
+| app-look | 6 款 | `app-look`（新组） |
+| 相机模拟 | 18 款 | hasselblad · leica · pentax（新组）· ricoh-gr |
+| 胶片 | 38 款 | kodak · fuji-film · other-stocks · leica · ilford |
+| **累计** | **155 款 / 14 组**（recipe-lab 140 + film-studio-matrix 15） | |
+
+下表是 app-look 那 6 款：
 
 | 新增 | 组 | 关键手段 |
 |---|---|---|
@@ -21,6 +30,10 @@
 
 因此 1.2 末尾「`pe` 使用现状」的统计已经过期：现在被用到的是
 `0 / 1 / 3 / 4 / 5 / 6 / 7`，仍未使用的为 `2 / 8 / 9 / 10 / 11 / 12 / 13`。
+
+> 这些参数数值本身是怎么从素材（LUT 文件 / 厂商公开描述）推出来的、为什么最后只剩几个整数、
+> 以及过程中必然丢掉什么，见 [`docs/LUT-TO-SETTINGS.zh-CN.md`](LUT-TO-SETTINGS.zh-CN.md)。
+> 本文档讲「想要什么风格该拧哪个参数」，那份讲「参数是哪儿来的」。
 
 **这一批的起因**：有人问能不能把手机滤镜 App「Liit」的滤镜搬进来。结论是不能，原因写在
 `NOTICE.md`——它是闭源商业软件，且其 LUT/曲线在 a6000 上根本没有承载通道。能做的是
@@ -324,22 +337,25 @@ a6000 上**没有 Picture Profile 菜单，存不下任何色调曲线**。配�
 | `pe` | 0-13 全量允许 | pe≠0 时 style 失效 |
 | `sub` | 各 pe 专用子档（如 fuji-pro-400h sub=2），缺省 0 | 仅部分 pe 用得到 |
 
-### 2.4 疑似越界参数（现有 93 款里 `sat` 超菜单 ±3）
+### 2.4 超出机身菜单范围的参数（全库 11 条）
 
-以下条目的 `sat` 绝对值 > 3，**只能在 APK 写入、机身菜单手调不到**（机身创意风格滑块封顶 ±3）。按现行引擎仍能存能显，但用户「按菜单复现」时会卡住，列此提醒：
+以下条目的 `sat` 绝对值 > 3，**只能由 APK 写入、机身菜单手调不到**（机身创意风格滑块封顶 ±3）。
+按现行引擎仍能存能显，但用户「照菜单复现」时会卡住，列此提醒：
 
-- sony-fl-film-like `sat=-4`
-- classic-chrome `sat=-5`
-- sony-in-instant `sat=-6`
-- eterna `sat=-6`
-- gr-bleach-bypass `sat=-8`
-- eterna-bleach-bypass `sat=-9`
-- velvia `sat=+5`
-- fuji-fortia-50 `sat=+6`
-- agfa-ultra-100 `sat=+6`
-- olympus-pop-art `sat=+8`
+- `olympus-pop-art` `sat=+8`
+- `fuji-fortia-50` `sat=+6`
+- `agfa-ultra-100` `sat=+6`
+- `velvia` `sat=+5`
+- `sony-fl-film-like` `sat=-4`
+- `classic-cinema` `sat=-4`
+- `classic-chrome` `sat=-5`
+- `sony-in-instant` `sat=-6`
+- `eterna` `sat=-6`
+- `gr-bleach-bypass` `sat=-8`
+- `eterna-bleach-bypass` `sat=-9`
 
-另：`gr-cross-process` 的 `gm=+4` 也超出机身白平衡微调常见 ±3 域，属同一类「仅 APK 可写」项，提醒核实。
+另有两条的 `gm=+4` 也超出机身白平衡微调常见的 ±3 域，属同一类「仅 APK 可写」项：
+`gr-cross-process`（`ab=-2 gm=+4`）与 `acros-g`（`gm=+4`）。
 
 > 不建议自行修改这些条目；若要使之「菜单调得动」，只能把 sat 收进 ±3，会损失风格强度。
 
