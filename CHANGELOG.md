@@ -7,6 +7,15 @@
 
 ---
 
+## v0.5.0 — 2026-09-13 · 重命名为 Sony SOOC Recipes
+
+将本仓库的相机端 App 从上游项目名重命名为 **Sony SOOC Recipes**：
+
+- 相机内显示名、APK 文件名、Java 包名统一为 `Sony SOOC Recipes` / `SonySOOCRecipes` / `com.hairuoliu.sonysoocrecipes`。
+- `release.yml` 在 CI 构建时通过 sed + `git mv` 把 fork 整体改名（含 JNI 符号 `Java_com_voxivoid_recipelab_*` → `sonysoocrecipes`）。
+- 安装说明、README、架构文档、工具脚本与生成的目录浏览器均改用新名称；正文对上游 voxivoid 项目的引用改写为「上游项目 / upstream project」。
+- 保留 `NOTICE.md` 的 MIT 法定署名，以及 CI / `check_fidelity.py` 联网抓取上游源码所用的 raw-URL。
+
 ## v0.4.0 — 2026-09-13 · 胶片批次
 
 **新增 38 款**（117 → 155，可编译 102 → 140），测试用例 25 → 63。分组不变。
