@@ -7,12 +7,20 @@ on:
       - 'catalog/**'
       - 'tools/**'
       - 'tests/**'
+      - 'docs/**'
+      - 'README.md'
+      - 'README.zh-CN.md'
+      - 'CHANGELOG.md'
       - '.github/workflows/ci.yml'
   pull_request:
     paths:
       - 'catalog/**'
       - 'tools/**'
       - 'tests/**'
+      - 'docs/**'
+      - 'README.md'
+      - 'README.zh-CN.md'
+      - 'CHANGELOG.md'
       - '.github/workflows/ci.yml'
   workflow_dispatch:
 
@@ -86,3 +94,19 @@ jobs:
           python-version: '3.12'
       - name: check
         run: python tools/check_readme_counts.py
+
+  # Gate 6 — a document pointing at a picture that is not there. Images live in
+  #          docs/assets/ and are versioned alongside the prose, and nothing may be
+  #          hotlinked, so a rename nobody noticed fails here instead of quietly
+  #          rotting on GitHub. Status badges are the one exception: they are
+  #          generated per request, and vendoring one would freeze a build status.
+  assets:
+    name: document images resolve
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: check
+        run: python tools/check_assets.py
