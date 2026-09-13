@@ -394,6 +394,45 @@ class TestGenerator(unittest.TestCase):
         self.assertEqual(len(upstream_ids), 77)
 
 
+class TestPinnedUpstream(unittest.TestCase):
+    """The release build clones upstream at a fixed commit.
+
+    If that pin drifts from the revision the catalog claims to have been validated
+    against, a tag can silently build against different upstream code than the one
+    the recipes were checked against. The two live in different files, so nothing
+    but a test can hold them together.
+    """
+
+    @staticmethod
+    def _sha_in_catalog() -> str | None:
+        rev = CATALOG_DATA["sources"]["recipe-lab"].get("fetched_rev", "")
+        for token in rev.replace("@", " ").split():
+            if len(token) == 40 and all(c in "0123456789abcdef" for c in token.lower()):
+                return token.lower()
+        return None
+
+    @staticmethod
+    def _sha_in_workflow() -> str | None:
+        path = ROOT / ".github" / "workflows" / "release.yml"
+        if not path.exists():
+            return None
+        for line in path.read_text(encoding="utf-8").splitlines():
+            if "UPSTREAM_SHA:" in line:
+                return line.split(":", 1)[1].strip().strip('"').lower()
+        return None
+
+    def test_catalog_pins_a_full_sha(self):
+        self.assertIsNotNone(self._sha_in_catalog(),
+                             "sources.recipe-lab.fetched_rev should carry a 40-char SHA")
+
+    def test_release_workflow_pins_the_same_sha(self):
+        cat, wf = self._sha_in_catalog(), self._sha_in_workflow()
+        self.assertIsNotNone(wf, "release.yml has no UPSTREAM_SHA")
+        self.assertEqual(cat, wf,
+                         "upstream pin drifted: catalog says "
+                         f"{cat}, release.yml builds {wf}. Update both.")
+
+
 if __name__ == "__main__":
     result = unittest.main(verbosity=2, exit=False).result
     raise SystemExit(0 if result.wasSuccessful() else 1)

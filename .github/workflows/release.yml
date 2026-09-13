@@ -1,0 +1,142 @@
+name: release
+
+# Builds the APK and attaches it to the GitHub Release.
+#
+# Why this exists rather than "run tools/build_apk.sh yourself": the toolchain is about
+# 3 GB and needs NDK r16b — the last NDK that still ships the GCC toolchain an
+# Android 2.3.7 / API 10 target requires. Nobody should install that to try a recipe.
+# Push a tag, get an APK.
+#
+#   git tag v0.2.0 && git push origin v0.2.0
+#
+# Or re-run for a tag that already exists: Actions -> release -> Run workflow.
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to build and publish (must already exist)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    name: build RecipeLab.apk
+    runs-on: ubuntu-latest
+
+    env:
+      UPSTREAM_REPO: https://github.com/voxivoid/recipe-lab-sony-pmca.git
+      # Pinned rather than "development" on purpose. An unpinned clone means the same
+      # tag can produce a different APK next month, and the whole point of a tag is that
+      # it does not. Bump this deliberately, in a commit, when upstream is re-validated.
+      UPSTREAM_SHA: 6b5c8aa2900019d98496c7047a90ce73d2d6a725
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      # A catalog that fails its own gates should never reach the point of producing
+      # something a human installs on a camera.
+      - name: catalog gates
+        run: |
+          python tools/validate_catalog.py
+          python tests/test_catalog.py
+
+      - name: install build-tools 30.0.3, platform 28, NDK r16b
+        run: |
+          SDKMANAGER="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
+          [ -x "$SDKMANAGER" ] || SDKMANAGER="$(command -v sdkmanager)"
+          yes | "$SDKMANAGER" --licenses >/dev/null 2>&1 || true
+          "$SDKMANAGER" "build-tools;30.0.3" "platforms;android-28" "ndk;16.1.4479499"
+
+      - name: resolve tag
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "value=${{ inputs.tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: fetch upstream at the pinned revision
+        run: |
+          git clone "$UPSTREAM_REPO" build/recipe-lab-sony-pmca
+          cd build/recipe-lab-sony-pmca
+          git checkout "$UPSTREAM_SHA"
+          git submodule update --init --recursive
+
+      - name: generate Recipes.java from the catalog
+        run: python tools/gen_recipes.py --fork build/recipe-lab-sony-pmca
+
+      - name: build
+        run: |
+          export ANDROID_SDK="$ANDROID_SDK_ROOT"
+          export ANDROID_NDK="$ANDROID_SDK_ROOT/ndk/16.1.4479499"
+          cd build/recipe-lab-sony-pmca
+          ./build.sh
+
+      - name: collect
+        run: |
+          set -euo pipefail
+          TAG="${{ steps.tag.outputs.value }}"
+          SRC="build/recipe-lab-sony-pmca/RecipeLab.apk"
+          test -f "$SRC" || { echo "no APK at $SRC"; exit 1; }
+          mkdir -p dist
+          cp "$SRC" "dist/RecipeLab-$TAG.apk"
+          cd dist
+          sha256sum "RecipeLab-$TAG.apk" > "RecipeLab-$TAG.apk.sha256"
+          ls -l
+
+      # Plain echo lines, not a heredoc: a heredoc inside a YAML block scalar is where
+      # the quoting goes to die.
+      - name: release notes
+        run: |
+          TAG="${{ steps.tag.outputs.value }}"
+          N=dist/notes.md
+          echo "Recipe Lab 装的是本仓库的配方表：$TAG" > "$N"
+          echo "" >> "$N"
+          echo "**安装**: 见 docs/INSTALL.md（第一次走 USB，别用 Wi-Fi ADB）" >> "$N"
+          echo "" >> "$N"
+          echo "### 装之前先看这三条" >> "$N"
+          echo "" >> "$N"
+          echo "1. **签名是一次性的。** 没有配置 keystore 时，构建会临时生成一把 key。" >> "$N"
+          echo "   用不同 key 签的 APK **无法覆盖安装**——如果相机上已经装过别处来的" >> "$N"
+          echo "   RecipeLab，得先卸载再装。" >> "$N"
+          echo "2. **有 7 款配方没上机验证过**（gr-moriyama、kodak-vision2-500t、" >> "$N"
+          echo "   Toy Camera 暖/冷、Part Color 红、Posterization、Teal Mood）。" >> "$N"
+          echo "   先在可丢弃的素材上试。" >> "$N"
+          echo "3. **APK 里显示的版本号是上游的，不是这个 tag。** 上游从" >> "$N"
+          echo "   AndroidManifest.xml 取版本，本仓库只换配方表。以 tag 为准。" >> "$N"
+          echo "" >> "$N"
+          echo "### 校验" >> "$N"
+          echo "" >> "$N"
+          echo '```' >> "$N"
+          echo "sha256sum -c RecipeLab-$TAG.apk.sha256" >> "$N"
+          echo '```' >> "$N"
+          echo "" >> "$N"
+          echo "构建自上游 $UPSTREAM_SHA" >> "$N"
+
+      - name: publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="${{ steps.tag.outputs.value }}"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" dist/*.apk dist/*.sha256 --clobber
+          else
+            gh release create "$TAG" dist/*.apk dist/*.sha256 \
+              --title "$TAG" --notes-file dist/notes.md
+          fi

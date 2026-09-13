@@ -29,7 +29,8 @@
       "repo": "https://github.com/voxivoid/recipe-lab-sony-pmca",
       "author": "André Domingues (voxivoid)",
       "license": "MIT",
-      "fetched_rev": "development @ 2026-09-12 (v1.0.0 stable / v1.1.0-dev.8)",
+      "fetched_rev": "development @ 6b5c8aa2900019d98496c7047a90ce73d2d6a725 (2026-09-12, v1.0.0 stable / v1.1.0-dev.8)",
+      "pinned_for_build": "同一个 SHA 也写在 .github/workflows/release.yml 的 UPSTREAM_SHA 里，改一处就要改另一处。",
       "redistributable": true,
       "contribution": "77 款配方参数、设置存储区反向工程（备份 ID、图片配置文件开关行为、色彩矩阵测量）、应用本体与图标。"
     },
