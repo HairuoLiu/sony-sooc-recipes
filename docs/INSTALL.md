@@ -38,6 +38,18 @@ PMCA 机型通用，且不需要任何前置应用。
 （本仓库只发布滤镜数据与构建工具；APK 由 CI 依据 `catalog/filters.json` 生成。
 若还没有发布版本，见 [架构说明](ARCHITECTURE.md) 自行构建。）
 
+> **装之前，两条会真咬人的：**
+>
+> 1. **签名用的一次性 key。** CI 没配 keystore，每次构建临时生成一把。用不同 key 签的
+>    APK **无法覆盖安装**——如果相机上已经装过别处来的 RecipeLab，得先在相机里把它删掉
+>    再装这个。
+> 2. **有 7 款配方没上机验证过**：`gr-moriyama`、`kodak-vision2-500T`、Toy Camera
+>    暖/冷、Part Color 红、Posterization、Teal Mood。它们在相机里显示为
+>    `NOT VERIFIED`。先在可丢弃的素材上试，别拿去拍不能重来的东西。
+>
+> APK 里显示的版本号是**上游**的，不是本仓库的 tag。上游从 `AndroidManifest.xml`
+> 读版本，本仓库只替换配方表；认 tag 就行。
+
 ### 2. 拿到安装器 Sony-PMCA-RE
 
 这是 ma1co 做的工具，用索尼自家应用商店同一条通道把应用写进相机。
