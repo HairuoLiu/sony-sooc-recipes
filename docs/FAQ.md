@@ -49,6 +49,8 @@ Press `MENU` and look for an **`Application`** entry. If it is there, your camer
 
 This is also exactly what the installer means when it prints `This camera does not support apps. Please check the compatibility list.` The tool asked the camera to switch into app-install mode and the camera refused; the installer is only relaying that refusal. It is a camera-side answer, not an APK problem — rebuilding or reinstalling the APK changes nothing.
 
+The line directly above it, `Switching to app install mode`, is **not** a success message: it is printed before the command is sent, so it only means "one Sony camera was found on USB and we are about to ask it to switch". Read together, the two lines say "the link is fine, the switch was refused". Because the failure returns immediately, **the APK is never transferred at all** — so the error has nothing to do with your file, your packaging or your signing.
+
 | Has `MENU → Application` (supported) | Does not (unsupported) |
 |---|---|
 | a6000 · a6300 · a6500 · a5100 · a5000<br>a7 / a7R / a7S / a7 II / a7R II / a7S II<br>NEX-5R · NEX-5T · NEX-6<br>RX100 III / IV / V · RX10 II / III · RX1R II<br>HX60 / HX90 / HX400 · WX500<br>a68 · a77 II · a99 II | Pre-2012 NEX (NEX-3 / 5 / 5N / F3 / 3N / **7**) · a3000 · a3500<br>a6100 · a6400 · a6600 · a6700 · ZV-E10<br>a7 III and everything after · a9 series · a1 series<br>RX100 VA and after · RX10 IV · RX0 · HX99 · ZV-1 series |

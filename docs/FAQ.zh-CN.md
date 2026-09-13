@@ -49,6 +49,8 @@
 
 安装时如果报 `This camera does not support apps. Please check the compatibility list.`，说的就是这件事：工具请相机切到「应用安装模式」，相机拒绝了，安装器只是把这句拒绝转述出来。这是相机侧的回答，不是 APK 的问题——重装、重编多少次都一样。
 
+日志里紧挨着它的上一行 `Switching to app install mode` **不是成功提示**：它在命令发出之前就打印了，只表示「USB 上认到了一台索尼相机，准备发切换命令」。两行连起来读，意思是「连接没问题，切换被拒绝」。而且切换失败会立刻退出，**安装的 APK 根本没被传输出去**——所以这个报错跟你的文件、打包、签名都无关。
+
 | 有 `MENU → Application`（支持） | 没有（不支持） |
 |---|---|
 | a6000 · a6300 · a6500 · a5100 · a5000<br>a7 / a7R / a7S / a7 II / a7R II / a7S II<br>NEX-5R · NEX-5T · NEX-6<br>RX100 III / IV / V · RX10 II / III · RX1R II<br>HX60 / HX90 / HX400 · WX500<br>a68 · a77 II · a99 II | 2012 年前的 NEX（NEX-3 / 5 / 5N / F3 / 3N / **7**）· a3000 · a3500<br>a6100 · a6400 · a6600 · a6700 · ZV-E10<br>a7 III 及之后全部 · a9 系列 · a1 系列<br>RX100 VA 及之后 · RX10 IV · RX0 · HX99 · ZV-1 系列 |
