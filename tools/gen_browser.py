@@ -1,0 +1,435 @@
+#!/usr/bin/env python3
+"""Generate catalog/index.html — a single-file filter browser.
+
+    python tools/gen_browser.py
+
+The catalog is embedded rather than fetched: opening index.html straight off disk is
+the normal way to use this, and `fetch("filters.json")` is blocked under file://.
+No network, no build step, no dependencies.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_CATALOG = ROOT / "catalog" / "filters.json"
+DEFAULT_OUT = ROOT / "catalog" / "index.html"
+
+TEMPLATE = r"""<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sony SOOC Recipes · 滤镜浏览器</title>
+<style>
+  :root {
+    --bg:        #f7f7f5;
+    --panel:     #ffffff;
+    --line:      #e6e4de;
+    --line-soft: #f0eee9;
+    --ink:       #1a1a18;
+    --ink-2:     #5c5a54;
+    --ink-3:     #8f8d86;
+    --amber:     #b45309;
+    --amber-bg:  #fdf6ec;
+    --slate:     #64748b;
+    --slate-bg:  #f1f5f9;
+    --mono-bg:   #2a2a28;
+    --radius:    12px;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                 "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  header { margin-bottom: 32px; }
+  h1 { font-size: 30px; line-height: 1.25; margin: 0 0 8px; letter-spacing: -0.02em; font-weight: 650; }
+  .sub { color: var(--ink-2); margin: 0 0 22px; max-width: 62ch; }
+  .sub b { color: var(--ink); font-weight: 600; }
+
+  .stats { display: flex; flex-wrap: wrap; gap: 10px; }
+  .stat {
+    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 10px 16px; min-width: 104px;
+  }
+  .stat .n { font-size: 21px; font-weight: 650; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+  .stat .l { font-size: 12px; color: var(--ink-3); }
+
+  .bar {
+    position: sticky; top: 0; z-index: 20; background: rgba(247,247,245,.92);
+    backdrop-filter: blur(10px); border-bottom: 1px solid var(--line);
+    padding: 14px 0; margin: 28px 0 24px;
+  }
+  .bar-inner { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  input[type=search], select {
+    font: inherit; padding: 8px 12px; border: 1px solid var(--line);
+    border-radius: 9px; background: var(--panel); color: var(--ink); min-height: 38px;
+  }
+  input[type=search] { flex: 1 1 220px; min-width: 180px; }
+  input[type=search]:focus, select:focus { outline: 2px solid #c7d2fe; outline-offset: -1px; border-color: #a5b4fc; }
+  .chip {
+    font: inherit; font-size: 13px; padding: 7px 13px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--panel); color: var(--ink-2);
+    cursor: pointer; min-height: 34px; white-space: nowrap;
+  }
+  .chip:hover { border-color: #d4d1c9; color: var(--ink); }
+  .chip[aria-pressed=true] { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .count { margin-left: auto; color: var(--ink-3); font-size: 13px; font-variant-numeric: tabular-nums; }
+
+  h2.group {
+    font-size: 13px; font-weight: 640; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--ink-3); margin: 34px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--line);
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  h2.group span { font-weight: 400; letter-spacing: 0; text-transform: none; font-size: 13px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(268px, 1fr)); gap: 14px; }
+
+  .card {
+    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+    overflow: hidden; display: flex; flex-direction: column;
+    transition: border-color .15s, box-shadow .15s, transform .15s;
+  }
+  .card:hover { border-color: #d9d6cd; box-shadow: 0 6px 20px rgba(26,26,24,.07); transform: translateY(-1px); }
+  .sw {
+    height: 46px; position: relative;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .sw .ax { position: absolute; inset: 0; display: flex; align-items: center; justify-content: space-between;
+            padding: 0 10px; font-size: 10.5px; letter-spacing: .04em; font-weight: 600; }
+  .body { padding: 13px 15px 15px; display: flex; flex-direction: column; gap: 9px; flex: 1; }
+  .name { font-weight: 620; font-size: 15.5px; letter-spacing: -0.01em; line-height: 1.35; }
+  .zh { color: var(--ink-3); font-size: 12.5px; font-weight: 400; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tag {
+    font-size: 10.5px; font-weight: 620; letter-spacing: .03em; padding: 3px 7px;
+    border-radius: 5px; white-space: nowrap;
+  }
+  .t-up      { background: var(--amber-bg); color: var(--amber); border: 1px solid #f2e2cc; }
+  .t-new     { background: #ecfdf5; color: #047857; border: 1px solid #c7f0dd; }
+  .t-ref     { background: var(--slate-bg); color: var(--slate); border: 1px solid #dde5ee; }
+  .t-mono    { background: var(--mono-bg); color: #fff; }
+  .t-color   { background: #eef2ff; color: #4338ca; border: 1px solid #dfe4fb; }
+  .t-unver   { background: #fef2f2; color: #b91c1c; border: 1px solid #fadcdc; }
+
+  .params { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 2px; }
+  .p {
+    font-size: 11.5px; font-variant-numeric: tabular-nums; padding: 3px 8px;
+    background: #faf9f7; border: 1px solid var(--line-soft); border-radius: 6px;
+    color: var(--ink-2); white-space: nowrap;
+  }
+  .p b { color: var(--ink); font-weight: 620; }
+  .p.warn { background: #fffbeb; border-color: #f5e6c0; color: #92400e; }
+
+  .note { font-size: 12.5px; color: var(--ink-2); border-left: 2px solid var(--line);
+          padding-left: 9px; margin-top: 2px; }
+  .note.mine { border-left-color: #10b981; }
+
+  footer { margin-top: 56px; padding-top: 22px; border-top: 1px solid var(--line);
+           color: var(--ink-2); font-size: 13.5px; }
+  footer h3 { font-size: 14px; margin: 0 0 10px; color: var(--ink); }
+  footer ul { margin: 0 0 16px; padding-left: 20px; }
+  footer li { margin-bottom: 5px; }
+  footer code { background: #efece6; padding: 1.5px 5px; border-radius: 4px; font-size: 12.5px; }
+  a { color: #1d4ed8; }
+
+  .empty { padding: 60px 0; text-align: center; color: var(--ink-3); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Sony SOOC Recipes · 滤镜浏览器</h1>
+    <p class="sub">
+      把胶片滤镜编译成 APK，装进索尼 PlayMemories 老机器（a6000 / a6500 / a5100 / NEX / RX100 III–V / a7 II …）。
+      <b>SOOC = Straight Out Of Camera，直出。</b>
+      这不是后期套 LUT —— 风格被写进相机，拍的时候就定了，关机重启后依然是全模式的默认。
+    </p>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <div class="bar">
+    <div class="bar-inner">
+      <input type="search" id="q" placeholder="搜索配方名、品牌…" autocomplete="off">
+      <select id="group"><option value="">全部品牌</option></select>
+      <button class="chip" id="f-compiled" aria-pressed="true">可编译进 APK</button>
+      <button class="chip" id="f-ref" aria-pressed="true">仅登记</button>
+      <button class="chip" id="f-mono" aria-pressed="false">只看黑白</button>
+      <button class="chip" id="f-unver" aria-pressed="false">只看未验证</button>
+      <span class="count" id="count"></span>
+    </div>
+  </div>
+
+  <div id="out"></div>
+
+  <footer>
+    <h3>关于色块</h3>
+    <p>
+      卡片顶部的色块是<b>参数示意，不是实拍样张</b>：它的色相来自白平衡微调
+      （琥珀/蓝、绿/品红），强度来自饱和度设置。它只表达这款配方<b>把画面往哪个方向推</b>，
+      不代表真实成像。要看成片，装进相机拍。
+    </p>
+
+    <h3>必须先知道的限制</h3>
+    <ul>
+      <li><b>这些是「某个味道的近似」，不是别家色彩科学的复制品。</b>
+          a6000 没有 Picture Profile 菜单，也存不下色调曲线。</li>
+      <li><b>做不到</b>：Log 曲线（S-Log / V-Log / Blackmagic）、带色调的黑白（硒调、蓝晒）、
+          真正的胶片颗粒。</li>
+      <li><b>没有强度档位</b>。想淡一点只能在相机应用里手改参数芯片。</li>
+      <li><b>标 PE 的配方要 JPEG 画质</b>。图片效果开启时相机忽略创意风格，
+          且 RAW / RAW+JPEG 下效果被静默丢弃。</li>
+      <li><b>a5100 少了 Fn 和 AEL 两个键</b>，品牌列表浏览和隐藏面板用不了，但波轮能滚完全部配方。</li>
+      <li><b>本项目不改固件</b>，只写你本来就能手设的那些值。</li>
+    </ul>
+
+    <h3>数据来自哪里</h3>
+    <ul>
+      <li><b>voxivoid/recipe-lab-sony-pmca</b> —— 77 款配方参数、设置存储区反向工程。许可 MIT，可再分发。</li>
+      <li><b>ukiki0718-netizen/sony-a5100-film-studio</b> —— 15 款风格的名称与取向。
+          许可 PolyForm 非商用，<b>仅登记名称与来源，未转录其拟合参数</b>。</li>
+      <li><b>ma1co</b> 的 Sony-PMCA-RE 与 OpenMemories:Tweak —— 安装通道与 Wi-Fi ADB。
+          <b>没有他就没有这一切。</b></li>
+    </ul>
+    <p>
+      完整来源与许可边界见仓库的 <code>NOTICE.md</code>；安装见 <code>docs/INSTALL.md</code>；
+      两条连接通道的区别见 <code>docs/CHANNEL-COMPARISON.md</code>。
+      配方名称中的 Sony / Fujifilm / Kodak / Ricoh / Leica 等均为各自权利人的商标，
+      此处仅用于描述所接近的视觉风格。本项目与上述公司无关联、未获背书。
+    </p>
+  </footer>
+</div>
+
+<script>
+const DATA = /*__CATALOG__*/;
+
+const STYLE_LABEL = {STD:"Standard",VIVID:"Vivid",NEUTRAL:"Neutral",PORTRAIT:"Portrait",
+  LANDSCAPE:"Landscape",MONO:"B&W",CLEAR:"Clear",DEEP:"Deep",LIGHT:"Light",SUNSET:"Sunset",
+  NIGHT:"Night",AUTUMN:"Autumn",SEPIA:"Sepia"};
+const PE_LABEL = ["off","Toy","Pop","Poster","Retro","High-key","Part col","HC mono","Soft foc",
+  "HDR art","Rich mono","Miniature","Illust","Watercol"];
+const PE_JPEG = 1;                 // every non-zero picture effect needs JPEG quality
+const SUB_COUNT = {5:3, 1:5, 6:4, 3:2};
+
+function evLabel(ev) {
+  if (ev === 0) return "0";
+  const a = Math.abs(ev);
+  const frac = a % 3 === 0 ? ".0" : a % 3 === 1 ? ".3" : ".7";
+  return (ev > 0 ? "+" : "-") + Math.floor(a / 3) + frac;
+}
+function droLabel(v) { return v === 6 ? "auto" : v === 0 ? "off" : "Lv" + v; }
+const subLabel = (pe, sub) => (SUB_COUNT[pe] != null ? ["blue","pink","green","red","yellow"][sub] : null);
+
+// --- parameter-derived swatch -------------------------------------------------------
+// Two stops, lighter -> stronger, so the tile reads as a grade direction rather than a
+// flat colour patch. Hue comes from the WB fine-tune axes; strength from saturation.
+function swatch(f) {
+  if (f.engine !== "recipe-lab") return null;
+  const r = f.recipe, ab = r.wb.ab, gm = r.wb.gm;
+  if (f.tone === "mono") {
+    const pe = r.pe;
+    const deep = pe === 7 ? 26 : pe === 4 ? 40 : 34;      // rough-mono goes darker
+    const lite = 92;
+    return { from: `hsl(40 6% ${lite}%)`, to: `hsl(40 6% ${deep}%)`, mono: true };
+  }
+  // translate the two fine-tune axes into an HSL hue
+  const warm = ab / 7;              // + amber, - blue
+  const green = gm / 7;             // + green, - magenta
+  let hue = 40 + warm * 34;         // amber 74deg  <-> blue 6deg
+  if (green > 0.15) hue = 96 + green * 26;
+  if (green < -0.15) hue = 348 + green * 20;
+  const strength = Math.min(1, Math.abs(r.sat) / 9 + Math.abs(warm) * .34 + Math.abs(green) * .34);
+  const sat = 10 + strength * 46;
+  const lite = 90 - strength * 6;
+  const deep = 62 - strength * 26;
+  return { from: `hsl(${hue} ${sat}% ${lite}%)`, to: `hsl(${hue} ${Math.min(70, sat + 12)}% ${deep}%)`, mono: false };
+}
+
+function paramChips(f) {
+  if (f.engine !== "recipe-lab") {
+    return [{ t: "强度 " + (f.strengths || []).join(" / ") + "%", w: false }];
+  }
+  const r = f.recipe, out = [];
+  if (r.pe !== 0) {
+    let t = "图片效果 · " + PE_LABEL[r.pe];
+    const sl = subLabel(r.pe, r.sub);
+    if (sl) t += " (" + sl + ")";
+    out.push({ t, w: true });
+  } else {
+    out.push({ t: "风格 <b>" + (STYLE_LABEL[r.style] || r.style) + "</b>", w: false });
+    const sc = (v) => (v > 0 ? "+" : "") + v;
+    out.push({ t: `饱和/对比 <b>${sc(r.sat)}/${sc(r.con)}</b>`, w: false });
+    if (r.sharp) out.push({ t: "锐度 <b>" + sc(r.sharp) + "</b>", w: false });
+    if (r.matrix === 1) out.push({ t: "色彩矩阵 <b>开启</b>", w: false });
+  }
+  if (r.wb.mode === "K") out.push({ t: "色温 <b>" + r.wb.kelvin + "K</b>", w: false });
+  if (r.wb.ab !== 0) out.push({ t: (r.wb.ab > 0 ? "琥珀 <b>A" : "蓝 <b>B") + Math.abs(r.wb.ab) + "</b>", w: false });
+  if (r.wb.gm !== 0) out.push({ t: (r.wb.gm > 0 ? "绿 <b>G" : "品红 <b>M") + Math.abs(r.wb.gm) + "</b>", w: false });
+  if (r.ev !== 0) out.push({ t: "曝光 <b>" + evLabel(r.ev) + " EV</b>", w: false });
+  if (r.dro !== 6) out.push({ t: "DRO <b>" + droLabel(r.dro) + "</b>", w: false });
+  return out;
+}
+
+function tags(f) {
+  const out = [];
+  if (f.engine === "recipe-lab") {
+    out.push({ c: "t-up", t: "可编译进 APK" });
+  } else {
+    out.push({ c: "t-ref", t: "仅登记 · 非商用" });
+  }
+  if (f.source === "authored-here") out.push({ c: "t-new", t: "本仓库新写" });
+  out.push({ c: f.tone === "mono" ? "t-mono" : "t-color", t: f.tone === "mono" ? "黑白" : "彩色" });
+  if (!f.verified) out.push({ c: "t-unver", t: "未实机验证" });
+  return out;
+}
+
+// --- render ------------------------------------------------------------------------
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+const groups = DATA.groups;
+const groupLabel = Object.fromEntries(groups.map((g) => [g.id, g.label]));
+
+const state = { q: "", group: "", compiled: true, ref: true, mono: false, unver: false };
+
+function visible() {
+  const q = state.q.trim().toLowerCase();
+  return DATA.filters.filter((f) => {
+    const isCompiled = f.engine === "recipe-lab";
+    if (isCompiled && !state.compiled) return false;
+    if (!isCompiled && !state.ref) return false;
+    if (state.mono && f.tone !== "mono") return false;
+    if (state.unver && f.verified) return false;
+    if (state.group && f.group !== state.group) return false;
+    if (!q) return true;
+    return (f.name + " " + (f.name_zh || "") + " " + groupLabel[f.group] + " " +
+            (f.note || "") + " " + f.id).toLowerCase().includes(q);
+  });
+}
+
+function card(f) {
+  const sw = swatch(f);
+  const swHtml = sw
+    ? `<div class="sw" style="background:linear-gradient(96deg, ${sw.from} 0%, ${sw.to} 100%)">
+         <div class="ax" style="color:${sw.mono ? "rgba(255,255,255,.9)" : "rgba(0,0,0,.42)"}">
+           <span>色偏 / 强度示意</span></div>
+       </div>`
+    : `<div class="sw" style="background:repeating-linear-gradient(135deg,#f4f2ee,#f4f2ee 7px,#ece9e3 7px,#ece9e3 14px)">
+         <div class="ax" style="color:#a09d95"><span>另一条引擎 · 无参数</span></div>
+       </div>`;
+
+  const chips = paramChips(f)
+    .map((c) => `<span class="p${c.w ? " warn" : ""}">${c.t}</span>`).join("");
+  const tagHtml = tags(f).map((t) => `<span class="tag ${t.c}">${t.t}</span>`).join("");
+
+  return `<article class="card">
+    ${swHtml}
+    <div class="body">
+      <div>
+        <div class="name">${esc(f.name)}</div>
+        ${f.name_zh ? `<div class="zh">${esc(f.name_zh)}</div>` : ""}
+      </div>
+      <div class="tags">${tagHtml}</div>
+      <div class="params">${chips}</div>
+      ${f.note ? `<div class="note${f.source === "authored-here" ? " mine" : ""}">${esc(f.note)}</div>` : ""}
+    </div>
+  </article>`;
+}
+
+function render() {
+  const list = visible();
+  document.getElementById("count").textContent = list.length + " / " + DATA.filters.length + " 款";
+
+  if (!list.length) {
+    document.getElementById("out").innerHTML = '<div class="empty">没有匹配的配方。试试清空搜索或放宽筛选。</div>';
+    return;
+  }
+
+  // keep the declared group order
+  const byGroup = new Map(groups.map((g) => [g.id, []]));
+  list.forEach((f) => byGroup.get(f.group).push(f));
+
+  let html = "";
+  for (const g of groups) {
+    const items = byGroup.get(g.id);
+    if (!items.length) continue;
+    const compiled = items.filter((f) => f.engine === "recipe-lab").length;
+    html += `<h2 class="group">${esc(g.label)} <span>${items.length} 款` +
+            (compiled ? ` · ${compiled} 款可编译` : " · 仅登记") + `</span></h2>`;
+    html += `<div class="grid">${items.map(card).join("")}</div>`;
+  }
+  document.getElementById("out").innerHTML = html;
+}
+
+// --- wiring ------------------------------------------------------------------------
+const all = DATA.filters;
+const stats = [
+  ["总配方", all.length],
+  ["可编译进 APK", all.filter((f) => f.engine === "recipe-lab").length],
+  ["本仓库新写", all.filter((f) => f.source === "authored-here").length],
+  ["仅登记", all.filter((f) => f.engine !== "recipe-lab").length],
+  ["黑白", all.filter((f) => f.tone === "mono").length],
+  ["品牌组", groups.length],
+];
+document.getElementById("stats").innerHTML = stats
+  .map(([l, n]) => `<div class="stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join("");
+
+const sel = document.getElementById("group");
+groups.forEach((g) => {
+  const n = all.filter((f) => f.group === g.id).length;
+  if (!n) return;
+  sel.insertAdjacentHTML("beforeend", `<option value="${g.id}">${esc(g.label)} (${n})</option>`);
+});
+
+document.getElementById("q").addEventListener("input", (e) => { state.q = e.target.value; render(); });
+sel.addEventListener("change", (e) => { state.group = e.target.value; render(); });
+
+[["f-compiled","compiled"],["f-ref","ref"],["f-mono","mono"],["f-unver","unver"]].forEach(([id, key]) => {
+  document.getElementById(id).addEventListener("click", (e) => {
+    state[key] = !state[key];
+    e.currentTarget.setAttribute("aria-pressed", String(state[key]));
+    render();
+  });
+});
+
+render();
+</script>
+</body>
+</html>
+"""
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--catalog", type=Path, default=DEFAULT_CATALOG)
+    ap.add_argument("--out", type=Path, default=DEFAULT_OUT)
+    args = ap.parse_args()
+
+    catalog = json.loads(args.catalog.read_text(encoding="utf-8"))
+    payload = json.dumps(catalog, ensure_ascii=False, separators=(",", ":"))
+
+    # keep the script from being terminated early by a stray "</script" in any string
+    payload = payload.replace("</", "<\\/")
+
+    html = TEMPLATE.replace("/*__CATALOG__*/", payload)
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    args.out.write_text(html, encoding="utf-8", newline="\n")
+
+    print(f"wrote {args.out}  ({len(html) / 1024:.1f} KB, {len(catalog['filters'])} filters)")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

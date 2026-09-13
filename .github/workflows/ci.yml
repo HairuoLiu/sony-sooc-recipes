@@ -1,0 +1,106 @@
+name: catalog
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'catalog/**'
+      - 'tools/**'
+      - '.github/workflows/ci.yml'
+  pull_request:
+    paths:
+      - 'catalog/**'
+      - 'tools/**'
+      - '.github/workflows/ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: verify the catalog
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # Gate 1 — is the registry internally legal, and is its provenance honest?
+      - name: validate catalog
+        run: python tools/validate_catalog.py
+
+      # Gate 2 — does the catalog still generate the same Java the fork ships?
+      #          Fails if someone hand-edited Recipes.java or forgot to regenerate.
+      - name: fetch upstream Recipes.java
+        run: |
+          mkdir -p build
+          curl -sSL -o build/upstream-Recipes.java \
+            https://raw.githubusercontent.com/voxivoid/recipe-lab-sony-pmca/development/src/com/voxivoid/recipelab/Recipes.java
+
+      # Gate 3 — the important one. Every upstream recipe must still reproduce
+      #          value for value. A silent drift here means the APK would shoot
+      #          different colours than the project it claims to build on.
+      - name: check recipe fidelity against upstream
+        run: python tools/check_fidelity.py --upstream build/upstream-Recipes.java
+
+      - name: generate Recipes.java
+        run: python tools/gen_recipes.py --fork build/recipe-lab-sony-pmca
+
+      - name: upload generated Recipes.java
+        uses: actions/upload-artifact@v4
+        with:
+          name: Recipes.java
+          path: build/recipe-lab-sony-pmca/src/com/voxivoid/recipelab/Recipes.java
+          if-no-files-found: error
+
+      # Gate 4 — the browser is one inline script; a typo ships a blank page and
+      # nothing else would catch it.
+      - name: regenerate browser and smoke-test it
+        run: |
+          python tools/gen_browser.py
+          git diff --exit-code catalog/index.html \
+            || { echo "catalog/index.html is stale — run python tools/gen_browser.py"; exit 1; }
+          node tests/smoke_browser.js
+
+  # A mismatch between the README's numbers and the catalog is a documentation bug
+  # that reviewers never catch by eye.
+  counts:
+    name: README counts match the catalog
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: check
+        run: |
+          python - <<'PY'
+          import json, re, pathlib, sys
+
+          catalog = json.loads(pathlib.Path("catalog/filters.json").read_text(encoding="utf-8"))
+          filters = catalog["filters"]
+          total = len(filters)
+          compiled = sum(1 for f in filters if f["engine"] == "recipe-lab")
+          readme = pathlib.Path("README.md").read_text(encoding="utf-8")
+
+          # the README states "**N 款**胶片与机型风格配方，其中 **M 款可直接编译进 APK**"
+          stated = re.findall(r"\*\*(\d+) 款\*\*胶片与机型风格配方，其中 \*\*(\d+) 款", readme)
+          if not stated:
+              print("could not find the totals sentence in README.md")
+              sys.exit(1)
+          stated_total, stated_compiled = (int(x) for x in stated[0])
+
+          ok = True
+          if stated_total != total:
+              print(f"README says {stated_total} recipes, catalog has {total}")
+              ok = False
+          if stated_compiled != compiled:
+              print(f"README says {stated_compiled} compiled, catalog has {compiled}")
+              ok = False
+          if not ok:
+              sys.exit(1)
+          print(f"ok — {total} catalogued, {compiled} compiled")
+          PY

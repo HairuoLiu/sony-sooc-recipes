@@ -1,0 +1,24 @@
+# Normalise line endings across the toolchain.
+#
+# This repository is edited on Windows but the shell scripts run on Linux in CI and on
+# macOS for some users. A CRLF shebang line makes bash fail with "bad interpreter", and
+# git's default Windows autocrlf behaviour would happily produce exactly that.
+* text=auto eol=lf
+
+*.sh    text eol=lf
+*.py    text eol=lf
+*.js    text eol=lf
+*.json  text eol=lf
+*.yml   text eol=lf
+*.md    text eol=lf
+
+# Windows batch files must stay CRLF.
+*.cmd   text eol=crlf
+*.bat   text eol=crlf
+
+# Binary, never touched.
+*.apk   binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.ico   binary

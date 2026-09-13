@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sony SOOC Recipes · 滤镜浏览器</title>
+<style>
+  :root {
+    --bg:        #f7f7f5;
+    --panel:     #ffffff;
+    --line:      #e6e4de;
+    --line-soft: #f0eee9;
+    --ink:       #1a1a18;
+    --ink-2:     #5c5a54;
+    --ink-3:     #8f8d86;
+    --amber:     #b45309;
+    --amber-bg:  #fdf6ec;
+    --slate:     #64748b;
+    --slate-bg:  #f1f5f9;
+    --mono-bg:   #2a2a28;
+    --radius:    12px;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                 "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  header { margin-bottom: 32px; }
+  h1 { font-size: 30px; line-height: 1.25; margin: 0 0 8px; letter-spacing: -0.02em; font-weight: 650; }
+  .sub { color: var(--ink-2); margin: 0 0 22px; max-width: 62ch; }
+  .sub b { color: var(--ink); font-weight: 600; }
+
+  .stats { display: flex; flex-wrap: wrap; gap: 10px; }
+  .stat {
+    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 10px 16px; min-width: 104px;
+  }
+  .stat .n { font-size: 21px; font-weight: 650; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+  .stat .l { font-size: 12px; color: var(--ink-3); }
+
+  .bar {
+    position: sticky; top: 0; z-index: 20; background: rgba(247,247,245,.92);
+    backdrop-filter: blur(10px); border-bottom: 1px solid var(--line);
+    padding: 14px 0; margin: 28px 0 24px;
+  }
+  .bar-inner { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  input[type=search], select {
+    font: inherit; padding: 8px 12px; border: 1px solid var(--line);
+    border-radius: 9px; background: var(--panel); color: var(--ink); min-height: 38px;
+  }
+  input[type=search] { flex: 1 1 220px; min-width: 180px; }
+  input[type=search]:focus, select:focus { outline: 2px solid #c7d2fe; outline-offset: -1px; border-color: #a5b4fc; }
+  .chip {
+    font: inherit; font-size: 13px; padding: 7px 13px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--panel); color: var(--ink-2);
+    cursor: pointer; min-height: 34px; white-space: nowrap;
+  }
+  .chip:hover { border-color: #d4d1c9; color: var(--ink); }
+  .chip[aria-pressed=true] { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .count { margin-left: auto; color: var(--ink-3); font-size: 13px; font-variant-numeric: tabular-nums; }
+
+  h2.group {
+    font-size: 13px; font-weight: 640; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--ink-3); margin: 34px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--line);
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  h2.group span { font-weight: 400; letter-spacing: 0; text-transform: none; font-size: 13px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(268px, 1fr)); gap: 14px; }
+
+  .card {
+    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+    overflow: hidden; display: flex; flex-direction: column;
+    transition: border-color .15s, box-shadow .15s, transform .15s;
+  }
+  .card:hover { border-color: #d9d6cd; box-shadow: 0 6px 20px rgba(26,26,24,.07); transform: translateY(-1px); }
+  .sw {
+    height: 46px; position: relative;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .sw .ax { position: absolute; inset: 0; display: flex; align-items: center; justify-content: space-between;
+            padding: 0 10px; font-size: 10.5px; letter-spacing: .04em; font-weight: 600; }
+  .body { padding: 13px 15px 15px; display: flex; flex-direction: column; gap: 9px; flex: 1; }
+  .name { font-weight: 620; font-size: 15.5px; letter-spacing: -0.01em; line-height: 1.35; }
+  .zh { color: var(--ink-3); font-size: 12.5px; font-weight: 400; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tag {
+    font-size: 10.5px; font-weight: 620; letter-spacing: .03em; padding: 3px 7px;
+    border-radius: 5px; white-space: nowrap;
+  }
+  .t-up      { background: var(--amber-bg); color: var(--amber); border: 1px solid #f2e2cc; }
+  .t-new     { background: #ecfdf5; color: #047857; border: 1px solid #c7f0dd; }
+  .t-ref     { background: var(--slate-bg); color: var(--slate); border: 1px solid #dde5ee; }
+  .t-mono    { background: var(--mono-bg); color: #fff; }
+  .t-color   { background: #eef2ff; color: #4338ca; border: 1px solid #dfe4fb; }
+  .t-unver   { background: #fef2f2; color: #b91c1c; border: 1px solid #fadcdc; }
+
+  .params { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 2px; }
+  .p {
+    font-size: 11.5px; font-variant-numeric: tabular-nums; padding: 3px 8px;
+    background: #faf9f7; border: 1px solid var(--line-soft); border-radius: 6px;
+    color: var(--ink-2); white-space: nowrap;
+  }
+  .p b { color: var(--ink); font-weight: 620; }
+  .p.warn { background: #fffbeb; border-color: #f5e6c0; color: #92400e; }
+
+  .note { font-size: 12.5px; color: var(--ink-2); border-left: 2px solid var(--line);
+          padding-left: 9px; margin-top: 2px; }
+  .note.mine { border-left-color: #10b981; }
+
+  footer { margin-top: 56px; padding-top: 22px; border-top: 1px solid var(--line);
+           color: var(--ink-2); font-size: 13.5px; }
+  footer h3 { font-size: 14px; margin: 0 0 10px; color: var(--ink); }
+  footer ul { margin: 0 0 16px; padding-left: 20px; }
+  footer li { margin-bottom: 5px; }
+  footer code { background: #efece6; padding: 1.5px 5px; border-radius: 4px; font-size: 12.5px; }
+  a { color: #1d4ed8; }
+
+  .empty { padding: 60px 0; text-align: center; color: var(--ink-3); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Sony SOOC Recipes · 滤镜浏览器</h1>
+    <p class="sub">
+      把胶片滤镜编译成 APK，装进索尼 PlayMemories 老机器（a6000 / a6500 / a5100 / NEX / RX100 III–V / a7 II …）。
+      <b>SOOC = Straight Out Of Camera，直出。</b>
+      这不是后期套 LUT —— 风格被写进相机，拍的时候就定了，关机重启后依然是全模式的默认。
+    </p>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <div class="bar">
+    <div class="bar-inner">
+      <input type="search" id="q" placeholder="搜索配方名、品牌…" autocomplete="off">
+      <select id="group"><option value="">全部品牌</option></select>
+      <button class="chip" id="f-compiled" aria-pressed="true">可编译进 APK</button>
+      <button class="chip" id="f-ref" aria-pressed="true">仅登记</button>
+      <button class="chip" id="f-mono" aria-pressed="false">只看黑白</button>
+      <button class="chip" id="f-unver" aria-pressed="false">只看未验证</button>
+      <span class="count" id="count"></span>
+    </div>
+  </div>
+
+  <div id="out"></div>
+
+  <footer>
+    <h3>关于色块</h3>
+    <p>
+      卡片顶部的色块是<b>参数示意，不是实拍样张</b>：它的色相来自白平衡微调
+      （琥珀/蓝、绿/品红），强度来自饱和度设置。它只表达这款配方<b>把画面往哪个方向推</b>，
+      不代表真实成像。要看成片，装进相机拍。
+    </p>
+
+    <h3>必须先知道的限制</h3>
+    <ul>
+      <li><b>这些是「某个味道的近似」，不是别家色彩科学的复制品。</b>
+          a6000 没有 Picture Profile 菜单，也存不下色调曲线。</li>
+      <li><b>做不到</b>：Log 曲线（S-Log / V-Log / Blackmagic）、带色调的黑白（硒调、蓝晒）、
+          真正的胶片颗粒。</li>
+      <li><b>没有强度档位</b>。想淡一点只能在相机应用里手改参数芯片。</li>
+      <li><b>标 PE 的配方要 JPEG 画质</b>。图片效果开启时相机忽略创意风格，
+          且 RAW / RAW+JPEG 下效果被静默丢弃。</li>
+      <li><b>a5100 少了 Fn 和 AEL 两个键</b>，品牌列表浏览和隐藏面板用不了，但波轮能滚完全部配方。</li>
+      <li><b>本项目不改固件</b>，只写你本来就能手设的那些值。</li>
+    </ul>
+
+    <h3>数据来自哪里</h3>
+    <ul>
+      <li><b>voxivoid/recipe-lab-sony-pmca</b> —— 77 款配方参数、设置存储区反向工程。许可 MIT，可再分发。</li>
+      <li><b>ukiki0718-netizen/sony-a5100-film-studio</b> —— 15 款风格的名称与取向。
+          许可 PolyForm 非商用，<b>仅登记名称与来源，未转录其拟合参数</b>。</li>
+      <li><b>ma1co</b> 的 Sony-PMCA-RE 与 OpenMemories:Tweak —— 安装通道与 Wi-Fi ADB。
+          <b>没有他就没有这一切。</b></li>
+    </ul>
+    <p>
+      完整来源与许可边界见仓库的 <code>NOTICE.md</code>；安装见 <code>docs/INSTALL.md</code>；
+      两条连接通道的区别见 <code>docs/CHANNEL-COMPARISON.md</code>。
+      配方名称中的 Sony / Fujifilm / Kodak / Ricoh / Leica 等均为各自权利人的商标，
+      此处仅用于描述所接近的视觉风格。本项目与上述公司无关联、未获背书。
+    </p>
+  </footer>
+</div>
+
+<script>
+const DATA = {"$comment":"SONY SOOC RECIPES — 单一事实来源。所有滤镜配方都登记在这里，APK 由工具从此文件生成，不要手改生成的 Recipes.java。","version":"0.1.0","updated":"2026-09-13","engines":{"recipe-lab":{"label":"Settings-store engine (Recipe Lab)","what_it_does":"把配方写进相机的持久化设置存储区：创意风格及其饱和度/对比度/锐度、白平衡与微调、曝光补偿、DRO、图片效果，外加一个索尼从未在菜单里公开的色彩矩阵开关。","applies_to":"应用关闭后依然生效，覆盖 P/A/S/M 与录像全部模式。","limits":"只能使用该机型「存得下来」的项目。无色调曲线、无 LUT 文件、无 Log。所有风格都是近似，不是别家色彩科学的复制品。","license":"MIT","upstream":"voxivoid/recipe-lab-sony-pmca","verified_models":["ILCE-6000 (fw 3.21)","ILCE-6500","ILCE-5100","ILCE-7M2"]},"film-studio-matrix":{"label":"Hardware matrix engine (Film Studio / 胶片工坊)","what_it_does":"改动机内图片处理管线的 3x3 色彩矩阵与 1024 点共同 Gamma 曲线，是真实的逐像素色彩处理，而非仅写设置。","applies_to":"拍照与实验性录像，带 30/50/70/100% 四档强度。","limits":"依赖一个不随仓库分发的基础 APK（bonyback1 的 Ricoh 模组，基于索尼「照片效果+」），且目前只在 a5100 固件 1.10 上实机验证。","license":"PolyForm Noncommercial 1.0.0 (非 OSI 开源，禁止商用)","upstream":"ukiki0718-netizen/sony-a5100-film-studio","verified_models":["ILCE-5100 (fw 1.10, Android 2.3.7 / API 10)"]}},"sources":{"recipe-lab":{"repo":"https://github.com/voxivoid/recipe-lab-sony-pmca","author":"André Domingues (voxivoid)","license":"MIT","fetched_rev":"development @ 2026-09-12 (v1.0.0 stable / v1.1.0-dev.8)","redistributable":true,"contribution":"77 款配方参数、设置存储区反向工程（备份 ID、图片配置文件开关行为、色彩矩阵测量）、应用本体与图标。"},"film-studio":{"repo":"https://github.com/ukiki0718-netizen/sony-a5100-film-studio","author":"ukiki0718-netizen (鲸鱼土豆饼日记)","license":"PolyForm Noncommercial 1.0.0（新增部分）/ Apache-2.0（上游理光参数）/ 富士与索尼权利独立保留","fetched_rev":"main @ v0.2.0-alpha (2026-09-11)","redistributable":false,"contribution":"15 款风格的取向与命名（10 富士参考 + 5 理光／街头）、四档强度设计、机型验证范围与许可边界的严谨披露方式。"},"ricoh-mod":{"repo":"https://github.com/bonyback1/sony-pmca-ricoh-mod","author":"bonyback1","license":"Apache-2.0","fetched_rev":"7c565898562c73c5073c54dfc831c8c3df9c24cf","redistributable":true,"contribution":"硬件色彩矩阵与共同 Gamma 的处理方法、菜单挂钩接口。"},"sony-pmca-re":{"repo":"https://github.com/ma1co/Sony-PMCA-RE","author":"ma1co","license":"MIT","redistributable":true,"contribution":"应用安装通道（索尼自带应用商店关闭前的同一通道）、固件与设置存储区转储工具。"},"openmemories":{"repo":"https://github.com/ma1co/OpenMemories-Tweak","author":"ma1co","license":"MIT","redistributable":true,"contribution":"Wi-Fi ADB 与开发者开关、Backup_read/write 参考实现、按键扫描码参考。"}},"style_constants":{"STD":1,"VIVID":2,"NEUTRAL":3,"PORTRAIT":4,"LANDSCAPE":5,"MONO":6,"CLEAR":7,"DEEP":8,"LIGHT":9,"SUNSET":10,"NIGHT":11,"AUTUMN":12,"SEPIA":13},"pe_constants":{"off":0,"toy-camera":1,"pop-color":2,"posterization":3,"retro-photo":4,"soft-high-key":5,"part-color":6,"rough-mono":7,"soft-focus":8,"hdr-art":9,"richtone-mono":10,"miniature":11,"illust":12,"watercolor":13},"dro_constants":{"off":0,"auto":6},"groups":[{"id":"sony","label":"Sony"},{"id":"fuji-sim","label":"Fuji Sim"},{"id":"fuji-film","label":"Fuji Film"},{"id":"kodak","label":"Kodak"},{"id":"cine","label":"Cine"},{"id":"ricoh-gr","label":"Ricoh GR"},{"id":"leica","label":"Leica"},{"id":"hasselblad","label":"Hasselblad"},{"id":"canon-nikon","label":"Canon / Nikon"},{"id":"pana-olympus","label":"Pana / Olympus"},{"id":"other-stocks","label":"Other Stocks"},{"id":"ilford","label":"Ilford"}],"filters":[{"id":"factory-st","name":"FACTORY (ST)","name_zh":"出厂标准","group":"sony","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"STD","sat":0,"con":0,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"sony-pt-portrait","name":"Sony PT (portrait)","group":"sony","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"PORTRAIT","sat":0,"con":0,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"sony-nt-neutral","name":"Sony NT (neutral)","group":"sony","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"NEUTRAL","sat":0,"con":0,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"sony-vv-vivid","name":"Sony VV (vivid)","group":"sony","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"VIVID","sat":0,"con":0,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"sony-vv2","name":"Sony VV2","group":"sony","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"VIVID","sat":2,"con":1,"sharp":0,"matrix":1,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"sony-fl-film-like","name":"Sony FL (film-like)","group":"sony","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"NEUTRAL","sat":-4,"con":-1,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":1,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"sony-in-instant","name":"Sony IN (instant)","group":"sony","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"NEUTRAL","sat":-6,"con":-3,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":-1},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"sony-sh-soft-high-key","name":"Sony SH (soft high-key)","group":"sony","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"LIGHT","sat":-2,"con":-2,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":1,"gm":0},"pe":5,"sub":0,"ev":3,"dro":6}},{"id":"provia","name":"Provia","group":"fuji-sim","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"cross_ref":"fs-provia","recipe":{"style":"STD","sat":1,"con":0,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"velvia","name":"Velvia","group":"fuji-sim","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"cross_ref":"fs-velvia","recipe":{"style":"VIVID","sat":5,"con":1,"sharp":0,"matrix":1,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"astia","name":"Astia","group":"fuji-sim","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"cross_ref":"fs-astia","recipe":{"style":"PORTRAIT","sat":0,"con":-1,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":1,"gm":0},"pe":0,"sub":0,"ev":1,"dro":6}},{"id":"classic-chrome","name":"Classic Chrome","group":"fuji-sim","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"cross_ref":"fs-classic-chrome","recipe":{"style":"NEUTRAL","sat":-5,"con":2,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":-1,"gm":0},"pe":0,"sub":0,"ev":-1,"dro":6}},{"id":"classic-negative","name":"Classic Negative","group":"fuji-sim","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"cross_ref":"fs-classic-neg","recipe":{"style":"STD","sat":-3,"con":3,"sharp":1,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":1},"pe":0,"sub":0,"ev":1,"dro":6}},{"id":"nostalgic-neg","name":"Nostalgic Neg","group":"fuji-sim","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"STD","sat":0,"con":0,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":2,"gm":0},"pe":4,"sub":0,"ev":1,"dro":6}},{"id":"reala-ace","name":"Reala Ace","group":"fuji-sim","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"cross_ref":"fs-reala-ace","recipe":{"style":"STD","sat":0,"con":1,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"pro-neg-std","name":"Pro Neg Std","group":"fuji-sim","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"cross_ref":"fs-pro-neg-std","recipe":{"style":"PORTRAIT","sat":-2,"con":-1,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"pro-neg-hi","name":"Pro Neg Hi","group":"fuji-sim","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"PORTRAIT","sat":-2,"con":1,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"eterna","name":"Eterna","group":"fuji-sim","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"cross_ref":"fs-eterna","recipe":{"style":"NEUTRAL","sat":-6,"con":-2,"sharp":-1,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":-1,"dro":3}},{"id":"eterna-bleach-bypass","name":"Eterna Bleach Bypass","group":"fuji-sim","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"cross_ref":"fs-eterna-bb","recipe":{"style":"NEUTRAL","sat":-9,"con":3,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":-1,"dro":6}},{"id":"acros","name":"Acros","group":"fuji-sim","engine":"recipe-lab","source":"recipe-lab","tone":"mono","verified":true,"cross_ref":"fs-acros","recipe":{"style":"MONO","sat":0,"con":1,"sharp":1,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"acros-ye","name":"Acros +Ye (yellow filter)","group":"fuji-sim","engine":"recipe-lab","source":"recipe-lab","tone":"mono","verified":true,"recipe":{"style":"MONO","sat":0,"con":1,"sharp":1,"matrix":0,"wb":{"mode":"K","kelvin":4000,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"acros-r","name":"Acros +R (red filter)","group":"fuji-sim","engine":"recipe-lab","source":"recipe-lab","tone":"mono","verified":true,"recipe":{"style":"MONO","sat":0,"con":0,"sharp":0,"matrix":0,"wb":{"mode":"K","kelvin":2500,"ab":0,"gm":0},"pe":7,"sub":0,"ev":0,"dro":6}},{"id":"acros-g","name":"Acros +G (green filter)","group":"fuji-sim","engine":"recipe-lab","source":"recipe-lab","tone":"mono","verified":true,"recipe":{"style":"MONO","sat":0,"con":1,"sharp":1,"matrix":0,"wb":{"mode":"K","kelvin":5600,"ab":0,"gm":4},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"sepia","name":"Sepia","group":"fuji-sim","engine":"recipe-lab","source":"recipe-lab","tone":"mono","verified":true,"recipe":{"style":"SEPIA","sat":0,"con":0,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"fuji-pro-400h","name":"Fuji Pro 400H","group":"fuji-film","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"STD","sat":0,"con":0,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":-1,"gm":1},"pe":5,"sub":2,"ev":2,"dro":6}},{"id":"fuji-fortia-50","name":"Fuji Fortia 50","group":"fuji-film","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"VIVID","sat":6,"con":2,"sharp":0,"matrix":1,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":-1},"pe":0,"sub":0,"ev":-1,"dro":6}},{"id":"fuji-superia-400","name":"Fuji Superia 400","group":"fuji-film","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"STD","sat":1,"con":1,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":1,"gm":1},"pe":0,"sub":0,"ev":1,"dro":6}},{"id":"fuji-c200","name":"Fuji C200","group":"fuji-film","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"STD","sat":0,"con":0,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":-1,"gm":1},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"fuji-natura-1600","name":"Fuji Natura 1600","group":"fuji-film","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"PORTRAIT","sat":-2,"con":-2,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":1,"gm":0},"pe":0,"sub":0,"ev":1,"dro":6}},{"id":"kodak-portra-160","name":"Kodak Portra 160","group":"kodak","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"PORTRAIT","sat":-2,"con":-1,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":1,"gm":0},"pe":0,"sub":0,"ev":2,"dro":6}},{"id":"kodak-portra-400","name":"Kodak Portra 400","group":"kodak","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"PORTRAIT","sat":-1,"con":0,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":2,"gm":1},"pe":0,"sub":0,"ev":2,"dro":6}},{"id":"kodak-portra-800","name":"Kodak Portra 800","group":"kodak","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"STD","sat":-1,"con":1,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":2,"gm":0},"pe":0,"sub":0,"ev":1,"dro":6}},{"id":"kodak-gold-200","name":"Kodak Gold 200","group":"kodak","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"STD","sat":2,"con":1,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":3,"gm":1},"pe":0,"sub":0,"ev":1,"dro":6}},{"id":"kodak-ultramax-400","name":"Kodak Ultra Max 400","group":"kodak","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"STD","sat":3,"con":1,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":2,"gm":0},"pe":0,"sub":0,"ev":1,"dro":6}},{"id":"kodak-colorplus-200","name":"Kodak Color Plus 200","group":"kodak","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"STD","sat":1,"con":1,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":2,"gm":1},"pe":0,"sub":0,"ev":1,"dro":6}},{"id":"kodak-ektar-100","name":"Kodak Ektar 100","group":"kodak","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"VIVID","sat":3,"con":2,"sharp":1,"matrix":1,"wb":{"mode":"AUTO","kelvin":0,"ab":1,"gm":0},"pe":0,"sub":0,"ev":-1,"dro":6}},{"id":"kodak-ektachrome-e100","name":"Kodak Ektachrome E100","group":"kodak","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"CLEAR","sat":2,"con":1,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":-1,"gm":0},"pe":0,"sub":0,"ev":-1,"dro":6}},{"id":"kodachrome-64","name":"Kodachrome 64","group":"kodak","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"DEEP","sat":1,"con":2,"sharp":1,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":1,"gm":-1},"pe":0,"sub":0,"ev":-1,"dro":6}},{"id":"kodak-vision3-500t","name":"Kodak Vision3 500T (daylight)","group":"kodak","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"NEUTRAL","sat":-1,"con":0,"sharp":0,"matrix":0,"wb":{"mode":"K","kelvin":3200,"ab":0,"gm":0},"pe":0,"sub":0,"ev":1,"dro":3}},{"id":"kodak-vision-200t-asteroid-city","name":"Kodak Vision 200T (Asteroid City)","group":"kodak","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"STD","sat":0,"con":0,"sharp":0,"matrix":0,"wb":{"mode":"K","kelvin":4300,"ab":1,"gm":2},"pe":4,"sub":0,"ev":0,"dro":6}},{"id":"kodak-trix-400","name":"Kodak Tri-X 400","group":"kodak","engine":"recipe-lab","source":"recipe-lab","tone":"mono","verified":true,"recipe":{"style":"MONO","sat":0,"con":2,"sharp":2,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":1,"dro":6}},{"id":"kodak-tmax","name":"Kodak T-Max","group":"kodak","engine":"recipe-lab","source":"recipe-lab","tone":"mono","verified":true,"recipe":{"style":"MONO","sat":0,"con":2,"sharp":3,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"kodak-trix-1600-pushed","name":"Kodak Tri-X 1600 (pushed)","group":"kodak","engine":"recipe-lab","source":"recipe-lab","tone":"mono","verified":true,"recipe":{"style":"MONO","sat":0,"con":0,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":7,"sub":0,"ev":1,"dro":6}},{"id":"cinestill-50d","name":"Cinestill 50D (Blue Velvet)","group":"cine","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"STD","sat":-1,"con":1,"sharp":0,"matrix":0,"wb":{"mode":"K","kelvin":5600,"ab":-2,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"cinestill-800t","name":"Cinestill 800T","group":"cine","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"NEUTRAL","sat":-2,"con":0,"sharp":0,"matrix":0,"wb":{"mode":"K","kelvin":3200,"ab":0,"gm":-1},"pe":0,"sub":0,"ev":1,"dro":6}},{"id":"classic-cinema","name":"Classic Cinema","group":"cine","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"NEUTRAL","sat":-4,"con":-2,"sharp":-1,"matrix":0,"wb":{"mode":"K","kelvin":5000,"ab":0,"gm":0},"pe":0,"sub":0,"ev":-1,"dro":3}},{"id":"rec709-video","name":"Rec709 Video (flat-ish)","group":"cine","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"NEUTRAL","sat":-2,"con":-2,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":5}},{"id":"gr-positive-film","name":"GR Positive Film","name_zh":"GR 正片","group":"ricoh-gr","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"cross_ref":"fs-gr-positive","recipe":{"style":"STD","sat":3,"con":2,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":2,"gm":0},"pe":0,"sub":0,"ev":-1,"dro":6}},{"id":"gr-negative-film","name":"GR Negative Film","name_zh":"GR 负片","group":"ricoh-gr","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"cross_ref":"fs-gr-negative","recipe":{"style":"NEUTRAL","sat":-2,"con":1,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":-1,"gm":1},"pe":0,"sub":0,"ev":1,"dro":6}},{"id":"gr-bleach-bypass","name":"GR Bleach Bypass","group":"ricoh-gr","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"NEUTRAL","sat":-8,"con":3,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"gr-retro","name":"GR Retro","group":"ricoh-gr","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"STD","sat":-3,"con":-1,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":3,"gm":-1},"pe":4,"sub":0,"ev":0,"dro":6}},{"id":"gr-cross-process","name":"GR Cross Process","name_zh":"GR 正负逆冲","group":"ricoh-gr","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"cross_ref":"fs-gr-cross","recipe":{"style":"VIVID","sat":2,"con":2,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":-2,"gm":4},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"gr-hi-contrast-bw","name":"GR Hi-Contrast B&W","name_zh":"GR 高反差黑白","group":"ricoh-gr","engine":"recipe-lab","source":"recipe-lab","tone":"mono","verified":true,"cross_ref":"fs-gr-hcbw","recipe":{"style":"MONO","sat":0,"con":3,"sharp":1,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":7,"sub":0,"ev":0,"dro":6}},{"id":"gr-hard-monotone","name":"GR Hard Monotone","group":"ricoh-gr","engine":"recipe-lab","source":"recipe-lab","tone":"mono","verified":true,"recipe":{"style":"MONO","sat":0,"con":2,"sharp":2,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"gr-soft-monotone","name":"GR Soft Monotone","group":"ricoh-gr","engine":"recipe-lab","source":"recipe-lab","tone":"mono","verified":true,"recipe":{"style":"MONO","sat":0,"con":-2,"sharp":-1,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"gr-moriyama","name":"GR Moriyama (grainy B&W)","name_zh":"GR 森山风","group":"ricoh-gr","engine":"recipe-lab","source":"authored-here","tone":"mono","verified":false,"cross_ref":"fs-gr-moriyama","note":"本仓库新写的配方，用于补上游唯一缺口（胶片工坊有、Recipe Lab 没有）。未在实机上验证，落地前请先在可丢弃素材上试拍。","recipe":{"style":"MONO","sat":0,"con":3,"sharp":1,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":7,"sub":0,"ev":-1,"dro":6}},{"id":"leica-contemporary","name":"Leica Contemporary","group":"leica","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"STD","sat":1,"con":1,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"leica-classic","name":"Leica Classic","group":"leica","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"STD","sat":-1,"con":2,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":1,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"leica-eternal","name":"Leica Eternal","group":"leica","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"NEUTRAL","sat":-3,"con":-1,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":1,"gm":0},"pe":0,"sub":0,"ev":0,"dro":3}},{"id":"leica-monochrom","name":"Leica Monochrom","group":"leica","engine":"recipe-lab","source":"recipe-lab","tone":"mono","verified":true,"recipe":{"style":"MONO","sat":0,"con":2,"sharp":1,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"hasselblad-hncs-natural","name":"Hasselblad HNCS Natural","group":"hasselblad","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"NEUTRAL","sat":-1,"con":-1,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"canon-standard","name":"Canon Standard","group":"canon-nikon","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"STD","sat":1,"con":1,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":1,"gm":-1},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"canon-portrait","name":"Canon Portrait","group":"canon-nikon","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"PORTRAIT","sat":0,"con":0,"sharp":-1,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":1,"gm":-1},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"canon-faithful","name":"Canon Faithful","group":"canon-nikon","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"NEUTRAL","sat":0,"con":0,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"nikon-flat","name":"Nikon Flat","group":"canon-nikon","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"NEUTRAL","sat":-3,"con":-3,"sharp":-1,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":5}},{"id":"nikon-vivid","name":"Nikon Vivid","group":"canon-nikon","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"VIVID","sat":1,"con":1,"sharp":1,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"pana-l-monochrome-d","name":"Pana L.Monochrome D","group":"pana-olympus","engine":"recipe-lab","source":"recipe-lab","tone":"mono","verified":true,"recipe":{"style":"MONO","sat":0,"con":3,"sharp":1,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"pana-l-classicneo","name":"Pana L.ClassicNeo","group":"pana-olympus","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"NEUTRAL","sat":-3,"con":-1,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":2,"gm":0},"pe":0,"sub":0,"ev":1,"dro":6}},{"id":"olympus-pop-art","name":"Olympus Pop Art","group":"pana-olympus","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"VIVID","sat":8,"con":2,"sharp":0,"matrix":1,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"olympus-pale-light","name":"Olympus Pale & Light","group":"pana-olympus","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"LIGHT","sat":-3,"con":-2,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":2,"dro":6}},{"id":"agfa-vista-200","name":"Agfa Vista 200","group":"other-stocks","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"STD","sat":2,"con":1,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":2,"gm":-1},"pe":0,"sub":0,"ev":1,"dro":6}},{"id":"agfa-ultra-100","name":"Agfa Ultra 100","group":"other-stocks","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"VIVID","sat":6,"con":1,"sharp":0,"matrix":1,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"polaroid-instax","name":"Polaroid / Instax","group":"other-stocks","engine":"recipe-lab","source":"recipe-lab","tone":"color","verified":true,"recipe":{"style":"STD","sat":-3,"con":-2,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":1,"gm":-2},"pe":4,"sub":0,"ev":1,"dro":6}},{"id":"ilford-hp5","name":"Ilford HP5","group":"ilford","engine":"recipe-lab","source":"recipe-lab","tone":"mono","verified":true,"recipe":{"style":"MONO","sat":0,"con":1,"sharp":0,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":1,"dro":6}},{"id":"ilford-fp4","name":"Ilford FP4","group":"ilford","engine":"recipe-lab","source":"recipe-lab","tone":"mono","verified":true,"recipe":{"style":"MONO","sat":0,"con":1,"sharp":1,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"ilford-delta-100","name":"Ilford Delta 100","group":"ilford","engine":"recipe-lab","source":"recipe-lab","tone":"mono","verified":true,"recipe":{"style":"MONO","sat":0,"con":1,"sharp":1,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"ilford-delta-3200","name":"Ilford Delta 3200","group":"ilford","engine":"recipe-lab","source":"recipe-lab","tone":"mono","verified":true,"recipe":{"style":"MONO","sat":0,"con":3,"sharp":-2,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":2,"dro":6}},{"id":"ilford-pan-f-50","name":"Ilford Pan F 50","group":"ilford","engine":"recipe-lab","source":"recipe-lab","tone":"mono","verified":true,"recipe":{"style":"MONO","sat":0,"con":2,"sharp":2,"matrix":0,"wb":{"mode":"AUTO","kelvin":0,"ab":0,"gm":0},"pe":0,"sub":0,"ev":0,"dro":6}},{"id":"fs-provia","name":"PROVIA","group":"fuji-sim","engine":"film-studio-matrix","source":"film-studio","tone":"color","verified":true,"cross_ref":"provia","strengths":[30,50,70,100],"note":"富士官方 GFX ETERNA 55 v1.10 LUT 拟合的 3x3 矩阵 + 1024 点 Gamma。100% 保留上游参数。"},{"id":"fs-velvia","name":"Velvia","group":"fuji-sim","engine":"film-studio-matrix","source":"film-studio","tone":"color","verified":true,"cross_ref":"velvia","strengths":[30,50,70,100]},{"id":"fs-astia","name":"ASTIA","group":"fuji-sim","engine":"film-studio-matrix","source":"film-studio","tone":"color","verified":true,"cross_ref":"astia","strengths":[30,50,70,100]},{"id":"fs-classic-chrome","name":"CLASSIC CHROME","group":"fuji-sim","engine":"film-studio-matrix","source":"film-studio","tone":"color","verified":true,"cross_ref":"classic-chrome","strengths":[30,50,70,100]},{"id":"fs-reala-ace","name":"REALA ACE","group":"fuji-sim","engine":"film-studio-matrix","source":"film-studio","tone":"color","verified":true,"cross_ref":"reala-ace","strengths":[30,50,70,100]},{"id":"fs-pro-neg-std","name":"PRO Neg. Std","group":"fuji-sim","engine":"film-studio-matrix","source":"film-studio","tone":"color","verified":true,"cross_ref":"pro-neg-std","strengths":[30,50,70,100]},{"id":"fs-classic-neg","name":"CLASSIC Neg.","group":"fuji-sim","engine":"film-studio-matrix","source":"film-studio","tone":"color","verified":true,"cross_ref":"classic-negative","strengths":[30,50,70,100]},{"id":"fs-eterna","name":"ETERNA","group":"fuji-sim","engine":"film-studio-matrix","source":"film-studio","tone":"color","verified":true,"cross_ref":"eterna","strengths":[30,50,70,100]},{"id":"fs-eterna-bb","name":"ETERNA BLEACH BYPASS","group":"fuji-sim","engine":"film-studio-matrix","source":"film-studio","tone":"color","verified":true,"cross_ref":"eterna-bleach-bypass","strengths":[30,50,70,100]},{"id":"fs-acros","name":"ACROS","group":"fuji-sim","engine":"film-studio-matrix","source":"film-studio","tone":"mono","verified":true,"cross_ref":"acros","strengths":[30,50,70,100],"note":"低于 100% 强度会保留部分颜色；纯黑白必须选 100%。"},{"id":"fs-gr-positive","name":"GR Positive Film","name_zh":"GR 正片","group":"ricoh-gr","engine":"film-studio-matrix","source":"film-studio","tone":"color","verified":true,"cross_ref":"gr-positive-film","strengths":[30,50,70,100],"note":"参数来自 bonyback1 社区模组（Apache-2.0），非理光官方 LUT。"},{"id":"fs-gr-negative","name":"Negative Film","name_zh":"负片","group":"ricoh-gr","engine":"film-studio-matrix","source":"film-studio","tone":"color","verified":true,"cross_ref":"gr-negative-film","strengths":[30,50,70,100]},{"id":"fs-gr-hcbw","name":"High Contrast B&W","name_zh":"高反差黑白","group":"ricoh-gr","engine":"film-studio-matrix","source":"film-studio","tone":"mono","verified":true,"cross_ref":"gr-hi-contrast-bw","strengths":[30,50,70,100],"note":"低于 100% 会保留部分颜色。"},{"id":"fs-gr-moriyama","name":"Moriyama Daido Style","name_zh":"森山风","group":"ricoh-gr","engine":"film-studio-matrix","source":"film-studio","tone":"mono","verified":true,"cross_ref":"gr-moriyama","strengths":[30,50,70,100],"note":"上游两个项目之间唯一真正互补的一项：Recipe Lab 原版没有这个风格。本仓库已用设置存储区参数补写近似版本 gr-moriyama。"},{"id":"fs-gr-cross","name":"Cross Process","name_zh":"正负逆冲","group":"ricoh-gr","engine":"film-studio-matrix","source":"film-studio","tone":"color","verified":true,"cross_ref":"gr-cross-process","strengths":[30,50,70,100]}]};
+
+const STYLE_LABEL = {STD:"Standard",VIVID:"Vivid",NEUTRAL:"Neutral",PORTRAIT:"Portrait",
+  LANDSCAPE:"Landscape",MONO:"B&W",CLEAR:"Clear",DEEP:"Deep",LIGHT:"Light",SUNSET:"Sunset",
+  NIGHT:"Night",AUTUMN:"Autumn",SEPIA:"Sepia"};
+const PE_LABEL = ["off","Toy","Pop","Poster","Retro","High-key","Part col","HC mono","Soft foc",
+  "HDR art","Rich mono","Miniature","Illust","Watercol"];
+const PE_JPEG = 1;                 // every non-zero picture effect needs JPEG quality
+const SUB_COUNT = {5:3, 1:5, 6:4, 3:2};
+
+function evLabel(ev) {
+  if (ev === 0) return "0";
+  const a = Math.abs(ev);
+  const frac = a % 3 === 0 ? ".0" : a % 3 === 1 ? ".3" : ".7";
+  return (ev > 0 ? "+" : "-") + Math.floor(a / 3) + frac;
+}
+function droLabel(v) { return v === 6 ? "auto" : v === 0 ? "off" : "Lv" + v; }
+const subLabel = (pe, sub) => (SUB_COUNT[pe] != null ? ["blue","pink","green","red","yellow"][sub] : null);
+
+// --- parameter-derived swatch -------------------------------------------------------
+// Two stops, lighter -> stronger, so the tile reads as a grade direction rather than a
+// flat colour patch. Hue comes from the WB fine-tune axes; strength from saturation.
+function swatch(f) {
+  if (f.engine !== "recipe-lab") return null;
+  const r = f.recipe, ab = r.wb.ab, gm = r.wb.gm;
+  if (f.tone === "mono") {
+    const pe = r.pe;
+    const deep = pe === 7 ? 26 : pe === 4 ? 40 : 34;      // rough-mono goes darker
+    const lite = 92;
+    return { from: `hsl(40 6% ${lite}%)`, to: `hsl(40 6% ${deep}%)`, mono: true };
+  }
+  // translate the two fine-tune axes into an HSL hue
+  const warm = ab / 7;              // + amber, - blue
+  const green = gm / 7;             // + green, - magenta
+  let hue = 40 + warm * 34;         // amber 74deg  <-> blue 6deg
+  if (green > 0.15) hue = 96 + green * 26;
+  if (green < -0.15) hue = 348 + green * 20;
+  const strength = Math.min(1, Math.abs(r.sat) / 9 + Math.abs(warm) * .34 + Math.abs(green) * .34);
+  const sat = 10 + strength * 46;
+  const lite = 90 - strength * 6;
+  const deep = 62 - strength * 26;
+  return { from: `hsl(${hue} ${sat}% ${lite}%)`, to: `hsl(${hue} ${Math.min(70, sat + 12)}% ${deep}%)`, mono: false };
+}
+
+function paramChips(f) {
+  if (f.engine !== "recipe-lab") {
+    return [{ t: "强度 " + (f.strengths || []).join(" / ") + "%", w: false }];
+  }
+  const r = f.recipe, out = [];
+  if (r.pe !== 0) {
+    let t = "图片效果 · " + PE_LABEL[r.pe];
+    const sl = subLabel(r.pe, r.sub);
+    if (sl) t += " (" + sl + ")";
+    out.push({ t, w: true });
+  } else {
+    out.push({ t: "风格 <b>" + (STYLE_LABEL[r.style] || r.style) + "</b>", w: false });
+    const sc = (v) => (v > 0 ? "+" : "") + v;
+    out.push({ t: `饱和/对比 <b>${sc(r.sat)}/${sc(r.con)}</b>`, w: false });
+    if (r.sharp) out.push({ t: "锐度 <b>" + sc(r.sharp) + "</b>", w: false });
+    if (r.matrix === 1) out.push({ t: "色彩矩阵 <b>开启</b>", w: false });
+  }
+  if (r.wb.mode === "K") out.push({ t: "色温 <b>" + r.wb.kelvin + "K</b>", w: false });
+  if (r.wb.ab !== 0) out.push({ t: (r.wb.ab > 0 ? "琥珀 <b>A" : "蓝 <b>B") + Math.abs(r.wb.ab) + "</b>", w: false });
+  if (r.wb.gm !== 0) out.push({ t: (r.wb.gm > 0 ? "绿 <b>G" : "品红 <b>M") + Math.abs(r.wb.gm) + "</b>", w: false });
+  if (r.ev !== 0) out.push({ t: "曝光 <b>" + evLabel(r.ev) + " EV</b>", w: false });
+  if (r.dro !== 6) out.push({ t: "DRO <b>" + droLabel(r.dro) + "</b>", w: false });
+  return out;
+}
+
+function tags(f) {
+  const out = [];
+  if (f.engine === "recipe-lab") {
+    out.push({ c: "t-up", t: "可编译进 APK" });
+  } else {
+    out.push({ c: "t-ref", t: "仅登记 · 非商用" });
+  }
+  if (f.source === "authored-here") out.push({ c: "t-new", t: "本仓库新写" });
+  out.push({ c: f.tone === "mono" ? "t-mono" : "t-color", t: f.tone === "mono" ? "黑白" : "彩色" });
+  if (!f.verified) out.push({ c: "t-unver", t: "未实机验证" });
+  return out;
+}
+
+// --- render ------------------------------------------------------------------------
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+const groups = DATA.groups;
+const groupLabel = Object.fromEntries(groups.map((g) => [g.id, g.label]));
+
+const state = { q: "", group: "", compiled: true, ref: true, mono: false, unver: false };
+
+function visible() {
+  const q = state.q.trim().toLowerCase();
+  return DATA.filters.filter((f) => {
+    const isCompiled = f.engine === "recipe-lab";
+    if (isCompiled && !state.compiled) return false;
+    if (!isCompiled && !state.ref) return false;
+    if (state.mono && f.tone !== "mono") return false;
+    if (state.unver && f.verified) return false;
+    if (state.group && f.group !== state.group) return false;
+    if (!q) return true;
+    return (f.name + " " + (f.name_zh || "") + " " + groupLabel[f.group] + " " +
+            (f.note || "") + " " + f.id).toLowerCase().includes(q);
+  });
+}
+
+function card(f) {
+  const sw = swatch(f);
+  const swHtml = sw
+    ? `<div class="sw" style="background:linear-gradient(96deg, ${sw.from} 0%, ${sw.to} 100%)">
+         <div class="ax" style="color:${sw.mono ? "rgba(255,255,255,.9)" : "rgba(0,0,0,.42)"}">
+           <span>色偏 / 强度示意</span></div>
+       </div>`
+    : `<div class="sw" style="background:repeating-linear-gradient(135deg,#f4f2ee,#f4f2ee 7px,#ece9e3 7px,#ece9e3 14px)">
+         <div class="ax" style="color:#a09d95"><span>另一条引擎 · 无参数</span></div>
+       </div>`;
+
+  const chips = paramChips(f)
+    .map((c) => `<span class="p${c.w ? " warn" : ""}">${c.t}</span>`).join("");
+  const tagHtml = tags(f).map((t) => `<span class="tag ${t.c}">${t.t}</span>`).join("");
+
+  return `<article class="card">
+    ${swHtml}
+    <div class="body">
+      <div>
+        <div class="name">${esc(f.name)}</div>
+        ${f.name_zh ? `<div class="zh">${esc(f.name_zh)}</div>` : ""}
+      </div>
+      <div class="tags">${tagHtml}</div>
+      <div class="params">${chips}</div>
+      ${f.note ? `<div class="note${f.source === "authored-here" ? " mine" : ""}">${esc(f.note)}</div>` : ""}
+    </div>
+  </article>`;
+}
+
+function render() {
+  const list = visible();
+  document.getElementById("count").textContent = list.length + " / " + DATA.filters.length + " 款";
+
+  if (!list.length) {
+    document.getElementById("out").innerHTML = '<div class="empty">没有匹配的配方。试试清空搜索或放宽筛选。</div>';
+    return;
+  }
+
+  // keep the declared group order
+  const byGroup = new Map(groups.map((g) => [g.id, []]));
+  list.forEach((f) => byGroup.get(f.group).push(f));
+
+  let html = "";
+  for (const g of groups) {
+    const items = byGroup.get(g.id);
+    if (!items.length) continue;
+    const compiled = items.filter((f) => f.engine === "recipe-lab").length;
+    html += `<h2 class="group">${esc(g.label)} <span>${items.length} 款` +
+            (compiled ? ` · ${compiled} 款可编译` : " · 仅登记") + `</span></h2>`;
+    html += `<div class="grid">${items.map(card).join("")}</div>`;
+  }
+  document.getElementById("out").innerHTML = html;
+}
+
+// --- wiring ------------------------------------------------------------------------
+const all = DATA.filters;
+const stats = [
+  ["总配方", all.length],
+  ["可编译进 APK", all.filter((f) => f.engine === "recipe-lab").length],
+  ["本仓库新写", all.filter((f) => f.source === "authored-here").length],
+  ["仅登记", all.filter((f) => f.engine !== "recipe-lab").length],
+  ["黑白", all.filter((f) => f.tone === "mono").length],
+  ["品牌组", groups.length],
+];
+document.getElementById("stats").innerHTML = stats
+  .map(([l, n]) => `<div class="stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join("");
+
+const sel = document.getElementById("group");
+groups.forEach((g) => {
+  const n = all.filter((f) => f.group === g.id).length;
+  if (!n) return;
+  sel.insertAdjacentHTML("beforeend", `<option value="${g.id}">${esc(g.label)} (${n})</option>`);
+});
+
+document.getElementById("q").addEventListener("input", (e) => { state.q = e.target.value; render(); });
+sel.addEventListener("change", (e) => { state.group = e.target.value; render(); });
+
+[["f-compiled","compiled"],["f-ref","ref"],["f-mono","mono"],["f-unver","unver"]].forEach(([id, key]) => {
+  document.getElementById(id).addEventListener("click", (e) => {
+    state[key] = !state[key];
+    e.currentTarget.setAttribute("aria-pressed", String(state[key]));
+    render();
+  });
+});
+
+render();
+</script>
+</body>
+</html>

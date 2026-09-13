@@ -1,0 +1,32 @@
+# upstream checkout, used by gen_recipes.py --fork and build_apk.sh
+build/
+
+# generated Java — never commit it; regenerate from catalog/filters.json
+Recipes.java
+
+# signing material — never commit, never share
+*.keystore
+*.jks
+*.pem
+.private/
+ANDROID_KEYSTORE_B64
+ANDROID_KEYSTORE_PASSWORD
+ANDROID_KEY_PASSWORD
+
+# build output
+*.apk
+*.idsig
+out/
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# editors / os
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
