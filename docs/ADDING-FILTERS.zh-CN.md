@@ -259,7 +259,7 @@ case 的规则：
 
 ---
 
-## 7. 本地验证——五道关卡
+## 7. 本地验证——七道关卡
 
 跑提交前脚本。它会在第一道失败时停下：
 
@@ -269,14 +269,15 @@ python tests/run_all.py
 
 | 关卡 | 命令 | 拦什么 |
 |---|---|---|
-| 1/6 校验 | `tools/validate_catalog.py` | 结构错误（枚举非法、取值越界、cross_ref 断、组不连续）和来源错误（`film-studio` 条目带 `recipe`、矩阵引擎被误标 MIT）。`sat` 超出菜单 ±3、`pe` 忽略创意风格 打印为**note 而非 error**——那是设计内行为。 |
-| 2/6 测试 | `tests/test_catalog.py` | 每个 filter 的不变量，加钉死值。`TestAuthoredHaveCases` 拦下任何无 case 的 `authored-here` 条目，以及任何不指向 `authored-here` 的 case。 |
-| 3/6 生成 Java | `tools/gen_recipes.py --check --fork` | 磁盘上的 `Recipes.java` 与 catalog 应生成的不一致。**未 checkout `build/recipe-lab-sony-pmca` 时跳过**（保真检查同理）。 |
-| 4/6 浏览器 | `tools/gen_browser.py` + `tests/smoke_browser.js` | `catalog/index.html` 过期或渲染失败。`node` 不在 PATH 时**跳过**。 |
-| 5/6 README 计数 | `tools/check_readme_counts.py` | `README.md` 里的数字与 catalog 不再匹配。 |
-| 6/6 资源 | `tools/check_assets.py` | 文档引用了不存在的图片、热链了第三方图床（状态徽章除外），或 `docs/assets/samples/` 里的文件没按 `<recipe-id>--off.jpg` / `--on.jpg` 命名、且 id 不在 catalog 中。 |
+| 1/7 校验 | `tools/validate_catalog.py` | 结构错误（枚举非法、取值越界、cross_ref 断、组不连续）和来源错误（`film-studio` 条目带 `recipe`、矩阵引擎被误标 MIT）。`sat` 超出菜单 ±3、`pe` 忽略创意风格 打印为**note 而非 error**——那是设计内行为。 |
+| 2/7 测试 | `tests/test_catalog.py` | 每个 filter 的不变量，加钉死值。`TestAuthoredHaveCases` 拦下任何无 case 的 `authored-here` 条目，以及任何不指向 `authored-here` 的 case。 |
+| 3/7 生成 Java | `tools/gen_recipes.py --check --fork` | 磁盘上的 `Recipes.java` 与 catalog 应生成的不一致。**未 checkout `build/recipe-lab-sony-pmca` 时跳过**（保真检查同理）。 |
+| 4/7 浏览器 | `tools/gen_browser.py` + `tests/smoke_browser.js` | `catalog/index.html` 过期或渲染失败。`node` 不在 PATH 时**跳过**。 |
+| 5/7 README 计数 | `tools/check_readme_counts.py` | `README.md` 里的数字与 catalog 不再匹配。 |
+| 6/7 资源 | `tools/check_assets.py` | 文档引用了不存在的图片、热链了第三方图床（状态徽章除外），或 `docs/assets/samples/` 里的文件没按 `<recipe-id>--off.jpg` / `--on.jpg` 命名、且 id 不在 catalog 中，或图标集缺某个密度。 |
+| 7/7 双语文档 | `tools/check_docs.py` | 英文文档没有 `.zh-CN.md` 双生且没声明原因、双生的英文原文已消失、共用 `docs/assets/*.svg` 里写死了某种语言、或图里画着的数字已被 catalog 超过。 |
 
-3–4 关在缺前置时**跳过**（会大声提示），缺工具不是 catalog 坏了。六关全过才是推送前的门槛。
+3–4 关在缺前置时**跳过**（会大声提示），缺工具不是 catalog 坏了。七关全过才是推送前的门槛。
 
 若第 3 关因无 fork 被跳过、而你仍想给路径 A 配方做保真证明，按 §4 手动跑 `check_fidelity.py`。
 

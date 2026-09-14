@@ -31,7 +31,7 @@
   <rect class="chip" x="44" y="84" width="112" height="20" rx="10"/>
   <text class="tag" x="100" y="98" text-anchor="middle">MIT</text>
   <rect class="chip" x="164" y="84" width="88" height="20" rx="10"/>
-  <text class="tag" x="208" y="98" text-anchor="middle">84 compiled</text>
+  <text class="tag" x="208" y="98" text-anchor="middle">140 compiled</text>
   <rect class="chip" x="260" y="84" width="100" height="20" rx="10"/>
   <text class="tag" x="310" y="98" text-anchor="middle">wide models</text>
 

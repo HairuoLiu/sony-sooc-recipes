@@ -249,6 +249,7 @@ SonySOOCRecipes-<tag>.apk          ──  签名密钥只在本机，永不入�
 | 4 | 浏览器 | `gen_browser.py` + `tests/smoke_browser.js` | 单文件浏览器里的拼写错误会发出空白页；`catalog/index.html` 过期也会失败 |
 | 5 | README 计数 | `check_readme_counts.py` | README 的配方计数与注册表对不上 |
 | 6 | Assets | `check_assets.py` | 文档里指向不存在的图片；从第三方主机外链图片（状态徽章除外——徽章是按请求实时生成的，固化其中一个会冻结构建状态）；`docs/assets/samples/` 下文件名不按 `<recipe-id>--off.jpg` / `--on.jpg` 命名、且该 id 存在于注册表 |
+| 7 | 双语文档 | `check_docs.py` | 英文文档没有 `.zh-CN.md` 双生、也没在 `ENGLISH_ONLY` 里说明原因；双生的英文原文已消失；共用的 `docs/assets/*.svg` 里写进了中文（图是两种语言共用的）；图里画着的数字已被注册表超过。它无法判断译文是否**忠实**，也没假装能 |
 
 顺序：
 
@@ -312,6 +313,7 @@ sony-sooc-recipes/
 │   ├── gen_browser.py        生成浏览器（CI 关卡 4）
 │   ├── check_readme_counts.py 核对 README 计数（CI 关卡 5）
 │   ├── check_assets.py       文档图片 / 资源引用 + 图标集关卡（CI 关卡 6）
+│   ├── check_docs.py         双生覆盖、共用图、图内计数（CI 关卡 7）
 │   ├── install-wifi.sh       Wi-Fi ADB 安装把手
 │   ├── apply_pack.py         为一个品牌包改写包名与 App 名
 │   ├── build_app_icon.py     按源照片重新生成全量版启动图标集
@@ -321,7 +323,7 @@ sony-sooc-recipes/
 │   ├── cases.json            自写配方的钉死值
 │   └── smoke_browser.js      浏览器冒烟测试（CI 关卡 4）
 ├── .github/workflows/
-│   ├── ci.yml                六道关卡
+│   ├── ci.yml                七道关卡
 │   └── release.yml           推 tag 自动构建 APK 挂 Release
 ├── LICENSE                   MIT（本仓库代码）
 └── NOTICE.md                 上游归属与许可边界

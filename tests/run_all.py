@@ -54,34 +54,35 @@ def main() -> int:
         if not ok:
             failures.append(label)
 
-    gate("1/6  validate catalog", [PY, "tools/validate_catalog.py"])
-    gate("2/6  catalog test cases", [PY, "tests/test_catalog.py"])
+    gate("1/7  validate catalog", [PY, "tools/validate_catalog.py"])
+    gate("2/7  catalog test cases", [PY, "tests/test_catalog.py"])
 
     fork = ROOT / "build" / "recipe-lab-sony-pmca"
     if fork.exists():
-        gate("3/6  generated Java is current",
+        gate("3/7  generated Java is current",
              [PY, "tools/gen_recipes.py", "--check", "--fork", str(fork)])
     else:
-        skipped.append("3/6  generated Java is current (no build/recipe-lab-sony-pmca checkout)")
+        skipped.append("3/7  generated Java is current (no build/recipe-lab-sony-pmca checkout)")
         skipped.append("     also skipped: fidelity check, needs upstream Recipes.java")
 
     node = shutil.which("node")
     if node:
-        ok, _ = run("4/6  browser — regenerate", [PY, "tools/gen_browser.py"])
+        ok, _ = run("4/7  browser — regenerate", [PY, "tools/gen_browser.py"])
         if not ok:
-            failures.append("4/6  browser — regenerate")
+            failures.append("4/7  browser — regenerate")
         else:
             diff = subprocess.run(["git", "diff", "--exit-code", "catalog/index.html"],
                                   cwd=ROOT, capture_output=True, text=True)
             if diff.returncode != 0:
                 print("catalog/index.html changed — it was stale. Commit the new one.")
-                failures.append("4/6  browser was stale")
-            gate("4/6  browser — smoke test", [node, "tests/smoke_browser.js"])
+                failures.append("4/7  browser was stale")
+            gate("4/7  browser — smoke test", [node, "tests/smoke_browser.js"])
     else:
-        skipped.append("4/6  browser smoke test (node is not on PATH)")
+        skipped.append("4/7  browser smoke test (node is not on PATH)")
 
-    gate("5/6  README counts", [PY, "tools/check_readme_counts.py"])
-    gate("6/6  assets", [PY, "tools/check_assets.py"])
+    gate("5/7  README counts", [PY, "tools/check_readme_counts.py"])
+    gate("6/7  assets", [PY, "tools/check_assets.py"])
+    gate("7/7  bilingual docs", [PY, "tools/check_docs.py"])
 
     print("\n" + "=" * 66)
     for s in skipped:

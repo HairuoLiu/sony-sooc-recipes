@@ -34,8 +34,18 @@ on:
         required: true
         type: string
 
-permissions:
-  contents: write
+# Deny by default, then grant per job. Only `release` publishes, so only `release` gets a
+# writable token. That matters here more than in a typical repo: the `apk` job executes the
+# *upstream project's* build.sh, and a token that can push is a token that script could steal.
+# Narrowing it costs three lines and removes that class of escalation entirely.
+permissions: {}
+
+# Two tag pushes (or a tag push racing a manual dispatch) would otherwise start two full
+# releases that both run `gh release create` for the same tag. cancel-in-progress is off:
+# cancelling halfway through publishing is worse than queueing behind it.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   # ------------------------------------------------------------------------------
@@ -45,10 +55,14 @@ jobs:
   targets:
     name: derive build matrix
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       matrix: ${{ steps.matrix.outputs.matrix }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - uses: actions/setup-python@v5
         with:
@@ -82,6 +96,10 @@ jobs:
     name: build ${{ matrix.id }}
     needs: targets
     runs-on: ubuntu-latest
+    # Read-only: this job builds artifacts, it never publishes. It runs third-party build
+    # scripts, so the token it can see must not be able to write to the repository.
+    permissions:
+      contents: read
 
     env:
       UPSTREAM_REPO: https://github.com/voxivoid/recipe-lab-sony-pmca.git
@@ -97,6 +115,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - uses: actions/setup-python@v5
         with:
@@ -244,6 +264,9 @@ jobs:
     name: publish release
     needs: [targets, apk]
     runs-on: ubuntu-latest
+    # The only job that needs to write, and it does so in one step (`gh release`).
+    permissions:
+      contents: write
 
     env:
       UPSTREAM_REPO: https://github.com/voxivoid/recipe-lab-sony-pmca.git
@@ -251,6 +274,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: resolve tag
         id: tag
@@ -268,30 +293,47 @@ jobs:
           path: dist
 
       - name: release notes
+        # English first. The audience that can find this repository at all is
+        # English-dominant: it is a sideload for a camera platform whose tooling, forums and
+        # documentation are English. A short Chinese summary stays at the end rather than
+        # translating the whole note twice — the parts that must not be misread (exact
+        # filenames, the sha256 commands) are language-neutral either way, and the four
+        # caveats are the only prose a user has to act on.
+        #
+        # No backticks in the English prose below: these are double-quoted echo arguments,
+        # and a backtick inside them would be command substitution, not formatting. No
+        # recipe or group counts either — a number written here would silently rot the next
+        # time the catalog changes.
         run: |
           TAG="${{ steps.tag.outputs.value }}"
           N=dist/notes.md
-          echo "Sony SOOC Recipes 装的是本仓库的配方表：$TAG" > "$N"
+          echo "Recipe tables from this repository, compiled into installable APKs: $TAG" > "$N"
           echo "" >> "$N"
-          echo "**安装**: 见 docs/INSTALL.md（第一次走 USB，别用 Wi-Fi ADB）" >> "$N"
+          echo "**Install**: see docs/INSTALL.md. The first install goes over USB; do not use Wi-Fi ADB." >> "$N"
           echo "" >> "$N"
-          echo "### 装之前先看这四条" >> "$N"
+          echo "### Read these four before installing" >> "$N"
           echo "" >> "$N"
-          echo "1. **签名是一次性的。** 没有配置 keystore 时，构建会临时生成一把 key。" >> "$N"
-          echo "   用不同 key 签的 APK **无法覆盖安装**——如果相机上已经装过别处来的" >> "$N"
-          echo "   SonySOOCRecipes，得先卸载再装。" >> "$N"
-          echo "2. **有 7 款配方没上机验证过**（gr-moriyama、kodak-vision2-500t、" >> "$N"
-          echo "   Toy Camera 暖/冷、Part Color 红、Posterization、Teal Mood）。" >> "$N"
-          echo "   先在可丢弃的素材上试。" >> "$N"
-          echo "3. **APK 里显示的版本号是上游的，不是这个 tag。** 上游从" >> "$N"
-          echo "   AndroidManifest.xml 取版本，本仓库只换配方表。以 tag 为准。" >> "$N"
-          echo "4. **品牌包（Brand packs）共享相机的设置存储。** 装多个品牌包并不会得到" >> "$N"
-          echo "   多台相机——相机同一时间只能有一个配方生效，多个包只是把各自的配方表" >> "$N"
-          echo "   装进不同的包名，互相并不叠加。" >> "$N"
+          echo "1. **The signing key is single-use.** With no keystore configured, every build" >> "$N"
+          echo "   generates a fresh key. An APK signed with a different key **cannot overwrite**" >> "$N"
+          echo "   an existing install — if your camera already has a Sony SOOC Recipes from" >> "$N"
+          echo "   anywhere else, uninstall it first." >> "$N"
+          echo "2. **Seven looks are not verified on hardware** (gr-moriyama, kodak-vision2-500t," >> "$N"
+          echo "   Toy Camera warm/cold, Part Color red, Posterization, Teal Mood). Try those on" >> "$N"
+          echo "   discardable footage before trusting them." >> "$N"
+          echo "3. **The version shown inside the app is upstream's, not this tag.** Upstream reads" >> "$N"
+          echo "   its version from AndroidManifest.xml; this repository only replaces the recipe" >> "$N"
+          echo "   table. Trust the tag." >> "$N"
+          echo "4. **Brand packs share the camera's settings store.** Installing several packs does" >> "$N"
+          echo "   not give you several cameras — only one recipe can be active on the camera at a" >> "$N"
+          echo "   time. Each pack carries its own recipe table under its own package name; they do" >> "$N"
+          echo "   not stack." >> "$N"
           echo "" >> "$N"
-          echo "### 品牌包一览" >> "$N"
+          echo "### APKs in this release" >> "$N"
           echo "" >> "$N"
-          echo "主程序 SonySOOCRecipes-$TAG.apk 之外，每个品牌一份独立 APK（包名不同，可并存于相机侧）：" >> "$N"
+          echo "SonySOOCRecipes-$TAG.apk is the all-in-one app: every look in the catalog. Alongside" >> "$N"
+          echo "it, one APK per camera brand. Each carries a distinct package name, so they install" >> "$N"
+          echo "side by side:" >> "$N"
+          echo "" >> "$N"
           # This glob cannot match the all-in-one artifact (SonySOOCRecipes-$TAG.apk): the
           # pattern needs a literal '-' before the tag, and after the first '-' the all-in-one
           # has 'v...', not '-'. Verified, not assumed — it is the reason the main app is
@@ -299,10 +341,10 @@ jobs:
           for f in dist/SonySOOCRecipes-*-"$TAG".apk; do
             [ -e "$f" ] || continue
             base="$(basename "$f" "-$TAG.apk")"
-            echo "- $base.apk（校验见 $base.apk.sha256）" >> "$N"
+            echo "- $base.apk — checksum in $base.apk.sha256" >> "$N"
           done
           echo "" >> "$N"
-          echo "### 校验" >> "$N"
+          echo "### Verify" >> "$N"
           echo "" >> "$N"
           echo '```' >> "$N"
           echo "sha256sum -c SonySOOCRecipes-$TAG.apk.sha256" >> "$N"
@@ -312,7 +354,18 @@ jobs:
           done
           echo '```' >> "$N"
           echo "" >> "$N"
-          echo "构建自上游 $UPSTREAM_SHA" >> "$N"
+          echo "Built from upstream $UPSTREAM_SHA" >> "$N"
+          echo "" >> "$N"
+          echo "---" >> "$N"
+          echo "" >> "$N"
+          echo "### 中文摘要" >> "$N"
+          echo "" >> "$N"
+          echo "本仓库的配方表，打成可安装的 APK。安装见 docs/INSTALL.md（第一次走 USB，别用 Wi-Fi ADB）。" >> "$N"
+          echo "" >> "$N"
+          echo "- **签名是一次性的**：不同 key 签的 APK 无法覆盖安装，相机上若已装过别处来的，先卸载。" >> "$N"
+          echo "- **7 款配方未上机验证**（gr-moriyama、kodak-vision2-500t、Toy Camera 暖/冷、Part Color 红、Posterization、Teal Mood），先在可丢弃素材上试。" >> "$N"
+          echo "- **App 内版本号是上游的**，不是这个 tag，以 tag 为准。" >> "$N"
+          echo "- **品牌包共享相机设置存储**：装多个包不会得到多台相机，同一时间只有一个配方生效。" >> "$N"
 
       - name: publish
         env:

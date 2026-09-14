@@ -193,9 +193,9 @@ Two engines appear in the catalog:
 > allowed it, which it does not. `tools/validate_catalog.py` fails the build if any entry
 > sourced from it carries a `recipe` field.
 
-### The gates — six locally, one more in CI
+### The gates — seven locally, one more in CI
 
-Every change runs through `python tests/run_all.py`, and again in CI. Six gates run
+Every change runs through `python tests/run_all.py`, and again in CI. Seven gates run
 anywhere; the fidelity check needs to fetch upstream, so CI runs it.
 
 | Gate | What it stops |
@@ -207,6 +207,7 @@ anywhere; the fidelity check needs to fetch upstream, so CI runs it.
 | `smoke_browser.js` | a typo that would ship a blank filter browser |
 | `check_readme_counts.py` | the READMEs advertising a number the catalog no longer holds |
 | `check_assets.py` | a document pointing at a picture that does not exist — or at somebody's image host |
+| `check_docs.py` | an English doc with no Chinese twin (or a twin whose original is gone), text baked into a shared diagram, or a count drawn inside a diagram that the catalog has outgrown |
 
 Current state of the fidelity check:
 

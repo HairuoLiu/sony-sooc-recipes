@@ -286,7 +286,7 @@ Copy `gr-moriyama`, `kodak-vision2-500t`, `toy-camera-warm`, `toy-camera-cool`,
 
 ---
 
-## 7. Local validation — the five gates
+## 7. Local validation — the seven gates
 
 Run the pre-push script. It stops at the first failure:
 
@@ -296,14 +296,16 @@ python tests/run_all.py
 
 | Gate | Command | What it blocks |
 |---|---|---|
-| 1/6 validate | `tools/validate_catalog.py` | Structural errors (bad enum, out-of-range value, broken `cross_ref`, non-contiguous group) and provenance errors (a `film-studio` entry carrying `recipe`, or the matrix engine mislabeled MIT). `sat` past the menu ±3 and "`pe` ignores Creative Style" print as **notes**, not errors — those are by-design. |
-| 2/6 test cases | `tests/test_catalog.py` | Invariants for every filter, plus pinned values. `TestAuthoredHaveCases` fails any `authored-here` entry with no case, and any case not pointing at an `authored-here` entry. |
-| 3/5 generated Java | `tools/gen_recipes.py --check --fork` | The on-disk `Recipes.java` differs from what the catalog would generate. **Skipped** if `build/recipe-lab-sony-pmca` is not checked out (so is the fidelity check). |
-| 4/5 browser | `tools/gen_browser.py` + `tests/smoke_browser.js` | `catalog/index.html` is stale or fails to render. **Skipped** if `node` is not on PATH. |
-| 5/5 README counts | `tools/check_readme_counts.py` | The numbers in `README.md` no longer match the catalog. |
+| 1/7 validate | `tools/validate_catalog.py` | Structural errors (bad enum, out-of-range value, broken `cross_ref`, non-contiguous group) and provenance errors (a `film-studio` entry carrying `recipe`, or the matrix engine mislabeled MIT). `sat` past the menu ±3 and "`pe` ignores Creative Style" print as **notes**, not errors — those are by-design. |
+| 2/7 test cases | `tests/test_catalog.py` | Invariants for every filter, plus pinned values. `TestAuthoredHaveCases` fails any `authored-here` entry with no case, and any case not pointing at an `authored-here` entry. |
+| 3/7 generated Java | `tools/gen_recipes.py --check --fork` | The on-disk `Recipes.java` differs from what the catalog would generate. **Skipped** if `build/recipe-lab-sony-pmca` is not checked out (so is the fidelity check). |
+| 4/7 browser | `tools/gen_browser.py` + `tests/smoke_browser.js` | `catalog/index.html` is stale or fails to render. **Skipped** if `node` is not on PATH. |
+| 5/7 README counts | `tools/check_readme_counts.py` | The numbers in `README.md` no longer match the catalog. |
+| 6/7 assets | `tools/check_assets.py` | A document pointing at an image that does not exist, a third-party hotlink (status badges excepted), a `docs/assets/samples/` file not named `<recipe-id>--off.jpg` / `--on.jpg` with an id that is in the catalog, or an icon set missing a density. |
+| 7/7 bilingual docs | `tools/check_docs.py` | An English document with no `.zh-CN.md` twin and no declaration saying why, a twin whose English original is gone, translated text baked into a shared `docs/assets/*.svg`, or a count drawn inside a diagram that the catalog has outgrown. |
 
 Gates 3–4 skip (loudly) when their prerequisite is missing; a missing tool is not a broken
-catalog. All five passing is the bar before you push.
+catalog. All seven passing is the bar before you push.
 
 If gate 3 is skipped for lack of a fork but you still want the fidelity proof for a Path A
 recipe, run `check_fidelity.py` manually as shown in §4.

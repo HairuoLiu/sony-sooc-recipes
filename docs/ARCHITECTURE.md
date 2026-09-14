@@ -268,6 +268,7 @@ it. There are **six CI gates** plus the release build.
 | 4 | Browser | `gen_browser.py` + `tests/smoke_browser.js` | A typo in the single-file browser that would ship a blank page; also fails if `catalog/index.html` is stale |
 | 5 | README counts | `check_readme_counts.py` | The README's filter counts no longer match the catalog |
 | 6 | Assets | `check_assets.py` | A document pointing at an image that does not exist; an image hotlinked from a third-party host (status badges excepted — they are generated per request, so vendoring one would freeze a build status); a sample in `docs/assets/samples/` not named `<recipe-id>--off.jpg` / `--on.jpg` with an id that exists in the catalog |
+| 7 | Bilingual docs | `check_docs.py` | An English document with no `.zh-CN.md` twin and no entry in `ENGLISH_ONLY` saying why; a twin whose English original is gone; CJK text inside a shared `docs/assets/*.svg` (the diagrams serve both languages); a count drawn inside a diagram that the catalog has outgrown. It cannot judge whether a translation is *faithful* and does not pretend to |
 
 Steps in order:
 
@@ -279,7 +280,10 @@ Steps in order:
 6. Gate 5 checks README counts.
 7. Gate 6 scans every README and `docs/*.md` for image references and fails on a missing file, a
    third-party hotlink (status badges excepted), or a mis-named sample in `docs/assets/samples/`.
-8. On a `v*` tag, `release.yml` re-runs gates 1+1b, then clones upstream at the **pinned
+8. Gate 7 checks the bilingual document set: every document is either twinned or declared
+   English-only, the shared `docs/assets/*.svg` diagrams carry no translated text, and the counts
+   drawn inside those diagrams still match the catalog.
+9. On a `v*` tag, `release.yml` re-runs gates 1+1b, then clones upstream at the **pinned
    `UPSTREAM_SHA`**, rebrands the fork, copies our launcher icon in from `assets/app-icon/`,
    regenerates, builds with JDK 17 + build-tools 30.0.3 + NDK r16b, and attaches
    `SonySOOCRecipes-<tag>.apk` + a SHA-256 sum to the GitHub Release.
@@ -334,6 +338,7 @@ sony-sooc-recipes/
 │   ├── gen_browser.py        browser generator (CI gate 4)
 │   ├── check_readme_counts.py README counts (CI gate 5)
 │   ├── check_assets.py       image / asset references + icon-set gate (CI gate 6)
+│   ├── check_docs.py         twin coverage, shared diagrams, counts drawn in diagrams (CI gate 7)
 │   ├── install-wifi.sh       Wi-Fi ADB install helper
 │   ├── apply_pack.py         rewrites package name + app name for one brand pack
 │   ├── build_app_icon.py     regenerates the all-in-one launcher icon set from a source photo

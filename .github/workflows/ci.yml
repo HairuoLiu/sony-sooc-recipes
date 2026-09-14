@@ -11,6 +11,7 @@ on:
       - 'README.md'
       - 'README.zh-CN.md'
       - 'CHANGELOG.md'
+      - 'CHANGELOG.zh-CN.md'
       - '.github/workflows/ci.yml'
   pull_request:
     paths:
@@ -21,11 +22,19 @@ on:
       - 'README.md'
       - 'README.zh-CN.md'
       - 'CHANGELOG.md'
+      - 'CHANGELOG.zh-CN.md'
       - '.github/workflows/ci.yml'
   workflow_dispatch:
 
 permissions:
   contents: read
+
+# A branch pushed twice in quick succession should not keep two identical verification runs
+# alive; the older one is answering a question nobody is asking any more. Unlike the release
+# workflow, cancelling here is free — nothing has been published at this point.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   verify:
@@ -33,6 +42,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - uses: actions/setup-python@v5
         with:
@@ -89,6 +100,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -105,8 +118,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - name: check
         run: python tools/check_assets.py
+
+  # Gate 7 — the bilingual document set. Two English/zh-CN twins that silently drift apart
+  # are worse than no translation at all: a reader following a stale Chinese page has no way
+  # to know it describes an older version. This gate cannot judge whether a translation is
+  # *faithful*, so it does not pretend to. It enforces the mechanical parts that are
+  # checkable: every English document is either twinned or explicitly declared English-only,
+  # the shared diagrams carry no language-specific text, and the counts baked into those
+  # diagrams still match the catalog.
+  docs:
+    name: bilingual docs are consistent
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: check
+        run: python tools/check_docs.py

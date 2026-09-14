@@ -1,270 +1,321 @@
 # Changelog
 
-每个条目记一次上传到 GitHub 的版本。版本号遵循语义化版本，但**配方值本身的变化**也视
-为 minor——对使用者来说，一款滤镜的参数变了，比加个函数影响更大。
+**English** · [简体中文](CHANGELOG.zh-CN.md)
 
-发布前必须跑 `python tests/run_all.py`，六道关卡全绿才允许打 tag。
+Each entry records one version uploaded to GitHub. Version numbers follow semantic
+versioning, with one exception: a **change to a recipe's values** also counts as a minor
+bump. For someone using this, a look whose parameters moved matters more than a new
+function does.
 
-> `v0.5.0` 是本仓库对外发布的**首个版本**。它之前完成的开发批次没有对应的 Release，
-> 因此不带版本号，以「开发批次」列在下方，内容与许可判断原样保留以便追溯。
+`python tests/run_all.py` must pass all of its gates before a tag is pushed.
+
+> `v0.5.0` was this repository's **first published release**. The development batches that
+> came before it have no Release and therefore no version number; they are listed below as
+> "development batch", with their content and licensing decisions kept verbatim so the
+> reasoning stays traceable.
 
 ---
 
-## v0.6.0 — 2026-09-13 · 品牌包：一个品牌一个 APK
+## v0.6.0 — 2026-09-13 · Brand packs: one APK per brand
 
-同一份代码、同一份 `catalog/filters.json`，按相机品牌打包成 **8 个独立 APK**，与全量版
-一起发布（9 个构建目标）。每个包的 Android 包名多一段（`...sonysoocrecipes.<id>`），所以
-几个包能在相机上**并存**；每个包的启动图标是那个品牌最知名的一台相机。
+The same code and the same `catalog/filters.json`, packaged into **8 separate APKs** by
+camera brand and published alongside the all-in-one app (9 build targets). Each pack's
+Android package name carries one extra segment (`...sonysoocrecipes.<id>`), so several packs
+can **coexist** on the camera; each pack's launcher icon is that brand's best-known camera.
 
-### 为什么做
+### Why
 
-155 款配方在相机上只能靠按键逐个翻，翻起来很累。按品牌拆包后，装自己需要的那一份，
-要翻的量少一个数量级。**拆的是浏览入口，不是数据**：仍是一份 catalog、一个配方引擎，
-`tools/gen_recipes.py --pack` 只是把某个包的组生成进去。
+155 looks can only be stepped through on the camera by pressing a button, one at a time, and
+that gets tiring. Split by brand, you install only the part you want and step through an
+order of magnitude less. **What is split is the browsing entry point, not the data**: there
+is still one catalog and one recipe engine. `tools/gen_recipes.py --pack` merely emits one
+pack's groups.
 
-### 包与配方数
+### Packs and recipe counts
 
 leica 20 · fujifilm 26 · ricoh 11 · kodak 20 · pentax 11 · ilford 5 · hasselblad 4 · sony 8
 
-`canon-nikon`、`pana-olympus` 各跨两个品牌（要先拆成单品牌包才能归属），`other-stocks`、
-`cine`、`app-look` 非单一品牌——这五组**只进全量版**，记录在 `packs.json` 的
-`unassigned_groups` 里，缺口可见而不是静默丢掉。
+`canon-nikon` and `pana-olympus` each span two brands (each would first have to be split
+into one pack per brand), while `other-stocks`, `cine` and `app-look` are not single-brand.
+Those five groups go into **the all-in-one app only**; they are recorded in `packs.json`
+under `unassigned_groups`, so the gap is visible rather than silently dropped.
 
-### 必须知道的
+### What you need to know
 
-- **装多个包不等于多台相机。** 相机的设置存储是共享的，同一时间只有一个配方生效；
-  各包的快照按包名隔离、互不覆盖，但不会叠加。
-- **包不比全量版小多少。** 配方数据是 APK 里最小的东西（全部 155 款 ≈ 21.6 KB，
-  APK ≈ 102 KB），大头是引擎。包的意义是「要翻的少」，不是「下载的小」。
-- **签名 key 仍是一次性的**，与 v0.5.0 相同的注意事项。
+- **Installing several packs does not give you several cameras.** The camera's settings
+  store is shared and only one recipe can be active at a time. Each pack's snapshot is
+  isolated by package name and they do not overwrite each other — but they do not stack
+  either.
+- **A pack is not much smaller than the all-in-one.** Recipe data is the smallest thing in
+  the APK (all 155 looks ≈ 21.6 KB, the APK ≈ 102 KB); the engine dominates. The point of a
+  pack is "less to step through", not "smaller download".
+- **The signing key is still single-use**, with the same caveat as v0.5.0.
 
-### 实现
+### Implementation
 
-- `catalog/packs.json` 定义包；`tools/apply_pack.py` 就地改写包名 / app_name / 图标；
-  `tools/gen_recipes.py --pack` 只生成该包的组；`tools/build_matrix.py` 从 packs.json
-  派生发布矩阵（矩阵不写死在 YAML 里，加一个包自动多一个构建目标）。
-- 发布矩阵在 CI 里按包并行构建（`fail-fast: false`），任一包失败则**不发布**——
-  宁可不发，也不发一个缺包的 Release。
-- 图标**不抠图**：用照片自身边框色找主体、按主体尺寸开方形框并补边、4× 超采样圆角。
-  生成器 `tools/build_pack_icons.py`，素材与逐张许可见 `assets/app-icon-packs/CREDITS.md`。
-- 图标许可规则：**只要 PD / CC0 / CC BY**。`CC BY-SA` 一律否决——图标是对照片的改编，
-  share-alike 会波及整个应用。fujifilm / hasselblad / sony 为 CC0 或 PD（零义务），
-  其余五张 CC BY（署名随 APK 走）。
-- `tests/test_packs.py` 31 条，其中最关键的一条断言**每个包的配方值与全量版逐值一致**：
-  包必须是子集，不能是重新拟合。
+- `catalog/packs.json` defines the packs; `tools/apply_pack.py` rewrites the package name,
+  `app_name` and icon set in place; `tools/gen_recipes.py --pack` emits only that pack's
+  groups; `tools/build_matrix.py` derives the release matrix from `packs.json`, so the
+  matrix is never written into the YAML and adding a pack adds a build target automatically.
+- The matrix builds packs in parallel in CI (`fail-fast: false`), but **any pack failing
+  means nothing is published** — better no release than a Release missing a pack.
+- Icons are **framed, not keyed out**: the subject is located from the photograph's own
+  border colour, a square frame is opened to the subject's size and padded rather than
+  cropped, and the rounded corners are drawn at 4× supersampling. Generator:
+  `tools/build_pack_icons.py`; sources and per-image licences in
+  `assets/app-icon-packs/CREDITS.md`.
+- Icon licence rule: **PD / CC0 / CC BY only.** `CC BY-SA` is disqualified outright — the
+  icon is an adaptation of the photograph, and share-alike would reach the whole app.
+  fujifilm / hasselblad / sony are CC0 or PD (no obligation); the other five are CC BY, so
+  their attribution travels with the APK.
+- `tests/test_packs.py`, 31 cases. The most important one asserts that **every pack's recipe
+  values are identical, value for value, to the all-in-one's** — a pack must be a subset,
+  never a re-fit.
 
-详见 `docs/BRAND-PACKS.md`（中文版 `BRAND-PACKS.zh-CN.md`）。
+See `docs/BRAND-PACKS.md`.
 
-## v0.5.0 — 2026-09-13 · 重命名为 Sony SOOC Recipes
+## v0.5.0 — 2026-09-13 · Renamed to Sony SOOC Recipes
 
-将本仓库的相机端 App 从上游项目名重命名为 **Sony SOOC Recipes**：
+Renames this repository's on-camera app away from the upstream project's name:
 
-- 相机内显示名、APK 文件名、Java 包名统一为 `Sony SOOC Recipes` / `SonySOOCRecipes` / `com.hairuoliu.sonysoocrecipes`。
-- `release.yml` 在 CI 构建时通过 sed + `git mv` 把 fork 整体改名（含 JNI 符号 `Java_com_voxivoid_recipelab_*` → `sonysoocrecipes`）。
-- 安装说明、README、架构文档、工具脚本与生成的目录浏览器均改用新名称；正文对上游 voxivoid 项目的引用改写为「上游项目 / upstream project」。
-- 保留 `NOTICE.md` 的 MIT 法定署名，以及 CI / `check_fidelity.py` 联网抓取上游源码所用的 raw-URL。
+- The in-camera display name, the APK filename and the Java package are now
+  `Sony SOOC Recipes` / `SonySOOCRecipes` / `com.hairuoliu.sonysoocrecipes`.
+- At build time `release.yml` renames the whole fork by sed plus `git mv`, including the JNI
+  symbols `Java_com_voxivoid_recipelab_*` → `sonysoocrecipes`.
+- Install docs, README, architecture docs, tooling and the generated catalog browser all use
+  the new name; references to the upstream voxivoid project in prose became "the upstream
+  project".
+- The MIT attribution in `NOTICE.md` is kept, as are the raw URLs CI and `check_fidelity.py`
+  use to fetch upstream sources.
 
-## 开发批次 · 胶片（2026-09-13，新增 38 款）
+## Development batch · Film stocks (2026-09-13, 38 added)
 
-**新增 38 款**（117 → 155，可编译 102 → 140），测试用例 25 → 63。分组不变。
+**38 added** (117 → 155; compilable 102 → 140), test cases 25 → 63. Groups unchanged.
 
-背景：用户确认其 LUT 收藏（相机模拟系列与徕卡缩写名合集）为本人（Roger Wang 笔名）
-创作、可自由使用，此前跳过的两批于是补齐。Dehancer 胶片合集按胶片种类观感做参考。
+Background: the user confirmed that the LUT collection in question (the camera-simulation set
+and the Leica abbreviation set) is their own work under the pen name Roger Wang and may be
+used freely, so the two batches skipped earlier were completed. The Dehancer film collection
+was used as a reference for how each stock looks.
 
-### 胶片 24 款（去重后）
+### 24 film stocks (after de-duplication)
 
-与现有目录比对：Dehancer 68 个文件里 30 个胶片已覆盖（Portra/Gold/HP5/Velvia/
-Acros/Cinestill/Instax 等），收录**未覆盖**的 24 款：
+Compared against the existing catalog: of Dehancer's 68 files, 30 stocks were already covered
+(Portra/Gold/HP5/Velvia/Acros/Cinestill/Instax and others). The **uncovered** 24 were added:
 
-- **Kodak +5**：Aerocolor IV 125（航空负片）· Eastman Double-X 5222（cine 黑白）·
-  Plus-X Pan 125 · Ektar 25（与 Ektar 100 是两支胶片）· Supra 100
-- **Fuji +5**：Reala 500D（电影负片）· CDU-II 交叉冲洗 · Fujicolor 100 ·
-  工业打印 100 / 400
-- **Other Stocks +14**：Adox Color Implosion · 安布罗湿版 · Astrum CN 125 ·
-  柯尼卡 Centuria / VX400 / Impresa · Lomochrome Metropolis / Purple ·
-  ORWO Chrom UT21 · 宝丽来 Type 100 褐调 · Prokudin-Gorskiy 1906 ·
-  Rollei CN200 / Ortho 25 · Svema Type-42
+- **Kodak +5**: Aerocolor IV 125 (aerial negative) · Eastman Double-X 5222 (cine black and
+  white) · Plus-X Pan 125 · Ektar 25 (a different film from Ektar 100) · Supra 100
+- **Fuji +5**: Reala 500D (motion-picture negative) · CDU-II cross-process · Fujicolor 100 ·
+  industrial print 100 / 400
+- **Other Stocks +14**: Adox Color Implosion · wet-plate collodion · Astrum CN 125 ·
+  Konica Centuria / VX400 / Impresa · Lomochrome Metropolis / Purple · ORWO Chrom UT21 ·
+  Polaroid Type 100 sepia · Prokudin-Gorsky 1906 · Rollei CN200 / Ortho 25 · Svema Type-42
 
-### 徕卡包 14 款（去重后）
+### 14 Leica entries (after de-duplication)
 
-缩写名解码：CNT/CLS/ETN = Contemporary/Classic/Eternal，与现有目录重复，跳过。
-收录其余 14 款：B&W HC · B&W Natural · Greg WLM（暖调黑白）· IA（硬黑白）·
-Blu（冷调黑白）· Sel（淡银）· Sepia · Bleach · Chrome · BRS（暖调高反差）·
-Natural · Silver（柔）· Teal · Vivid。
+Decoding the abbreviations: CNT/CLS/ETN = Contemporary/Classic/Eternal, which duplicate the
+existing catalog and were skipped. The remaining 14 were added: B&W HC · B&W Natural ·
+Greg WLM (warm black and white) · IA (hard black and white) · Blu (cool black and white) ·
+Sel (pale silver) · Sepia · Bleach · Chrome · BRS (warm high contrast) · Natural ·
+Silver (soft) · Teal · Vivid.
 
-### 诚实说明（写进了各条目 note）
+### Honest notes (written into each entry's `note`)
 
-- **Lomochrome Purple 的绿→紫置换**：索尼设置区做不了逐色相置换，只能用品红+琥珀
-  白平衡整体偏移近似气质——note 里写明了。
-- **Rollei Ortho 25 的正色响应**（红光不感光）：无法复现，只保留高反差硬朗观感。
-- 全批 `authored-here` + `verified: false`，note 附参考测量值（反差/饱和/色偏）。
+- **Lomochrome Purple's green→purple substitution**: the Sony settings space cannot do a
+  per-hue substitution, so a magenta plus amber white-balance shift only approximates the
+  character — the note says so.
+- **Rollei Ortho 25's orthochromatic response** (insensitive to red) cannot be reproduced;
+  only the hard, high-contrast look is kept.
+- The whole batch is `authored-here` + `verified: false`, with reference measurements
+  (contrast / saturation / colour cast) in the notes.
 
 ---
 
-## 开发批次 · 相机模拟（2026-09-13，新增 18 款）
+## Development batch · Camera simulation (2026-09-13, 18 added)
 
-**新增 18 款「相机调色模拟」配方**（99 → 117，可编译 84 → 102），新增组 `pentax`。
-全部 `source: authored-here` + `verified: false`，测试用例 7 → 25 条。
+**18 "camera rendering simulation" recipes added** (99 → 117; compilable 84 → 102), plus a new
+`pentax` group. All are `source: authored-here` + `verified: false`; test cases 7 → 25.
 
-这批配方的定位：模拟**其他相机机身 / 机身内色彩模式**的观感——宾得 Custom Image、
-哈苏 HN CS、徕卡机身默认渲染、GR 系的电影调。
+These recipes simulate **other camera bodies / in-body colour modes**: Pentax Custom Image,
+Hasselblad HNCS, default Leica body rendering, and the GR line's cinematic grades.
 
-### 新增组 Pentax（11 款）
+### New group Pentax (11)
 
-宾得 Custom Image 目录的近似，参数依据**宾得官方对各模式的公开描述**：
+Approximations of the Pentax Custom Image catalog, parameterised from **Pentax's own public
+descriptions** of each mode:
 
-| id | 官方描述要点 |
+| id | Points from the official description |
 |---|---|
-| `pentax-bleach-bypass` | 低调、高反差、色彩收敛（漂白旁路冲洗） |
-| `pentax-muted` | 高调、低反差、饱和收敛 |
-| `pentax-radiant` | 高饱和高反差、整体提亮、夸大色相 |
-| `pentax-reversal-film` | 黑位深，靠反差而非饱和度还原反转片 |
-| `pentax-satobi` | 60-70 年代彩照：青蓝、暗黄、褪色红 |
-| `pentax-katen` | 夏空的浓郁蓝与白云细节（特别版） |
-| `pentax-kyushu` | 秋意的红调蓝与深绿（特别版） |
-| `pentax-fuyuno` | 高调冬景、饱和收敛（特别版） |
-| `pentax-harubeni` | 樱花粉、色相向红偏移（特别版） |
-| `pentax-gold` | 高光区黄调更浓郁（K-1 II 特别版） |
-| `pentax-miyabi` | 雅致、低反差、颜色不抢戏 |
+| `pentax-bleach-bypass` | muted, high contrast, restrained colour (bleach bypass) |
+| `pentax-muted` | high-key, low contrast, restrained saturation |
+| `pentax-radiant` | high saturation and contrast, lifted overall, exaggerated hues |
+| `pentax-reversal-film` | deep blacks; achieves reversal-film look through contrast, not saturation |
+| `pentax-satobi` | 1960s–70s colour print: cyan-blue, dark yellow, faded red |
+| `pentax-katen` | dense summer-sky blue with cloud detail (limited edition) |
+| `pentax-kyushu` | autumnal red-toned blues and deep greens (limited edition) |
+| `pentax-fuyuno` | high-key winter scene, restrained saturation (limited edition) |
+| `pentax-harubeni` | cherry-blossom pink, hues shifted toward red (limited edition) |
+| `pentax-gold` | richer yellow in the highlights (K-1 II limited edition) |
+| `pentax-miyabi` | elegant, low contrast, colour that stays out of the way |
 
-### 既有组的扩充
+### Extensions to existing groups
 
-- **Hasselblad**（1→4）：HNCS LowSat · HiContrast · HiContrast LowSat
-- **Leica**（4→6）：M9 CCD（暖调 CCD 渲染）· M240 STD
-- **Ricoh GR**（14→16）：GR Cinema Green · GR Cinema Yellow（GR 街拍圈常见的青绿/暖黄电影调）
+- **Hasselblad** (1→4): HNCS LowSat · HiContrast · HiContrast LowSat
+- **Leica** (4→6): M9 CCD (warm CCD rendering) · M240 STD
+- **Ricoh GR** (14→16): GR Cinema Green · GR Cinema Yellow (the teal/warm-cinematic grades
+  common in GR street photography)
 
-### 合规边界（这批配方为什么这样写）
+### The licensing boundary (why these recipes are written the way they are)
 
-用户提供了一批「相机模拟 LUT」作参考。其中哈苏/徕卡 M9/M240/宾得/理光一套的
-许可为 **BY-NC-ND（禁止演绎）**——把 LUT 数值转换后发布即构成衍生作品，不可以。
-但**相机模式本身是事实而非表达**：宾得官方页面公开描述每个 Custom Image 的观感，
-我们按这些公开描述自写参数，不含任何第三方 LUT 的数据。Dehancer 胶片 68 款与出处
-不明的 Leica 缩写名合集未收录（前者是商业插件专有 profile 且与现有胶片组大量重复）。
+The user provided a set of "camera simulation LUTs" as a reference. The Hasselblad / Leica
+M9 / M240 / Pentax / Ricoh set is licensed **BY-NC-ND (no derivatives)** — converting a LUT's
+values and publishing the result is a derivative work and not permitted. But **a camera mode
+is a fact, not an expression**: Pentax publishes a description of how each Custom Image looks,
+and these parameters were authored from those public descriptions, containing no third-party
+LUT data. The 68 Dehancer film profiles and the Leica abbreviation set of unknown provenance
+were not included (the former are proprietary commercial-plugin profiles and largely duplicate
+the existing film groups).
 
-### 其他改动
+### Other changes
 
-- `tools/gen_recipes.py`：`GROUP_JAVA` 补 `pentax` 常量（生成器每个组需要一个 Java 标识符）
+- `tools/gen_recipes.py`: added the `pentax` constant to `GROUP_JAVA` (the generator needs a
+  Java identifier per group)
 
 ---
 
-## 开发批次 · 文档（2026-09-13）
+## Development batch · Documentation (2026-09-13)
 
-配方与 APK 一行未改（99 款 / 84 款可编译，APK 仍是上一版那个）。这一版只动文档。
+No recipe or APK behaviour changed (99 looks / 84 compilable; the APK is still the previous
+one). This batch touches documentation only.
 
-**不打 tag。** 打 `v*` 会触发 `release.yml` 重新构建并发布 APK，而 APK 没有任何变化——
-只为文档跑一次 3 GB 工具链没有意义。要装相机就用最新 Release 的 APK。
+**No tag.** Pushing `v*` would make `release.yml` rebuild and publish an APK that is identical,
+and running a multi-gigabyte toolchain purely for documentation is not worth it. To install
+onto a camera, use the APK from the latest Release.
 
-**主页改成英文，中文作为子页面**
+**The front page became English, with Chinese as a subpage**
 
-`README.md` 重写为英文主页，`README.zh-CN.md` 是同一份内容的中文版，两页顶部都有
-`English · 简体中文` 切换。**计数标记 `<!-- counts: total=99 compiled=84 -->` 两个文件
-各有一份**，`check_readme_counts.py` 现在两边都查——翻译页悄悄留着旧数字，比没有翻译更糟。
+`README.md` was rewritten as the English front page and `README.zh-CN.md` is the same content
+in Chinese, each with an `English · 简体中文` switcher at the top. **The counts marker
+`<!-- counts: total=99 compiled=84 -->` exists in both files** and `check_readme_counts.py`
+now checks both — a translated page quietly keeping an old number is worse than no
+translation at all.
 
-**docs/ 全部补成中英双份**
+**All of `docs/` gained a Chinese counterpart**
 
-| 文档 | 内容 |
+| Document | Contents |
 |---|---|
-| `docs/INSTALL.md` | 5 步安装流程、各系统前置条件、13 行排错表 |
-| `docs/ARCHITECTURE.md` | 数据流、两个引擎的机制差别、许可边界 |
-| `docs/FAQ.md` | 21 个问答，安全类问题排在最前 |
-| `docs/ADDING-FILTERS.md` | 完整参数表、测试用例要求、新增组要同步的 3 处 |
+| `docs/INSTALL.md` | the 5-step install flow, prerequisites per OS, a 13-row troubleshooting table |
+| `docs/ARCHITECTURE.md` | data flow, how the two engines differ, the licensing boundary |
+| `docs/FAQ.md` | 21 questions, safety-related ones first |
+| `docs/ADDING-FILTERS.md` | full parameter table, test-case requirements, the 3 places a new group must be registered |
 
-每个都有 `.zh-CN.md` 兄弟文件。
+Each has a `.zh-CN.md` sibling.
 
-**4 张 SVG 图**
+**4 SVG diagrams**
 
-`docs/assets/`：`parameters.svg`（配方能改什么、改不了什么）、`install-flow.svg`、
-`architecture.svg`、`engines.svg`。全部带 `@media (prefers-color-scheme: dark)`，
-GitHub 深色模式下不会变成黑底黑字。
+`docs/assets/`: `parameters.svg` (what a recipe can and cannot change), `install-flow.svg`,
+`architecture.svg`, `engines.svg`. All carry `@media (prefers-color-scheme: dark)` so they do
+not turn into black-on-black on GitHub's dark theme.
 
-**新增第 6 道关卡：`tools/check_assets.py`**
+**Gate 6 added: `tools/check_assets.py`**
 
-扫所有文档里的 `<img>` 和 markdown 图片，四类问题直接失败：
+Scans every `<img>` and markdown image in the docs; four classes of problem fail the build:
 
-1. 外链图片（图片必须进 `docs/assets/`，不许挂第三方图床）——**状态徽章是唯一例外**，
-   它是按请求生成的，本地化就等于把构建状态冻住；
-2. 引用了不存在的文件；
-3. `samples/` 里命名不合规（必须是 `<配方 id>--off.jpg` / `--on.jpg`，且 id 在目录里存在）；
-4. 只报不拦：磁盘上有但没有任何文档引用的孤儿图。
+1. hotlinked images (images must live in `docs/assets/`, no third-party hosts) — **status
+   badges are the one exception**, since they are generated per request and vendoring one
+   would freeze a build status;
+2. a reference to a file that does not exist;
+3. a `samples/` filename violating the convention (must be `<recipe id>--off.jpg` /
+   `--on.jpg`, with the id present in the catalog);
+4. reported but not enforced: orphan images on disk that no document references.
 
-**样张还没到位**
+**Sample images are not in place yet**
 
-`docs/assets/samples/` 目前是空的。命名规则和投稿方式写在 `docs/assets/README.md`：
-同一场景、同一曝光、同一白平衡，只有「上没上配方」这一个变量。
+`docs/assets/samples/` is currently empty. The naming rule and how to contribute are in
+`docs/assets/README.md`: same scene, same exposure, same white balance, with "recipe applied
+or not" as the only variable.
 
 ---
 
-## 开发批次 · 首批自写配方（2026-09-13，新增 6 款）
+## Development batch · First authored recipes (2026-09-13, 6 added)
 
-**新增 6 款自写配方**（93 → 99，可编译 78 → 84）
+**6 authored recipes added** (93 → 99; compilable 78 → 84)
 
-| id | 组 | 手段 |
+| id | Group | How |
 |---|---|---|
-| `kodak-vision2-500t` | kodak | NEUTRAL 底 + K 3200 + gm+1，比既有 Vision3 500T 更绿、更平 |
-| `toy-camera-warm` | app-look | pe=1 玩具相机（全库首次使用），sub=2 暖调 |
-| `toy-camera-cool` | app-look | pe=1，sub=1 冷调 |
-| `part-color-red` | app-look | pe=6 局部色彩（首次使用），sub=0 红 |
-| `posterization-color` | app-look | pe=3 海报化（首次使用），sub=0 彩色 |
-| `teal-mood` | app-look | pe=0，全局 ab−2 / gm+1 的干净青调 |
+| `kodak-vision2-500t` | kodak | NEUTRAL base + K 3200 + gm+1 — greener and flatter than the existing Vision3 500T |
+| `toy-camera-warm` | app-look | pe=1 Toy Camera (first use in the catalog), sub=2 warm |
+| `toy-camera-cool` | app-look | pe=1, sub=1 cool |
+| `part-color-red` | app-look | pe=6 Partial Colour (first use), sub=0 red |
+| `posterization-color` | app-look | pe=3 Posterization (first use), sub=0 colour |
+| `teal-mood` | app-look | pe=0, a clean teal cast via global ab−2 / gm+1 |
 
-全部 `source: authored-here` + `verified: false`，并在 `tests/cases.json` 里有对应的钉死值。
+All are `source: authored-here` + `verified: false`, each with pinned values in
+`tests/cases.json`.
 
-**新增组**：`app-look`（App Look）。
+**New group**: `app-look`.
 
-**APK 现在由 CI 构建并挂在 Release 上**
+**The APK is now built by CI and attached to a Release**
 
-此前这个仓库一直是「可验证、不可安装」——五道关卡能证明配方是对的，但产不出能装进相机
-的东西，因为工具链要 JDK 17 + build-tools 30.0.3 + **NDK r16b** 约 3 GB（r16b 是最后一个
-还带 GCC 工具链的 NDK，Android 2.3.7 / API 10 的目标必须用 GCC）。现在推 tag 就有 APK：
+Until now this repository was "verifiable but not installable" — the gates could prove the
+recipes were right but produced nothing you could put into a camera, because the toolchain
+needs JDK 17 + build-tools 30.0.3 + **NDK r16b** (r16b is the last NDK that still ships the
+GCC toolchain, which an Android 2.3.7 / API 10 target requires). Now a tag produces an APK:
 
 ```
 https://github.com/HairuoLiu/sony-sooc-recipes/releases
 ```
 
-产物已核验：有效 zip、`AndroidManifest.xml` 为二进制 AXML、`classes.dex` 52 KB、
-`lib/armeabi/libsonysoocrecipes.so` 30 KB（armeabi 正是 2.3.7 的 ABI）、v1 签名齐全
-（`--min-sdk-version 10`，相机不认 v2/v3）。
+The artifact was verified: a valid zip, `AndroidManifest.xml` as binary AXML, `classes.dex`
+52 KB, `lib/armeabi/libsonysoocrecipes.so` 30 KB (armeabi being exactly the 2.3.7 ABI), and
+complete v1 signing (`--min-sdk-version 10`; the camera does not accept v2/v3).
 
-**两个坑，都写在配置文件的注释里了**
+**Two traps, both written into the config files as comments**
 
-1. `jni/platform`（ma1co/OpenMemories-Platform）是必需的——`Android.mk` 要 include 它的
-   `vars.mk` 和驱动源码。但它带一个嵌套子模块指向 `git.code.sf.net/p/stlport/code`，
-   **那个地址已经不存在了**，而 git 即使不加 `--recursive` 也会钻进去然后整个 job 失败。
-   解法是直接克隆 `jni/platform` 并钉在上游记录的 gitlink SHA 上。构建真正链接的 stlport
-   是 **NDK r16b 自带的**（`APP_STL := stlport_static`），那份子模块副本用不上。
-2. 上游 commit 钉死为 `6b5c8aa2`，同时写在 `filters.json` 的 `fetched_rev` 和
-   `release.yml` 的 `UPSTREAM_SHA`。`TestPinnedUpstream` 会在两者漂移时跑不过。
+1. `jni/platform` (ma1co/OpenMemories-Platform) is required — `Android.mk` includes its
+   `vars.mk` and compiles its driver sources. But it carries a nested submodule pointing at
+   `git.code.sf.net/p/stlport/code`, **which no longer resolves**, and git descends into it
+   even without `--recursive` and fails the whole job. The fix is to clone `jni/platform`
+   directly and pin it at the gitlink SHA upstream records. The stlport actually linked is
+   **the one NDK r16b ships** (`APP_STL := stlport_static`); the submodule copy is unused.
+2. The upstream commit is pinned to `6b5c8aa2`, recorded both in `filters.json`'s
+   `fetched_rev` and in `release.yml`'s `UPSTREAM_SHA`. `TestPinnedUpstream` fails if the two
+   drift apart.
 
-**测试**
-- `tests/test_catalog.py`：33 条用例，含结构不变量、参数范围、来源诚实性、生成器往返、
-  上游 pin 一致性。
-- `tests/cases.json`：本仓库自写配方的钉死值。`TestAuthoredHaveCases` 规定——自写条目
-  没有对应 case 就跑不过。
-- `tests/run_all.py`：本地一次跑完五道关卡。
-- CI 新增 Gate 1b。
+**Tests**
+- `tests/test_catalog.py`: 33 cases covering structural invariants, parameter ranges,
+  provenance honesty, generator round-trip and upstream-pin consistency.
+- `tests/cases.json`: pinned values for the recipes this repository authors.
+  `TestAuthoredHaveCases` requires that an authored entry without a matching case fails.
+- `tests/run_all.py`: every gate in one local run.
+- CI gained Gate 1b.
 
-**修复**
-- `validate_catalog.py` 不再自带一份分组名单，改为读 `groups[]`。之前那份副本会让每个
-  新分组都被静默拒绝。
+**Fixes**
+- `validate_catalog.py` no longer carries its own copy of the group list and reads `groups[]`
+  instead. That copy silently rejected every new group.
 
-**关于 Liit**：起因是希望把它（DAZZ PTE. LTD. 的闭源商业 App）的滤镜搬进来。结论是不行——
-它是闭源商业软件，且其 LUT/曲线在 a6000 上没有承载通道（无 LUT 路径、无 Picture Profile、
-存不下曲线）。**没有提取任何东西，也没有复制任何滤镜名**。NOTICE.md 记录了用与没用什么。
-这一批是相机参数空间里的原创近似，不是移植。
+**About Liit**: this began as an attempt to bring in the filters from Liit (a closed-source
+commercial app by DAZZ PTE. LTD.). The conclusion was no — it is closed-source commercial
+software, and its LUTs/curves have no carrying channel on an a6000 (no LUT path, no Picture
+Profile, nowhere to store a curve). **Nothing was extracted and no filter name was copied.**
+`NOTICE.md` records what was and was not used. This batch is original approximation within the
+camera's parameter space, not a port.
 
 ---
 
-## 开发批次 · 初始目录（2026-09-13，93 款）
+## Development batch · Initial catalog (2026-09-13, 93 looks)
 
-首个版本。
+The first version.
 
-- 汇总两个上游项目共 93 款风格：voxivoid/recipe-lab-sony-pmca 的 77 款（MIT，参数全量转录）、
-  ukiki0718-netizen/sony-a5100-film-studio 的 15 款（PolyForm Noncommercial，**仅登记名称，
-  不转录参数**，由校验器强制）。
-- 自写 1 款 `gr-moriyama`，补上两个上游之间唯一真正互补的缺口。
-- `catalog/filters.json` 作为唯一事实来源，由 `tools/gen_recipes.py` 生成 `Recipes.java`。
-- `tools/check_fidelity.py` 对上游 77 款逐值比对，确认 0 漂移。
-- 五道 CI 关卡：validate → fidelity → generate → browser smoke → README counts。
-- 滤镜浏览器 `catalog/index.html`，单文件、`file://` 可直接打开。
-- 文档：`docs/INSTALL.md`、`ARCHITECTURE.md`、`ADDING-FILTERS.md`、`CHANNEL-COMPARISON.md`
-  （USB 与 Wi-Fi ADB 的 13 维度对照）。
+- 93 looks gathered from two upstream projects: 77 from voxivoid/recipe-lab-sony-pmca
+  (MIT, parameters transcribed in full) and 15 from ukiki0718-netizen/sony-a5100-film-studio
+  (PolyForm Noncommercial, **names registered only, no parameters transcribed**, enforced by
+  the validator).
+- 1 authored recipe, `gr-moriyama`, filling the one genuinely complementary gap between the
+  two upstreams.
+- `catalog/filters.json` as the single source of truth, with `tools/gen_recipes.py`
+  generating `Recipes.java` from it.
+- `tools/check_fidelity.py` compares all 77 upstream recipes value for value: 0 drift.
+- Five CI gates: validate → fidelity → generate → browser smoke → README counts.
+- A filter browser at `catalog/index.html`, a single file openable over `file://`.
+- Docs: `docs/INSTALL.md`, `ARCHITECTURE.md`, `ADDING-FILTERS.md`, `CHANNEL-COMPARISON.md`
+  (a 13-dimension comparison of USB versus Wi-Fi ADB).
