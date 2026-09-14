@@ -261,7 +261,7 @@ case 的规则：
 
 ## 7. 本地验证——七道关卡
 
-跑提交前脚本。它会在第一道失败时停下：
+跑提交前脚本。它会**跑完全部七道**再汇总报告——不在第一道失败时停下，这样一道关卡坏了也不会掩盖另一道：
 
 ```bash
 python tests/run_all.py
@@ -276,8 +276,9 @@ python tests/run_all.py
 | 5/7 README 计数 | `tools/check_readme_counts.py` | `README.md` 里的数字与 catalog 不再匹配。 |
 | 6/7 资源 | `tools/check_assets.py` | 文档引用了不存在的图片、热链了第三方图床（状态徽章除外），或 `docs/assets/samples/` 里的文件没按 `<recipe-id>--off.jpg` / `--on.jpg` 命名、且 id 不在 catalog 中，或图标集缺某个密度。 |
 | 7/7 双语文档 | `tools/check_docs.py` | 英文文档没有 `.zh-CN.md` 双生且没声明原因、双生的英文原文已消失、共用 `docs/assets/*.svg` 里写死了某种语言、或图里画着的数字已被 catalog 超过。 |
+| 自测 | `tests/test_gates.py` | 某道关卡对坏输入不再失败。它给每道关卡喂一份必须拒绝的输入并断言非零退出——放在最后跑，因为它是唯一会临时写探测文件的关卡。 |
 
-3–4 关在缺前置时**跳过**（会大声提示），缺工具不是 catalog 坏了。七关全过才是推送前的门槛。
+3–4 关在缺前置时**跳过**（会大声提示），缺工具不是 catalog 坏了。七关全过加自测通过，才是推送前的门槛。
 
 若第 3 关因无 fork 被跳过、而你仍想给路径 A 配方做保真证明，按 §4 手动跑 `check_fidelity.py`。
 

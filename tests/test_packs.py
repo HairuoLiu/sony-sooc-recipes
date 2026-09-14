@@ -49,28 +49,18 @@ PACKS_DATA = json.loads(PACKS.read_text(encoding="utf-8"))
 PACK_LIST = PACKS_DATA["packs"]
 
 
-def _load_gen():
+def _load_tool(name: str):
+    """Import a tool script by name. tools/ is not a package, so tests borrow the same
+    sys.path trick check_fidelity.py uses to import gen_recipes."""
     sys.path.insert(0, str(TOOLS))
     try:
-        import gen_recipes  # noqa: PLC0415
+        return __import__(name)  # noqa: PLC0415
     finally:
         sys.path.remove(str(TOOLS))
-    return gen_recipes
 
 
-GEN = _load_gen()
-
-
-def _load_apply_pack():
-    sys.path.insert(0, str(TOOLS))
-    try:
-        import apply_pack  # noqa: PLC0415
-    finally:
-        sys.path.remove(str(TOOLS))
-    return apply_pack
-
-
-APPLY = _load_apply_pack()
+GEN = _load_tool("gen_recipes")
+APPLY = _load_tool("apply_pack")
 
 RECIPE_LINE = re.compile(r"new Recipe\(")
 

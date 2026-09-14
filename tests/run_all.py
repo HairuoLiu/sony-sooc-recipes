@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run every gate, in the order they matter, and stop at the first one that fails.
+"""Run every gate, in the order they matter, and report every failure together.
 
 This is the pre-push script. CI runs the same checks, but CI only tells you after
 the fact; this tells you before the commit leaves the machine.
@@ -14,10 +14,16 @@ Gates, cheapest and most informative first:
   4. browser        index.html is regenerated and renders (needs node)
   5. readme counts  the numbers in README.md match the catalog
   6. assets         every image a document points at exists, and nothing is hotlinked
+  7. bilingual docs twin coverage, shared diagrams, numbers drawn inside diagrams
+  8. self-test      the gates themselves still fail on broken input (tests/test_gates.py)
 
-Gates 3-4 are skipped rather than failed when their prerequisite is missing (no
-upstream checkout, no node on PATH) — a missing tool is not a broken catalog. The
-skip is printed loudly so it cannot be mistaken for a pass.
+All gates run even after one fails — one broken gate never hides another. Gates 3-4
+are skipped rather than failed when their prerequisite is missing (no upstream
+checkout, no node on PATH) — a missing tool is not a broken catalog. The skip is
+printed loudly so it cannot be mistaken for a pass.
+
+The labels are deliberately unnumbered: a "4/7" label goes stale the moment an eighth
+gate lands, and nothing forces whoever adds it to renumber the other seven.
 """
 
 from __future__ import annotations
@@ -54,35 +60,40 @@ def main() -> int:
         if not ok:
             failures.append(label)
 
-    gate("1/7  validate catalog", [PY, "tools/validate_catalog.py"])
-    gate("2/7  catalog test cases", [PY, "tests/test_catalog.py"])
+    gate("1     validate catalog", [PY, "tools/validate_catalog.py"])
+    gate("2     catalog test cases", [PY, "tests/test_catalog.py"])
 
     fork = ROOT / "build" / "recipe-lab-sony-pmca"
     if fork.exists():
-        gate("3/7  generated Java is current",
+        gate("3     generated Java is current",
              [PY, "tools/gen_recipes.py", "--check", "--fork", str(fork)])
     else:
-        skipped.append("3/7  generated Java is current (no build/recipe-lab-sony-pmca checkout)")
-        skipped.append("     also skipped: fidelity check, needs upstream Recipes.java")
+        skipped.append("3     generated Java is current (no build/recipe-lab-sony-pmca checkout)")
+        skipped.append("      also skipped: fidelity check, needs upstream Recipes.java")
 
     node = shutil.which("node")
     if node:
-        ok, _ = run("4/7  browser — regenerate", [PY, "tools/gen_browser.py"])
+        ok, _ = run("4     browser — regenerate", [PY, "tools/gen_browser.py"])
         if not ok:
-            failures.append("4/7  browser — regenerate")
+            failures.append("4     browser — regenerate")
         else:
             diff = subprocess.run(["git", "diff", "--exit-code", "catalog/index.html"],
                                   cwd=ROOT, capture_output=True, text=True)
             if diff.returncode != 0:
                 print("catalog/index.html changed — it was stale. Commit the new one.")
-                failures.append("4/7  browser was stale")
-            gate("4/7  browser — smoke test", [node, "tests/smoke_browser.js"])
+                failures.append("4     browser was stale")
+            gate("4     browser — smoke test", [node, "tests/smoke_browser.js"])
     else:
-        skipped.append("4/7  browser smoke test (node is not on PATH)")
+        skipped.append("4     browser smoke test (node is not on PATH)")
 
-    gate("5/7  README counts", [PY, "tools/check_readme_counts.py"])
-    gate("6/7  assets", [PY, "tools/check_assets.py"])
-    gate("7/7  bilingual docs", [PY, "tools/check_docs.py"])
+    gate("5     README counts", [PY, "tools/check_readme_counts.py"])
+    gate("6     assets", [PY, "tools/check_assets.py"])
+    gate("7     bilingual docs", [PY, "tools/check_docs.py"])
+    # Last, and deliberately so: it temporarily breaks inputs and runs gates as
+    # subprocesses, so it is the slowest and the only one that mutates the working
+    # tree (probe files only, restored in finally). Running it after the real gates
+    # also means a broken tree is reported by its own gate first, with a real message.
+    gate("8     gate self-test", [PY, "tests/test_gates.py"])
 
     print("\n" + "=" * 66)
     for s in skipped:

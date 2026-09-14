@@ -35,11 +35,12 @@ with UnsatisfiedLinkError. `--check` fails if that has happened.
 from __future__ import annotations
 
 import argparse
-import json
 import re
 import shutil
 import sys
 from pathlib import Path
+
+import cataloglib
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_PACKS = ROOT / "catalog" / "packs.json"
@@ -139,15 +140,6 @@ def text_files(fork: Path) -> list[Path]:
     return out
 
 
-def load_pack(packs_file: Path, pack_id: str) -> tuple[dict, list[str]]:
-    packs = json.loads(packs_file.read_text(encoding="utf-8"))["packs"]
-    for p in packs:
-        if p["id"] == pack_id:
-            return p, [q["id"] for q in packs]
-    raise SystemExit(f"no pack {pack_id!r} in {packs_file} "
-                     f"(have: {', '.join(p['id'] for p in packs)})")
-
-
 def apply_icons(fork: Path, pack: dict, report, dry: bool) -> None:
     """Copy a pack's icon set over the fork's launcher icon, else keep what is there."""
     src_root = DEFAULT_ICONS / pack.get("icon_set", pack["id"])
@@ -187,13 +179,12 @@ def main() -> int:
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--pack", required=True, help="pack id from catalog/packs.json")
     ap.add_argument("--fork", type=Path, default=ROOT / "build" / "recipe-lab-sony-pmca")
-    ap.add_argument("--packs", type=Path, default=DEFAULT_PACKS)
     ap.add_argument("--dry-run", action="store_true", help="report, change nothing")
     ap.add_argument("--check", action="store_true",
                     help="verify the checkout is already this pack and is self-consistent")
     args = ap.parse_args()
 
-    pack, all_ids = load_pack(args.packs, args.pack)
+    pack, all_ids = cataloglib.load_pack(DEFAULT_PACKS, args.pack)
     fork: Path = args.fork
     package = f"{PACKAGE_BASE}.{pack['id']}"
     report: list[str] = []

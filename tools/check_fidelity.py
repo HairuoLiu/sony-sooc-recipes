@@ -20,8 +20,8 @@ upstream's, and they are expected to be unverified.
 
 from __future__ import annotations
 
+import cataloglib
 import argparse
-import json
 import re
 import sys
 from collections import Counter
@@ -42,8 +42,6 @@ LONG = 13    # ... sub
 # what the short forms imply, from the constructor bodies in Recipes.java
 DEFAULTS_MEDIUM = ["0", "0", "6"]   # pe=0, ev=0, dro=DRO_AUTO
 DEFAULTS_LONG = ["0"]               # sub=0
-
-UNAUTHORED = "authored-here"
 
 
 def canonical(arguments: str) -> tuple[str, str]:
@@ -90,7 +88,7 @@ def main() -> int:
         return 2
 
     upstream, up_labels = parse(args.upstream.read_text(encoding="utf-8"))
-    catalog = json.loads(args.catalog.read_text(encoding="utf-8"))
+    catalog = cataloglib.load_catalog(args.catalog)
     ours, our_labels = parse(generate(catalog))
 
     matched = sum((upstream & ours).values())
@@ -133,10 +131,8 @@ def main() -> int:
         print(f"FAILED — {sum(missing.values())} upstream recipe(s) drifted")
         return 1
 
-    expected_added = sum(
-        1 for f in catalog["filters"]
-        if f.get("engine") == "recipe-lab" and f.get("source") == UNAUTHORED
-    )
+    stats = cataloglib.catalog_stats(catalog)
+    expected_added = stats["authored_compiled"]
     if sum(added.values()) != expected_added:
         print(
             f"FAILED — expected {expected_added} added recipe(s) from the catalog, "

@@ -308,6 +308,7 @@ sony-sooc-recipes/
 │   └── assets/                     配图 + README（architecture.svg、engines.svg、parameters.svg、install-flow.svg）
 ├── tools/
 │   ├── validate_catalog.py   校验注册表（CI 关卡 1）
+│   ├── cataloglib.py         共享的 catalog/packs 读取：计数与 load_pack 各只有一份
 │   ├── gen_recipes.py        注册表 → Recipes.java（CI 关卡 2 步骤）；--pack 收窄到单个品牌
 │   ├── check_fidelity.py     与上游逐值比对（CI 关卡 3）
 │   ├── gen_browser.py        生成浏览器（CI 关卡 4）
@@ -320,10 +321,12 @@ sony-sooc-recipes/
 │   └── build_apk.sh          调上游 build.sh；--pack / --all-packs 构建品牌包
 ├── tests/
 │   ├── test_catalog.py       33 条用例 + 不变量（CI 关卡 1b）
+│   ├── test_packs.py         包转换、发布矩阵与子集用例（CI + release）
+│   ├── test_gates.py         自测：给每道关卡喂坏输入，断言失败
 │   ├── cases.json            自写配方的钉死值
 │   └── smoke_browser.js      浏览器冒烟测试（CI 关卡 4）
 ├── .github/workflows/
-│   ├── ci.yml                七道关卡
+│   ├── ci.yml                全部门关，按 job 拆分
 │   └── release.yml           推 tag 自动构建 APK 挂 Release
 ├── LICENSE                   MIT（本仓库代码）
 └── NOTICE.md                 上游归属与许可边界

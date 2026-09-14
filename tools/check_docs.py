@@ -32,7 +32,7 @@ way is not caught, and that limit is deliberate rather than hidden.
 
 from __future__ import annotations
 
-import json
+import cataloglib
 import re
 import sys
 from pathlib import Path
@@ -66,12 +66,11 @@ DIAGRAM_COUNTS = {
 
 
 def counts_from_catalog() -> dict[str, int]:
-    catalog = json.loads(CATALOG.read_text(encoding="utf-8"))
-    filters = catalog["filters"]
+    stats = cataloglib.catalog_stats(cataloglib.load_catalog(CATALOG))
     return {
-        "total": len(filters),
-        "compiled": sum(1 for f in filters if f["engine"] == "recipe-lab"),
-        "groups": len(catalog["groups"]),
+        "total": stats["total"],
+        "compiled": stats["compiled"],
+        "groups": stats["groups_declared"],
     }
 
 

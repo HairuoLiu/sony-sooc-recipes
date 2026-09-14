@@ -20,7 +20,7 @@ translation at all.
 
 from __future__ import annotations
 
-import json
+import cataloglib
 import re
 import sys
 from pathlib import Path
@@ -44,10 +44,8 @@ READMES = {
 
 
 def main() -> int:
-    catalog = json.loads(CATALOG.read_text(encoding="utf-8"))
-    filters = catalog["filters"]
-    total = len(filters)
-    compiled = sum(1 for f in filters if f["engine"] == "recipe-lab")
+    stats = cataloglib.catalog_stats(cataloglib.load_catalog(CATALOG))
+    total, compiled = stats["total"], stats["compiled"]
 
     ok = True
     for name, phrases in READMES.items():

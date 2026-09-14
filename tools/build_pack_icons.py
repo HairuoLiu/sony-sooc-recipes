@@ -240,7 +240,6 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--pack", help="only this pack (default: every pack with a master)")
-    ap.add_argument("--packs", type=Path, default=DEFAULT_PACKS)
     ap.add_argument("--icons", type=Path, default=ICON_ROOT,
                     help="root of the per-pack icon sets")
     ap.add_argument("--import", dest="import_dir", type=Path, metavar="DIR",
@@ -248,7 +247,7 @@ def main() -> int:
                          "(downscaled to %d px; run again without --import to render)" % MASTER_MAX)
     args = ap.parse_args()
 
-    packs = load_packs(args.packs)
+    packs = load_packs(DEFAULT_PACKS)
     if args.pack and args.pack not in packs:
         raise SystemExit(f"no pack {args.pack!r} "
                          f"(have: {', '.join(sorted(packs))})")

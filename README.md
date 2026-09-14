@@ -193,10 +193,12 @@ Two engines appear in the catalog:
 > allowed it, which it does not. `tools/validate_catalog.py` fails the build if any entry
 > sourced from it carries a `recipe` field.
 
-### The gates — seven locally, one more in CI
+### The gates — seven locally, one more in CI, plus a self-test
 
 Every change runs through `python tests/run_all.py`, and again in CI. Seven gates run
-anywhere; the fidelity check needs to fetch upstream, so CI runs it.
+anywhere; the fidelity check needs to fetch upstream, so CI runs it. An eighth, the
+self-test, breaks one thing per gate and asserts the gate actually fails — a gate that
+has never been seen failing is a decoration, not a gate.
 
 | Gate | What it stops |
 |---|---|
@@ -208,6 +210,7 @@ anywhere; the fidelity check needs to fetch upstream, so CI runs it.
 | `check_readme_counts.py` | the READMEs advertising a number the catalog no longer holds |
 | `check_assets.py` | a document pointing at a picture that does not exist — or at somebody's image host |
 | `check_docs.py` | an English doc with no Chinese twin (or a twin whose original is gone), text baked into a shared diagram, or a count drawn inside a diagram that the catalog has outgrown |
+| `tests/test_gates.py` | a gate that no longer fails on broken input — each gate is fed something it must reject *(the self-test)* |
 
 Current state of the fidelity check:
 

@@ -63,15 +63,13 @@ def entries(packs_file: Path) -> list[dict]:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--packs", type=Path, default=DEFAULT_PACKS)
     g = ap.add_mutually_exclusive_group()
     g.add_argument("--ids", action="store_true", help="pack ids only, one per line")
-    g.add_argument("--apks", action="store_true", help="expected APK filenames only")
     g.add_argument("--apk-for", metavar="ID", help="the APK filename for one target id "
                                                   "('all' for the all-in-one app)")
     args = ap.parse_args()
 
-    rows = entries(args.packs)
+    rows = entries(DEFAULT_PACKS)
     if args.apk_for:
         for r in rows:
             if r["id"] == args.apk_for:
@@ -87,9 +85,6 @@ def main() -> int:
         for r in rows:
             if r["pack"]:
                 print(r["pack"])
-    elif args.apks:
-        for r in rows:
-            print(r["apk"])
     else:
         # Single-line JSON: $GITHUB_OUTPUT takes one line per key, so a pretty-printed
         # matrix would be silently truncated at the first newline.

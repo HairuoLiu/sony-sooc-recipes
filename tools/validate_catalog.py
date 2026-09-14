@@ -11,7 +11,7 @@ commit, and in CI.
 
 from __future__ import annotations
 
-import json
+import cataloglib
 import sys
 from pathlib import Path
 
@@ -296,21 +296,18 @@ def validate_provenance(report: Report, filters: list) -> None:
 
 def main() -> int:
     path = Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_CATALOG
-    catalog = json.loads(path.read_text(encoding="utf-8"))
+    catalog = cataloglib.load_catalog(path)
     report = validate(catalog)
 
-    recipe_lab = sum(1 for f in catalog["filters"] if f.get("engine") == "recipe-lab")
-    matrix = sum(1 for f in catalog["filters"] if f.get("engine") == "film-studio-matrix")
-    mono = sum(1 for f in catalog["filters"] if f.get("tone") == "mono")
-    authored = sum(1 for f in catalog["filters"] if f.get("source") == "authored-here")
+    stats = cataloglib.catalog_stats(catalog)
 
     print(f"catalog : {path}")
     print(
-        f"filters : {len(catalog['filters'])} total | {recipe_lab} compiled "
-        f"({authored} authored here) | {matrix} reference-only"
+        f"filters : {stats['total']} total | {stats['compiled']} compiled "
+        f"({stats['authored']} authored here) | {stats['matrix']} reference-only"
     )
-    print(f"tones   : {mono} mono | {len(catalog['filters']) - mono} color")
-    print(f"groups  : {len({f['group'] for f in catalog['filters']})}")
+    print(f"tones   : {stats['mono']} mono | {stats['total'] - stats['mono']} color")
+    print(f"groups  : {stats['groups_used']}")
     print()
 
     for w in report.warnings:

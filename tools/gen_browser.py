@@ -414,7 +414,6 @@ render();
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--catalog", type=Path, default=DEFAULT_CATALOG)
-    ap.add_argument("--out", type=Path, default=DEFAULT_OUT)
     args = ap.parse_args()
 
     catalog = json.loads(args.catalog.read_text(encoding="utf-8"))
@@ -424,10 +423,10 @@ def main() -> int:
     payload = payload.replace("</", "<\\/")
 
     html = TEMPLATE.replace("/*__CATALOG__*/", payload)
-    args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(html, encoding="utf-8", newline="\n")
+    DEFAULT_OUT.parent.mkdir(parents=True, exist_ok=True)
+    DEFAULT_OUT.write_text(html, encoding="utf-8", newline="\n")
 
-    print(f"wrote {args.out}  ({len(html) / 1024:.1f} KB, {len(catalog['filters'])} filters)")
+    print(f"wrote {DEFAULT_OUT}  ({len(html) / 1024:.1f} KB, {len(catalog['filters'])} filters)")
     return 0
 
 

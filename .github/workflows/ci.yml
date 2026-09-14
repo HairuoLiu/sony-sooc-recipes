@@ -59,6 +59,16 @@ jobs:
       - name: run catalog test cases
         run: python tests/test_catalog.py
 
+      # The pack transform and the release matrix are only exercised on release tags
+      # otherwise — a bug there would first surface as a failed release, which is the
+      # worst possible time. test_gates.py is the self-test: it breaks one thing per
+      # gate and asserts the gate actually fails, so a refactor that silently loosened
+      # a gate cannot pass CI green.
+      - name: run pack and gate self-tests
+        run: |
+          python tests/test_packs.py
+          python tests/test_gates.py
+
       # Gate 2 — does the catalog still generate the same Java the fork ships?
       #          Fails if someone hand-edited Recipes.java or forgot to regenerate.
       - name: fetch upstream Recipes.java

@@ -333,6 +333,7 @@ sony-sooc-recipes/
 │   └── assets/                     diagrams + README (architecture.svg, engines.svg, parameters.svg, install-flow.svg)
 ├── tools/
 │   ├── validate_catalog.py   registry gate (CI gate 1)
+│   ├── cataloglib.py         shared catalog/packs access: one count, one load_pack
 │   ├── gen_recipes.py        registry → Recipes.java (CI gate 2 step); --pack narrows to one brand
 │   ├── check_fidelity.py     value-for-value vs upstream (CI gate 3)
 │   ├── gen_browser.py        browser generator (CI gate 4)
@@ -345,10 +346,12 @@ sony-sooc-recipes/
 │   └── build_apk.sh          calls upstream build.sh; --pack / --all-packs build the packs
 ├── tests/
 │   ├── test_catalog.py       33 cases + invariants (CI gate 1b)
+│   ├── test_packs.py         pack transform, matrix and subset cases (CI + release)
+│   ├── test_gates.py         the self-test: breaks one thing per gate, asserts failure
 │   ├── cases.json            pinned values for authored-here recipes
 │   └── smoke_browser.js      browser smoke test (CI gate 4)
 ├── .github/workflows/
-│   ├── ci.yml                six gates
+│   ├── ci.yml                all gates, split across jobs
 │   └── release.yml           tag → build APK → attach to Release
 ├── LICENSE                   MIT (this repo's code)
 └── NOTICE.md                 upstream attribution and licence boundaries

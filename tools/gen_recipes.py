@@ -22,10 +22,11 @@ the pack's package, or the file will not compile into that pack's APK.
 from __future__ import annotations
 
 import argparse
-import json
 import re
 import sys
 from pathlib import Path
+
+import cataloglib
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CATALOG = ROOT / "catalog" / "filters.json"
@@ -285,23 +286,9 @@ def emitted_group_labels(source: str) -> list[str]:
     return re.findall(r'"([^"]*)"', m.group(1)) if m else []
 
 
-def load_pack(packs_file: Path, pack_id: str) -> dict:
-    packs = json.loads(packs_file.read_text(encoding="utf-8"))["packs"]
-    matches = [p for p in packs if p["id"] == pack_id]
-    if not matches:
-        raise SystemExit(f"no pack {pack_id!r} in {packs_file} "
-                         f"(have: {', '.join(p['id'] for p in packs)})")
-    pack = matches[0]
-    if not pack.get("groups"):
-        raise SystemExit(f"pack {pack_id!r} lists no groups")
-    return pack
-
-
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--catalog", type=Path, default=DEFAULT_CATALOG)
-    ap.add_argument("--packs", type=Path, default=DEFAULT_PACKS,
-                    help="pack definitions, read by --pack")
     ap.add_argument("--pack", metavar="ID",
                     help="emit only this pack's groups, under this pack's package name")
     ap.add_argument("--fork", type=Path, default=ROOT / "build" / "recipe-lab-sony-pmca",
@@ -311,8 +298,8 @@ def main() -> int:
                     help="exit non-zero if the file on disk differs from the generated one")
     args = ap.parse_args()
 
-    catalog = json.loads(args.catalog.read_text(encoding="utf-8"))
-    pack = load_pack(args.packs, args.pack) if args.pack else None
+    catalog = cataloglib.load_catalog(args.catalog)
+    pack = cataloglib.load_pack(DEFAULT_PACKS, args.pack)[0] if args.pack else None
     package = package_for(pack)
 
     source = generate(catalog, group_ids=(pack["groups"] if pack else None), package=package)

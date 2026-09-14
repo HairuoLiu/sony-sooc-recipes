@@ -7,7 +7,8 @@ versioning, with one exception: a **change to a recipe's values** also counts as
 bump. For someone using this, a look whose parameters moved matters more than a new
 function does.
 
-`python tests/run_all.py` must pass all of its gates before a tag is pushed.
+`python tests/run_all.py` must pass all of its gates before a tag is pushed — the seven
+catalog gates plus the self-test that proves the gates still fail on broken input.
 
 > `v0.5.0` was this repository's **first published release**. The development batches that
 > came before it have no Release and therefore no version number; they are listed below as

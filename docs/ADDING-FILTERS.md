@@ -288,7 +288,8 @@ Copy `gr-moriyama`, `kodak-vision2-500t`, `toy-camera-warm`, `toy-camera-cool`,
 
 ## 7. Local validation — the seven gates
 
-Run the pre-push script. It stops at the first failure:
+Run the pre-push script. It runs all seven gates and reports every failure together —
+it does not stop at the first one, so one broken gate never hides another:
 
 ```bash
 python tests/run_all.py
@@ -303,9 +304,10 @@ python tests/run_all.py
 | 5/7 README counts | `tools/check_readme_counts.py` | The numbers in `README.md` no longer match the catalog. |
 | 6/7 assets | `tools/check_assets.py` | A document pointing at an image that does not exist, a third-party hotlink (status badges excepted), a `docs/assets/samples/` file not named `<recipe-id>--off.jpg` / `--on.jpg` with an id that is in the catalog, or an icon set missing a density. |
 | 7/7 bilingual docs | `tools/check_docs.py` | An English document with no `.zh-CN.md` twin and no declaration saying why, a twin whose English original is gone, translated text baked into a shared `docs/assets/*.svg`, or a count drawn inside a diagram that the catalog has outgrown. |
+| self-test | `tests/test_gates.py` | A gate that no longer fails on broken input. It feeds each gate something it must reject and asserts a non-zero exit — run last, because it is the only gate that temporarily writes probe files. |
 
 Gates 3–4 skip (loudly) when their prerequisite is missing; a missing tool is not a broken
-catalog. All seven passing is the bar before you push.
+catalog. All seven passing, plus the self-test, is the bar before you push.
 
 If gate 3 is skipped for lack of a fork but you still want the fidelity proof for a Path A
 recipe, run `check_fidelity.py` manually as shown in §4.
