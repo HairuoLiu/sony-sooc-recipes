@@ -7,7 +7,7 @@ name: release
 # Android 2.3.7 / API 10 target requires. Nobody should install that to try a recipe.
 # Push a tag, get an APK.
 #
-#   git tag v0.5.0 && git push origin v0.5.0
+#   git tag v0.6.0 && git push origin v0.6.0
 #
 # Or re-run for a tag that already exists: Actions -> release -> Run workflow.
 #

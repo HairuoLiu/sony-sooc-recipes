@@ -132,7 +132,9 @@ Counts include looks that are registered by name only; **140** are compiled into
   <img src="docs/assets/install-flow.svg" width="760" alt="installation flow">
 </p>
 
-1. Download `SonySOOCRecipes.apk` from the [Releases page](https://github.com/HairuoLiu/sony-sooc-recipes/releases).
+1. Download an APK from the [Releases page](https://github.com/HairuoLiu/sony-sooc-recipes/releases) —
+   the all-in-one `SonySOOCRecipes.apk`, or a per-brand pack (`SonySOOCRecipes-<brand>.apk`)
+   if you only want that brand's looks. See **[docs/BRAND-PACKS.md](docs/BRAND-PACKS.md)**.
 2. Confirm the body has `MENU → Application`. If it does not, stop.
 3. Install over **USB** with [Sony-PMCA-RE](https://github.com/ma1co/Sony-PMCA-RE). Offline, universal, no prerequisites.
 4. Open the app, pick a look with the control wheel, store it with the centre button, **power-cycle the body**.

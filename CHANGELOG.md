@@ -10,6 +10,51 @@
 
 ---
 
+## v0.6.0 — 2026-09-13 · 品牌包：一个品牌一个 APK
+
+同一份代码、同一份 `catalog/filters.json`，按相机品牌打包成 **8 个独立 APK**，与全量版
+一起发布（9 个构建目标）。每个包的 Android 包名多一段（`...sonysoocrecipes.<id>`），所以
+几个包能在相机上**并存**；每个包的启动图标是那个品牌最知名的一台相机。
+
+### 为什么做
+
+155 款配方在相机上只能靠按键逐个翻，翻起来很累。按品牌拆包后，装自己需要的那一份，
+要翻的量少一个数量级。**拆的是浏览入口，不是数据**：仍是一份 catalog、一个配方引擎，
+`tools/gen_recipes.py --pack` 只是把某个包的组生成进去。
+
+### 包与配方数
+
+leica 20 · fujifilm 26 · ricoh 11 · kodak 20 · pentax 11 · ilford 5 · hasselblad 4 · sony 8
+
+`canon-nikon`、`pana-olympus` 各跨两个品牌（要先拆成单品牌包才能归属），`other-stocks`、
+`cine`、`app-look` 非单一品牌——这五组**只进全量版**，记录在 `packs.json` 的
+`unassigned_groups` 里，缺口可见而不是静默丢掉。
+
+### 必须知道的
+
+- **装多个包不等于多台相机。** 相机的设置存储是共享的，同一时间只有一个配方生效；
+  各包的快照按包名隔离、互不覆盖，但不会叠加。
+- **包不比全量版小多少。** 配方数据是 APK 里最小的东西（全部 155 款 ≈ 21.6 KB，
+  APK ≈ 102 KB），大头是引擎。包的意义是「要翻的少」，不是「下载的小」。
+- **签名 key 仍是一次性的**，与 v0.5.0 相同的注意事项。
+
+### 实现
+
+- `catalog/packs.json` 定义包；`tools/apply_pack.py` 就地改写包名 / app_name / 图标；
+  `tools/gen_recipes.py --pack` 只生成该包的组；`tools/build_matrix.py` 从 packs.json
+  派生发布矩阵（矩阵不写死在 YAML 里，加一个包自动多一个构建目标）。
+- 发布矩阵在 CI 里按包并行构建（`fail-fast: false`），任一包失败则**不发布**——
+  宁可不发，也不发一个缺包的 Release。
+- 图标**不抠图**：用照片自身边框色找主体、按主体尺寸开方形框并补边、4× 超采样圆角。
+  生成器 `tools/build_pack_icons.py`，素材与逐张许可见 `assets/app-icon-packs/CREDITS.md`。
+- 图标许可规则：**只要 PD / CC0 / CC BY**。`CC BY-SA` 一律否决——图标是对照片的改编，
+  share-alike 会波及整个应用。fujifilm / hasselblad / sony 为 CC0 或 PD（零义务），
+  其余五张 CC BY（署名随 APK 走）。
+- `tests/test_packs.py` 31 条，其中最关键的一条断言**每个包的配方值与全量版逐值一致**：
+  包必须是子集，不能是重新拟合。
+
+详见 `docs/BRAND-PACKS.md`（中文版 `BRAND-PACKS.zh-CN.md`）。
+
 ## v0.5.0 — 2026-09-13 · 重命名为 Sony SOOC Recipes
 
 将本仓库的相机端 App 从上游项目名重命名为 **Sony SOOC Recipes**：

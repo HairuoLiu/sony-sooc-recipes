@@ -40,9 +40,12 @@ python tools/gen_recipes.py --stdout # 看一眼会生成什么
 
 **只想把滤镜装进相机？** 直接看 **[安装指南](docs/INSTALL.zh-CN.md)**：
 
-1. 按 `MENU` 找有没有 **`Application`** 这一项 —— 没有就装不了，别往下走了
-2. 走 **USB + Sony-PMCA-RE** 通道（全程离线、通用、无需前置应用）
-3. 打开应用，波轮选配方，中心键存储，**关机再开机**
+1. 从 [Releases](https://github.com/HairuoLiu/sony-sooc-recipes/releases) 下载 APK ——
+   全量版 `SonySOOCRecipes.apk`，或只要某个品牌就装对应的包（`SonySOOCRecipes-<品牌>.apk`）。
+   见 **[docs/BRAND-PACKS.zh-CN.md](docs/BRAND-PACKS.zh-CN.md)**。
+2. 按 `MENU` 找有没有 **`Application`** 这一项 —— 没有就装不了，别往下走了
+3. 走 **USB + Sony-PMCA-RE** 通道（全程离线、通用、无需前置应用）
+4. 打开应用，波轮选配方，中心键存储，**关机再开机**
 
 <p align="center">
   <img src="docs/assets/install-flow.svg" width="760" alt="安装流程">

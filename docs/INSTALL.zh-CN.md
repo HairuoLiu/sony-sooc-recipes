@@ -48,20 +48,33 @@ Apps（PMCA）通道，能收应用；没有，就到此为止——本仓库没
 
 ### 拿到 APK
 
-从本仓库的 Releases 下载 `SonySOOCRecipes-<版本>.apk`：
+从本仓库的 Releases 下载：
 
 https://github.com/HairuoLiu/sony-sooc-recipes/releases
 
-（当前发布是 `SonySOOCRecipes-v0.5.0.apk`，约 102 KB。本仓库只发布配方数据和构建工具；APK 由 CI
-依据 `catalog/filters.json` 生成。若还没有发布版本，见 [架构说明](ARCHITECTURE.md) 自行构建。）
+一次发布里是 **每个品牌包一个 APK，外加全量版**。它们是同一个 App、同一份 catalog 编译的；
+差别只在某个包含哪些组、Android 包名（这才让几个包能在相机上并存）、以及启动图标。
+完整清单与取舍见 [BRAND-PACKS.md](BRAND-PACKS.md)。
 
-> **实话实说。** 两条会真咬人的：
+| 你想要 | 装哪个 |
+|---|---|
+| 全部都要，想翻整个目录 | `SonySOOCRecipes-<版本>.apk` |
+| 只要某个品牌的观感 | `SonySOOCRecipes-<品牌>-<版本>.apk` |
+
+当前发布是 `v0.6.0`。包只比全量版小几 KB——配方数据是 APK 里最小的东西，大头是引擎。
+包的意义是「要翻的少」，不是「下载的小」。本仓库只发布配方数据和构建工具；APK 由 CI
+依据 `catalog/filters.json` 生成。若还没有发布版本，见 [架构说明](ARCHITECTURE.md) 自行构建。
+
+> **实话实说。** 三条会真咬人的：
 >
 > 1. **签名用的一次性 key。** CI 没配 keystore，每次构建临时生成一把。用不同 key 签的 APK
 >    **无法覆盖安装**——如果相机上已经装过别处来的 Sony SOOC Recipes，得先在相机里把它删掉再装这个。
+>    品牌包同理：`SonySOOCRecipes-leica` 和全量版是**不同的包**、可以并存，但同一个包装两份不行。
 > 2. **有 7 款配方没上机验证过**：`gr-moriyama`、`kodak-vision2-500T`、Toy Camera 暖/冷、
 >    Part Color 红、Posterization、Teal Mood。它们在相机里显示为 `NOT VERIFIED`。先在可丢弃的
 >    素材上试，别拿去拍不能重来的东西。
+> 3. **装多个包不等于多台相机。** 相机的设置存储是共享的，同一时间只有一个配方生效。
+>    包的差别在于**装进去什么**，不在于相机**能做什么**。
 >
 > APK 里显示的版本号是**基础应用**的，不是本仓库的 tag。基础应用从 `AndroidManifest.xml` 读版本，
 > 本仓库只替换配方表；认 tag 就行。

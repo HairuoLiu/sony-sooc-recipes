@@ -55,24 +55,40 @@ method in this repository can install anything on it.
 
 ### Get the APK
 
-Download `SonySOOCRecipes-<version>.apk` from the project's Releases page:
+Download from the project's Releases page:
 
 https://github.com/HairuoLiu/sony-sooc-recipes/releases
 
-(The current release is `SonySOOCRecipes-v0.5.0.apk`, about 102 KB. The repository publishes only the
-recipe data and build tooling; the APK is produced by CI from `catalog/filters.json`. If no
-release exists yet, build it yourself — see [ARCHITECTURE.md](ARCHITECTURE.md).)
+A release carries **one APK per brand pack, plus the all-in-one app**. They are the same app
+built from the same catalog; what differs is which groups of looks a pack carries, its
+Android package name (that is what lets several sit side by side on the camera), and its
+launcher icon. The full list and the reasoning are in [BRAND-PACKS.md](BRAND-PACKS.md).
 
-> **Honest note.** Two things actually bite people:
+| If you want | Install |
+|---|---|
+| Everything, and to browse the whole catalog | `SonySOOCRecipes-<version>.apk` |
+| One brand's looks only | `SonySOOCRecipes-<brand>-<version>.apk` |
+
+The current release is `v0.6.0`. A pack is only a few KB smaller than the all-in-one — the
+recipe data is the smallest thing in the APK, the engine is most of it. The point of a pack
+is fewer looks to step through, not a smaller download. The repository publishes only the
+recipe data and build tooling; the APKs are produced by CI from `catalog/filters.json`. If
+no release exists yet, build them yourself — see [ARCHITECTURE.md](ARCHITECTURE.md).
+
+> **Honest note.** Three things actually bite people:
 >
 > 1. **The signing key is single-use.** CI has no keystore configured, so every build generates
 >    a fresh key. APKs signed with *different* keys **cannot overwrite** each other — if your
 >    camera already has a Sony SOOC Recipes from somewhere else, remove it in the camera first, then
->    install this one.
+>    install this one. This applies to packs too: `SonySOOCRecipes-leica` and the all-in-one are
+>    *different packages* and install side by side, but two copies of the same one do not.
 > 2. **Seven recipes are unverified on real hardware:** `gr-moriyama`,
 >    `kodak-vision2-500T`, Toy Camera (warm/cold), Part Color (red), Posterization, Teal Mood.
 >    They show `NOT VERIFIED` in the app. Try them on discardable footage before trusting them
 >    on something you cannot reshoot.
+> 3. **Several packs do not give you several cameras.** The camera's settings store is
+>    shared, and only one recipe can be active at a time. Packs differ in what they *ship*,
+>    not in what the camera can *do*.
 >
 > The version number shown inside the app is the **base app's** version, not this repository's
 > tag. The base app reads its version from `AndroidManifest.xml`; this repo only swaps the
