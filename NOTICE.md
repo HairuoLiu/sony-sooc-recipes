@@ -169,16 +169,22 @@ LUT 收藏与各厂商对机身色彩模式、胶片种类的**公开描述**。
 
 | 包 (`id`) | 品牌 | 相机型号 | 作者 | 许可 | 来源页 |
 |---|---|---|---|---|---|
-| `kodak` | Kodak | Brownie 127 | 多多123 | CC BY 4.0（https://creativecommons.org/licenses/by/4.0/） | 待补（Wikimedia Commons 文件页） |
-| `ilford` | Ilford | Sporti | Matthew Paul Argall | CC BY 4.0（https://creativecommons.org/licenses/by/4.0/） | 待补（Wikimedia Commons 文件页） |
-| `pentax` | Pentax | K1000 | Terry Presley | CC BY 2.0（https://creativecommons.org/licenses/by/2.0/） | 待补（Wikimedia Commons 文件页） |
-| `hasselblad` | Hasselblad | 500C | Holger Ellgaard | 公有领域（PD-self） | 待补（Wikimedia Commons 文件页） |
-| `leica` | Leica | — | 待补 | 待补 | 待补 |
-| `fujifilm` | Fujifilm | — | 待补 | 待补 | 待补 |
-| `ricoh` | Ricoh | — | 待补 | 待补 | 待补 |
-| `sony` | Sony | — | 待补 | 待补 | 待补 |
+| `fujifilm` | Fujifilm | FinePix X100 | frank mckenna（frankiefoto，经 Unsplash） | **CC0**（无需署名） | https://commons.wikimedia.org/wiki/File:Fujifilm_FinePix_X100_with_Fujinon_Asph_Super_EBC_23mm_F2_(Unsplash_JbTBJYOEc28).jpg |
+| `hasselblad` | Hasselblad | 500C | Holger Ellgaard | 公有领域（PD-self，无需署名） | https://commons.wikimedia.org/wiki/File:Hasselblad_500C.jpg |
+| `ilford` | Ilford | Sporti | Matthew Paul Argall | CC BY 4.0（https://creativecommons.org/licenses/by/4.0/） | https://commons.wikimedia.org/wiki/File:Ilford_Sporti_camera.jpg |
+| `kodak` | Kodak | Brownie 127 | 多多123 | CC BY 4.0（https://creativecommons.org/licenses/by/4.0/） | https://commons.wikimedia.org/wiki/File:Kodak_Brownie_127.jpg |
+| `leica` | Leica | M3 | Hannes Grobe | CC BY 3.0（https://creativecommons.org/licenses/by/3.0/） | https://commons.wikimedia.org/wiki/File:Leica-m3_hg.JPG |
+| `pentax` | Pentax | K1000 | Terry Presley | CC BY 2.0（https://creativecommons.org/licenses/by/2.0/） | https://commons.wikimedia.org/wiki/File:Pentax_K1000_(6301325288).jpg |
+| `ricoh` | Ricoh | GR（2013） | Kārlis Dambrāns | CC BY 2.0（https://creativecommons.org/licenses/by/2.0/） | https://commons.wikimedia.org/wiki/File:Ricoh_GR_(16159018330).jpg |
+| `sony` | Sony | α7（ILCE-7） | Hans Braxmeier | **CC0**（无需署名） | https://commons.wikimedia.org/wiki/File:Sony_Alpha_7.jpg |
 
-前四行是已确认的素材；后四行标「待补」，**尚未溯源，不编造** —— 拿到作者与许可后再补。
+八个包全部有图标。其中 `fujifilm`、`hasselblad`、`sony` 三张是 CC0 或公有领域，**没有署名义务**；
+其余五张是 CC BY，署名是许可条件，必须随 APK 走。逐张的取舍说明见
+`assets/app-icon-packs/CREDITS.md`。
+
+被否决过的一张：`File:Fujifilm X100-IMG 6097.jpg`（作者 Rama）是 **CC BY-SA 2.0 (fr)**，已下载并渲染
+后被撤下 —— 图标是对照片的改编，而「相同方式共享」会从改编件波及到分发它的整个应用。已换成上表中
+的 CC0 照片。不要再启用它。
 
 几点必须说清的边界：
 

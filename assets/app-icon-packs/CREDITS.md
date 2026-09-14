@@ -25,24 +25,38 @@ with the APK).
 
 ## Attribution table
 
+All eight packs have an icon. Two are CC0, which is the ideal outcome: CC0 waives
+attribution entirely, so those two carry no obligation at all. The other six are CC BY, so
+their author credit is a licence condition.
+
 | Pack | Camera | Author | Licence | Source |
 |------|--------|--------|---------|--------|
+| `fujifilm` | Fujifilm FinePix X100 (2011) | frank mckenna (frankiefoto), via Unsplash | **CC0** — no attribution required | [File:Fujifilm FinePix X100 with Fujinon Asph Super EBC 23mm F2](https://commons.wikimedia.org/wiki/File:Fujifilm_FinePix_X100_with_Fujinon_Asph_Super_EBC_23mm_F2_(Unsplash_JbTBJYOEc28).jpg) |
 | `hasselblad` | Hasselblad 500C (1957) | Holger Ellgaard | Public domain (PD-self) — no attribution required | [File:Hasselblad 500C.jpg](https://commons.wikimedia.org/wiki/File:Hasselblad_500C.jpg) |
+| `ilford` | Ilford Sporti (c. 1955) | Matthew Paul Argall | CC BY 4.0 — attribution required | [File:Ilford Sporti camera.jpg](https://commons.wikimedia.org/wiki/File:Ilford_Sporti_camera.jpg) |
 | `kodak` | Kodak Brownie 127 (1952–1963) | 多多123 | CC BY 4.0 — attribution required | [File:Kodak Brownie 127.jpg](https://commons.wikimedia.org/wiki/File:Kodak_Brownie_127.jpg) |
 | `leica` | Leica M3 (1954–1966) | Hannes Grobe | CC BY 3.0 — attribution required | [File:Leica-m3 hg.JPG](https://commons.wikimedia.org/wiki/File:Leica-m3_hg.JPG) |
-| `ilford` | Ilford Sporti (c. 1955) | Matthew Paul Argall | CC BY 4.0 — attribution required | [File:Ilford Sporti camera.jpg](https://commons.wikimedia.org/wiki/File:Ilford_Sporti_camera.jpg) |
 | `pentax` | Asahi Pentax K1000 (1976–1997) | Terry Presley | CC BY 2.0 — attribution required | [File:Pentax K1000 (6301325288).jpg](https://commons.wikimedia.org/wiki/File:Pentax_K1000_(6301325288).jpg) |
 | `ricoh` | Ricoh GR (2013) | Kārlis Dambrāns | CC BY 2.0 — attribution required | [File:Ricoh GR (16159018330).jpg](https://commons.wikimedia.org/wiki/File:Ricoh_GR_(16159018330).jpg) |
-| `fujifilm` | *pending re-sourcing* | — | — | the first pick was CC BY-SA and was rejected |
-| `sony` | *pending sourcing* | — | — | — |
+| `sony` | Sony α7 (ILCE-7, 2013) | Hans Braxmeier | **CC0** — no attribution required | [File:Sony Alpha 7.jpg](https://commons.wikimedia.org/wiki/File:Sony_Alpha_7.jpg) |
 
-Licence texts: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) ·
+Licence texts: [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) ·
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) ·
 [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/) ·
 [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)
 
-`fujifilm` and `sony` have **no master yet**, which is a supported state: `apply_pack.py`
-falls back to `assets/app-icon/`, so those packs build and ship today with the app's default
-icon. Do not fill those rows in without a photograph that actually satisfies the rule above.
+Six of the eight therefore need a visible credit wherever the app is distributed. See
+`NOTICE.md` for the block that carries it, and remember that an APK is distributed on its
+own — a credit that exists only in this repository does not travel with it.
+
+## Rejected: the first Fujifilm pick
+
+`File:Fujifilm X100-IMG 6097.jpg` by Rama is **CC BY-SA 2.0 (fr)** and was rejected after
+it had already been downloaded and rendered. The icon reframes and resizes the photograph,
+which makes it an adapted work, and share-alike would propagate from the adaptation to the
+application distributing it — forcing this whole app under CC BY-SA, which it is not. It was
+replaced by the CC0 photograph above. Do not reinstate it, and check the licence before
+adding any photograph here.
 
 ## Which camera each pack uses, and why
 
@@ -68,12 +82,13 @@ here so it can be argued with rather than rediscovered:
 - **Ricoh GR (2013)** — brought APS-C quality into a pocketable fixed-lens body and became the
   street-photography tool of its generation; the name descends from the film GR1 that Daido
   Moriyama used. The film GR1 is the alternative pick.
-- **Fujifilm** — the intended choice is the **FinePix X100 (2011)**, which created the modern
-  retro-styled compact category and is the visual shorthand for "Fujifilm camera". Pending a
-  compliant photograph.
-- **Sony** — the intended choice is the **α7 (ILCE-7, 2013)**, the first full-frame mirrorless
-  camera and the origin of that entire market segment. The RX100 and α7 III are the
-  alternatives. Pending a photograph.
+- **Fujifilm FinePix X100** — created the modern retro-styled compact category: hybrid
+  optical/electronic viewfinder and physical dials in a fixed-lens APS-C body. Now the
+  visual shorthand for "Fujifilm camera". The CC0 photograph is the X100 with its
+  Fujinon 23mm f/2, shot against a plain background.
+- **Sony α7 (ILCE-7)** — the first full-frame mirrorless camera, and the origin of that
+  whole market segment. The α7 III is the best-selling descendant and the RX100 is the
+  other defensible pick; the original α7 is the one that changed the industry.
 
 ## How the masters were produced
 

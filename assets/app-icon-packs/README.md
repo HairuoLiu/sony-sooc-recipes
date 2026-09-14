@@ -6,14 +6,14 @@ with no set here silently keeps `../app-icon/`, so a half-finished set cannot br
 
 | Directory | Pack | Camera |
 |---|---|---|
+| `fujifilm/` | `fujifilm` | Fujifilm FinePix X100 |
 | `hasselblad/` | `hasselblad` | Hasselblad 500C |
+| `ilford/` | `ilford` | Ilford Sporti |
 | `kodak/` | `kodak` | Kodak Brownie 127 |
 | `leica/` | `leica` | Leica M3 |
-| `ilford/` | `ilford` | Ilford Sporti |
 | `pentax/` | `pentax` | Asahi Pentax K1000 |
 | `ricoh/` | `ricoh` | Ricoh GR (2013) |
-| `fujifilm/` | `fujifilm` | *pending a compliant photograph* |
-| `sony/` | `sony` | *pending a photograph* |
+| `sony/` | `sony` | Sony α7 (ILCE-7) |
 
 Each directory holds the same five files as `../app-icon/`, at the same pixel sizes and in
 the same transparent RGBA format, plus `master.jpg` — the source photograph, downscaled to
