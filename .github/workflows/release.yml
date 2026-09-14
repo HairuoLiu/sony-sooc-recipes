@@ -1,6 +1,6 @@
 name: release
 
-# Builds the APK and attaches it to the GitHub Release.
+# Builds the APKs and attaches them to the GitHub Release.
 #
 # Why this exists rather than "run tools/build_apk.sh yourself": the toolchain is about
 # 3 GB and needs NDK r16b — the last NDK that still ships the GCC toolchain an
@@ -10,6 +10,19 @@ name: release
 #   git tag v0.5.0 && git push origin v0.5.0
 #
 # Or re-run for a tag that already exists: Actions -> release -> Run workflow.
+#
+# Why a matrix: there is one all-in-one app plus one APK per brand pack (8 of them today),
+# and each matrix job is an independent runner. Two reasons drive the split:
+#   1. Diagnosis. With fail-fast: false one broken pack does not abort the other jobs, so a
+#      single run shows you the state of every target instead of stopping at the first
+#      failure. It does NOT make the release partial: the publish job needs the whole matrix,
+#      because a release that silently lacks a pack is worse than no release.
+#   2. Cost. Every matrix job downloads its own ~3 GB toolchain. 9 targets today means
+#      ~27 GB of downloads per release. That is the price of side-by-side brand packs;
+#      keep it in mind before adding packs.
+# The build matrix is DERIVED from catalog/packs.json at run time (see tools/build_matrix.py),
+# so adding a pack there is picked up with no YAML edit. The pack list must never be copied
+# into this file — that is exactly the drift this repo forbids.
 
 on:
   push:
@@ -25,8 +38,49 @@ permissions:
   contents: write
 
 jobs:
+  # ------------------------------------------------------------------------------
+  # Derive the build matrix from catalog/packs.json and run the catalog gates. A second
+  # literal copy of the pack list here would drift the moment someone edits packs.json,
+  # so the matrix is computed, not written. Emits the matrix as JSON to $GITHUB_OUTPUT.
+  targets:
+    name: derive build matrix
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # A catalog that fails its own gates should never reach the point of producing
+      # something a human installs on a camera.
+      - name: catalog gates
+        run: |
+          python tools/validate_catalog.py
+          python tests/test_catalog.py
+          python tests/test_packs.py
+
+      - name: build matrix
+        # tools/build_matrix.py, not an inline `python -c`: inside a YAML block scalar the
+        # code carries its indentation into the shell string, and `python -c` then dies on
+        # the first statement with `IndentationError: unexpected indent` — before building
+        # anything. The script also imports apply_pack.apk_name(), so the APK filename in
+        # the matrix is the same rule that rewrites build.sh rather than a second copy of it.
+        id: matrix
+        run: |
+          MATRIX="$(python tools/build_matrix.py)"
+          echo "matrix=$MATRIX" >> "$GITHUB_OUTPUT"
+          echo "targets: all-in-one + $(python tools/build_matrix.py --ids | wc -l) brand pack(s)"
+          python tools/build_matrix.py --ids
+
+  # ------------------------------------------------------------------------------
+  # One job per matrix entry: the all-in-one app, then one per brand pack. Each does the
+  # current pipeline for its single target.
   apk:
-    name: build SonySOOCRecipes.apk
+    name: build ${{ matrix.id }}
+    needs: targets
     runs-on: ubuntu-latest
 
     env:
@@ -35,6 +89,11 @@ jobs:
       # tag can produce a different APK next month, and the whole point of a tag is that
       # it does not. Bump this deliberately, in a commit, when upstream is re-validated.
       UPSTREAM_SHA: 6b5c8aa2900019d98496c7047a90ce73d2d6a725
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.targets.outputs.matrix) }}
 
     steps:
       - uses: actions/checkout@v4
@@ -47,13 +106,6 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-
-      # A catalog that fails its own gates should never reach the point of producing
-      # something a human installs on a camera.
-      - name: catalog gates
-        run: |
-          python tools/validate_catalog.py
-          python tests/test_catalog.py
 
       - name: install build-tools 30.0.3, platform 28, NDK r16b
         run: |
@@ -118,12 +170,23 @@ jobs:
           mkdir -p src/com/hairuoliu
           git mv src/com/voxivoid/recipelab src/com/hairuoliu/sonysoocrecipes
 
-      - name: apply the app icon
+      - name: apply pack transform
+        # Only for brand packs. apply_pack.py rewrites the package name, the app name and
+        # the icon set in place (it owns icon selection for packs, falling back to
+        # assets/app-icon/ when assets/app-icon-packs/<icon_set>/ does not exist yet).
+        # The all-in-one skips this and uses the explicit icon copy below instead.
+        if: ${{ matrix.pack != '' }}
+        run: |
+          python tools/apply_pack.py --pack "${{ matrix.pack }}" --fork build/recipe-lab-sony-pmca
+
+      - name: apply the app icon (all-in-one only)
         # The icon is a build input owned by this repository, not by the upstream checkout.
         # It lives in assets/app-icon/ and has to be copied in *after* the clone and after
         # the rebrand, because a fresh `git clone` in the previous step has no memory of it.
         # Everything is already RGBA with a transparent background, sized per density —
         # see assets/app-icon/README.md. Update the set with tools/build_app_icon.py.
+        # Packs let apply_pack.py handle their icons, so this step is all-in-one only.
+        if: ${{ matrix.pack == '' }}
         run: |
           F=build/recipe-lab-sony-pmca
           cp assets/app-icon/ic_launcher-mdpi.png    "$F/res/drawable-mdpi/ic_launcher.png"
@@ -133,7 +196,13 @@ jobs:
           cp assets/app-icon/icon-512.png            "$F/dist/icon-512.png"
 
       - name: generate Recipes.java from the catalog
-        run: python tools/gen_recipes.py --fork build/recipe-lab-sony-pmca
+        # --pack narrows the catalog to that pack's groups; with no --pack the all-in-one.
+        run: |
+          if [ -n "${{ matrix.pack }}" ]; then
+            python tools/gen_recipes.py --pack "${{ matrix.pack }}" --fork build/recipe-lab-sony-pmca
+          else
+            python tools/gen_recipes.py --fork build/recipe-lab-sony-pmca
+          fi
 
       - name: build
         run: |
@@ -143,19 +212,61 @@ jobs:
           ./build.sh
 
       - name: collect
+        # The output APK name is target-specific and comes from the matrix, which got it from
+        # apply_pack.apk_name() — the same function that rewrites build.sh. Deriving it here
+        # instead would be a second copy of the naming rule, and the two would drift.
         run: |
           set -euo pipefail
           TAG="${{ steps.tag.outputs.value }}"
-          SRC="build/recipe-lab-sony-pmca/SonySOOCRecipes.apk"
+          APK_NAME="${{ matrix.apk }}"
+          ART="${APK_NAME%.apk}"
+          SRC="build/recipe-lab-sony-pmca/$APK_NAME"
           test -f "$SRC" || { echo "no APK at $SRC"; exit 1; }
           mkdir -p dist
-          cp "$SRC" "dist/SonySOOCRecipes-$TAG.apk"
+          cp "$SRC" "dist/$ART-$TAG.apk"
           cd dist
-          sha256sum "SonySOOCRecipes-$TAG.apk" > "SonySOOCRecipes-$TAG.apk.sha256"
+          sha256sum "$ART-$TAG.apk" > "$ART-$TAG.apk.sha256"
           ls -l
 
       # Plain echo lines, not a heredoc: a heredoc inside a YAML block scalar is where
       # the quoting goes to die.
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.id }}
+          path: |
+            dist/*.apk
+            dist/*.sha256
+
+  # ------------------------------------------------------------------------------
+  # Runs once: download every artifact into one directory and publish the release.
+  release:
+    name: publish release
+    needs: [targets, apk]
+    runs-on: ubuntu-latest
+
+    env:
+      UPSTREAM_REPO: https://github.com/voxivoid/recipe-lab-sony-pmca.git
+      UPSTREAM_SHA: 6b5c8aa2900019d98496c7047a90ce73d2d6a725
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: resolve tag
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "value=${{ inputs.tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+          path: dist
+
       - name: release notes
         run: |
           TAG="${{ steps.tag.outputs.value }}"
@@ -164,7 +275,7 @@ jobs:
           echo "" >> "$N"
           echo "**安装**: 见 docs/INSTALL.md（第一次走 USB，别用 Wi-Fi ADB）" >> "$N"
           echo "" >> "$N"
-          echo "### 装之前先看这三条" >> "$N"
+          echo "### 装之前先看这四条" >> "$N"
           echo "" >> "$N"
           echo "1. **签名是一次性的。** 没有配置 keystore 时，构建会临时生成一把 key。" >> "$N"
           echo "   用不同 key 签的 APK **无法覆盖安装**——如果相机上已经装过别处来的" >> "$N"
@@ -174,11 +285,31 @@ jobs:
           echo "   先在可丢弃的素材上试。" >> "$N"
           echo "3. **APK 里显示的版本号是上游的，不是这个 tag。** 上游从" >> "$N"
           echo "   AndroidManifest.xml 取版本，本仓库只换配方表。以 tag 为准。" >> "$N"
+          echo "4. **品牌包（Brand packs）共享相机的设置存储。** 装多个品牌包并不会得到" >> "$N"
+          echo "   多台相机——相机同一时间只能有一个配方生效，多个包只是把各自的配方表" >> "$N"
+          echo "   装进不同的包名，互相并不叠加。" >> "$N"
+          echo "" >> "$N"
+          echo "### 品牌包一览" >> "$N"
+          echo "" >> "$N"
+          echo "主程序 SonySOOCRecipes-$TAG.apk 之外，每个品牌一份独立 APK（包名不同，可并存于相机侧）：" >> "$N"
+          # This glob cannot match the all-in-one artifact (SonySOOCRecipes-$TAG.apk): the
+          # pattern needs a literal '-' before the tag, and after the first '-' the all-in-one
+          # has 'v...', not '-'. Verified, not assumed — it is the reason the main app is
+          # described on the line above and does not also appear in this list.
+          for f in dist/SonySOOCRecipes-*-"$TAG".apk; do
+            [ -e "$f" ] || continue
+            base="$(basename "$f" "-$TAG.apk")"
+            echo "- $base.apk（校验见 $base.apk.sha256）" >> "$N"
+          done
           echo "" >> "$N"
           echo "### 校验" >> "$N"
           echo "" >> "$N"
           echo '```' >> "$N"
           echo "sha256sum -c SonySOOCRecipes-$TAG.apk.sha256" >> "$N"
+          for f in dist/SonySOOCRecipes-*-"$TAG".apk.sha256; do
+            [ -e "$f" ] || continue
+            echo "sha256sum -c $(basename "$f")" >> "$N"
+          done
           echo '```' >> "$N"
           echo "" >> "$N"
           echo "构建自上游 $UPSTREAM_SHA" >> "$N"

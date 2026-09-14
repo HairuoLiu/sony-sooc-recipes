@@ -268,6 +268,13 @@ SonySOOCRecipes-<tag>.apk          ──  签名密钥只在本机，永不入�
 > 和 `release.yml`（`UPSTREAM_SHA`）——而且 `test_catalog.py`（`TestPinnedUpstream`）会在两处不一致时
 > 失败。一个 tag 必须构建在它被验证过的那个上游版本上；不固定版本，下个月可能构建出不同的 APK。
 
+**品牌包。** 同一条管道也按品牌各构建一份 App。`catalog/packs.json` 列出各包，`release.yml` 在
+运行时从这份文件推导构建矩阵 —— 每个包一项加全量版一项，每项各自全新克隆上游并跑 `apply_pack.py`
+再跑 `gen_recipes.py --pack <id>`。一个包与全量版的区别只在包名、`app_name` 与启动图标；*为什么*
+见 [docs/BRAND-PACKS.zh-CN.md](BRAND-PACKS.zh-CN.md)。关卡 6（`check_assets.py`）现在也覆盖
+`assets/app-icon/` 与每个 `assets/app-icon-packs/<icon_set>/`，所以缺一个密度或一套孤儿图标集会
+让构建失败。
+
 ---
 
 ## 8. 仓库布局
@@ -277,15 +284,19 @@ SonySOOCRecipes-<tag>.apk          ──  签名密钥只在本机，永不入�
 ```
 sony-sooc-recipes/
 ├── assets/app-icon/          启动图标集——透明 RGBA，4 个密度 + 512 px 主图
+├── assets/app-icon-packs/    各品牌包的启动图标集，每个 icon_set 一个目录
 ├── catalog/
 │   ├── filters.json          ★ 唯一事实来源。所有配方都登记在这里
+│   ├── packs.json             品牌包定义（id、app_name、groups、icon_set）+ unassigned_groups
 │   ├── index.html            可浏览的滤镜浏览器（单文件，无依赖）
 │   └── README.md             字段说明
 ├── docs/
 │   ├── INSTALL.md                  双通道安装
 │   ├── INSTALL.zh-CN.md            中文安装说明
-│   ├── ARCHITECTURE.md             英文版（本文件）
-│   ├── ARCHITECTURE.zh-CN.md       中文版
+│   ├── ARCHITECTURE.md             英文版
+│   ├── ARCHITECTURE.zh-CN.md       中文版（本文件）
+│   ├── BRAND-PACKS.md              品牌包——为什么、怎么做、商标、图标
+│   ├── BRAND-PACKS.zh-CN.md        品牌包中文版
 │   ├── ADDING-FILTERS.md           加滤镜的完整流程
 │   ├── ADDING-FILTERS.zh-CN.md     中文版
 │   ├── FAQ.md                      常见问题
@@ -296,14 +307,15 @@ sony-sooc-recipes/
 │   └── assets/                     配图 + README（architecture.svg、engines.svg、parameters.svg、install-flow.svg）
 ├── tools/
 │   ├── validate_catalog.py   校验注册表（CI 关卡 1）
-│   ├── gen_recipes.py        注册表 → Recipes.java（CI 关卡 2 步骤）
+│   ├── gen_recipes.py        注册表 → Recipes.java（CI 关卡 2 步骤）；--pack 收窄到单个品牌
 │   ├── check_fidelity.py     与上游逐值比对（CI 关卡 3）
 │   ├── gen_browser.py        生成浏览器（CI 关卡 4）
 │   ├── check_readme_counts.py 核对 README 计数（CI 关卡 5）
-│   ├── check_assets.py       文档图片 / 资源引用（CI 关卡 6）
+│   ├── check_assets.py       文档图片 / 资源引用 + 图标集关卡（CI 关卡 6）
 │   ├── install-wifi.sh       Wi-Fi ADB 安装把手
-│   ├── build_app_icon.py     按源照片重新生成启动图标集
-│   └── build_apk.sh          调上游 build.sh 并套用生成的 Recipes.java 与图标
+│   ├── apply_pack.py         为一个品牌包改写包名与 App 名
+│   ├── build_app_icon.py     按源照片重新生成全量版启动图标集
+│   └── build_apk.sh          调上游 build.sh；--pack / --all-packs 构建品牌包
 ├── tests/
 │   ├── test_catalog.py       33 条用例 + 不变量（CI 关卡 1b）
 │   ├── cases.json            自写配方的钉死值

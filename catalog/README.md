@@ -109,3 +109,46 @@ python tools/gen_recipes.py --stdout  # 看生成结果
 | `note` | **引擎的既有行为，不是缺陷**。例如：饱和度超出菜单滑块范围；`pe != 0` 时创意风格失效。上游自家的配方就是有意这么写的 | 不会 |
 
 `note` 是给**写新配方的人**看的 —— 它告诉你「你设了这个，但它不会有效果」。
+
+---
+
+## 品牌包元数据（`packs.json`）
+
+`filters.json` 描述「有哪些配方」；`packs.json` 描述「这些配方怎么按品牌切成一份份独立 APK」。
+它也是品牌包构建矩阵的**唯一事实来源**：`.github/workflows/release.yml` 在运行时从这份文件
+推导矩阵，绝不把包列表抄进 YAML。详见 [../docs/BRAND-PACKS.md](../docs/BRAND-PACKS.md)。
+
+### 顶层字段
+
+| 字段 | 说明 |
+|---|---|
+| `package_base` | 基包名 `com.hairuoliu.sonysoocrecipes`；每个包的包名是它加一段 `.id` |
+| `packs` | 品牌包数组，每个包一项 |
+| `unassigned_groups` | 故意不进任何包的组，附理由（不是漏写） |
+
+### 一个包（`packs[]` 的一项）
+
+| 字段 | 必填 | 说明 |
+|---|---|---|
+| `id` | ✔ | 包标识，也是包名后缀、源码子目录名、图标集目录名 |
+| `app_name` | ✔ | 装到相机上显示的名字，约定用 `<Brand> Looks` 形式（见 BRAND-PACKS §8） |
+| `groups` | ✔ | 该包编译进的 `groups[].id` 列表，**必须同属一个品牌** |
+| `icon_set` | ✔ | 图标集目录名，对应 `assets/app-icon-packs/<icon_set>/` |
+
+`groups` 引用的组必须存在于 `filters.json` 的 `groups`，且是单品牌组。**跨两个品牌的组**
+（如 `canon-nikon`、`pana-olympus`）不能直接做包，要先拆成每个品牌一个组。`film-studio-matrix`
+条目编译不进任何包，所以一个组若只含这类条目，该包这一组会贡献 0 款可编译配方。
+
+### `unassigned_groups`
+
+这些是刻意不进任何包的组，仍可在全量版 App 里用到。记在这里而不是删掉，好让缺口显在数据里：
+
+| 组 | 理由 |
+|---|---|
+| `canon-nikon` | 跨两个品牌——要先拆成各一个包 |
+| `pana-olympus` | 跨两个品牌——同理要拆 |
+| `other-stocks` | 混血胶片，无单一品牌 |
+| `cine` | 不是相机品牌，是电影感风格家族 |
+| `app-look` | 不是相机品牌，是社交 / App 滤镜风 |
+
+新增一个包时，往 `packs` 加一项即可；`release.yml` 的矩阵会自动纳入，无需改工作流。

@@ -289,6 +289,14 @@ Steps in order:
 > (`TestPinnedUpstream`) fails if they disagree. A tag must always build the exact upstream it was
 > validated against; an unpinned clone could build a different APK next month.
 
+**Brand packs.** The same pipeline also builds one app per camera brand. `catalog/packs.json`
+lists the packs, and `release.yml` derives its build matrix from that file at run time — one
+job per pack plus the all-in-one, each cloning upstream fresh and running `apply_pack.py` then
+`gen_recipes.py --pack <id>`. A pack differs from the all-in-one only in package name,
+`app_name`, and launcher icon; the *why* is in [docs/BRAND-PACKS.md](BRAND-PACKS.md). Gate 6
+(`check_assets.py`) now also covers `assets/app-icon/` and every
+`assets/app-icon-packs/<icon_set>/`, so a missing density or an orphan icon set fails the build.
+
 ---
 
 ## 8. Repository layout
@@ -298,8 +306,10 @@ This section maps the tree so the paths above make sense.
 ```
 sony-sooc-recipes/
 ├── assets/app-icon/          launcher icon set — transparent RGBA, 4 densities + 512 px master
+├── assets/app-icon-packs/     per-brand-pack launcher icon sets, one dir per icon_set
 ├── catalog/
 │   ├── filters.json          ★ single source of truth — all filters live here
+│   ├── packs.json             brand-pack definitions (id, app_name, groups, icon_set) + unassigned_groups
 │   ├── index.html            browsable filter browser (single file, no deps)
 │   └── README.md             field reference
 ├── docs/
@@ -307,6 +317,8 @@ sony-sooc-recipes/
 │   ├── INSTALL.zh-CN.md            Chinese install guide
 │   ├── ARCHITECTURE.md             this file (English)
 │   ├── ARCHITECTURE.zh-CN.md       中文版
+│   ├── BRAND-PACKS.md              brand packs — why, how, trademark, icons
+│   ├── BRAND-PACKS.zh-CN.md        品牌包中文版
 │   ├── ADDING-FILTERS.md           full "add a filter" flow
 │   ├── ADDING-FILTERS.zh-CN.md     Chinese version
 │   ├── FAQ.md                      frequently asked questions
@@ -317,14 +329,15 @@ sony-sooc-recipes/
 │   └── assets/                     diagrams + README (architecture.svg, engines.svg, parameters.svg, install-flow.svg)
 ├── tools/
 │   ├── validate_catalog.py   registry gate (CI gate 1)
-│   ├── gen_recipes.py        registry → Recipes.java (CI gate 2 step)
+│   ├── gen_recipes.py        registry → Recipes.java (CI gate 2 step); --pack narrows to one brand
 │   ├── check_fidelity.py     value-for-value vs upstream (CI gate 3)
 │   ├── gen_browser.py        browser generator (CI gate 4)
 │   ├── check_readme_counts.py README counts (CI gate 5)
-│   ├── check_assets.py       image / asset references (CI gate 6)
+│   ├── check_assets.py       image / asset references + icon-set gate (CI gate 6)
 │   ├── install-wifi.sh       Wi-Fi ADB install helper
-│   ├── build_app_icon.py     regenerates the launcher icon set from a source photo
-│   └── build_apk.sh          calls upstream build.sh with the generated Recipes.java + our icon
+│   ├── apply_pack.py         rewrites package name + app name for one brand pack
+│   ├── build_app_icon.py     regenerates the all-in-one launcher icon set from a source photo
+│   └── build_apk.sh          calls upstream build.sh; --pack / --all-packs build the packs
 ├── tests/
 │   ├── test_catalog.py       33 cases + invariants (CI gate 1b)
 │   ├── cases.json            pinned values for authored-here recipes

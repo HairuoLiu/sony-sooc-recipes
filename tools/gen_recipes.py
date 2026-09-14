@@ -8,22 +8,39 @@ the only thing that writes it. Add a filter to catalog/filters.json, run this, r
     python tools/gen_recipes.py                   # write into the fork at --fork
     python tools/gen_recipes.py --stdout          # print to stdout, write nothing
     python tools/gen_recipes.py --check           # fail if the file on disk is stale
+    python tools/gen_recipes.py --pack leica      # only that pack's groups (see packs.json)
 
 Layout it expects in the fork:
 
     <fork>/src/com/hairuoliu/sonysoocrecipes/Recipes.java
+
+--pack reads catalog/packs.json and narrows both the recipe set and the emitted package
+name. The package name matters as much as the subset: a pack's Recipes.java has to carry
+the pack's package, or the file will not compile into that pack's APK.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CATALOG = ROOT / "catalog" / "filters.json"
-RELATIVE_TARGET = Path("src/com/hairuoliu/sonysoocrecipes/Recipes.java")
+DEFAULT_PACKS = ROOT / "catalog" / "packs.json"
+PACKAGE_BASE = "com.hairuoliu.sonysoocrecipes"
+
+
+def package_for(pack: dict | None) -> str:
+    """`com.hairuoliu.sonysoocrecipes` for the all-in-one app, `...<id>` for a pack."""
+    return PACKAGE_BASE if pack is None else f"{PACKAGE_BASE}.{pack['id']}"
+
+
+def target_for(package: str) -> Path:
+    """A Java package maps to a directory path — `com.a.b` -> `com/a/b`."""
+    return Path("src") / Path(*package.split(".")) / "Recipes.java"
 
 # group id -> the Java constant name the generated static block refers to.
 # Order here is irrelevant; order comes from the catalog's `groups` array.
@@ -51,7 +68,7 @@ DEFAULT_EV = 0
 DEFAULT_DRO = 6
 DRO_AUTO = 6
 
-HEADER = '''package com.hairuoliu.sonysoocrecipes;
+HEADER = '''package {package};
 
 /**
  * GENERATED FILE — do not edit by hand.
@@ -161,15 +178,38 @@ def emit_recipe(f: dict, group_const: str) -> str:
     return f"new Recipe({head}),"
 
 
-def generate(catalog: dict) -> str:
-    groups = [g for g in catalog["groups"] if g["id"] in GROUP_JAVA]
-    missing = [g["id"] for g in catalog["groups"] if g["id"] not in GROUP_JAVA]
-    if missing:
-        raise SystemExit(f"groups with no Java constant: {', '.join(missing)}")
+def generate(catalog: dict, group_ids: list[str] | None = None,
+             package: str = PACKAGE_BASE) -> str:
+    """The whole catalog, or only `group_ids` when building a brand pack.
+
+    The subset is applied *before* the ordering checks, so a pack is held to exactly the
+    same contiguity contract as the all-in-one app rather than being a special case.
+    """
+    if group_ids is None:
+        groups = list(catalog["groups"])
+    else:
+        known = {g["id"] for g in catalog["groups"]}
+        unknown = [g for g in group_ids if g not in known]
+        if unknown:
+            raise SystemExit("packs.json names groups that are not in the catalog: "
+                             + ", ".join(unknown))
+        wanted = set(group_ids)
+        groups = [g for g in catalog["groups"] if g["id"] in wanted]
 
     recipes = [f for f in catalog["filters"] if f.get("engine") == "recipe-lab"]
+    if group_ids is not None:
+        recipes = [f for f in recipes if f["group"] in set(group_ids)]
     if not recipes:
         raise SystemExit("catalog holds no recipe-lab filters")
+
+    # Drop groups with nothing in them. The emitted static block leaves GROUP_START at -1
+    # for an empty group, and MainActivity's prev/next-group walk assumes a group can be
+    # entered — so an empty group is a crash waiting for a button press, not just noise.
+    groups = [g for g in groups if any(f["group"] == g["id"] for f in recipes)]
+
+    missing = [g["id"] for g in groups if g["id"] not in GROUP_JAVA]
+    if missing:
+        raise SystemExit(f"groups with no Java constant: {', '.join(missing)}")
 
     # verify contiguity — the GROUP_START static block below depends on it
     order: list[str] = []
@@ -184,7 +224,7 @@ def generate(catalog: dict) -> str:
     if order != [g["id"] for g in groups if any(f["group"] == g["id"] for f in recipes)]:
         raise SystemExit("catalog recipes do not follow the declared group order")
 
-    out = [HEADER.format(count=len(recipes), group_count=len(groups))]
+    out = [HEADER.format(count=len(recipes), group_count=len(groups), package=package)]
     out.append(f'    // ---- groups (brands) - recipes below MUST be listed in group order')
     out.append(
         "    public static final String[] GROUPS = { "
@@ -232,9 +272,38 @@ def generate(catalog: dict) -> str:
     return "\n".join(out) + "\n"
 
 
+def emitted_group_labels(source: str) -> list[str]:
+    """The group labels that actually made it into the generated GROUPS array.
+
+    Reported instead of `len(pack['groups'])` because those two differ: a requested group
+    whose every entry belongs to the other engine contributes nothing and is dropped.
+    That is not a corner case — `fuji-sim` lists 26 filters but only 16 are compilable,
+    and `ricoh-gr` lists 16 with 11 compilable, so a pack is routinely smaller than its
+    group counts suggest.
+    """
+    m = re.search(r"String\[\] GROUPS = \{([^}]*)\};", source)
+    return re.findall(r'"([^"]*)"', m.group(1)) if m else []
+
+
+def load_pack(packs_file: Path, pack_id: str) -> dict:
+    packs = json.loads(packs_file.read_text(encoding="utf-8"))["packs"]
+    matches = [p for p in packs if p["id"] == pack_id]
+    if not matches:
+        raise SystemExit(f"no pack {pack_id!r} in {packs_file} "
+                         f"(have: {', '.join(p['id'] for p in packs)})")
+    pack = matches[0]
+    if not pack.get("groups"):
+        raise SystemExit(f"pack {pack_id!r} lists no groups")
+    return pack
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--catalog", type=Path, default=DEFAULT_CATALOG)
+    ap.add_argument("--packs", type=Path, default=DEFAULT_PACKS,
+                    help="pack definitions, read by --pack")
+    ap.add_argument("--pack", metavar="ID",
+                    help="emit only this pack's groups, under this pack's package name")
     ap.add_argument("--fork", type=Path, default=ROOT / "build" / "recipe-lab-sony-pmca",
                     help="path to the upstream checkout to generate into")
     ap.add_argument("--stdout", action="store_true", help="print instead of writing")
@@ -242,20 +311,25 @@ def main() -> int:
                     help="exit non-zero if the file on disk differs from the generated one")
     args = ap.parse_args()
 
-    source = generate(json.loads(args.catalog.read_text(encoding="utf-8")))
+    catalog = json.loads(args.catalog.read_text(encoding="utf-8"))
+    pack = load_pack(args.packs, args.pack) if args.pack else None
+    package = package_for(pack)
+
+    source = generate(catalog, group_ids=(pack["groups"] if pack else None), package=package)
 
     if args.stdout:
         sys.stdout.write(source)
         return 0
 
-    target = args.fork / RELATIVE_TARGET
+    target = args.fork / target_for(package)
+    who = f"--pack {pack['id']}" if pack else "python tools/gen_recipes.py"
 
     if args.check:
         if not target.exists():
-            print(f"STALE — {target} does not exist; run python tools/gen_recipes.py")
+            print(f"STALE — {target} does not exist; run {who}")
             return 1
         if target.read_text(encoding="utf-8") != source:
-            print(f"STALE — {target} differs from the catalog; run python tools/gen_recipes.py")
+            print(f"STALE — {target} differs from the catalog; run {who}")
             return 1
         print(f"OK — {target} matches {args.catalog}")
         return 0
@@ -263,7 +337,19 @@ def main() -> int:
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(source, encoding="utf-8", newline="\n")
     count = source.count("new Recipe(")
-    print(f"wrote {target}  ({count} recipes)")
+    if pack:
+        emitted = emitted_group_labels(source)
+        print(f"wrote {target}  ({count} recipes, {len(emitted)} group(s), "
+              f"package {package})")
+        # A requested group that produced nothing is worth saying out loud: its filters all
+        # belong to the other engine, so the pack ships without them.
+        emitted_ids = [g["id"] for g in catalog["groups"] if g["label"] in emitted]
+        empty = [g for g in pack["groups"] if g not in emitted_ids]
+        if empty:
+            print(f"      note: {', '.join(empty)} contributed no compilable recipe "
+                  f"(those entries belong to the other engine) — the pack ships without them")
+    else:
+        print(f"wrote {target}  ({count} recipes)")
     return 0
 
 

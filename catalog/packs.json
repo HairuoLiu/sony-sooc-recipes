@@ -1,0 +1,83 @@
+{
+  "$comment": [
+    "Brand packs: one APK per brand, built from the SAME codebase and the SAME catalog.",
+    "A pack is not a fork. tools/apply_pack.py rewrites the package name and the app name",
+    "inside a fresh upstream checkout, and tools/gen_recipes.py --pack emits only that",
+    "pack's groups into Recipes.java. Everything else is byte-identical to the all-in-one app.",
+    "",
+    "Two things make a pack work that are easy to miss:",
+    "  1. The Android package name MUST differ per pack, or the packages cannot be installed",
+    "     side by side (Android identifies an app by its package name; same name = an update).",
+    "  2. The camera's settings store is shared between packs. Each pack keeps its own",
+    "     snapshot (getFilesDir() is per-package), but only one recipe can be active on the",
+    "     camera at a time. Installing three packs does NOT give you three cameras.",
+    "",
+    "app_name is the string that lands in res/values/strings.xml. It is deliberately kept to",
+    "a <brand> + adjective form rather than a bare brand name or a camera model number:",
+    "naming a distributed app after a trademark implies endorsement, which is the risk that",
+    "actually gets a project taken down. See docs/BRAND-PACKS.md."
+  ],
+  "package_base": "com.hairuoliu.sonysoocrecipes",
+  "packs": [
+    {
+      "id": "leica",
+      "app_name": "Leica Looks",
+      "groups": ["leica"],
+      "icon_set": "leica"
+    },
+    {
+      "id": "fujifilm",
+      "app_name": "Fujifilm Looks",
+      "groups": ["fuji-sim", "fuji-film"],
+      "icon_set": "fujifilm"
+    },
+    {
+      "id": "ricoh",
+      "app_name": "Ricoh GR Looks",
+      "groups": ["ricoh-gr"],
+      "icon_set": "ricoh"
+    },
+    {
+      "id": "kodak",
+      "app_name": "Kodak Looks",
+      "groups": ["kodak"],
+      "icon_set": "kodak"
+    },
+    {
+      "id": "pentax",
+      "app_name": "Pentax Looks",
+      "groups": ["pentax"],
+      "icon_set": "pentax"
+    },
+    {
+      "id": "ilford",
+      "app_name": "Ilford Looks",
+      "groups": ["ilford"],
+      "icon_set": "ilford"
+    },
+    {
+      "id": "hasselblad",
+      "app_name": "Hasselblad Looks",
+      "groups": ["hasselblad"],
+      "icon_set": "hasselblad"
+    },
+    {
+      "id": "sony",
+      "app_name": "Sony Looks",
+      "groups": ["sony"],
+      "icon_set": "sony"
+    }
+  ],
+  "unassigned_groups": {
+    "$comment": [
+      "Groups deliberately left out of every pack. They stay reachable in the all-in-one",
+      "app, which is still built and still published. Assigned here rather than silently",
+      "dropped, so the gap is visible in the data instead of in a bug report."
+    ],
+    "canon-nikon": "spans two brands - needs one pack each before it can be split",
+    "pana-olympus": "spans two brands - needs one pack each before it can be split",
+    "other-stocks": "mixed heritage stocks (Agfa, Polaroid, Ferrania...) - no single brand",
+    "cine": "not a camera brand - a motion-picture look family",
+    "app-look": "not a camera brand - social/app filter looks"
+  }
+}

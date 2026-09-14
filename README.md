@@ -250,6 +250,11 @@ Read **[docs/ADDING-FILTERS.md](docs/ADDING-FILTERS.md)**. The short version:
 You do not have to. CI builds it and attaches it to the release whenever a `v*` tag is
 pushed — see **[docs/INSTALL.md](docs/INSTALL.md)** for the download, or the Releases page.
 
+Brand packs — one small app per camera brand, each with its own package name and launcher
+icon so several can sit side by side on the camera — are documented in
+**[docs/BRAND-PACKS.md](docs/BRAND-PACKS.md)**. The all-in-one app stays the default
+download.
+
 If you want to anyway, the toolchain is JDK 17, Android build-tools 30.0.3, platform 28
 and **NDK r16b** — the last NDK carrying the GCC toolchain an Android 2.3.7 / API 10 target
 needs. About 3 GB. `.github/workflows/release.yml` is the working recipe; read it rather

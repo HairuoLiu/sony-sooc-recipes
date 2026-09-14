@@ -158,3 +158,35 @@ LUT 收藏与各厂商对机身色彩模式、胶片种类的**公开描述**。
 ## 四、反馈
 
 发现权利问题请开 issue，标题以 `[rights]` 开头。会优先处理。
+
+---
+
+## 五、品牌包图标素材
+
+品牌包（`docs/BRAND-PACKS.md`）的启动图标，是用 Wikimedia Commons 上各品牌最知名相机的**自由许可
+照片**构建的，由 `tools/build_pack_icons.py` 生成进 `assets/app-icon-packs/<icon_set>/`。图标随 APK
+一起发布，所以署名必须随 APK 走 —— 它进本文件（下方表格），也进每个包的发布说明。
+
+| 包 (`id`) | 品牌 | 相机型号 | 作者 | 许可 | 来源页 |
+|---|---|---|---|---|---|
+| `kodak` | Kodak | Brownie 127 | 多多123 | CC BY 4.0（https://creativecommons.org/licenses/by/4.0/） | 待补（Wikimedia Commons 文件页） |
+| `ilford` | Ilford | Sporti | Matthew Paul Argall | CC BY 4.0（https://creativecommons.org/licenses/by/4.0/） | 待补（Wikimedia Commons 文件页） |
+| `pentax` | Pentax | K1000 | Terry Presley | CC BY 2.0（https://creativecommons.org/licenses/by/2.0/） | 待补（Wikimedia Commons 文件页） |
+| `hasselblad` | Hasselblad | 500C | Holger Ellgaard | 公有领域（PD-self） | 待补（Wikimedia Commons 文件页） |
+| `leica` | Leica | — | 待补 | 待补 | 待补 |
+| `fujifilm` | Fujifilm | — | 待补 | 待补 | 待补 |
+| `ricoh` | Ricoh | — | 待补 | 待补 | 待补 |
+| `sony` | Sony | — | 待补 | 待补 | 待补 |
+
+前四行是已确认的素材；后四行标「待补」，**尚未溯源，不编造** —— 拿到作者与许可后再补。
+
+几点必须说清的边界：
+
+- **`CC BY` 允许商用，但必须署名。** 不署名就商用违反许可。署名随 APK 走：本表格是一处，每个包的
+  发布说明是另一处。
+- **`CC BY-SA` 被刻意排除。** 它的「相同方式共享」条款会波及整个 App，而不只是那张图标，所以品牌包
+  图标一律不用 `CC BY-SA` 照片。
+- **全量版默认图标（`assets/app-icon/`）是本仓库原创作**，由 `tools/build_app_icon.py` 从源照片生成，
+  不依赖上述任何素材，无需此类署名。
+- 品牌包图标**没有**抠掉背景（全量版默认图标才抠），见 `docs/BRAND-PACKS.md` §7。
+- 再分发这些包的人，自行承担对应的商标与署名风险（见 `docs/BRAND-PACKS.md` §8）。
