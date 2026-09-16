@@ -25,8 +25,8 @@ The catalog already holds **155 recipes across 14 groups / two engines**. Many
 style intervals are already saturated. Adding "another faded warm negative" does not
 increase coverage — it dilutes it. The catalog is a reference, not a pile.
 
-`docs/MAPPING-RECIPES.md` §1.2 sorts the existing 93 recipe-lab entries into 12 visual
-bands. The bands that are **already full** (do not add more of these):
+`docs/MAPPING-RECIPES.md` §1.2 sorts the original recipe-lab entries (a snapshot) into
+12 visual bands. The bands that are **already full** (do not add more of these):
 
 - **Band 3 — low-saturation faded / cinematic** (classic-chrome, eterna, gr-negative-film,
   nikon-flat, rec709-video, gr-bleach-bypass). Generic "faded" looks are covered.

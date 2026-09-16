@@ -25,8 +25,8 @@ with the APK).
 
 ## Attribution table
 
-All eight packs have an icon. Two are CC0, which is the ideal outcome: CC0 waives
-attribution entirely, so those two carry no obligation at all. The other six are CC BY, so
+All eight packs have an icon. Three carry no attribution obligation at all — two are CC0
+(`fujifilm`, `kodak`) and one is public domain (`hasselblad`). The other five are CC BY, so
 their author credit is a licence condition.
 
 | Pack | Camera | Author | Licence | Source |
@@ -34,18 +34,18 @@ their author credit is a licence condition.
 | `fujifilm` | Fujifilm FinePix X100 (2011) | frank mckenna (frankiefoto), via Unsplash | **CC0** — no attribution required | [File:Fujifilm FinePix X100 with Fujinon Asph Super EBC 23mm F2](https://commons.wikimedia.org/wiki/File:Fujifilm_FinePix_X100_with_Fujinon_Asph_Super_EBC_23mm_F2_(Unsplash_JbTBJYOEc28).jpg) |
 | `hasselblad` | Hasselblad 500C (1957) | Holger Ellgaard | Public domain (PD-self) — no attribution required | [File:Hasselblad 500C.jpg](https://commons.wikimedia.org/wiki/File:Hasselblad_500C.jpg) |
 | `ilford` | Ilford Sporti (c. 1955) | Matthew Paul Argall | CC BY 4.0 — attribution required | [File:Ilford Sporti camera.jpg](https://commons.wikimedia.org/wiki/File:Ilford_Sporti_camera.jpg) |
-| `kodak` | Kodak Brownie 127 (1952–1963) | 多多123 | CC BY 4.0 — attribution required | [File:Kodak Brownie 127.jpg](https://commons.wikimedia.org/wiki/File:Kodak_Brownie_127.jpg) |
+| `kodak` | Kodak Instamatic 255-X (1970–1972) | 2538O | **CC0** — no attribution required | [File:Kodak Instamatic 255-X.jpg](https://commons.wikimedia.org/wiki/File:Kodak_Instamatic_255-X.jpg) |
 | `leica` | Leica M3 (1954–1966) | Hannes Grobe | CC BY 3.0 — attribution required | [File:Leica-m3 hg.JPG](https://commons.wikimedia.org/wiki/File:Leica-m3_hg.JPG) |
 | `pentax` | Asahi Pentax K1000 (1976–1997) | Terry Presley | CC BY 2.0 — attribution required | [File:Pentax K1000 (6301325288).jpg](https://commons.wikimedia.org/wiki/File:Pentax_K1000_(6301325288).jpg) |
 | `ricoh` | Ricoh GR (2013) | Kārlis Dambrāns | CC BY 2.0 — attribution required | [File:Ricoh GR (16159018330).jpg](https://commons.wikimedia.org/wiki/File:Ricoh_GR_(16159018330).jpg) |
-| `sony` | Sony α7 (ILCE-7, 2013) | Hans Braxmeier | **CC0** — no attribution required | [File:Sony Alpha 7.jpg](https://commons.wikimedia.org/wiki/File:Sony_Alpha_7.jpg) |
+| `sony` | Sony α7 (ILCE-7, 2013) | Henry Söderlund | CC BY 2.0 — attribution required | [File:Sony A7, A7R, A7S — by Henry Söderlund](https://commons.wikimedia.org/wiki/File:Sony_A7,_A7R,_A7S_-_by_Henry_S%C3%B6derlund_(14700037048).jpg) |
 
 Licence texts: [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) ·
 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) ·
 [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/) ·
 [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)
 
-Six of the eight therefore need a visible credit wherever the app is distributed. See
+Five of the eight therefore need a visible credit wherever the app is distributed. See
 `NOTICE.md` for the block that carries it, and remember that an APK is distributed on its
 own — a credit that exists only in this repository does not travel with it.
 
@@ -66,10 +66,12 @@ here so it can be argued with rather than rediscovered:
 - **Leica M3** — the definitive Leica rangefinder. Introduced the M-mount and the
   twin-window silhouette that every later M camera inherited. The Barnack screw-mount Leica I
   is historically more foundational, but the M3 is what "a Leica" looks like.
-- **Kodak Brownie 127** — "Brownie" is the name Kodak is most identified with, and this is the
-  representative 1950s plastic-body Brownie with a clean product photograph available. The
-  original 1900 Brownie is more historically significant; the free-licensed photographs of it
-  are cluttered.
+- **Kodak Instamatic 255-X** — the Instamatic line (126-cartridge, 1963–1970) is the
+  best-selling camera range ever, and the name became generic for "point-and-shoot". The
+  255-X is a representative 1970 model with a clean, freely-licensed product photograph. The
+  original 1900 Brownie is more historically foundational, but its free photographs are
+  cluttered; an earlier pick (the Brownie 127) was a minor 127-film variant and was replaced
+  for not being the icon.
 - **Ilford Sporti** — Ilford is a film manufacturer (HP5, FP4, Delta), not a camera maker; it
   badged cameras built by Dacora of Germany. The Sporti is the best-documented of those under a
   free licence. The Sportsman was considered but has no equally usable photograph.

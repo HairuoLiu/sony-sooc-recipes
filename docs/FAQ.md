@@ -123,7 +123,7 @@ No. You open the app once to preview and store a recipe; after that it lives in 
 
 ### Can I install several recipes at once? Is switching easy?
 
-You install the app once, and it carries all 99 recipes. You store **one** recipe into the camera at a time (press the center button), and storing a new one overwrites the previous. Switching is quick: open the app, turn the dial to the look you want, press center, done — no reinstall needed.
+You install the app once, and it carries all 155 recipes. You store **one** recipe into the camera at a time (press the center button), and storing a new one overwrites the previous. Switching is quick: open the app, turn the dial to the look you want, press center, done — no reinstall needed.
 
 > **Honest note.** Only one recipe is active at a time; there is no "layer several looks." If you want A for portraits and B for landscapes, you switch between them in the app as you shoot.
 
@@ -143,6 +143,6 @@ It is safe **only on a trusted network, used briefly**. Opening ADB (via OpenMem
 
 ## Where do I start if I just want a certain look?
 
-Open the filter browser at [`catalog/index.html`](catalog/index.html) — a single-file, no-dependency page that lists all 99 recipes with their groups and tones. Filter by brand (Kodak, Fujifilm, Ricoh GR, Ilford…), by color vs. mono, or by engine, then find the recipe whose name matches the film you have in mind.
+Open the filter browser at [`catalog/index.html`](catalog/index.html) — a single-file, no-dependency page that lists all 155 recipes with their groups and tones. Filter by brand (Kodak, Fujifilm, Ricoh GR, Ilford…), by color vs. mono, or by engine, then find the recipe whose name matches the film you have in mind.
 
 If you are unsure, start from the look you already like: a warm everyday negative? Try `kodak-portra-400` or `fuji-superia-400`. A moody cinematic night? Try `cinestill-800t`. A clean black-and-white? Try `ilford-hp5` or `acros`. Pick one, install it, shoot a roll, and switch from there — the whole point is that trying the next look costs you nothing but a dial turn.

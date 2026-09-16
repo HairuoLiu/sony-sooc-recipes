@@ -22,7 +22,7 @@
 catalog 现在已有 **155 款 / 14 组 / 两套引擎**。很多风格区间已经饱和。再添一款
 「又一款褪色暖负片」并不能增加覆盖度——只会稀释仓库。catalog 是参考资料，不是堆料场。
 
-`docs/MAPPING-RECIPES.md` §1.2 把现有 93 款 recipe-lab 归成 12 个视觉区间。以下区间
+`docs/MAPPING-RECIPES.md` §1.2 把最初那批 recipe-lab（一份快照）归成 12 个视觉区间。以下区间
 **已经满员**（不要再往里加）：
 
 - **区间 3 — 低饱和褪色 / 电影感**（classic-chrome、eterna、gr-negative-film、nikon-flat、

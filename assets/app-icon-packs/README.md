@@ -9,7 +9,7 @@ with no set here silently keeps `../app-icon/`, so a half-finished set cannot br
 | `fujifilm/` | `fujifilm` | Fujifilm FinePix X100 |
 | `hasselblad/` | `hasselblad` | Hasselblad 500C |
 | `ilford/` | `ilford` | Ilford Sporti |
-| `kodak/` | `kodak` | Kodak Brownie 127 |
+| `kodak/` | `kodak` | Kodak Instamatic 255-X |
 | `leica/` | `leica` | Leica M3 |
 | `pentax/` | `pentax` | Asahi Pentax K1000 |
 | `ricoh/` | `ricoh` | Ricoh GR (2013) |
