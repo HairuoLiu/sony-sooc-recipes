@@ -31,11 +31,16 @@ catalog gates plus the self-test that proves the gates still fail on broken inpu
   this pack.
 - **All pack icons re-cut as transparent silhouettes.** Every pack icon is now a transparent
   silhouette keyed from its source photograph, matching the all-in-one icon's style.
-- **Six pack icons use user-supplied commercial material.** `leica`, `fujifilm`, `filmstocks`,
-  `kodak`, `ilford` and `hasselblad` now use all-rights-reserved commercial photographs /
+- **Seven pack icons use user-supplied commercial material.** `leica`, `fujifilm`, `filmstocks`,
+  `kodak`, `ilford`, `hasselblad` and `sony` now use all-rights-reserved commercial photographs /
   official manufacturer renders supplied by the user, with no licence granted. The publishing
   party carries the risk; see `assets/app-icon-packs/CREDITS.md` for the honest provenance and
-  the relaxed licence rule.
+  the relaxed licence rule. That leaves only two packs (`ricoh`, `pentax`) on CC BY 2.0, whose
+  credits still have to travel with the APK.
+- **Three of those icons changed subject.** `filmstocks` shows Fujifilm film canisters (it is
+  named after the film, not a body), `ilford` a CineStill film product instead of the earlier
+  composed Cinestill + Ilford pair, and `sony` a user-supplied camera render instead of the
+  Wikimedia α7 photograph.
 
 ---
 

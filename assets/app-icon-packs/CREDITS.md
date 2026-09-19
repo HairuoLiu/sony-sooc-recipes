@@ -3,17 +3,17 @@
 Most brand packs carry a launcher icon built from a photograph of the camera that pack is
 named after. Three packs are the exception, and one is a merged app:
 
-- `filmstocks` is named after a film stock, not a camera — its icon is a Kodak Portra 400
-  canister.
+- `filmstocks` is named after a film stock, not a camera — its icon shows Fujifilm film
+  canisters.
 - `kodak` keeps the Kodak name, but its current icon is a Kodak Gold 400 / 400 film canister,
   not a camera body.
-- `ilford` is now the **Cinestill + Ilford** app: its icon is composed from a Cinestill 800T
-  35 mm product shot and an Ilford HP5 135 product shot, neither of which is a camera.
+- `ilford` is now the **Cinestill + Ilford** app, and its icon is a CineStill film product
+  shot, not a camera.
 
 So the "famous camera" premise holds for six of the nine packs (`leica`, `fujifilm`, `ricoh`,
 `pentax`, `hasselblad`, `sony`); the other three (`filmstocks`, `kodak`, `ilford`) depict film
 stock. This file records where every one of those photographs came from and under what licence,
-because for most of them **attribution is a licence condition, not a courtesy**.
+because for the CC BY ones **attribution is a licence condition, not a courtesy**.
 
 ## What the licence rule is, and why it is this strict
 
@@ -33,10 +33,10 @@ this file, `NOTICE.md`, and the release notes for the pack in question (a user w
 only `SonySOOCRecipes-kodak.apk` never sees this repository, so the credits have to travel
 with the APK).
 
-### The rule was deliberately relaxed for six user-supplied images
+### The rule was deliberately relaxed for seven user-supplied images
 
-Six of the nine packs (`leica`, `fujifilm`, `filmstocks`, `kodak`, `ilford`, `hasselblad`)
-now use photographs that the **user supplied specifically for this project** — commercial
+Seven of the nine packs (`leica`, `fujifilm`, `filmstocks`, `kodak`, `ilford`, `hasselblad`,
+`sony`) now use photographs that the **user supplied specifically for this project** — commercial
 product photographs and official manufacturer renders. These are **all rights reserved,
 unlicensed** material. No licence of any kind (not CC0, not CC BY, not public domain) was
 granted:
@@ -48,34 +48,34 @@ granted:
   inside the APK. That risk is the publisher's to accept or decline; it is recorded here
   rather than hidden.
 
-The three remaining packs (`ricoh`, `pentax`, `sony`) keep their original CC BY 2.0
+The two remaining packs (`ricoh`, `pentax`) keep their original CC BY 2.0
 photographs from Wikimedia Commons and still require a visible credit wherever the app is
 distributed.
 
 ## Attribution table
 
-Nine packs have an icon. Six of them (`leica`, `fujifilm`, `filmstocks`, `kodak`, `ilford`,
-`hasselblad`) carry **no licence at all** — all-rights-reserved commercial photographs
+Nine packs have an icon. Seven of them (`leica`, `fujifilm`, `filmstocks`, `kodak`, `ilford`,
+`hasselblad`, `sony`) carry **no licence at all** — all-rights-reserved commercial photographs
 supplied by the user, recorded below with their source but with **no attribution obligation**,
-because no licence was granted. The other three (`ricoh`, `pentax`, `sony`) are **CC BY 2.0**,
+because no licence was granted. The other two (`ricoh`, `pentax`) are **CC BY 2.0**,
 so their author credit is a licence condition and must travel with the APK.
 
 | Pack | Depicts | Author / source | Licence | Source |
 |------|---------|----------------|---------|--------|
 | `leica` | Leica M9 (2009) | sketch.vip — Leica M9 product render | **All rights reserved** — user-supplied, no licence granted | sketch.vip M9 render |
 | `fujifilm` | Fujifilm X100VI (2023) | fujifilm-x.b-cdn.net — X100VI product thumbnail (480×480) | **All rights reserved** — user-supplied, no licence granted | fujifilm-x.b-cdn.net X100VI product thumbnail |
-| `filmstocks` | Kodak Portra 400 135 canister | Google Images thumbnail of a Kodak Portra 400 canister | **All rights reserved** — user-supplied, no licence granted | Google Images thumbnail (Kodak Portra 400 canister) |
+| `filmstocks` | Fujifilm film canisters | user-supplied product photograph | **All rights reserved** — user-supplied, no licence granted | user-supplied (pasted image) |
 | `ricoh` | Ricoh GR (2013) | Kārlis Dambrāns | CC BY 2.0 — attribution required | [File:Ricoh GR (16159018330).jpg](https://commons.wikimedia.org/wiki/File:Ricoh_GR_(16159018330).jpg) |
 | `kodak` | Kodak Gold 400 / 400 film canister | prophotosupply.com — Kodak Gold 400 product photo | **All rights reserved** — user-supplied, no licence granted | prophotosupply.com Kodak Gold 400 |
 | `pentax` | Asahi Pentax K1000 (1976–1997) | Terry Presley | CC BY 2.0 — attribution required | [File:Pentax K1000 (6301325288).jpg](https://commons.wikimedia.org/wiki/File:Pentax_K1000_(6301325288).jpg) |
-| `ilford` | Cinestill 800T 35 mm + Ilford HP5 135, composed | composed from images.squarespace-cdn.com (Cinestill 800T 35 mm product shot) and ilfordphoto.com (HP5 135 product shot) | **All rights reserved** — user-supplied, no licence granted | images.squarespace-cdn.com Cinestill 800T + ilfordphoto.com HP5 |
+| `ilford` | CineStill film product | user-supplied product photograph | **All rights reserved** — user-supplied, no licence granted | user-supplied (pasted image) |
 | `hasselblad` | Hasselblad X2D II 100C (2022) | cameraelectronic.com.au — official X2D II 100C render (Shopify CDN) | **All rights reserved** — user-supplied, no licence granted | cameraelectronic.com.au product page (Shopify CDN) |
-| `sony` | Sony α7 (ILCE-7, 2013) | Henry Söderlund | CC BY 2.0 — attribution required | [File:Sony A7, A7R, A7S — by Henry Söderlund](https://commons.wikimedia.org/wiki/File:Sony_A7,_A7R,_A7S_-_by_Henry_S%C3%B6derlund_(14700037048).jpg) |
+| `sony` | Sony camera | user-supplied product photograph | **All rights reserved** — user-supplied, no licence granted | user-supplied (pasted image) |
 
 Licence texts: [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)
 
-Three of the nine therefore need a visible credit wherever the app is distributed (the CC BY
-2.0 packs: `ricoh`, `pentax`, `sony`). See `NOTICE.md` for the block that carries it, and
+Two of the nine therefore need a visible credit wherever the app is distributed (the CC BY
+2.0 packs: `ricoh`, `pentax`). See `NOTICE.md` for the block that carries it, and
 remember that an APK is distributed on its own — a credit that exists only in this repository
 does not travel with it.
 
@@ -101,11 +101,11 @@ stock* depicted. The reasoning, kept here so it can be argued with rather than r
 - **Kodak Gold 400 / 400 canister** — Kodak Gold 400 is one of Kodak's best-selling consumer
   colour negatives, and its canister is the most recognisable Kodak object that is not a
   camera. The earlier Instamatic 255-X pick was a camera; the current icon is the film itself.
-- **Ilford / Cinestill — Cinestill 800T + Ilford HP5** — `ilford` is now the **Cinestill +
-  Ilford** app, and its icon is composed from a Cinestill 800T 35 mm product shot and an Ilford
-  HP5 135 product shot. Note that the `cine` group is a **motion-picture look family** (Cinestill
-  50D, Cinestill 800T, classic cinema, Rec709) and is **not** an Ilford product — it is grouped
-  into this pack for distribution convenience, not because it is an Ilford film.
+- **Ilford / Cinestill — CineStill film product** — `ilford` is now the **Cinestill +
+  Ilford** app, and its icon is a CineStill film product shot. Note that the `cine` group is a
+  **motion-picture look family** (Cinestill 50D, Cinestill 800T, classic cinema, Rec709) and is
+  **not** an Ilford product — it is grouped into this pack for distribution convenience, not
+  because it is an Ilford film.
 - **Pentax K1000** — roughly three million units, and for two decades the default "first film
   camera" in every photography course. The 1957 Asahi Pentax created the modern Japanese SLR
   layout, but the K1000 is the model people actually recognise.
@@ -121,9 +121,9 @@ stock* depicted. The reasoning, kept here so it can be argued with rather than r
 - **Sony α7 (ILCE-7)** — the first full-frame mirrorless camera, and the origin of that
   whole market segment. The α7 III is the best-selling descendant and the RX100 is the
   other defensible pick; the original α7 is the one that changed the industry.
-- **filmstocks — Kodak Portra 400 canister** — Portra 400 is Kodak's standard professional
-  colour negative, and its 135 canister is the icon because this pack is named after the film,
-  not a camera.
+- **filmstocks — Fujifilm film canisters** — this pack is named after Fujifilm's *film stocks*
+  rather than a camera, so its icon is Fujifilm film canisters instead of a body. The recipes in
+  the pack (Pro 400H, Superia 400, C200 …) are all Fujifilm colour negatives.
 
 ## How the masters were produced
 

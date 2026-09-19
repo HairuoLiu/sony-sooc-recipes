@@ -165,24 +165,24 @@ LUT 收藏与各厂商对机身色彩模式、胶片种类的**公开描述**。
 
 品牌包（`docs/BRAND-PACKS.md`）的启动图标，由 `tools/build_pack_icons.py` 生成进
 `assets/app-icon-packs/<icon_set>/`。图标随 APK 一起发布，所以署名必须随 APK 走 —— 它进本文件
-（下方表格），也进每个包的发布说明。其中三个包用的是 Wikimedia Commons 上的 **CC BY 2.0** 自由许可
-照片；另外六个包用的是**用户专门为本项目提供的商业产品照片 / 厂商官方渲染图**，全部保留权利、
+（下方表格），也进每个包的发布说明。其中两个包用的是 Wikimedia Commons 上的 **CC BY 2.0** 自由许可
+照片；另外七个包用的是**用户专门为本项目提供的商业产品照片 / 厂商官方渲染图**，全部保留权利、
 未授予任何许可，风险由发布方承担。逐张的取舍与权利说明见 `assets/app-icon-packs/CREDITS.md`。
 
 | 包 (`id`) | 品牌 | 图标描绘 | 作者 / 来源 | 许可 | 来源页 |
 |---|---|---|---|---|---|
 | `leica` | Leica | Leica M9 | sketch.vip（M9 产品渲染） | **保留全部权利**——用户提供，未授予许可 | sketch.vip M9 渲染图 |
 | `fujifilm` | Fujifilm | X100VI | fujifilm-x.b-cdn.net（X100VI 产品缩略图，480×480） | **保留全部权利**——用户提供，未授予许可 | fujifilm-x.b-cdn.net X100VI 产品缩略图 |
-| `filmstocks` | Fuji Film | Kodak Portra 400 135 胶卷罐 | Google Images 缩略图（Kodak Portra 400 胶卷罐） | **保留全部权利**——用户提供，未授予许可 | Google Images 缩略图（Kodak Portra 400 胶卷罐） |
+| `filmstocks` | Fuji Film | Fujifilm 胶卷（三个胶卷罐并排） | 用户提供的产品图 | **保留全部权利**——用户提供，未授予许可 | 用户提供的产品图 |
 | `ricoh` | Ricoh | GR（2013） | Kārlis Dambrāns | CC BY 2.0（https://creativecommons.org/licenses/by/2.0/） | https://commons.wikimedia.org/wiki/File:Ricoh_GR_(16159018330).jpg |
 | `kodak` | Kodak | Gold 400 / 400 胶卷罐 | prophotosupply.com（Kodak Gold 400 产品照片） | **保留全部权利**——用户提供，未授予许可 | prophotosupply.com Kodak Gold 400 |
 | `pentax` | Pentax | K1000 | Terry Presley | CC BY 2.0（https://creativecommons.org/licenses/by/2.0/） | https://commons.wikimedia.org/wiki/File:Pentax_K1000_(6301325288).jpg |
-| `ilford` | Cinestill + Ilford | Cinestill 800T 35mm + Ilford HP5 135（拼合） | 拼合自 images.squarespace-cdn.com（Cinestill 800T 35mm 产品图）+ ilfordphoto.com（HP5 135 产品图） | **保留全部权利**——用户提供，未授予许可 | images.squarespace-cdn.com Cinestill 800T + ilfordphoto.com HP5 |
+| `ilford` | Cinestill + Ilford | CineStill 胶卷产品图 | 用户提供的产品图 | **保留全部权利**——用户提供，未授予许可 | 用户提供的产品图 |
 | `hasselblad` | Hasselblad | X2D II 100C | cameraelectronic.com.au（官方 X2D II 100C 渲染，Shopify CDN） | **保留全部权利**——用户提供，未授予许可 | cameraelectronic.com.au 产品页（Shopify CDN） |
-| `sony` | Sony | α7（ILCE-7） | Henry Söderlund | CC BY 2.0（https://creativecommons.org/licenses/by/2.0/） | https://commons.wikimedia.org/wiki/File:Sony_A7,_A7R,_A7S_-_by_Henry_S%C3%B6derlund_(14700037048).jpg |
+| `sony` | Sony | Sony 相机 | 用户提供的产品图 | **保留全部权利**——用户提供，未授予许可 | 用户提供的产品图 |
 
-九个包全部有图标。其中 `leica`、`fujifilm`、`filmstocks`、`kodak`、`ilford`、`hasselblad` 六张是用户提供的商业照片、**保留全部权利、未授予任何许可**，因此**没有署名义务**（风险由发布方承担）；
-`ricoh`、`pentax`、`sony` 三张是 CC BY 2.0，署名是许可条件，必须随 APK 走。逐张的取舍说明见
+九个包全部有图标。其中 `leica`、`fujifilm`、`filmstocks`、`kodak`、`ilford`、`hasselblad`、`sony` 七张是用户提供的商业照片、**保留全部权利、未授予任何许可**，因此**没有署名义务**（风险由发布方承担）；
+`ricoh`、`pentax` 两张是 CC BY 2.0，署名是许可条件，必须随 APK 走。逐张的取舍说明见
 `assets/app-icon-packs/CREDITS.md`。
 
 被否决过的一张：`File:Fujifilm X100-IMG 6097.jpg`（作者 Rama）是 **CC BY-SA 2.0 (fr)**，已下载并渲染

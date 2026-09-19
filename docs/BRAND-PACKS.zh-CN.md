@@ -184,9 +184,9 @@ src/com/hairuoliu/sonysoocrecipes/        （基包）
 ## 7. 图标 —— 从哪来、怎么生成、以及归属义务
 
 每个包的启动图标，是用**该品牌最知名相机的照片**构建的——`filmstocks`、`kodak`、`ilford`
-这三个包是胶片罐而非相机（它们是按胶片命名，不是按机身）。多数包用的是 Wikimedia Commons 上的
-**自由许可照片**，但六个包（`leica`、`fujifilm`、`filmstocks`、`kodak`、`ilford`、`hasselblad`）
-现在用的是**用户专门提供的、保留全部权利的商业照片，未授予任何许可**。归属与「放宽许可」的约定记在
+这三个包是胶片罐而非相机（它们是按胶片命名，不是按机身）。两个包（`ricoh`、`pentax`）仍用 Wikimedia
+Commons 上的**自由许可照片**；另外七个包（`leica`、`fujifilm`、`filmstocks`、`kodak`、`ilford`、
+`hasselblad`、`sony`）用的是**用户专门提供的、保留全部权利的商业照片，未授予任何许可**。归属与「放宽许可」的约定记在
 `assets/app-icon-packs/CREDITS.md` 里；而因为图标随 APK 一起发布，归属必须**随 APK 走**：它进
 `NOTICE.md`，也进每个包的发布说明。
 
@@ -205,14 +205,13 @@ src/com/hairuoliu/sonysoocrecipes/        （基包）
 可绘制）。本版本起，品牌包图标**也**做了抠图——每张都是从源照片里裁出的透明剪影，与全量版风格一致，
 而非保留整张矩形照片。不要说品牌包图标是矩形照片；它们不是。
 
-**归属义务是真实的——但现在九个包里只有三个还有这条义务。** 六个包
-（`leica`、`fujifilm`、`filmstocks`、`kodak`、`ilford`、`hasselblad`）用的是用户提供的、保留全部权利的
-商业照片；未授予任何许可，因此没有署名义务，只有发布方承担分发风险。另外三个包仍用 Wikimedia
+**归属义务是真实的——但现在九个包里只有两个还有这条义务。** 七个包
+（`leica`、`fujifilm`、`filmstocks`、`kodak`、`ilford`、`hasselblad`、`sony`）用的是用户提供的、保留全部权利的
+商业照片；未授予任何许可，因此没有署名义务，只有发布方承担分发风险。另外两个包仍用 Wikimedia
 Commons 上的原照片，仍需署名：
 
 - **Ricoh** —— Ricoh GR（2013），CC BY 2.0（作者：Kārlis Dambrāns）
 - **Pentax** —— Pentax K1000，CC BY 2.0（作者：Terry Presley）
-- **Sony** —— Sony α7（ILCE-7），CC BY 2.0（作者：Henry Söderlund）
 
 `CC BY` 只有**带署名**才允许商用，所以署名必须随行于 `NOTICE.md` 和每个包的发布说明。`CC BY-SA`
 被**刻意排除**在品牌包图标之外：它的相同方式共享条款会波及整个 App，而不只是图标。全量版默认图标

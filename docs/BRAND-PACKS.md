@@ -223,10 +223,11 @@ checkout. `--dry-run` reports every change without writing.
 
 Each pack's launcher icon is built from a photograph of that brand's best-known camera — or,
 for `filmstocks`, `kodak` and `ilford`, from a film canister rather than a camera (those three
-packs are named after film stock, not a body). Most packs use a **freely-licensed photograph
-on Wikimedia Commons**, but six packs (`leica`, `fujifilm`, `filmstocks`, `kodak`, `ilford`,
-`hasselblad`) now use **all-rights-reserved commercial photographs supplied by the user**, with
-no licence granted. The attributions and the relaxed licence rule are recorded in
+packs are named after film stock, not a body). Two packs (`ricoh`, `pentax`) still use a
+**freely-licensed photograph on Wikimedia Commons**; the other seven (`leica`, `fujifilm`,
+`filmstocks`, `kodak`, `ilford`, `hasselblad`, `sony`) use **all-rights-reserved commercial
+photographs supplied by the user**, with no licence granted. The attributions and the relaxed
+licence rule are recorded in
 `assets/app-icon-packs/CREDITS.md`, and — because the icon ships inside the APK — the
 attribution must **travel with the APK**: it goes in `NOTICE.md` and in the per-pack
 release notes.
@@ -249,15 +250,14 @@ release the pack icons are **also** keyed — each is a transparent silhouette c
 source photograph, matching the all-in-one's style rather than keeping the rectangular photo.
 Do not describe the pack icons as rectangular photographic tiles; they are not.
 
-**The attribution obligation is real — but it now applies to only three of the nine packs.**
-Six packs (`leica`, `fujifilm`, `filmstocks`, `kodak`, `ilford`, `hasselblad`) use
+**The attribution obligation is real — but it now applies to only two of the nine packs.**
+Seven packs (`leica`, `fujifilm`, `filmstocks`, `kodak`, `ilford`, `hasselblad`, `sony`) use
 all-rights-reserved commercial photographs supplied by the user; no licence was granted, so
 there is no attribution obligation — only the publisher's risk of distributing them. The
-other three packs keep their original Wikimedia Commons photographs and still require a credit:
+other two packs keep their original Wikimedia Commons photographs and still require a credit:
 
 - **Ricoh** — Ricoh GR (2013), CC BY 2.0 (author: Kārlis Dambrāns)
 - **Pentax** — Pentax K1000, CC BY 2.0 (author: Terry Presley)
-- **Sony** — Sony α7 (ILCE-7), CC BY 2.0 (author: Henry Söderlund)
 
 `CC BY` permits commercial use **only with attribution**, so the credit must ride along in
 `NOTICE.md` and the per-pack release notes. `CC BY-SA` is deliberately **excluded** from

@@ -16,6 +16,12 @@ transparent silhouettes. It never overwrites master.jpg.
 The fill target is ~80% of the binding dimension of the subject's bounding box,
 which gives a comfortable margin without either a tiny subject or an amputated
 one.
+
+Multi-object sources: some covers are not one object. A film-stock pack may show
+several canisters, or a canister standing beside its box. The blob filter below
+drops specks relative to the largest blob, so pass --min-blob-frac <1 to keep the
+whole group. Leaving it at the default 1.0 would silently render only the biggest
+object and throw the rest away.
 """
 
 import argparse
@@ -36,8 +42,8 @@ MODEL = "u2net"
 # Fill target: the subject's binding bbox side should be ~ this share of canvas.
 FILL = 0.80
 
-PACKS = ["leica", "fujifilm", "ricoh", "kodak", "pentax", "ilford",
-         "hasselblad", "sony"]
+PACKS = ["leica", "fujifilm", "filmstocks", "ricoh", "kodak", "pentax",
+         "ilford", "hasselblad", "sony"]
 
 
 def cut(master: Path) -> Image.Image:
@@ -51,27 +57,41 @@ def cut(master: Path) -> Image.Image:
     return Image.open(__import__("io").BytesIO(out)).convert("RGBA")
 
 
-def clean_mask(a: np.ndarray) -> np.ndarray:
+def clean_mask(a: np.ndarray, min_blob_frac: float = 1.0) -> np.ndarray:
     """Drop isolated specks outside the subject without eating the already-
     matted soft edges. rembg's alpha_matting has already refined the edge, so
     we must NOT re-erode (a second opening destroys a thin camera silhouette).
-    Only the largest connected component is kept; everything else is dropped.
+
+    A component is kept when its area is at least ``min_blob_frac`` of the largest
+    one. The default 1.0 keeps only the single largest component, which is right for
+    a lone subject (one camera body) and discards stray reflection or shadow blobs.
+    A multi-object cover — three canisters, or a canister plus its box — needs a
+    smaller fraction, otherwise the extra objects are silently thrown away and the
+    icon ends up showing a third of the product.
     """
     import cv2
     mask = (a > 40).astype(np.uint8)
     n, labels, stats, _ = cv2.connectedComponentsWithStats(mask, 8)
     if n <= 1:
         return mask
-    # Keep the largest component (index 0 is the background).
-    largest = 1 + int(np.argmax(stats[1:, cv2.CC_STAT_AREA]))
-    mask = (labels == largest).astype(np.uint8) * 255
-    return mask
+    areas = stats[1:, cv2.CC_STAT_AREA]
+    largest = int(areas.max())
+    if min_blob_frac >= 1.0:
+        # Verbatim original behaviour: keep the largest component only.
+        keep = 1 + int(np.argmax(areas))
+        return (labels == keep).astype(np.uint8) * 255
+    threshold = max(1, int(round(min_blob_frac * largest)))
+    keep = np.zeros_like(mask)
+    for i, area in enumerate(areas, start=1):
+        if int(area) >= threshold:
+            keep |= (labels == i).astype(np.uint8)
+    return keep * 255
 
 
-def fill80(img: Image.Image) -> tuple[Image.Image, float]:
+def fill80(img: Image.Image, min_blob_frac: float = 1.0) -> tuple[Image.Image, float]:
     """Centre the cutout on a square canvas so it fills ~FILL of the side."""
     a = np.asarray(img)
-    mask = clean_mask(a[:, :, 3])
+    mask = clean_mask(a[:, :, 3], min_blob_frac)
     ys, xs = np.where(mask > 127)
     if len(xs) == 0:
         return img, 0.0
@@ -95,6 +115,10 @@ def main() -> int:
     ap.add_argument("--packs", default=",".join(PACKS),
                     help="comma-separated pack ids (default: all)")
     ap.add_argument("--out", type=Path, default=OUT)
+    ap.add_argument("--min-blob-frac", type=float, default=1.0,
+                    help="keep connected components at least this fraction of the "
+                         "largest one's area (default 1.0 = largest only; use e.g. "
+                         "0.15 for a multi-object cover such as several canisters)")
     args = ap.parse_args()
 
     args.out.mkdir(parents=True, exist_ok=True)
@@ -105,7 +129,7 @@ def main() -> int:
             print(f"  skip {pid}: no master.jpg")
             continue
         img = cut(master)
-        canvas, fill = fill80(img)
+        canvas, fill = fill80(img, args.min_blob_frac)
         dst = args.out / f"{pid}.png"
         canvas.save(dst)
         report.append((pid, fill, canvas.size))
