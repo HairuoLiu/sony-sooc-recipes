@@ -70,28 +70,30 @@ Fujifilm 包又会覆盖 Leica 包 —— 最后你只剩一个 App，且是最�
 
 ## 4. 品牌包一览
 
-今天共 8 个包，都从 catalog 构建。「**编译进的配方数**」是该包实际写进 `Recipes.java` 的数量 ——
+今天共 9 个包，都从 catalog 构建。「**编译进的配方数**」是该包实际写进 `Recipes.java` 的数量 ——
 扣掉属于另一套引擎（`film-studio-matrix`，仅登记）以及仅登记给其他品牌的条目之后。它**不等于**
 该组的总条目数，数字偏小不是 bug（见下表下方的说明）。
 
 | `id` | `app_name` | 来源组 | 编译进的配方数 |
 |---|---|---|---|
 | `leica` | Leica Looks | `leica` | 20 |
-| `fujifilm` | Fujifilm Looks | `fuji-sim`, `fuji-film` | 26 |
+| `fujifilm` | Fujifilm Looks | `fuji-sim` | 16 |
+| `filmstocks` | Fuji Film Looks | `fuji-film` | 10 |
 | `ricoh` | Ricoh GR Looks | `ricoh-gr` | 11 |
 | `kodak` | Kodak Looks | `kodak` | 20 |
 | `pentax` | Pentax Looks | `pentax` | 11 |
-| `ilford` | Ilford Looks | `ilford` | 5 |
+| `ilford` | Cinestill + Ilford Looks | `ilford`, `cine` | 9 |
 | `hasselblad` | Hasselblad Looks | `hasselblad` | 4 |
 | `sony` | Sony Looks | `sony` | 8 |
 
-有两个数字比组的总条目小，这是预期的：
+有三个数字比组的总条目小（或两组合计），这是预期的：
 
-- **`fujifilm`** 的组共有 26 条，但 `fuji-sim`  alone 带了 **10 条 `film-studio-matrix` 条目** ——
-  那是另一套引擎、仅登记、哪都编译不进。只有 **16** 条 `fuji-sim` 条目可编译，加上 `fuji-film`
-  的 **10** 条，包里共 26。
+- **`fujifilm`** 的 `fuji-sim` 组共有 26 条，但只有 **16** 条可编译；另 10 条属于 `fuji-film`，
+  现在已拆成独立的 `filmstocks` 包。所以这个包含 16 条。
 - **`ricoh`** 的 `ricoh-gr` 有 16 条，其中 **11** 条可编译（另 5 条是 `film-studio-matrix`
   仅登记）。
+- **`ilford`** 现在跨两个组：`ilford` 的 **5** 条加上 `cine` 的 **4** 条（电影感风格家族，
+  并非伊尔福产品），共 9 条。
 
 所以某个包的数字看起来低时，先看看它的组是不是混进了另一套引擎，再怀疑是不是丢了东西。
 `tools/gen_recipes.py --pack <id>` 会打印实际写出的组，并在某个请求的组没贡献任何可编译配方时
@@ -114,11 +116,10 @@ Looks」名下，等于对自己的内容撒谎。
 | `canon-nikon` | 跨两个品牌 —— 得先拆成每个品牌一个包 |
 | `pana-olympus` | 跨两个品牌 —— 同理要拆 |
 | `other-stocks` | 混血胶片（Agfa、Polaroid、Ferrania …），没有单一品牌 |
-| `cine` | 不是相机品牌 —— 是电影感风格家族 |
 | `app-look` | 不是相机品牌 —— 是社交 / App 滤镜风 |
 
 `canon-nikon` 和 `pana-olympus` 是唯一有清晰路径变成包的：各自拆成 `canon` 与 `nikon`（或
-`panasonic` 与 `olympus`）组，然后各写一个包条目。其余三个是类别组、不是品牌，基本不可能成为包。
+`panasonic` 与 `olympus`）组，然后各写一个包条目。其余两个是类别组、不是品牌，基本不可能成为包。
 
 一个包也不能装 `film-studio-matrix` 条目 —— 那些仅登记、哪都编译不进，自然不会出现在写出的
 `Recipes.java` 里。
@@ -182,7 +183,10 @@ src/com/hairuoliu/sonysoocrecipes/        （基包）
 
 ## 7. 图标 —— 从哪来、怎么生成、以及归属义务
 
-每个包的启动图标，是用 Wikimedia Commons 上**该品牌最知名相机的自由许可照片**构建的。归属记在
+每个包的启动图标，是用**该品牌最知名相机的照片**构建的——`filmstocks`、`kodak`、`ilford`
+这三个包是胶片罐而非相机（它们是按胶片命名，不是按机身）。多数包用的是 Wikimedia Commons 上的
+**自由许可照片**，但六个包（`leica`、`fujifilm`、`filmstocks`、`kodak`、`ilford`、`hasselblad`）
+现在用的是**用户专门提供的、保留全部权利的商业照片，未授予任何许可**。归属与「放宽许可」的约定记在
 `assets/app-icon-packs/CREDITS.md` 里；而因为图标随 APK 一起发布，归属必须**随 APK 走**：它进
 `NOTICE.md`，也进每个包的发布说明。
 
@@ -198,14 +202,17 @@ src/com/hairuoliu/sonysoocrecipes/        （基包）
 | `icon-512.png` | 商店列表图 | 512 |
 
 **对抠图要诚实。** 全量版图标由 `tools/build_app_icon.py` 构建，**抠掉了纯白背景**（透明 RGBA
-可绘制）。品牌包图标**没有**抠图 —— 它们原样保留那张矩形照片。不要说品牌包图标是去背的；它们不是。
+可绘制）。本版本起，品牌包图标**也**做了抠图——每张都是从源照片里裁出的透明剪影，与全量版风格一致，
+而非保留整张矩形照片。不要说品牌包图标是矩形照片；它们不是。
 
-**归属义务是真实的。** 前四个包的照片分别是：
+**归属义务是真实的——但现在九个包里只有三个还有这条义务。** 六个包
+（`leica`、`fujifilm`、`filmstocks`、`kodak`、`ilford`、`hasselblad`）用的是用户提供的、保留全部权利的
+商业照片；未授予任何许可，因此没有署名义务，只有发布方承担分发风险。另外三个包仍用 Wikimedia
+Commons 上的原照片，仍需署名：
 
-- **Kodak** —— Kodak Brownie 127，CC BY 4.0（作者：多多123）
-- **Ilford** —— Ilford Sporti，CC BY 4.0（作者：Matthew Paul Argall）
+- **Ricoh** —— Ricoh GR（2013），CC BY 2.0（作者：Kārlis Dambrāns）
 - **Pentax** —— Pentax K1000，CC BY 2.0（作者：Terry Presley）
-- **Hasselblad** —— Hasselblad 500C，公有领域（作者：Holger Ellgaard）
+- **Sony** —— Sony α7（ILCE-7），CC BY 2.0（作者：Henry Söderlund）
 
 `CC BY` 只有**带署名**才允许商用，所以署名必须随行于 `NOTICE.md` 和每个包的发布说明。`CC BY-SA`
 被**刻意排除**在品牌包图标之外：它的相同方式共享条款会波及整个 App，而不只是图标。全量版默认图标
@@ -271,9 +278,11 @@ tools/build_apk.sh --all-packs         # 全量版 App + packs.json 里的每个
 2. **确认组是单品牌且可编译。** 跑 `tools/gen_recipes.py --pack contax` 看输出：它打印写出的组，并在
    某个请求的组没贡献任何可编译配方时（例如全是 `film-studio-matrix` 条目）报警。零配方的包是个坏包。
 
-3. **生成图标集。** 用 `tools/build_pack_icons.py` 产出 `assets/app-icon-packs/contax/`，五个文件分别
-   为 48 / 72 / 96 / 144 / 512 px（§7）。用自由许可的照片，并把归属记进 `NOTICE.md` 和该包发布说明。
-   **不要**用 `CC BY-SA` 照片，也**不要**声称图标抠掉了背景。
+3. **生成图标集。** 产出 `assets/app-icon-packs/contax/`，五个文件分别为 48 / 72 / 96 / 144 / 512 px（§7）。
+   首选：把抠好的 `contax.png` 放进 `camera-covers/cutout/`（见 `tools/cut_camera_covers.py`），
+   `tools/build_pack_icons.py` 会自动采用并渲染成透明剪影；没有抠图则回退到加边框的 `master.jpg`。
+   把来源与许可记进 `assets/app-icon-packs/CREDITS.md`、`NOTICE.md` 和该包发布说明。
+   **不要**用 `CC BY-SA` 照片——图标是对照片的改编，相同方式共享会波及整个应用。
 
 4. **跑关卡。** `tools/check_assets.py` 现在会检查图标集。缺整套目录只是*note*（该包回退到默认图标），
    但一套已存在却缺文件或尺寸不对就是*error*。打 tag 前关卡必须过。

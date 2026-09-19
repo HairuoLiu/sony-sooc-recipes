@@ -163,28 +163,31 @@ LUT 收藏与各厂商对机身色彩模式、胶片种类的**公开描述**。
 
 ## 五、品牌包图标素材
 
-品牌包（`docs/BRAND-PACKS.md`）的启动图标，是用 Wikimedia Commons 上各品牌最知名相机的**自由许可
-照片**构建的，由 `tools/build_pack_icons.py` 生成进 `assets/app-icon-packs/<icon_set>/`。图标随 APK
-一起发布，所以署名必须随 APK 走 —— 它进本文件（下方表格），也进每个包的发布说明。
+品牌包（`docs/BRAND-PACKS.md`）的启动图标，由 `tools/build_pack_icons.py` 生成进
+`assets/app-icon-packs/<icon_set>/`。图标随 APK 一起发布，所以署名必须随 APK 走 —— 它进本文件
+（下方表格），也进每个包的发布说明。其中三个包用的是 Wikimedia Commons 上的 **CC BY 2.0** 自由许可
+照片；另外六个包用的是**用户专门为本项目提供的商业产品照片 / 厂商官方渲染图**，全部保留权利、
+未授予任何许可，风险由发布方承担。逐张的取舍与权利说明见 `assets/app-icon-packs/CREDITS.md`。
 
-| 包 (`id`) | 品牌 | 相机型号 | 作者 | 许可 | 来源页 |
+| 包 (`id`) | 品牌 | 图标描绘 | 作者 / 来源 | 许可 | 来源页 |
 |---|---|---|---|---|---|
-| `fujifilm` | Fujifilm | FinePix X100 | frank mckenna（frankiefoto，经 Unsplash） | **CC0**（无需署名） | https://commons.wikimedia.org/wiki/File:Fujifilm_FinePix_X100_with_Fujinon_Asph_Super_EBC_23mm_F2_(Unsplash_JbTBJYOEc28).jpg |
-| `hasselblad` | Hasselblad | 500C | Holger Ellgaard | 公有领域（PD-self，无需署名） | https://commons.wikimedia.org/wiki/File:Hasselblad_500C.jpg |
-| `ilford` | Ilford | Sporti | Matthew Paul Argall | CC BY 4.0（https://creativecommons.org/licenses/by/4.0/） | https://commons.wikimedia.org/wiki/File:Ilford_Sporti_camera.jpg |
-| `kodak` | Kodak | Instamatic 255-X | 2538O | **CC0**（无需署名） | https://commons.wikimedia.org/wiki/File:Kodak_Instamatic_255-X.jpg |
-| `leica` | Leica | M3 | Hannes Grobe | CC BY 3.0（https://creativecommons.org/licenses/by/3.0/） | https://commons.wikimedia.org/wiki/File:Leica-m3_hg.JPG |
-| `pentax` | Pentax | K1000 | Terry Presley | CC BY 2.0（https://creativecommons.org/licenses/by/2.0/） | https://commons.wikimedia.org/wiki/File:Pentax_K1000_(6301325288).jpg |
+| `leica` | Leica | Leica M9 | sketch.vip（M9 产品渲染） | **保留全部权利**——用户提供，未授予许可 | sketch.vip M9 渲染图 |
+| `fujifilm` | Fujifilm | X100VI | fujifilm-x.b-cdn.net（X100VI 产品缩略图，480×480） | **保留全部权利**——用户提供，未授予许可 | fujifilm-x.b-cdn.net X100VI 产品缩略图 |
+| `filmstocks` | Fuji Film | Kodak Portra 400 135 胶卷罐 | Google Images 缩略图（Kodak Portra 400 胶卷罐） | **保留全部权利**——用户提供，未授予许可 | Google Images 缩略图（Kodak Portra 400 胶卷罐） |
 | `ricoh` | Ricoh | GR（2013） | Kārlis Dambrāns | CC BY 2.0（https://creativecommons.org/licenses/by/2.0/） | https://commons.wikimedia.org/wiki/File:Ricoh_GR_(16159018330).jpg |
+| `kodak` | Kodak | Gold 400 / 400 胶卷罐 | prophotosupply.com（Kodak Gold 400 产品照片） | **保留全部权利**——用户提供，未授予许可 | prophotosupply.com Kodak Gold 400 |
+| `pentax` | Pentax | K1000 | Terry Presley | CC BY 2.0（https://creativecommons.org/licenses/by/2.0/） | https://commons.wikimedia.org/wiki/File:Pentax_K1000_(6301325288).jpg |
+| `ilford` | Cinestill + Ilford | Cinestill 800T 35mm + Ilford HP5 135（拼合） | 拼合自 images.squarespace-cdn.com（Cinestill 800T 35mm 产品图）+ ilfordphoto.com（HP5 135 产品图） | **保留全部权利**——用户提供，未授予许可 | images.squarespace-cdn.com Cinestill 800T + ilfordphoto.com HP5 |
+| `hasselblad` | Hasselblad | X2D II 100C | cameraelectronic.com.au（官方 X2D II 100C 渲染，Shopify CDN） | **保留全部权利**——用户提供，未授予许可 | cameraelectronic.com.au 产品页（Shopify CDN） |
 | `sony` | Sony | α7（ILCE-7） | Henry Söderlund | CC BY 2.0（https://creativecommons.org/licenses/by/2.0/） | https://commons.wikimedia.org/wiki/File:Sony_A7,_A7R,_A7S_-_by_Henry_S%C3%B6derlund_(14700037048).jpg |
 
-八个包全部有图标。其中 `fujifilm`、`hasselblad`、`kodak` 三张是 CC0 或公有领域，**没有署名义务**；
-其余五张是 CC BY，署名是许可条件，必须随 APK 走。逐张的取舍说明见
+九个包全部有图标。其中 `leica`、`fujifilm`、`filmstocks`、`kodak`、`ilford`、`hasselblad` 六张是用户提供的商业照片、**保留全部权利、未授予任何许可**，因此**没有署名义务**（风险由发布方承担）；
+`ricoh`、`pentax`、`sony` 三张是 CC BY 2.0，署名是许可条件，必须随 APK 走。逐张的取舍说明见
 `assets/app-icon-packs/CREDITS.md`。
 
 被否决过的一张：`File:Fujifilm X100-IMG 6097.jpg`（作者 Rama）是 **CC BY-SA 2.0 (fr)**，已下载并渲染
 后被撤下 —— 图标是对照片的改编，而「相同方式共享」会从改编件波及到分发它的整个应用。已换成上表中
-的 CC0 照片。不要再启用它。
+用户提供的 X100VI 产品缩略图。不要再启用它。
 
 几点必须说清的边界：
 
@@ -194,5 +197,6 @@ LUT 收藏与各厂商对机身色彩模式、胶片种类的**公开描述**。
   图标一律不用 `CC BY-SA` 照片。
 - **全量版默认图标（`assets/app-icon/`）是本仓库原创作**，由 `tools/build_app_icon.py` 从源照片生成，
   不依赖上述任何素材，无需此类署名。
-- 品牌包图标**没有**抠掉背景（全量版默认图标才抠），见 `docs/BRAND-PACKS.md` §7。
+- 品牌包图标**也抠掉了背景**，与全量版默认图标同样渲染为透明剪影（抠图用
+  `tools/cut_camera_covers.py`，渲染用 `tools/build_pack_icons.py`），见 `docs/BRAND-PACKS.md` §7。
 - 再分发这些包的人，自行承担对应的商标与署名风险（见 `docs/BRAND-PACKS.md` §8）。

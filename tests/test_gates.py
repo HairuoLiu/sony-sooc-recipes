@@ -33,6 +33,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 import unittest
 from pathlib import Path
 
@@ -40,6 +41,43 @@ ROOT = Path(__file__).resolve().parent.parent
 TOOLS = ROOT / "tools"
 
 PROBE = "_gate_probe_"
+
+
+def _rmtree_clear_readonly(func, path, exc_info):
+    """onerror handler: clear the read-only bit and retry the removal."""
+    try:
+        os.chmod(path, 0o777)
+        func(path)
+    except OSError:
+        pass
+
+
+def _remove_probe(path: Path) -> None:
+    """Best-effort removal of a gate probe, retrying past transient Windows lock/AV races.
+
+    The self-tests below drop a real artifact into the repo (an orphan icon set, a stray
+    translation) so the gates can be proven to reject it; the artifact has to be gone
+    before the suite returns, or it pollutes the next run's assets/docs gates. A bare
+    shutil.rmtree(..., ignore_errors=True) silently leaves the directory behind when a
+    subprocess that just read it still holds a handle — so retry, clearing read-only bits.
+    """
+    for _ in range(40):  # up to ~2 s
+        try:
+            if path.is_dir():
+                shutil.rmtree(path, onerror=_rmtree_clear_readonly)
+            else:
+                path.unlink()
+            return
+        except OSError:
+            time.sleep(0.05)
+    # last resort: don't fail the self-test over a cleanup hiccup, but try once more quietly
+    try:
+        if path.is_dir():
+            shutil.rmtree(path, ignore_errors=True)
+        else:
+            path.unlink(missing_ok=True)
+    except OSError:
+        pass
 
 
 def run_gate(script: str, *args: str):
@@ -108,7 +146,7 @@ class TestCheckAssetsFails(unittest.TestCase):
             (probe / "ic_launcher-mdpi.png").write_bytes(b"not a real png")
             r = run_gate("check_assets.py")
         finally:
-            shutil.rmtree(probe, ignore_errors=True)
+            _remove_probe(probe)
         self.assertEqual(r.returncode, 1, "gate passed an icon set no pack references")
         self.assertIn("orphan icon set", r.stdout)
 
@@ -120,7 +158,7 @@ class TestCheckDocsFails(unittest.TestCase):
         try:
             r = run_gate("check_docs.py")
         finally:
-            probe.unlink(missing_ok=True)
+            _remove_probe(probe)
         self.assertEqual(r.returncode, 1, "gate passed a translation with no original")
         self.assertIn("no English original", r.stdout)
 

@@ -28,8 +28,14 @@
     {
       "id": "fujifilm",
       "app_name": "Fujifilm Looks",
-      "groups": ["fuji-sim", "fuji-film"],
+      "groups": ["fuji-sim"],
       "icon_set": "fujifilm"
+    },
+    {
+      "id": "filmstocks",
+      "app_name": "Fuji Film Looks",
+      "groups": ["fuji-film"],
+      "icon_set": "filmstocks"
     },
     {
       "id": "ricoh",
@@ -51,8 +57,8 @@
     },
     {
       "id": "ilford",
-      "app_name": "Ilford Looks",
-      "groups": ["ilford"],
+      "app_name": "Cinestill + Ilford Looks",
+      "groups": ["ilford", "cine"],
       "icon_set": "ilford"
     },
     {
@@ -77,7 +83,6 @@
     "canon-nikon": "spans two brands - needs one pack each before it can be split",
     "pana-olympus": "spans two brands - needs one pack each before it can be split",
     "other-stocks": "mixed heritage stocks (Agfa, Polaroid, Ferrania...) - no single brand",
-    "cine": "not a camera brand - a motion-picture look family",
     "app-look": "not a camera brand - social/app filter looks"
   }
 }

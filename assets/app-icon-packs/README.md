@@ -4,13 +4,14 @@ One icon set per brand pack, keyed by the pack's `icon_set` in `catalog/packs.js
 `tools/apply_pack.py` copies the matching set into the fork's `res/drawable-*` — a pack
 with no set here silently keeps `../app-icon/`, so a half-finished set cannot break a build.
 
-| Directory | Pack | Camera |
+| Directory | Pack | Camera / depicts |
 |---|---|---|
-| `fujifilm/` | `fujifilm` | Fujifilm FinePix X100 |
-| `hasselblad/` | `hasselblad` | Hasselblad 500C |
-| `ilford/` | `ilford` | Ilford Sporti |
-| `kodak/` | `kodak` | Kodak Instamatic 255-X |
-| `leica/` | `leica` | Leica M3 |
+| `filmstocks/` | `filmstocks` | Kodak Portra 400 135 canister (film stock) |
+| `fujifilm/` | `fujifilm` | Fujifilm X100VI |
+| `hasselblad/` | `hasselblad` | Hasselblad X2D II 100C |
+| `ilford/` | `ilford` | Cinestill 800T + Ilford HP5 (film stock, composed) |
+| `kodak/` | `kodak` | Kodak Gold 400 / 400 canister (film stock) |
+| `leica/` | `leica` | Leica M9 |
 | `pentax/` | `pentax` | Asahi Pentax K1000 |
 | `ricoh/` | `ricoh` | Ricoh GR (2013) |
 | `sony/` | `sony` | Sony α7 (ILCE-7) |
@@ -36,27 +37,36 @@ python tools/build_pack_icons.py --pack leica
 
 ## Read CREDITS.md before touching any of this
 
-`CREDITS.md` records the author and licence of every photograph here. Most are **CC BY**,
-which permits commercial use only with attribution — so the attribution is a licence
-condition that has to travel with the APK, not just live in this repository. **CC BY-SA is
-disqualifying**: the icon is an adapted work, so share-alike would reach the whole app.
-Check the licence before adding or replacing a photograph.
+`CREDITS.md` records the author and licence of every photograph here. Three are **CC BY 2.0**
+(`ricoh`, `pentax`, `sony`), which permit commercial use only with attribution — so the
+attribution is a licence condition that has to travel with the APK, not just live in this
+repository. The other six (`leica`, `fujifilm`, `filmstocks`, `kodak`, `ilford`,
+`hasselblad`) are user-supplied commercial renders with **no licence at all** — the publisher
+carries the risk of distributing them. **CC BY-SA is disqualifying**: the icon is an adapted
+work, so share-alike would reach the whole app. Check the licence before adding or replacing
+a photograph.
 
-## Why these icons are not keyed out like `../app-icon/`
+## How these icons are keyed out
 
 `../app-icon/` is a single studio shot of a dark camera on plain white, and its builder
-removes the background by connectivity. These are seven different photographs from a public
-image archive, with backgrounds ranging from seamless white to studio grey to a wooden table.
-Luminance keying cannot separate a black camera from a black background without also eating
-it, so the pack icons keep their background and are framed instead: the camera is located by
-comparing each pixel against the photograph's *own* border colour, framed into a square that
-is padded rather than cropped so the camera is never cut off, and given rounded corners.
+removes the background by connectivity. These are nine different photographs — three CC BY 2.0
+from a public image archive and six user-supplied commercial renders — with backgrounds ranging
+from seamless white to studio grey to a wooden table. A luminance threshold cannot separate a
+black camera from a black background without also eating it, so connectivity keying does not
+work here.
 
-The visible consequence, and the reason this is worth stating plainly: **the all-in-one
-app's icon is a transparent silhouette, the pack icons are rounded photographic tiles.**
-They do not look like a set, and that is the intent — eight near-identical silhouettes would
-be useless in an app menu, and telling the packs apart at a glance is the entire point of
-giving each one its own cover.
+Instead each source is segmented semantically with `rembg` (U-Net), the largest connected
+component is kept so a stray flap or a printed label cannot drag a second object into the
+silhouette, and the result is centred and enlarged to fill ~80% of the square — that is
+`tools/cut_camera_covers.py`. `tools/build_pack_icons.py` then renders the cut-out at the four
+densities, intersecting its alpha with the rounded-rect mask so the corners stay rounded *and*
+the background stays transparent.
 
-See the header of `tools/build_pack_icons.py` for the framing algorithm and the reasoning
+The visible consequence, and the reason this is worth stating plainly: **both the all-in-one
+icon and the pack icons are transparent silhouettes** cut from their source photograph. The
+packs are told apart by which camera or film stock each silhouette depicts, not by a
+photographic background — giving each pack its own cover is the whole point of making them
+recognisable at a glance.
+
+See the header of `tools/build_pack_icons.py` for the two rendering paths and the reasoning
 behind each step.

@@ -124,9 +124,10 @@ locally rather than viewing the source on GitHub.
 
 Counts include looks that are registered by name only; **140** are compiled into the APK.
 
-**Per-APK breakdown.** The v0.6.0 release ships nine APKs — the all-in-one plus eight
-single-brand packs. For exactly how many recipes each APK contains and a description of
-*every* recipe inside it, see **[docs/packs/README.md](docs/packs/README.md)**.
+**Per-APK breakdown.** The current tree ships **ten** APKs — the all-in-one plus **nine**
+single-brand packs. This grew out of v0.6.0's nine (the all-in-one plus eight). For exactly
+how many recipes each APK contains and a description of *every* recipe inside it, see
+**[docs/packs/README.md](docs/packs/README.md)**.
 
 ---
 

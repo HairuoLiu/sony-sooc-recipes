@@ -86,7 +86,7 @@ python tools/gen_recipes.py --stdout # 看一眼会生成什么
 
 （数量含仅登记的胶片工坊风格；编译进 APK 的是 140 款。）
 
-**按 APK 拆分。** v0.6.0 发布版共九个 APK——全量版加八个单品牌包。想知道每个 APK 到底含多少
+**按 APK 拆分。** 当前代码树共十个 APK——全量版加九个单品牌包（由 v0.6.0 的九个发展而来）。想知道每个 APK 到底含多少
 配方、里面每一款分别是什么，见 **[docs/packs/README.zh-CN.md](docs/packs/README.zh-CN.md)**。
 
 ---

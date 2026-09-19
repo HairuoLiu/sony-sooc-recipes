@@ -9,13 +9,13 @@
 | **应用名称** | Fujifilm Looks |
 | **包名** | com.hairuoliu.sonysoocrecipes.fujifilm |
 | **APK 文件名** | SonySOOCRecipes-fujifilm.apk |
-| **已编译配方数** | 26 |
-| **来源分组** | Fuji Sim（`fuji-sim`）、Fuji Film（`fuji-film`） |
+| **已编译配方数** | 16 |
+| **来源分组** | Fuji Sim（`fuji-sim`） |
 | **目录版本** | 0.6.0（更新于 2026-09-13） |
 
 ## 一览
 
-本包共编译 **26 个配方**，来自两个来源分组：**Fuji Sim**（富士内置胶片*模拟*）与 **Fuji Film**（以索尼设置还原的真实富士*胶卷*）。
+本包共编译 **16 个配方**，来自 **Fuji Sim** 一个来源分组——富士内置的胶片*模拟*，以索尼设置还原。（富士真实的*胶卷*已独立成包，见 **[filmstocks](filmstocks.zh-CN.md)**。）
 
 ## 富士胶片模拟（`fuji-sim`）
 
@@ -37,21 +37,6 @@
 | Acros +R (red filter) | Acros +R (red filter) | 黑白 | Acros 加红色反差滤镜——戏剧化天空、压暗 foliage。<br>创意风格：MONO（照片效果启用时忽略）· 使用索尼照片效果：High-Contrast Mono（高反差黑白） |
 | Acros +G (green filter) | Acros +G (green filter) | 黑白 | Acros 加绿色反差滤镜—— foliage 提亮、肤色平滑。<br>创意风格：MONO · 对比度 +1 · 锐度 +1 |
 | Sepia | Sepia | 黑白 | 棕褐色单色调。<br>创意风格：SEPIA |
-
-## 富士真实胶卷（`fuji-film`）
-
-| Name | 中文 | 类型 | 效果说明 / 关键设置 |
-|---|---|---|---|
-| Fuji Pro 400H | Fuji Pro 400H | 彩色 | 还原富士 Pro 400H——柔和粉彩、低反差的人像负片，肤色温柔。<br>创意风格：STD（照片效果启用时忽略）· 使用索尼照片效果：Soft High-key（柔和高调）· 曝光补偿 +2 |
-| Fuji Fortia 50 | Fuji Fortia 50 | 彩色 | 还原富士 Fortia 50——超高饱和反转片，红色浓烈，适合花卉与夕阳。<br>创意风格：VIVID · 饱和度 +6 · 对比度 +2 · 微调索尼隐藏的次级色彩矩阵 · 曝光补偿 -1 |
-| Fuji Superia 400 | Fuji Superia 400 | 彩色 | 还原富士 Superia 400——均衡的日用彩色负片，略带青/绿倾向。<br>创意风格：STD · 饱和度 +1 · 对比度 +1 · 曝光补偿 +1 |
-| Fuji C200 | Fuji C200 | 彩色 | 还原富士 C200——中性、廉价的日光彩色负片。<br>创意风格：STD |
-| Fuji Natura 1600 | Fuji Natura 1600 | 彩色 | 还原富士 Natura 1600——干净、低噪点的高感色彩，质感柔和。<br>创意风格：PORTRAIT · 饱和度 -2 · 对比度 -2 · 曝光补偿 +1 |
-| Fuji Reala 500D | 富士 Reala 500D | 彩色 | 还原富士 Reala 500D——自然、中性的日光电影负片。（社区创作，未经实测验证。）<br>创意风格：NEUTRAL · 饱和度 -1 · 对比度 +1 · DRO 4 |
-| Fujichrome CDU-II (cross) | 富士 CDU-II 交叉冲洗 | 彩色 | 还原交叉冲洗的 Fujichrome CDU-II——将反转片作 C-41 冲洗，反差狂野、色彩偏移。（社区创作，未经实测验证。）<br>创意风格：STD · 对比度 +2 · DRO 2 |
-| Fujicolor 100 | 富士 Fujicolor 100 | 彩色 | 还原富士 Fujicolor 100——中性、细腻的日用日光负片。（社区创作，未经实测验证。）<br>创意风格：STD · 饱和度 -1 · DRO 4 |
-| Fujicolor Print Industrial 100 | 富士工业打印 100 | 彩色 | 还原富士 Print Industrial 100——干净、略带冲击力的日用负片。（社区创作，未经实测验证。）<br>创意风格：STD · 对比度 +1 · DRO 3 |
-| Fujicolor Print Industrial 400 | 富士工业打印 400 | 彩色 | 还原富士 Print Industrial 400——反差更强的日用负片，适合日常。（社区创作，未经实测验证。）<br>创意风格：STD · 对比度 +2 · DRO 3 |
 
 ## 诚实说明
 

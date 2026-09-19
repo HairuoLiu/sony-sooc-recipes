@@ -148,7 +148,6 @@ python tools/gen_recipes.py --stdout  # 看生成结果
 | `canon-nikon` | 跨两个品牌——要先拆成各一个包 |
 | `pana-olympus` | 跨两个品牌——同理要拆 |
 | `other-stocks` | 混血胶片，无单一品牌 |
-| `cine` | 不是相机品牌，是电影感风格家族 |
 | `app-look` | 不是相机品牌，是社交 / App 滤镜风 |
 
 新增一个包时，往 `packs` 加一项即可；`release.yml` 的矩阵会自动纳入，无需改工作流。

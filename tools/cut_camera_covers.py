@@ -1,16 +1,17 @@
-"""Cut the 8 brand-pack cover cameras out of their backgrounds and refill ~80%.
+"""Cut the brand-pack cover cameras and film stocks out of their backgrounds and refill ~80%.
 
-This is the visual-unification pass. The user wants every launcher icon to be a
-*cut-out* camera (transparent background) enlarged to fill ~80% of the square,
-instead of the current "framed photo with original background" look.
+This is the visual-unification pass. Every launcher icon is a *cut-out* subject
+(transparent background) enlarged to fill ~80% of the square, rather than a framed
+photo that keeps its original background.
 
 Why rembg and not the existing luminance keying in build_pack_icons.py: several
 of these are black cameras on dark or textured backgrounds, which no luminance
 threshold can separate. rembg (U2-Net) does semantic subject segmentation.
 
-This script is deliberately separate from build_pack_icons.py. It produces
-intermediate cut-out masters under camera-covers/cutout/; wiring them into the
-icon build is a later step. It never overwrites master.jpg.
+This script is deliberately separate from build_pack_icons.py. It produces cut-out
+masters under camera-covers/cutout/, named <pack-id>.png; build_pack_icons.py picks
+those up automatically (--cutout, default camera-covers/cutout) and renders them as
+transparent silhouettes. It never overwrites master.jpg.
 
 The fill target is ~80% of the binding dimension of the subject's bounding box,
 which gives a comfortable margin without either a tiny subject or an amputated

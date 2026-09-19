@@ -12,6 +12,21 @@
 
 ---
 
+## Unreleased — 2026-09-19 · 第九个品牌包，与全套新图标素材
+
+- **第九个品牌包：`filmstocks`（Fuji Film Looks）。** 富士包一拆为二。`fujifilm` 现在只含相机
+  *模拟*——来自 `fuji-sim` 组的 16 款已编译配方；富士真实*胶卷*（来自 `fuji-film` 组的 10 款已编译
+  配方）移到新的 `filmstocks` 包。发布现在共 **十个** APK：全量版加九个单品牌包，较 v0.6.0 的九个又多一个。
+- **`ilford` 改名为 `Cinestill + Ilford Looks`。** 它现在还带 `cine` 组——4 个电影感风格
+  （Cinestill 50D、Cinestill 800T、Classic Cinema、Rec709 Video）——`ilford` 与 `cine` 两组合计 9 款
+  已编译配方。`cine` 是电影感风格家族，并非伊尔福产品；它从 `unassigned_groups` 移进了这个包。
+- **所有品牌包图标重制为透明剪影。** 每个包图标现在都从源照片里抠出的透明剪影，与全量版图标风格一致。
+- **六个包图标用用户提供的商业素材。** `leica`、`fujifilm`、`filmstocks`、`kodak`、`ilford`、
+  `hasselblad` 现在用的是用户专门提供的、保留全部权利的商业照片 / 厂商官方渲染，未授予任何许可。风险由
+  发布方承担；诚实的来源与「放宽许可」的约定见 `assets/app-icon-packs/CREDITS.md`。
+
+---
+
 ## v0.6.0 — 2026-09-13 · 品牌包：一个品牌一个 APK
 
 同一份代码、同一份 `catalog/filters.json`，按相机品牌打包成 **8 个独立 APK**，与全量版

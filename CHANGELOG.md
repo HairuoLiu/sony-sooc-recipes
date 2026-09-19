@@ -17,6 +17,28 @@ catalog gates plus the self-test that proves the gates still fail on broken inpu
 
 ---
 
+## Unreleased — 2026-09-19 · a ninth brand pack, and all-new icon artwork
+
+- **A ninth brand pack: `filmstocks` (Fuji Film Looks).** The Fujifilm pack split in two.
+  `fujifilm` now carries only the camera *simulations* — 16 compiled recipes from the
+  `fuji-sim` group — and the Fujifilm film *stocks* (10 compiled recipes from the `fuji-film`
+  group) moved to the new `filmstocks` pack. The release now ships **ten** APKs: the
+  all-in-one plus nine single-brand packs, up from v0.6.0's nine.
+- **`ilford` renamed `Cinestill + Ilford Looks`.** It now also carries the `cine` group — 4
+  motion-picture looks (Cinestill 50D, Cinestill 800T, Classic Cinema, Rec709 Video) — for 9
+  compiled recipes across the `ilford` and `cine` groups. The `cine` group is a
+  motion-picture look family, not an Ilford product; it moved out of `unassigned_groups` into
+  this pack.
+- **All pack icons re-cut as transparent silhouettes.** Every pack icon is now a transparent
+  silhouette keyed from its source photograph, matching the all-in-one icon's style.
+- **Six pack icons use user-supplied commercial material.** `leica`, `fujifilm`, `filmstocks`,
+  `kodak`, `ilford` and `hasselblad` now use all-rights-reserved commercial photographs /
+  official manufacturer renders supplied by the user, with no licence granted. The publishing
+  party carries the risk; see `assets/app-icon-packs/CREDITS.md` for the honest provenance and
+  the relaxed licence rule.
+
+---
+
 ## v0.6.0 — 2026-09-13 · Brand packs: one APK per brand
 
 The same code and the same `catalog/filters.json`, packaged into **8 separate APKs** by

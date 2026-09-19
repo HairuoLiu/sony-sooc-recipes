@@ -88,7 +88,7 @@ because this is the single most common point of confusion.
 
 ## 4. The pack table
 
-Eight packs today, built from the catalog. The *compiled recipe count* is the number
+Nine packs today, built from the catalog. The *compiled recipe count* is the number
 actually emitted into `Recipes.java` for that pack — after dropping entries that belong to
 the other engine (`film-studio-matrix`, reference-only) and entries that are reference-only
 for another brand. It is **not** the same as the group's total entry count, and a smaller
@@ -97,22 +97,23 @@ number is not a bug (see the notes below the table).
 | `id` | `app_name` | Source groups | Compiled recipes |
 |---|---|---|---|
 | `leica` | Leica Looks | `leica` | 20 |
-| `fujifilm` | Fujifilm Looks | `fuji-sim`, `fuji-film` | 26 |
+| `fujifilm` | Fujifilm Looks | `fuji-sim` | 16 |
+| `filmstocks` | Fuji Film Looks | `fuji-film` | 10 |
 | `ricoh` | Ricoh GR Looks | `ricoh-gr` | 11 |
 | `kodak` | Kodak Looks | `kodak` | 20 |
 | `pentax` | Pentax Looks | `pentax` | 11 |
-| `ilford` | Ilford Looks | `ilford` | 5 |
+| `ilford` | Cinestill + Ilford Looks | `ilford`, `cine` | 9 |
 | `hasselblad` | Hasselblad Looks | `hasselblad` | 4 |
 | `sony` | Sony Looks | `sony` | 8 |
 
-Two counts are smaller than their group sizes, and that is expected:
+Three counts are smaller than — or add up differently from — their group sizes, and that is expected:
 
-- **`fujifilm`** lists 26 entries across its groups, but `fuji-sim` alone carries **10
-  `film-studio-matrix` entries** — a different-engine, reference-only type that compiles
-  nowhere. Only **16** of `fuji-sim`'s entries are compilable, plus the **10** from
-  `fuji-film`, for 26 in the pack.
+- **`fujifilm`** lists 26 entries in `fuji-sim`, but only **16** are compilable; the other 10
+  belong to `fuji-film`, which is now the separate `filmstocks` pack. So this pack holds 16.
 - **`ricoh`** lists 16 entries in `ricoh-gr`, of which **11** are compilable (the other 5
   are `film-studio-matrix` reference-only).
+- **`ilford`** now spans two groups: **5** from `ilford` plus **4** from `cine` (a
+  motion-picture look family, not an Ilford product), for 9 in the pack.
 
 So if a pack's number looks low, check whether its group mixes in the other engine before
 assuming something was dropped. `tools/gen_recipes.py --pack <id>` prints the emitted
@@ -137,12 +138,11 @@ bug report:
 | `canon-nikon` | Spans two brands — it has to be split into one pack per brand first |
 | `pana-olympus` | Spans two brands — same split required |
 | `other-stocks` | Mixed heritage stocks (Agfa, Polaroid, Ferrania …) with no single brand |
-| `cine` | Not a camera brand — a motion-picture look family |
 | `app-look` | Not a camera brand — social / app filter looks |
 
 `canon-nikon` and `pana-olympus` are the only ones with a clear path to becoming packs:
 split each into `canon` and `nikon` (or `panasonic` and `olympus`) groups, then each gets
-its own pack entry. The other three are category groups, not brands, and are unlikely ever
+its own pack entry. The other two are category groups, not brands, and are unlikely ever
 to be packs.
 
 A pack also cannot contain `film-studio-matrix` entries — those are reference-only and
@@ -221,8 +221,12 @@ checkout. `--dry-run` reports every change without writing.
 
 ## 7. Icons — where they come from, how they are generated, and the attribution obligation
 
-Each pack's launcher icon is built from a **freely-licensed photograph on Wikimedia
-Commons** of that brand's best-known camera. The attributions are recorded in
+Each pack's launcher icon is built from a photograph of that brand's best-known camera — or,
+for `filmstocks`, `kodak` and `ilford`, from a film canister rather than a camera (those three
+packs are named after film stock, not a body). Most packs use a **freely-licensed photograph
+on Wikimedia Commons**, but six packs (`leica`, `fujifilm`, `filmstocks`, `kodak`, `ilford`,
+`hasselblad`) now use **all-rights-reserved commercial photographs supplied by the user**, with
+no licence granted. The attributions and the relaxed licence rule are recorded in
 `assets/app-icon-packs/CREDITS.md`, and — because the icon ships inside the APK — the
 attribution must **travel with the APK**: it goes in `NOTICE.md` and in the per-pack
 release notes.
@@ -240,16 +244,20 @@ fixed pixel sizes:
 | `icon-512.png` | store listing | 512 |
 
 **Be honest about the keying.** The all-in-one icon, built by `tools/build_app_icon.py`,
-is **keyed out of its plain-white background** (a transparent RGBA drawable). The pack
-icons are **not** keyed — they keep the rectangular photograph exactly as shipped. Do not
-describe the pack icons as background-free; they are not.
+is **keyed out of its plain-white background** (a transparent RGBA drawable). As of this
+release the pack icons are **also** keyed — each is a transparent silhouette cut from its
+source photograph, matching the all-in-one's style rather than keeping the rectangular photo.
+Do not describe the pack icons as rectangular photographic tiles; they are not.
 
-**The attribution obligation is real.** Of the first four packs, the photographs are:
+**The attribution obligation is real — but it now applies to only three of the nine packs.**
+Six packs (`leica`, `fujifilm`, `filmstocks`, `kodak`, `ilford`, `hasselblad`) use
+all-rights-reserved commercial photographs supplied by the user; no licence was granted, so
+there is no attribution obligation — only the publisher's risk of distributing them. The
+other three packs keep their original Wikimedia Commons photographs and still require a credit:
 
-- **Kodak** — Kodak Brownie 127, CC BY 4.0 (author: 多多123)
-- **Ilford** — Ilford Sporti, CC BY 4.0 (author: Matthew Paul Argall)
+- **Ricoh** — Ricoh GR (2013), CC BY 2.0 (author: Kārlis Dambrāns)
 - **Pentax** — Pentax K1000, CC BY 2.0 (author: Terry Presley)
-- **Hasselblad** — Hasselblad 500C, public domain (author: Holger Ellgaard)
+- **Sony** — Sony α7 (ILCE-7), CC BY 2.0 (author: Henry Söderlund)
 
 `CC BY` permits commercial use **only with attribution**, so the credit must ride along in
 `NOTICE.md` and the per-pack release notes. `CC BY-SA` is deliberately **excluded** from
@@ -332,10 +340,13 @@ Say you want a `contax` pack. Step by step:
    `film-studio-matrix` entries). A pack with zero recipes is a broken pack.
 
 3. **Generate the icon set.** Produce `assets/app-icon-packs/contax/` with the five files
-   at 48 / 72 / 96 / 144 / 512 px (§7), via `tools/build_pack_icons.py`. Use a
-   freely-licensed photograph, and record its attribution in `NOTICE.md` and the per-pack
-   release notes. Do **not** use a `CC BY-SA` photo, and do **not** claim the icon is
-   keyed out of its background.
+   at 48 / 72 / 96 / 144 / 512 px (§7). Preferred: drop a keyed `contax.png` cut-out into
+   `camera-covers/cutout/` (see `tools/cut_camera_covers.py`) — `tools/build_pack_icons.py`
+   picks it up and renders a transparent silhouette. With no cut-out it falls back to the
+   framed `master.jpg`. Record the source's provenance and licence in
+   `assets/app-icon-packs/CREDITS.md`, `NOTICE.md` and the per-pack release notes. Do
+   **not** use a `CC BY-SA` photo — the icon is an adaptation of the photograph, so
+   share-alike would reach the whole app.
 
 4. **Run the gate.** `tools/check_assets.py` now checks icon sets. A missing set directory
    is a *note* (the pack falls back to the default icon), but a set that exists with a

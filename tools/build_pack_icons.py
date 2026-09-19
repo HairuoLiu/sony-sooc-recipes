@@ -12,17 +12,27 @@ for the provenance and licence of every photograph, which is a compliance obliga
 decoration.
 
 Why this is not tools/build_app_icon.py. That script keys the background out of a single
-studio shot to match upstream's transparent silhouette, and its docstring is explicit that
-the keying works only because the master is a dark camera on a plain *white* background.
-These are seven different photographs from a public image archive: backgrounds vary from
-pure white through studio grey to dark wood, several have no clean background at all, and
-a black camera on a black seamless is indistinguishable from its background by any
-luminance rule. Keying them would either leave a grey halo or eat the camera. So the pack
-icons keep their background and are *framed* instead — a rounded square, which is what a
-launcher icon looks like on modern Android anyway and which reads as deliberate rather
-than as a failed cut-out.
+studio shot by connectivity, and its docstring is explicit that the keying works only
+because the master is a dark camera on a plain *white* background. These are nine
+photographs — three freely licensed ones from a public image archive and six commercial
+renders supplied by the user — and their backgrounds vary from pure white through studio
+grey to dark wood. A black camera on a black seamless is indistinguishable from its
+background by any luminance rule, so that connectivity keying would either leave a grey
+halo or eat the camera.
 
-The three steps, in order, and why each exists:
+Two rendering paths, chosen per pack by whether a cut-out exists:
+
+  * **Cut-out (preferred).** If `ROOT.parent/camera-covers/cutout/<pack-id>.png` exists,
+    `render_rgba()` renders it as a transparent silhouette. That source was already keyed
+    semantically by tools/cut_camera_covers.py (rembg / U-Net), which *can* separate a black
+    camera from a dark background. The cut-out's own alpha is intersected with the rounded
+    mask, so the corners round off *and* the keyed background stays transparent.
+  * **Framed (fallback).** With no cut-out, `render()` falls back to `master.jpg`: the
+    subject is located against the photograph's own border colour and framed into a rounded
+    square — padded rather than cropped, so the camera is never cut off. A framed tile is a
+    deliberate look here, not a failed cut-out.
+
+The framing fallback, in three steps, and why each exists:
 
   1. **Find the camera.** The subject is located by comparing every pixel against the
      photograph's own border colour — the median of its four edge strips — rather than
@@ -217,6 +227,37 @@ def render(square: Image.Image, out: Path) -> list[tuple[Path, int]]:
     return written
 
 
+def render_rgba(square: Image.Image, out: Path) -> list[tuple[Path, int]]:
+    """Like render(), but for a *cut-out* master whose own alpha is the transparent
+    camera silhouette.
+
+    The plain render() overwrites alpha with the rounded-rect mask, which would turn the
+    cut-out's soft, see-through camera back into an opaque rectangle. Here the two alphas
+    are intersected instead: the outer corners are rounded AND the camera keeps its
+    keyed-out background. The square is expected to already be centred and sized (the
+    camera filling ~FILL of the side) — that is what tools/cut_camera_covers.py produces.
+    """
+    written: list[tuple[Path, int]] = []
+    for name, side in DENSITIES.items():
+        art = square.resize((side, side), Image.LANCZOS).convert("RGBA")
+        alpha = np.asarray(art.split()[-1]).astype(np.uint16)
+        mask = np.asarray(rounded_mask(side)).astype(np.uint16)
+        new_a = (alpha * mask // 255).astype(np.uint8)
+        art.putalpha(Image.fromarray(new_a, "L"))
+        p = out / f"ic_launcher-{name}.png"
+        art.save(p)
+        written.append((p, side))
+    art = square.resize((LARGE, LARGE), Image.LANCZOS).convert("RGBA")
+    alpha = np.asarray(art.split()[-1]).astype(np.uint16)
+    mask = np.asarray(rounded_mask(LARGE)).astype(np.uint16)
+    new_a = (alpha * mask // 255).astype(np.uint8)
+    art.putalpha(Image.fromarray(new_a, "L"))
+    p = out / f"icon-{LARGE}.png"
+    art.save(p)
+    written.append((p, LARGE))
+    return written
+
+
 def write_master(src: Path, dst: Path) -> tuple[int, int]:
     img = Image.open(src)
     rgb = base_rgb(img)
@@ -242,6 +283,11 @@ def main() -> int:
     ap.add_argument("--pack", help="only this pack (default: every pack with a master)")
     ap.add_argument("--icons", type=Path, default=ICON_ROOT,
                     help="root of the per-pack icon sets")
+    ap.add_argument("--cutout", type=Path,
+                    default=ROOT.parent / "camera-covers" / "cutout",
+                    help="directory of transparent cut-out PNGs named <pack-id>.png; when "
+                         "one exists for a pack the icon is built from the cut-out "
+                         "(background already keyed out) instead of master.jpg + framing")
     ap.add_argument("--import", dest="import_dir", type=Path, metavar="DIR",
                     help="copy DIR/<pack-id>.jpg in as the master for each pack, then stop "
                          "(downscaled to %d px; run again without --import to render)" % MASTER_MAX)
@@ -276,14 +322,21 @@ def main() -> int:
     missing: list[str] = []
     for pid, pack in sorted(wanted.items()):
         set_dir = args.icons / pack["icon_set"]
-        master = set_dir / "master.jpg"
-        if not master.is_file():
-            missing.append(pid)
-            continue
-        square = frame_square(base_rgb(Image.open(master)))
-        written = render(square, set_dir)
+        cut = (args.cutout / f"{pid}.png") if args.cutout else None
+        if cut is not None and cut.is_file():
+            square = Image.open(cut).convert("RGBA")
+            written = render_rgba(square, set_dir)
+            src = f"{cut.name} (cut-out)"
+        else:
+            master = set_dir / "master.jpg"
+            if not master.is_file():
+                missing.append(pid)
+                continue
+            square = frame_square(base_rgb(Image.open(master)))
+            written = render(square, set_dir)
+            src = master.name
         print(f"{pid}  (icon_set {pack['icon_set']}, app_name {pack['app_name']!r})")
-        print(f"  master {master.name} -> square {square.size[0]}x{square.size[1]} px")
+        print(f"  {src} -> square {square.size[0]}x{square.size[1]} px")
         for p, side in written:
             print(f"  {p.relative_to(ROOT)}  {side}x{side}  {p.stat().st_size} B")
 

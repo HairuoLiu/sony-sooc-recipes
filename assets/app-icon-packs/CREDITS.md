@@ -1,14 +1,24 @@
 # Brand-pack icon artwork — provenance and licences
 
-Each brand pack carries a launcher icon built from a photograph of the camera that pack is
-named after. This file records where every one of those photographs came from and under
-what licence, because for most of them **attribution is a licence condition, not a
-courtesy**.
+Most brand packs carry a launcher icon built from a photograph of the camera that pack is
+named after. Three packs are the exception, and one is a merged app:
+
+- `filmstocks` is named after a film stock, not a camera — its icon is a Kodak Portra 400
+  canister.
+- `kodak` keeps the Kodak name, but its current icon is a Kodak Gold 400 / 400 film canister,
+  not a camera body.
+- `ilford` is now the **Cinestill + Ilford** app: its icon is composed from a Cinestill 800T
+  35 mm product shot and an Ilford HP5 135 product shot, neither of which is a camera.
+
+So the "famous camera" premise holds for six of the nine packs (`leica`, `fujifilm`, `ricoh`,
+`pentax`, `hasselblad`, `sony`); the other three (`filmstocks`, `kodak`, `ilford`) depict film
+stock. This file records where every one of those photographs came from and under what licence,
+because for most of them **attribution is a licence condition, not a courtesy**.
 
 ## What the licence rule is, and why it is this strict
 
-Only **public domain, CC0, or CC BY** images are accepted. Two families are excluded on
-purpose:
+The standing rule is: only **public domain, CC0, or CC BY** images are accepted. Two families
+are excluded on purpose:
 
 - **CC BY-SA** carries a share-alike term. The icon is an *adapted* work — the photograph is
   reframed, cropped and then resized — so share-alike would propagate to the adaptation, and
@@ -23,31 +33,51 @@ this file, `NOTICE.md`, and the release notes for the pack in question (a user w
 only `SonySOOCRecipes-kodak.apk` never sees this repository, so the credits have to travel
 with the APK).
 
+### The rule was deliberately relaxed for six user-supplied images
+
+Six of the nine packs (`leica`, `fujifilm`, `filmstocks`, `kodak`, `ilford`, `hasselblad`)
+now use photographs that the **user supplied specifically for this project** — commercial
+product photographs and official manufacturer renders. These are **all rights reserved,
+unlicensed** material. No licence of any kind (not CC0, not CC BY, not public domain) was
+granted:
+
+- the project accepted them on the **copyright holder's / user's own instruction**;
+- **no licence was granted** by the rights holder — this is not "used with permission",
+  because nothing was licensed;
+- the **publishing party carries the risk** of distributing all-rights-reserved photographs
+  inside the APK. That risk is the publisher's to accept or decline; it is recorded here
+  rather than hidden.
+
+The three remaining packs (`ricoh`, `pentax`, `sony`) keep their original CC BY 2.0
+photographs from Wikimedia Commons and still require a visible credit wherever the app is
+distributed.
+
 ## Attribution table
 
-All eight packs have an icon. Three carry no attribution obligation at all — two are CC0
-(`fujifilm`, `kodak`) and one is public domain (`hasselblad`). The other five are CC BY, so
-their author credit is a licence condition.
+Nine packs have an icon. Six of them (`leica`, `fujifilm`, `filmstocks`, `kodak`, `ilford`,
+`hasselblad`) carry **no licence at all** — all-rights-reserved commercial photographs
+supplied by the user, recorded below with their source but with **no attribution obligation**,
+because no licence was granted. The other three (`ricoh`, `pentax`, `sony`) are **CC BY 2.0**,
+so their author credit is a licence condition and must travel with the APK.
 
-| Pack | Camera | Author | Licence | Source |
-|------|--------|--------|---------|--------|
-| `fujifilm` | Fujifilm FinePix X100 (2011) | frank mckenna (frankiefoto), via Unsplash | **CC0** — no attribution required | [File:Fujifilm FinePix X100 with Fujinon Asph Super EBC 23mm F2](https://commons.wikimedia.org/wiki/File:Fujifilm_FinePix_X100_with_Fujinon_Asph_Super_EBC_23mm_F2_(Unsplash_JbTBJYOEc28).jpg) |
-| `hasselblad` | Hasselblad 500C (1957) | Holger Ellgaard | Public domain (PD-self) — no attribution required | [File:Hasselblad 500C.jpg](https://commons.wikimedia.org/wiki/File:Hasselblad_500C.jpg) |
-| `ilford` | Ilford Sporti (c. 1955) | Matthew Paul Argall | CC BY 4.0 — attribution required | [File:Ilford Sporti camera.jpg](https://commons.wikimedia.org/wiki/File:Ilford_Sporti_camera.jpg) |
-| `kodak` | Kodak Instamatic 255-X (1970–1972) | 2538O | **CC0** — no attribution required | [File:Kodak Instamatic 255-X.jpg](https://commons.wikimedia.org/wiki/File:Kodak_Instamatic_255-X.jpg) |
-| `leica` | Leica M3 (1954–1966) | Hannes Grobe | CC BY 3.0 — attribution required | [File:Leica-m3 hg.JPG](https://commons.wikimedia.org/wiki/File:Leica-m3_hg.JPG) |
-| `pentax` | Asahi Pentax K1000 (1976–1997) | Terry Presley | CC BY 2.0 — attribution required | [File:Pentax K1000 (6301325288).jpg](https://commons.wikimedia.org/wiki/File:Pentax_K1000_(6301325288).jpg) |
+| Pack | Depicts | Author / source | Licence | Source |
+|------|---------|----------------|---------|--------|
+| `leica` | Leica M9 (2009) | sketch.vip — Leica M9 product render | **All rights reserved** — user-supplied, no licence granted | sketch.vip M9 render |
+| `fujifilm` | Fujifilm X100VI (2023) | fujifilm-x.b-cdn.net — X100VI product thumbnail (480×480) | **All rights reserved** — user-supplied, no licence granted | fujifilm-x.b-cdn.net X100VI product thumbnail |
+| `filmstocks` | Kodak Portra 400 135 canister | Google Images thumbnail of a Kodak Portra 400 canister | **All rights reserved** — user-supplied, no licence granted | Google Images thumbnail (Kodak Portra 400 canister) |
 | `ricoh` | Ricoh GR (2013) | Kārlis Dambrāns | CC BY 2.0 — attribution required | [File:Ricoh GR (16159018330).jpg](https://commons.wikimedia.org/wiki/File:Ricoh_GR_(16159018330).jpg) |
+| `kodak` | Kodak Gold 400 / 400 film canister | prophotosupply.com — Kodak Gold 400 product photo | **All rights reserved** — user-supplied, no licence granted | prophotosupply.com Kodak Gold 400 |
+| `pentax` | Asahi Pentax K1000 (1976–1997) | Terry Presley | CC BY 2.0 — attribution required | [File:Pentax K1000 (6301325288).jpg](https://commons.wikimedia.org/wiki/File:Pentax_K1000_(6301325288).jpg) |
+| `ilford` | Cinestill 800T 35 mm + Ilford HP5 135, composed | composed from images.squarespace-cdn.com (Cinestill 800T 35 mm product shot) and ilfordphoto.com (HP5 135 product shot) | **All rights reserved** — user-supplied, no licence granted | images.squarespace-cdn.com Cinestill 800T + ilfordphoto.com HP5 |
+| `hasselblad` | Hasselblad X2D II 100C (2022) | cameraelectronic.com.au — official X2D II 100C render (Shopify CDN) | **All rights reserved** — user-supplied, no licence granted | cameraelectronic.com.au product page (Shopify CDN) |
 | `sony` | Sony α7 (ILCE-7, 2013) | Henry Söderlund | CC BY 2.0 — attribution required | [File:Sony A7, A7R, A7S — by Henry Söderlund](https://commons.wikimedia.org/wiki/File:Sony_A7,_A7R,_A7S_-_by_Henry_S%C3%B6derlund_(14700037048).jpg) |
 
-Licence texts: [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) ·
-[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) ·
-[CC BY 3.0](https://creativecommons.org/licenses/by/3.0/) ·
-[CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)
+Licence texts: [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)
 
-Five of the eight therefore need a visible credit wherever the app is distributed. See
-`NOTICE.md` for the block that carries it, and remember that an APK is distributed on its
-own — a credit that exists only in this repository does not travel with it.
+Three of the nine therefore need a visible credit wherever the app is distributed (the CC BY
+2.0 packs: `ricoh`, `pentax`, `sony`). See `NOTICE.md` for the block that carries it, and
+remember that an APK is distributed on its own — a credit that exists only in this repository
+does not travel with it.
 
 ## Rejected: the first Fujifilm pick
 
@@ -55,42 +85,45 @@ own — a credit that exists only in this repository does not travel with it.
 it had already been downloaded and rendered. The icon reframes and resizes the photograph,
 which makes it an adapted work, and share-alike would propagate from the adaptation to the
 application distributing it — forcing this whole app under CC BY-SA, which it is not. It was
-replaced by the CC0 photograph above. Do not reinstate it, and check the licence before
-adding any photograph here.
+replaced by the user-supplied X100VI product thumbnail above. Do not reinstate it, and check
+the licence before adding any photograph here.
 
-## Which camera each pack uses, and why
+## Which camera (or film stock) each pack uses, and why
 
-The pick is "the brand's most famous camera", which is a judgement call. The reasoning, kept
-here so it can be argued with rather than rediscovered:
+The pick is "the brand's most famous camera", which is a judgement call. For the three packs
+whose icon is a film canister rather than a camera, the same judgement applies to the *film
+stock* depicted. The reasoning, kept here so it can be argued with rather than rediscovered:
 
-- **Leica M3** — the definitive Leica rangefinder. Introduced the M-mount and the
-  twin-window silhouette that every later M camera inherited. The Barnack screw-mount Leica I
-  is historically more foundational, but the M3 is what "a Leica" looks like.
-- **Kodak Instamatic 255-X** — the Instamatic line (126-cartridge, 1963–1970) is the
-  best-selling camera range ever, and the name became generic for "point-and-shoot". The
-  255-X is a representative 1970 model with a clean, freely-licensed product photograph. The
-  original 1900 Brownie is more historically foundational, but its free photographs are
-  cluttered; an earlier pick (the Brownie 127) was a minor 127-film variant and was replaced
-  for not being the icon.
-- **Ilford Sporti** — Ilford is a film manufacturer (HP5, FP4, Delta), not a camera maker; it
-  badged cameras built by Dacora of Germany. The Sporti is the best-documented of those under a
-  free licence. The Sportsman was considered but has no equally usable photograph.
+- **Leica M9** — Leica's first full-frame digital M-rangefinder (2009), the digital form of
+  the M body the M3 established. The M3's reasoning — the M-mount and the twin-window
+  silhouette every later M camera inherited — still describes what "a Leica" looks like; the
+  M9 is the current camera that shape now names.
+- **Kodak Gold 400 / 400 canister** — Kodak Gold 400 is one of Kodak's best-selling consumer
+  colour negatives, and its canister is the most recognisable Kodak object that is not a
+  camera. The earlier Instamatic 255-X pick was a camera; the current icon is the film itself.
+- **Ilford / Cinestill — Cinestill 800T + Ilford HP5** — `ilford` is now the **Cinestill +
+  Ilford** app, and its icon is composed from a Cinestill 800T 35 mm product shot and an Ilford
+  HP5 135 product shot. Note that the `cine` group is a **motion-picture look family** (Cinestill
+  50D, Cinestill 800T, classic cinema, Rec709) and is **not** an Ilford product — it is grouped
+  into this pack for distribution convenience, not because it is an Ilford film.
 - **Pentax K1000** — roughly three million units, and for two decades the default "first film
   camera" in every photography course. The 1957 Asahi Pentax created the modern Japanese SLR
   layout, but the K1000 is the model people actually recognise.
-- **Hasselblad 500C** — established the modular 6×6 medium-format SLR; its electronic sibling
-  the 500EL went to the Moon on Apollo. The 500C is the origin of the shape that means
-  "Hasselblad".
+- **Hasselblad X2D II 100C** — Hasselblad's current 100 MP medium-format mirrorless body
+  (2022); the modern continuation of the 500C's modular 6×6 shape that means "Hasselblad". The
+  500C's electronic sibling, the 500EL, went to the Moon on Apollo.
 - **Ricoh GR (2013)** — brought APS-C quality into a pocketable fixed-lens body and became the
   street-photography tool of its generation; the name descends from the film GR1 that Daido
   Moriyama used. The film GR1 is the alternative pick.
-- **Fujifilm FinePix X100** — created the modern retro-styled compact category: hybrid
-  optical/electronic viewfinder and physical dials in a fixed-lens APS-C body. Now the
-  visual shorthand for "Fujifilm camera". The CC0 photograph is the X100 with its
-  Fujinon 23mm f/2, shot against a plain background.
+- **Fujifilm X100VI** — the current X100-series camera (2023); the hybrid optical/electronic
+  viewfinder compact the original X100 (2011) started. Now the visual shorthand for "Fujifilm
+  camera".
 - **Sony α7 (ILCE-7)** — the first full-frame mirrorless camera, and the origin of that
   whole market segment. The α7 III is the best-selling descendant and the RX100 is the
   other defensible pick; the original α7 is the one that changed the industry.
+- **filmstocks — Kodak Portra 400 canister** — Portra 400 is Kodak's standard professional
+  colour negative, and its 135 canister is the icon because this pack is named after the film,
+  not a camera.
 
 ## How the masters were produced
 
@@ -105,9 +138,9 @@ python tools/build_pack_icons.py                                   # render ever
 python tools/build_pack_icons.py --pack leica                      # render one
 ```
 
-`tools/build_pack_icons.py` frames the camera and rounds the corners; its docstring explains
-why these icons keep their photographic background instead of being keyed out the way
-`assets/app-icon/` is. If a master is replaced, re-run the render — the PNGs are committed,
+`tools/build_pack_icons.py` keys the camera or film stock out of its photograph into a
+transparent silhouette (the same treatment as `assets/app-icon/`); its docstring explains the
+framing and keying. If a master is replaced, re-run the render — the PNGs are committed,
 so a stale render would otherwise ship.
 
 ## Trademark
