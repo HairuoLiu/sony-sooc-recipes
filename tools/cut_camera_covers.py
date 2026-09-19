@@ -22,6 +22,12 @@ several canisters, or a canister standing beside its box. The blob filter below
 drops specks relative to the largest blob, so pass --min-blob-frac <1 to keep the
 whole group. Leaving it at the default 1.0 would silently render only the biggest
 object and throw the rest away.
+
+Pre-keyed sources: if the supplier hands over a PNG that is *already* background-free,
+pass its directory as --prekeyed and it is used as-is, with its own alpha. Re-running
+rembg on an existing cut-out can only lose fidelity — and the master.jpg path cannot
+carry alpha at all, because it is JPEG. The master is still written (flattened on
+white) so the committed source record stays uniform.
 """
 
 import argparse
@@ -55,6 +61,32 @@ def cut(master: Path) -> Image.Image:
                  alpha_matting_background_threshold=10,
                  alpha_matting_erode_size=10)
     return Image.open(__import__("io").BytesIO(out)).convert("RGBA")
+
+
+def load_prekeyed(path: Path) -> Image.Image | None:
+    """Return the image with its own alpha if it is already a cut-out, else None.
+
+    A source the supplier already keyed out must not be re-run through rembg: the soft
+    edge is already the good one, and a second segmentation can only disagree with it.
+    A file that merely *happens* to be stored as RGBA but is effectively opaque is not a
+    cut-out, and has to go through rembg like any other photograph.
+    """
+    if not path.is_file():
+        return None
+    try:
+        im = Image.open(path)
+    except Exception:
+        return None
+    if im.mode not in ("RGBA", "LA", "P"):
+        return None
+    im = im.convert("RGBA")
+    alpha = np.asarray(im)[:, :, 3]
+    if alpha.size == 0:
+        return None
+    transparent = float((alpha < 250).mean())
+    if alpha.min() > 250 or transparent < 0.02:
+        return None
+    return im
 
 
 def clean_mask(a: np.ndarray, min_blob_frac: float = 1.0) -> np.ndarray:
@@ -119,6 +151,9 @@ def main() -> int:
                     help="keep connected components at least this fraction of the "
                          "largest one's area (default 1.0 = largest only; use e.g. "
                          "0.15 for a multi-object cover such as several canisters)")
+    ap.add_argument("--prekeyed", type=Path,
+                    help="directory of already background-free <pack-id>.png sources; when "
+                         "one exists its own alpha is used and rembg is skipped")
     args = ap.parse_args()
 
     args.out.mkdir(parents=True, exist_ok=True)
@@ -128,12 +163,17 @@ def main() -> int:
         if not master.exists():
             print(f"  skip {pid}: no master.jpg")
             continue
-        img = cut(master)
+        keyed = load_prekeyed(args.prekeyed / f"{pid}.png") if args.prekeyed else None
+        if keyed is not None:
+            img, how = keyed, f"{pid}.png (own alpha)"
+        else:
+            img, how = cut(master), "rembg"
         canvas, fill = fill80(img, args.min_blob_frac)
         dst = args.out / f"{pid}.png"
         canvas.save(dst)
         report.append((pid, fill, canvas.size))
-        print(f"  {pid:11s} fill={fill*100:5.1f}%  -> {dst.name} {canvas.size[0]}x{canvas.size[1]}")
+        print(f"  {pid:11s} fill={fill*100:5.1f}%  [{how}]  -> {dst.name} "
+              f"{canvas.size[0]}x{canvas.size[1]}")
 
     print("\nsummary:")
     for pid, fill, size in report:

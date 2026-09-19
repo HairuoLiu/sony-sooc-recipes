@@ -31,16 +31,21 @@ catalog gates plus the self-test that proves the gates still fail on broken inpu
   this pack.
 - **All pack icons re-cut as transparent silhouettes.** Every pack icon is now a transparent
   silhouette keyed from its source photograph, matching the all-in-one icon's style.
-- **Seven pack icons use user-supplied commercial material.** `leica`, `fujifilm`, `filmstocks`,
-  `kodak`, `ilford`, `hasselblad` and `sony` now use all-rights-reserved commercial photographs /
-  official manufacturer renders supplied by the user, with no licence granted. The publishing
-  party carries the risk; see `assets/app-icon-packs/CREDITS.md` for the honest provenance and
-  the relaxed licence rule. That leaves only two packs (`ricoh`, `pentax`) on CC BY 2.0, whose
-  credits still have to travel with the APK.
-- **Three of those icons changed subject.** `filmstocks` shows Fujifilm film canisters (it is
+- **All nine pack icons use user-supplied commercial material.** `leica`, `fujifilm`,
+  `filmstocks`, `kodak`, `ilford`, `hasselblad`, `sony`, `ricoh` and `pentax` now use
+  all-rights-reserved commercial photographs / official manufacturer renders supplied by the
+  user, with no licence granted. The publishing party carries the risk; see
+  `assets/app-icon-packs/CREDITS.md` for the honest provenance and the relaxed licence rule.
+  `ricoh` and `pentax` were the last two Wikimedia Commons **CC BY 2.0** photographs, so no
+  free-licensed image ships in any APK and there is no attribution obligation left — their
+  former credit lines were removed rather than left behind for photographs that are no longer
+  distributed.
+- **Five of those icons changed subject.** `filmstocks` shows Fujifilm film canisters (it is
   named after the film, not a body), `ilford` a CineStill film product instead of the earlier
-  composed Cinestill + Ilford pair, and `sony` a user-supplied camera render instead of the
-  Wikimedia α7 photograph.
+  composed Cinestill + Ilford pair, `sony` a user-supplied camera image instead of the Wikimedia
+  α7 photograph, and both `ricoh` and `pentax` user-supplied camera images instead of their
+  Wikimedia `Ricoh GR` and `Pentax K1000` photographs. The exact camera models behind the three
+  replacement images supplied without captions have **not** been verified; see CREDITS.md.
 
 ---
 

@@ -13,7 +13,10 @@ named after. Three packs are the exception, and one is a merged app:
 So the "famous camera" premise holds for six of the nine packs (`leica`, `fujifilm`, `ricoh`,
 `pentax`, `hasselblad`, `sony`); the other three (`filmstocks`, `kodak`, `ilford`) depict film
 stock. This file records where every one of those photographs came from and under what licence,
-because for the CC BY ones **attribution is a licence condition, not a courtesy**.
+because whenever a CC BY or other attribution-bearing image is used, **that attribution is a
+licence condition, not a courtesy**. As of now no such image ships — see below — but the
+record has to stay accurate either way, since a credit left behind for a photograph that is no
+longer distributed is itself a misattribution.
 
 ## What the licence rule is, and why it is this strict
 
@@ -27,19 +30,21 @@ are excluded on purpose:
 - **CC BY-NC / CC BY-ND** forbid commercial use and derivatives respectively, and an icon is
   both.
 
-CC BY is accepted because it permits commercial use, at the cost of a mandatory attribution
-obligation. That obligation is discharged in three places, all of which must stay in sync:
-this file, `NOTICE.md`, and the release notes for the pack in question (a user who downloads
-only `SonySOOCRecipes-kodak.apk` never sees this repository, so the credits have to travel
-with the APK).
+CC BY remains acceptable in principle because it permits commercial use, at the cost of a
+mandatory attribution obligation. That obligation is discharged in three places, all of which
+must stay in sync: this file, `NOTICE.md`, and the release notes for the pack in question (a
+user who downloads only `SonySOOCRecipes-kodak.apk` never sees this repository, so the credits
+have to travel with the APK). **No CC BY image is currently in use**, so the obligation is
+dormant — it resumes the day a licensed photograph is added.
 
-### The rule was deliberately relaxed for seven user-supplied images
+### The rule was deliberately relaxed for all nine user-supplied images
 
-Seven of the nine packs (`leica`, `fujifilm`, `filmstocks`, `kodak`, `ilford`, `hasselblad`,
-`sony`) now use photographs that the **user supplied specifically for this project** — commercial
-product photographs and official manufacturer renders. These are **all rights reserved,
-unlicensed** material. No licence of any kind (not CC0, not CC BY, not public domain) was
-granted:
+All nine packs now use photographs that the **user supplied specifically for this project** —
+commercial product photographs and official manufacturer renders. `ricoh` and `pentax` were
+the last two Wikimedia Commons CC BY 2.0 photographs and were replaced with user-supplied
+images too, so nothing free-licensed is distributed in any pack. These are **all rights
+reserved, unlicensed** material. No licence of any kind (not CC0, not CC BY, not public
+domain) was granted:
 
 - the project accepted them on the **copyright holder's / user's own instruction**;
 - **no licence was granted** by the rights holder — this is not "used with permission",
@@ -48,36 +53,39 @@ granted:
   inside the APK. That risk is the publisher's to accept or decline; it is recorded here
   rather than hidden.
 
-The two remaining packs (`ricoh`, `pentax`) keep their original CC BY 2.0
-photographs from Wikimedia Commons and still require a visible credit wherever the app is
-distributed.
+Because nothing licensed ships, the former CC BY credit lines for `ricoh` (Ricoh GR by
+Kārlis Dambrāns) and `pentax` (Pentax K1000 by Terry Presley) have been removed from this
+file, from `NOTICE.md` and from the release notes. Removing them is the honest move: keeping a
+credit for a photograph that no longer ships would attribute material the APK does not contain.
 
 ## Attribution table
 
-Nine packs have an icon. Seven of them (`leica`, `fujifilm`, `filmstocks`, `kodak`, `ilford`,
-`hasselblad`, `sony`) carry **no licence at all** — all-rights-reserved commercial photographs
-supplied by the user, recorded below with their source but with **no attribution obligation**,
-because no licence was granted. The other two (`ricoh`, `pentax`) are **CC BY 2.0**,
-so their author credit is a licence condition and must travel with the APK.
+Nine packs have an icon, and all nine carry **no licence at all** — all-rights-reserved
+commercial photographs supplied by the user, recorded below with their source but with **no
+attribution obligation**, because no licence was granted. There is therefore no CC BY material
+in the table any more.
 
 | Pack | Depicts | Author / source | Licence | Source |
 |------|---------|----------------|---------|--------|
 | `leica` | Leica M9 (2009) | sketch.vip — Leica M9 product render | **All rights reserved** — user-supplied, no licence granted | sketch.vip M9 render |
 | `fujifilm` | Fujifilm X100VI (2023) | fujifilm-x.b-cdn.net — X100VI product thumbnail (480×480) | **All rights reserved** — user-supplied, no licence granted | fujifilm-x.b-cdn.net X100VI product thumbnail |
 | `filmstocks` | Fujifilm film canisters | user-supplied product photograph | **All rights reserved** — user-supplied, no licence granted | user-supplied (pasted image) |
-| `ricoh` | Ricoh GR (2013) | Kārlis Dambrāns | CC BY 2.0 — attribution required | [File:Ricoh GR (16159018330).jpg](https://commons.wikimedia.org/wiki/File:Ricoh_GR_(16159018330).jpg) |
+| `ricoh` | Ricoh camera (user-supplied) | user-supplied product photograph | **All rights reserved** — user-supplied, no licence granted | user-supplied (pasted image) |
 | `kodak` | Kodak Gold 400 / 400 film canister | prophotosupply.com — Kodak Gold 400 product photo | **All rights reserved** — user-supplied, no licence granted | prophotosupply.com Kodak Gold 400 |
-| `pentax` | Asahi Pentax K1000 (1976–1997) | Terry Presley | CC BY 2.0 — attribution required | [File:Pentax K1000 (6301325288).jpg](https://commons.wikimedia.org/wiki/File:Pentax_K1000_(6301325288).jpg) |
+| `pentax` | Pentax camera (user-supplied; source was already a transparent cut-out) | user-supplied product photograph | **All rights reserved** — user-supplied, no licence granted | user-supplied (pasted image) |
 | `ilford` | CineStill film product | user-supplied product photograph | **All rights reserved** — user-supplied, no licence granted | user-supplied (pasted image) |
 | `hasselblad` | Hasselblad X2D II 100C (2022) | cameraelectronic.com.au — official X2D II 100C render (Shopify CDN) | **All rights reserved** — user-supplied, no licence granted | cameraelectronic.com.au product page (Shopify CDN) |
 | `sony` | Sony camera | user-supplied product photograph | **All rights reserved** — user-supplied, no licence granted | user-supplied (pasted image) |
 
-Licence texts: [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)
+No pack currently needs a visible credit for its icon, because none ships licensed material;
+the whole set is user-supplied and unlicensed, and the distribution risk sits with the
+publisher instead. If a CC BY image is ever added again, it must be marked as such here, in
+`NOTICE.md` and in that pack's release notes — an APK is distributed on its own, so a credit
+that exists only in this repository does not travel with it.
 
-Two of the nine therefore need a visible credit wherever the app is distributed (the CC BY
-2.0 packs: `ricoh`, `pentax`). See `NOTICE.md` for the block that carries it, and
-remember that an APK is distributed on its own — a credit that exists only in this repository
-does not travel with it.
+Removing the old CC BY entries was part of this change, not an oversight: a credit describing a
+photograph that is no longer in the APK would be inaccurate in exactly the way a missing
+credit is.
 
 ## Rejected: the first Fujifilm pick
 
@@ -106,21 +114,27 @@ stock* depicted. The reasoning, kept here so it can be argued with rather than r
   **motion-picture look family** (Cinestill 50D, Cinestill 800T, classic cinema, Rec709) and is
   **not** an Ilford product — it is grouped into this pack for distribution convenience, not
   because it is an Ilford film.
-- **Pentax K1000** — roughly three million units, and for two decades the default "first film
-  camera" in every photography course. The 1957 Asahi Pentax created the modern Japanese SLR
-  layout, but the K1000 is the model people actually recognise.
+- **Pentax** — the earlier icon was the K1000 (roughly three million units, and for two
+  decades the default "first film camera" in every photography course; the 1957 Asahi Pentax
+  created the modern Japanese SLR layout, but the K1000 is the model people actually
+  recognise). That CC BY photograph has since been replaced by a **user-supplied Pentax
+  product image**, whose exact model has **not been verified** — update this line once it is.
 - **Hasselblad X2D II 100C** — Hasselblad's current 100 MP medium-format mirrorless body
   (2022); the modern continuation of the 500C's modular 6×6 shape that means "Hasselblad". The
   500C's electronic sibling, the 500EL, went to the Moon on Apollo.
-- **Ricoh GR (2013)** — brought APS-C quality into a pocketable fixed-lens body and became the
-  street-photography tool of its generation; the name descends from the film GR1 that Daido
-  Moriyama used. The film GR1 is the alternative pick.
+- **Ricoh** — the earlier icon was the GR (2013), which brought APS-C quality into a pocketable
+  fixed-lens body and became the street-photography tool of its generation; the name descends
+  from the film GR1 that Daido Moriyama used, and that GR1 is the alternative pick. That CC BY
+  photograph has since been replaced by a **user-supplied Ricoh product image**, whose exact
+  model has **not been verified** — update this line once it is.
 - **Fujifilm X100VI** — the current X100-series camera (2023); the hybrid optical/electronic
   viewfinder compact the original X100 (2011) started. Now the visual shorthand for "Fujifilm
   camera".
-- **Sony α7 (ILCE-7)** — the first full-frame mirrorless camera, and the origin of that
-  whole market segment. The α7 III is the best-selling descendant and the RX100 is the
-  other defensible pick; the original α7 is the one that changed the industry.
+- **Sony** — the earlier icon was the α7 (ILCE-7), the first full-frame mirrorless camera and
+  the origin of that whole market segment; the α7 III is the best-selling descendant and the
+  RX100 is the other defensible pick. That CC BY photograph has since been replaced by a
+  **user-supplied Sony camera image**, whose exact model has **not been verified** — update
+  this line once it is.
 - **filmstocks — Fujifilm film canisters** — this pack is named after Fujifilm's *film stocks*
   rather than a camera, so its icon is Fujifilm film canisters instead of a body. The recipes in
   the pack (Pro 400H, Superia 400, C200 …) are all Fujifilm colour negatives.

@@ -164,26 +164,27 @@ LUT 收藏与各厂商对机身色彩模式、胶片种类的**公开描述**。
 ## 五、品牌包图标素材
 
 品牌包（`docs/BRAND-PACKS.md`）的启动图标，由 `tools/build_pack_icons.py` 生成进
-`assets/app-icon-packs/<icon_set>/`。图标随 APK 一起发布，所以署名必须随 APK 走 —— 它进本文件
-（下方表格），也进每个包的发布说明。其中两个包用的是 Wikimedia Commons 上的 **CC BY 2.0** 自由许可
-照片；另外七个包用的是**用户专门为本项目提供的商业产品照片 / 厂商官方渲染图**，全部保留权利、
-未授予任何许可，风险由发布方承担。逐张的取舍与权利说明见 `assets/app-icon-packs/CREDITS.md`。
+`assets/app-icon-packs/<icon_set>/`。图标随 APK 一起发布，所以一旦用了带许可义务的素材，署名就必须随
+APK 走 —— 它会进本文件（下方表格）与每个包的发布说明。**目前九个包全部用用户专门为本项目提供的
+商业产品照片 / 厂商官方渲染图，全部保留权利、未授予任何许可**，因此没有任何 CC BY 照片在发布之列、
+也没有法定署名义务；风险由发布方承担。逐张的取舍与权利说明见 `assets/app-icon-packs/CREDITS.md`。
 
 | 包 (`id`) | 品牌 | 图标描绘 | 作者 / 来源 | 许可 | 来源页 |
 |---|---|---|---|---|---|
 | `leica` | Leica | Leica M9 | sketch.vip（M9 产品渲染） | **保留全部权利**——用户提供，未授予许可 | sketch.vip M9 渲染图 |
 | `fujifilm` | Fujifilm | X100VI | fujifilm-x.b-cdn.net（X100VI 产品缩略图，480×480） | **保留全部权利**——用户提供，未授予许可 | fujifilm-x.b-cdn.net X100VI 产品缩略图 |
 | `filmstocks` | Fuji Film | Fujifilm 胶卷（三个胶卷罐并排） | 用户提供的产品图 | **保留全部权利**——用户提供，未授予许可 | 用户提供的产品图 |
-| `ricoh` | Ricoh | GR（2013） | Kārlis Dambrāns | CC BY 2.0（https://creativecommons.org/licenses/by/2.0/） | https://commons.wikimedia.org/wiki/File:Ricoh_GR_(16159018330).jpg |
+| `ricoh` | Ricoh | Ricoh 相机（用户来图） | 用户提供的产品图 | **保留全部权利**——用户提供，未授予许可 | 用户提供的产品图 |
 | `kodak` | Kodak | Gold 400 / 400 胶卷罐 | prophotosupply.com（Kodak Gold 400 产品照片） | **保留全部权利**——用户提供，未授予许可 | prophotosupply.com Kodak Gold 400 |
-| `pentax` | Pentax | K1000 | Terry Presley | CC BY 2.0（https://creativecommons.org/licenses/by/2.0/） | https://commons.wikimedia.org/wiki/File:Pentax_K1000_(6301325288).jpg |
+| `pentax` | Pentax | Pentax 相机（用户来图，自带透明底） | 用户提供的产品图 | **保留全部权利**——用户提供，未授予许可 | 用户提供的产品图 |
 | `ilford` | Cinestill + Ilford | CineStill 胶卷产品图 | 用户提供的产品图 | **保留全部权利**——用户提供，未授予许可 | 用户提供的产品图 |
 | `hasselblad` | Hasselblad | X2D II 100C | cameraelectronic.com.au（官方 X2D II 100C 渲染，Shopify CDN） | **保留全部权利**——用户提供，未授予许可 | cameraelectronic.com.au 产品页（Shopify CDN） |
 | `sony` | Sony | Sony 相机 | 用户提供的产品图 | **保留全部权利**——用户提供，未授予许可 | 用户提供的产品图 |
 
-九个包全部有图标。其中 `leica`、`fujifilm`、`filmstocks`、`kodak`、`ilford`、`hasselblad`、`sony` 七张是用户提供的商业照片、**保留全部权利、未授予任何许可**，因此**没有署名义务**（风险由发布方承担）；
-`ricoh`、`pentax` 两张是 CC BY 2.0，署名是许可条件，必须随 APK 走。逐张的取舍说明见
-`assets/app-icon-packs/CREDITS.md`。
+九个包全部有图标，**九张全部是用户提供的商业照片 / 厂商渲染图，保留全部权利、未授予任何许可**，
+因此**没有法定署名义务**（分销风险由发布方承担）。曾经用 Wikimedia Commons **CC BY 2.0** 照片的
+`ricoh` 与 `pentax` 也已换成用户来图，本表格里不再有任何 CC BY 素材 —— 但这不等于可以松懈：下表与
+`CREDITS.md` 必须逐张保持真实，一旦换回带许可义务的图，署名义务立刻恢复。
 
 被否决过的一张：`File:Fujifilm X100-IMG 6097.jpg`（作者 Rama）是 **CC BY-SA 2.0 (fr)**，已下载并渲染
 后被撤下 —— 图标是对照片的改编，而「相同方式共享」会从改编件波及到分发它的整个应用。已换成上表中
@@ -191,8 +192,9 @@ LUT 收藏与各厂商对机身色彩模式、胶片种类的**公开描述**。
 
 几点必须说清的边界：
 
-- **`CC BY` 允许商用，但必须署名。** 不署名就商用违反许可。署名随 APK 走：本表格是一处，每个包的
-  发布说明是另一处。
+- **`CC BY` 允许商用，但必须署名。** 不署名就商用违反许可。目前九张图标里**没有 CC BY 素材**，这条
+  义务处于「空置」状态；将来若引入任何 `CC BY` 照片，署名必须随 APK 走 —— 本表格是一处，每个包的
+  发布说明是另一处。同理，改用回 CC BY 素材时，被替换掉的那一行必须同步移除，不能留下幽灵署名。
 - **`CC BY-SA` 被刻意排除。** 它的「相同方式共享」条款会波及整个 App，而不只是那张图标，所以品牌包
   图标一律不用 `CC BY-SA` 照片。
 - **全量版默认图标（`assets/app-icon/`）是本仓库原创作**，由 `tools/build_app_icon.py` 从源照片生成，

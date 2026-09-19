@@ -21,13 +21,16 @@
   （Cinestill 50D、Cinestill 800T、Classic Cinema、Rec709 Video）——`ilford` 与 `cine` 两组合计 9 款
   已编译配方。`cine` 是电影感风格家族，并非伊尔福产品；它从 `unassigned_groups` 移进了这个包。
 - **所有品牌包图标重制为透明剪影。** 每个包图标现在都从源照片里抠出的透明剪影，与全量版图标风格一致。
-- **七个包图标用用户提供的商业素材。** `leica`、`fujifilm`、`filmstocks`、`kodak`、`ilford`、
-  `hasselblad`、`sony` 现在用的是用户专门提供的、保留全部权利的商业照片 / 厂商官方渲染，未授予任何许可。风险由
-  发布方承担；诚实的来源与「放宽许可」的约定见 `assets/app-icon-packs/CREDITS.md`。这样只剩两个包
-  （`ricoh`、`pentax`）仍用 CC BY 2.0，它们的署名仍必须随 APK 走。
-- **其中三个图标换了题材。** `filmstocks` 改为富士胶卷罐（它是按胶片命名，不是按机身）；`ilford` 改为
-  CineStill 胶卷产品图，不再是原先拼合的 Cinestill + Ilford；`sony` 改为用户提供的相机图，不再是
-  Wikimedia 上的 α7 照片。
+- **九个包图标全部用用户提供的商业素材。** `leica`、`fujifilm`、`filmstocks`、`kodak`、`ilford`、
+  `hasselblad`、`sony`、`ricoh`、`pentax` 现在用的是用户专门提供的、保留全部权利的商业照片 / 厂商官方渲染，
+  未授予任何许可。风险由发布方承担；诚实的来源与「放宽许可」的约定见 `assets/app-icon-packs/CREDITS.md`。
+  `ricoh` 与 `pentax` 是最后两张 Wikimedia Commons **CC BY 2.0** 照片，如今也已换掉，所以**没有任何
+  自由许可图片随任一 APK 发布、也不再有署名义务**；它们原先的署名行是**删除**而非保留——为一张早已不发布的
+  照片留着署名，本身就是虚假标注。
+- **其中五个图标换了题材。** `filmstocks` 改为富士胶卷罐（它是按胶片命名，不是按机身）；`ilford` 改为
+  CineStill 胶卷产品图，不再是原先拼合的 Cinestill + Ilford；`sony`、`ricoh`、`pentax` 改为用户提供的
+  相机图，不再是 Wikimedia 上的 α7 / Ricoh GR / Pentax K1000 照片。三张无题注来图的具体机型**尚未核实**，
+  详见 CREDITS.md。
 
 ---
 

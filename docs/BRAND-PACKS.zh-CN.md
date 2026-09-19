@@ -184,10 +184,10 @@ src/com/hairuoliu/sonysoocrecipes/        （基包）
 ## 7. 图标 —— 从哪来、怎么生成、以及归属义务
 
 每个包的启动图标，是用**该品牌最知名相机的照片**构建的——`filmstocks`、`kodak`、`ilford`
-这三个包是胶片罐而非相机（它们是按胶片命名，不是按机身）。两个包（`ricoh`、`pentax`）仍用 Wikimedia
-Commons 上的**自由许可照片**；另外七个包（`leica`、`fujifilm`、`filmstocks`、`kodak`、`ilford`、
-`hasselblad`、`sony`）用的是**用户专门提供的、保留全部权利的商业照片，未授予任何许可**。归属与「放宽许可」的约定记在
-`assets/app-icon-packs/CREDITS.md` 里；而因为图标随 APK 一起发布，归属必须**随 APK 走**：它进
+这三个包是胶片罐而非相机（它们是按胶片命名，不是按机身）。**九个包现在全部**用**用户专门提供的、
+保留全部权利的商业照片，未授予任何许可** —— `ricoh` 与 `pentax` 是最后两张 Wikimedia Commons
+照片，也已换成用户来图，所以**没有任何自由许可图片随任一 APK 发布**。逐张来源与「放宽许可」的约定记在
+`assets/app-icon-packs/CREDITS.md` 里；而因为图标随 APK 一起发布，许可与署名必须**随 APK 走**：它进
 `NOTICE.md`，也进每个包的发布说明。
 
 图标集由 `tools/build_pack_icons.py` 生成（它是 `tools/build_app_icon.py` 的按包对应版，后者构建
@@ -205,15 +205,15 @@ Commons 上的**自由许可照片**；另外七个包（`leica`、`fujifilm`、
 可绘制）。本版本起，品牌包图标**也**做了抠图——每张都是从源照片里裁出的透明剪影，与全量版风格一致，
 而非保留整张矩形照片。不要说品牌包图标是矩形照片；它们不是。
 
-**归属义务是真实的——但现在九个包里只有两个还有这条义务。** 七个包
-（`leica`、`fujifilm`、`filmstocks`、`kodak`、`ilford`、`hasselblad`、`sony`）用的是用户提供的、保留全部权利的
-商业照片；未授予任何许可，因此没有署名义务，只有发布方承担分发风险。另外两个包仍用 Wikimedia
-Commons 上的原照片，仍需署名：
+**归属义务目前九个包一个都不适用——但只要再用带许可的图，它立刻回来。** 九个包现在全部用用户提供的、
+保留全部权利的商业照片；未授予任何许可，因此没有署名义务，只有发布方承担分发风险。`ricoh` 与
+`pentax` 过去是例外：它们用的是 Wikimedia Commons 上的 **CC BY 2.0** 照片（Ricoh GR，作者
+Kārlis Dambrāns；Pentax K1000，作者 Terry Presley），必须署名。这两张如今也都换成了用户来图，
+所以当下发布的素材里没有任何带许可的内容。相应的署名行也已在 `NOTICE.md` 与 `CREDITS.md` 里同步删掉 ——
+**为一张早已不发布的照片保留署名，是另一种形式的虚假标注，同样是缺陷。**
 
-- **Ricoh** —— Ricoh GR（2013），CC BY 2.0（作者：Kārlis Dambrāns）
-- **Pentax** —— Pentax K1000，CC BY 2.0（作者：Terry Presley）
-
-`CC BY` 只有**带署名**才允许商用，所以署名必须随行于 `NOTICE.md` 和每个包的发布说明。`CC BY-SA`
+因此这条义务是「休眠」而非「废除」。`CC BY` 只有**带署名**才允许商用，将来若引入 CC BY 素材，署名
+必须随行于 `NOTICE.md` 和每个包的发布说明，许可全文也要随 APK 发布。`CC BY-SA`
 被**刻意排除**在品牌包图标之外：它的相同方式共享条款会波及整个 App，而不只是图标。全量版默认图标
 是原创作，无需此类署名。
 
