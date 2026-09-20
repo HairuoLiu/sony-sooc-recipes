@@ -127,6 +127,18 @@ You install the app once, and it carries all 155 recipes. You store **one** reci
 
 > **Honest note.** Only one recipe is active at a time; there is no "layer several looks." If you want A for portraits and B for landscapes, you switch between them in the app as you shoot.
 
+### How many packs can I install at once? Will they all fit?
+
+**They coexist, and a whole release's worth fits.** Every pack has its own Android package name (the all-in-one is `…sonysoocrecipes`, a pack is `…sonysoocrecipes.<brand>`), and Android identifies an app by its package name — so they never overwrite one another. The number of APKs in a release is the number of brand packs in `catalog/packs.json` plus one for the all-in-one: currently 9 + 1 = **10**.
+
+The camera's own ceiling is a different order of magnitude: **Sony says approximately 20** PlayMemories Camera Apps can be stored (support article 00020843), and the real figure depends on how large the apps are, because they live in the camera's internal memory. Our APK is about 200 KB each, so **all ten together come to under 2 MB** — one to two orders of magnitude smaller than Sony's own apps, which start at several MB. Running out of room is not the problem you will hit.
+
+> **Honest note.** But "you can" is not "you should". Three costs, up front:
+>
+> 1. **The more apps the camera holds, the slower it powers on and off.** Sony states this itself (support article 00020845): the slowdown depends on free internal memory and on how many apps are stored, and it is normal behaviour, not a fault. Ten apps is not free.
+> 2. **Several packs is not several cameras.** The settings store is shared; only one recipe is active at a time, and switching packs does not switch recipes. See [Brand packs §3](BRAND-PACKS.md#3-the-shared-settings-caveat--one-camera-one-active-recipe).
+> 3. **The all-in-one already contains every recipe, and a pack is a subset of it.** If you want "all of them", the all-in-one alone gets you there — nine more packs add no recipe, only nine icons and a slower boot.
+
 ### What should I watch out for when updating to a new version?
 
 The APK is built by CI with a **fresh, throwaway signing key every time** (there is no keystore). An APK signed with a different key **cannot overwrite** an existing install — you will see `INSTALL_FAILED_UPDATE_INCOMPATIBLE`. Fix: uninstall the same-package app in the camera's app management first, then install the new one (uninstalling clears the app's stored settings, so re-store your recipe afterward).
