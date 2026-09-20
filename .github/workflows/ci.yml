@@ -81,11 +81,23 @@ jobs:
 
       # Gate 2 — does the catalog still generate the same Java the fork ships?
       #          Fails if someone hand-edited Recipes.java or forgot to regenerate.
+      #
+      #          Fetched at the SHA we PIN, not at a branch. This gate's job is to prove we
+      #          still reproduce the revision we BUILD from, and a branch moves out from
+      #          under it: upstream renamed `development`, this URL started 404ing, and
+      #          `curl -sSL` without -f wrote the 404 page into the file — so the gate died
+      #          on a parse error instead of saying "not found", and main went red with
+      #          nothing in this repository having changed. -f makes an HTTP error fail the
+      #          step outright, and the SHA is read back out of the catalog so the pin still
+      #          has exactly one home (test_catalog.py holds filters.json and release.yml
+      #          together; this step reads the former rather than adding a third copy).
       - name: fetch upstream Recipes.java
         run: |
           mkdir -p build
-          curl -sSL -o build/upstream-Recipes.java \
-            https://raw.githubusercontent.com/voxivoid/recipe-lab-sony-pmca/development/src/com/voxivoid/recipelab/Recipes.java
+          REV=$(python -c "import json,re;print(re.search(r'[0-9a-f]{40}', json.load(open('catalog/filters.json'))['sources']['recipe-lab']['fetched_rev']).group(0))")
+          echo "pinned upstream revision: $REV"
+          curl -sSLf -o build/upstream-Recipes.java \
+            "https://raw.githubusercontent.com/voxivoid/recipe-lab-sony-pmca/$REV/src/com/voxivoid/recipelab/Recipes.java"
 
       # Gate 3 — the important one. Every upstream recipe must still reproduce
       #          value for value. A silent drift here means the APK would shoot

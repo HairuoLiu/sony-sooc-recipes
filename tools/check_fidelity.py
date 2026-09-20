@@ -6,9 +6,15 @@ If a transcription slip ever changed a recipe, the generated APK would quietly s
 different colours than the upstream project it claims to build on. This compares every
 recipe against a real upstream checkout.
 
-    curl -sSL -o build/upstream-Recipes.java \\
-      https://raw.githubusercontent.com/voxivoid/recipe-lab-sony-pmca/development/src/com/voxivoid/recipelab/Recipes.java
+    curl -sSLf -o build/upstream-Recipes.java \\
+      https://raw.githubusercontent.com/voxivoid/recipe-lab-sony-pmca/6b5c8aa2900019d98496c7047a90ce73d2d6a725/src/com/voxivoid/recipelab/Recipes.java
     python tools/check_fidelity.py --upstream build/upstream-Recipes.java
+
+Fetch that SHA, not a branch. The revision is the one the build is PINNED to (see
+sources.recipe-lab.fetched_rev in catalog/filters.json); a branch moves, and comparing
+against a moving target reports upstream's own edits as our drift. Use -f so a 404 fails
+loudly — without it curl writes the error page into the file and this tool then fails on a
+parse error that names nothing useful.
 
 The comparison is semantic, not textual. Both sides are expanded to the full 15-value
 form using the constructor defaults, so upstream's occasional long-hand spelling of a

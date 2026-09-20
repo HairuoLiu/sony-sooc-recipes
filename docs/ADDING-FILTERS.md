@@ -144,10 +144,14 @@ recording it.
 2. Set `"source": "recipe-lab"`, `"verified": true`, and keep `engine: "recipe-lab"`.
 3. Run the fidelity gate to prove you did not shift a value:
    ```bash
-   curl -sSL -o build/upstream-Recipes.java \
-     https://raw.githubusercontent.com/voxivoid/recipe-lab-sony-pmca/development/src/com/voxivoid/recipelab/Recipes.java
+   curl -sSLf -o build/upstream-Recipes.java \
+     https://raw.githubusercontent.com/voxivoid/recipe-lab-sony-pmca/6b5c8aa2900019d98496c7047a90ce73d2d6a725/src/com/voxivoid/recipelab/Recipes.java
    python tools/check_fidelity.py --upstream build/upstream-Recipes.java
    ```
+   Fetch the pinned SHA (`sources.recipe-lab.fetched_rev` in `catalog/filters.json`), not a
+   branch. A branch moves, and comparing against a moving target reports upstream's own
+   edits as your drift. `-f` matters too: without it a 404 is written into the file and the
+   next command fails on a parse error that names nothing useful.
    It compares **semantically** (constructor defaults expanded). Any real value drift
    prints as `MISSING` and fails. Your new recipe will appear under `ADDED` as expected —
    that is fine. The engine counts 77 upstream recipes as load-bearing; do not change that

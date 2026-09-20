@@ -132,10 +132,13 @@ catalog 现在已有 **155 款 / 14 组 / 两套引擎**。很多风格区间已
 2. 设 `"source": "recipe-lab"`、`"verified": true`，保持 `engine: "recipe-lab"`。
 3. 跑保真关卡，证明你没挪动任何值：
    ```bash
-   curl -sSL -o build/upstream-Recipes.java \
-     https://raw.githubusercontent.com/voxivoid/recipe-lab-sony-pmca/development/src/com/voxivoid/recipelab/Recipes.java
+   curl -sSLf -o build/upstream-Recipes.java \
+     https://raw.githubusercontent.com/voxivoid/recipe-lab-sony-pmca/6b5c8aa2900019d98496c7047a90ce73d2d6a725/src/com/voxivoid/recipelab/Recipes.java
    python tools/check_fidelity.py --upstream build/upstream-Recipes.java
    ```
+   要取**钉死的那个 SHA**（`catalog/filters.json` 里的 `sources.recipe-lab.fetched_rev`），
+   而不是某个分支：分支会移动，拿移动目标比对，会把上游自己的改动报成你的漂移。`-f` 也别省
+   ——没有它，404 会被写进文件里，下一条命令随后吐出一个什么都没说明的解析错误。
    它是**语义级**对比（构造函数默认值已展开）。任何真实漂移都会以 `MISSING` 打印并失败。
    你的新配方会列在 `ADDED` 下——这是正常的。引擎把 77 款上游配方当作硬锚点；除非你真的
    增删了上游转录，否则别动这个数。
