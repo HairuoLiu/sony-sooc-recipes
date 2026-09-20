@@ -337,7 +337,7 @@ sony-sooc-recipes/
 │   ├── test_catalog.py       33 条用例 + 不变量（CI 关卡 1b）
 │   ├── test_packs.py         包转换、发布矩阵与子集用例（CI + release）
 │   ├── test_gates.py         自测：给每道关卡喂坏输入，断言失败
-│   ├── test_ui_theme.py      磨砂双栏主屏：view id、drawable / string、#AARRGGBB 颜色（24 个用例）
+│   ├── test_ui_theme.py      磨砂双栏主屏：view id、drawable / string、#AARRGGBB 颜色（25 个用例）
 │   ├── cases.json            自写配方的钉死值
 │   └── smoke_browser.js      浏览器冒烟测试（CI 关卡 4）
 ├── .github/workflows/
@@ -429,9 +429,15 @@ PE = Picture Effect，只在 JPEG 上落得下来）。一个写错的可见性�
 
 `tests/test_ui_theme.py` 是唯一挡在「`catalog/ui-theme.json` / `assets/ui/` 里一个坏颜色或一个丢掉的
 view id」与「一个在相机上无法 inflate 布局的 APK」之间的东西。因为 `build/` 在每次构建前被清空，所以
-`run_all.py` 里没有任何别的东西会注意到主题坏掉。关卡强制三件事：布局保留 `MainActivity` 用 `findViewById`
-绑定的每个 view id；布局引用的每个 drawable 和 string 都能解析；每个颜色都是 `#AARRGGBB`。（24 个用例。）
+`run_all.py` 里没有任何别的东西会注意到主题坏掉。关卡强制四件事：布局保留 `MainActivity` 用 `findViewById`
+绑定的每个 view id；布局引用的每个 drawable 和 string 都能解析；每个颜色都是 `#AARRGGBB`；以及每个 `@id/x`
+引用都出现在同一文件里更早的 `@+id/x` 之后。（25 个用例。）
 它像 catalog 与 assets 关卡一样在本地跑——CI 里作为名为 `run UI theme test cases` 的一步跑。
+
+第四条规则是 aapt 的静态替身，而它之所以存在，是因为一次真实的失败：布局里有一个 view 指向 `@id/head`，
+而拥有 `@+id/head` 的那条栏声明在它后面，aapt 又是按文档顺序单趟解析 id 的。它在上游构建的第一步——
+生成 `R.java` 时——就失败了，也就是说这个主题根本编译不过；而只要没有任何一条会跑 `patch_ui.py` 的管道被
+真正执行过，这件事就一直看不见。aapt 本身在这里跑不起来（要 3 GB 的 NDK r16b），所以规则改成在文本上检。
 
 > **实话实说。** 这是唯一一个丢了也不会让 CI 变红的关卡：静默的 `-A assets` 回退意味着缺字体时发出去的是
 > Droid Sans，全程无报错。布局和颜色的校验都是机械的；字体的 flag 才是得靠人工盯的那部分。

@@ -147,7 +147,7 @@ tools/                   校验器 · 代码生成器 · 保真比对 · 安装�
 |---|---|
 | `validate_catalog.py` | 枚举非法、取值越界、分组顺序断裂、**来源声明不诚实** |
 | `tests/test_catalog.py` | 33 个用例：不变量、取值范围、生成器往返、上游 pin 漂移 |
-| `tests/test_ui_theme.py` | 24 个用例：磨砂双栏主屏保留 `MainActivity` 绑定的每个 view id、每个引用的 drawable / string 都能解析、每个颜色都是 `#AARRGGBB`——可见性值写错会让 aapt 无法 inflate、启动即崩 |
+| `tests/test_ui_theme.py` | 25 个用例：磨砂双栏主屏保留 `MainActivity` 绑定的每个 view id、每个引用的 drawable / string 都能解析、每个颜色都是 `#AARRGGBB`——可见性值写错会让 aapt 无法 inflate、启动即崩 |
 | `check_fidelity.py` | **某个配方的数值被悄悄改动** —— 全部 77 条上游配方，逐值对照 *(仅 CI)* |
 | `gen_recipes.py --check` | 有人手改了 `Recipes.java`，或忘了重新生成 |
 | `smoke_browser.js` | 一个会让滤镜浏览器空白出货的拼写错误 |

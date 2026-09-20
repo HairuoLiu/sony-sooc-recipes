@@ -26,8 +26,15 @@
 
         <!-- top bar: a single line. RelativeLayout rather than a row of weights so the
              film/style really is centred on the screen. Both outer items also declare a
-             boundary against @id/head, so a long recipe name gets clipped at its own limit
-             instead of sliding over the centred text or off the edge. -->
+             boundary against @+id/head, so a long recipe name gets clipped at its own limit
+             instead of sliding over the centred text or off the edge.
+
+             The + on the FIRST mention is not optional. aapt resolves ids in one pass, in
+             document order: a bare @id/head here fails with "No resource found that matches
+             the given name (at 'layout_toLeftOf' with value '@id/head')" because the bar
+             that owns the id is declared further down. That is a build error at the very
+             first aapt step, not a warning - tests/test_ui_theme.py enforces the rule
+             statically, since aapt cannot be run before the 3 GB toolchain is installed. -->
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -43,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:layout_toLeftOf="@id/head"
+                android:layout_toLeftOf="@+id/head"
                 android:text="@string/app_name"
                 android:textSize="9sp"
                 android:textColor="#99566473"

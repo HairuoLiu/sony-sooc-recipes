@@ -12,7 +12,7 @@
 
 ---
 
-## v0.7.1 — 2026-09-19 · 发布构建根本没把主屏装进去
+## v0.7.2 — 2026-09-19 · 发布构建根本没把主屏装进去
 
 **v0.7.0 的 APK 里并没有它自己宣布的磨砂双栏主屏。** 本地构建有，发布构建没有：`.github/workflows/release.yml`
 把构建步骤又写了一遍，而那一遍漏了 `tools/patch_ui.py` 这一步——于是 v0.7.0 的十个 APK 装的是上游主屏，
@@ -20,14 +20,20 @@
 任何东西测过「发布构建到底跑没跑它们」。本版不改任何配方值，也不改任何包。如果你装了 v0.7.0 的 APK，相机上
 的配方就是这一版的配方；不同的是那块屏幕。
 
+*（`v0.7.1` 打了 tag 但没有发布出任何东西：补回这一步之后，构建在 aapt 处理主题自己的布局时失败——见第三条
+——所以修复落到了这一版。）*
+
 - **`release.yml` 现在会重放主题**，位置与 `tools/build_apk.sh` 一致——`apply_pack` 之后、`gen_recipes` 之前。
 - **`tests/test_catalog.py::TestBuildPipelinesAgree` 把两条管道钉在一起。** 它比较两条管道各自跑的变换工具及
   其顺序，并点名发布构建漏掉的那个。该测试跑在 `release.yml` 自己的「构建前关卡」job 里，所以此后一次缺步
   骤的发布会在构建之前就失败，而不是照常发布出去。
+- **主题的布局从来没被编译过，而且根本编译不过。** `assets/ui/main.xml` 让标题指向 `@id/head`，而拥有
+  `@+id/head` 的那条栏声明在它后面，aapt 按文档顺序单趟解析 id——于是构建的第一步 `R.java` 生成就失败了。
+  此前没人发现，是因为没有任何一条会重放主题的管道真正跑过：CI 没有，本地也没有。现在 `head` 的第一次出现
+  就带上 `+`，并由 `tests/test_ui_theme.py` 直接在布局文本上强制这条规则（aapt 本身需要 3 GB 的 NDK 工具链）。
 - **字体的许可现在真的随字体走。** `patch_ui.py` 会整目录拷贝 `assets/fonts/`，于是 `OFL-Quicksand.txt`
   和它覆盖的两个 Quicksand 字面一起进 APK。OFL 唯一的再分发条件就是许可全文必须随字体同行，`NOTICE.md`
   也早已这么要求——但此前只拷了两个 `.ttf`，所以至今每一个 APK 都会把字体发出去、而把许可留在仓库里。
-  现由 `tests/test_ui_theme.py` 里的一个用例看守。
 
 ---
 
@@ -54,7 +60,7 @@
 - **九个图标里六个是胶片、不是机身。** `filmstocks`、`kodak`、`nichefilm`、`pentax`、`ricoh`、
   `sony` 展示的是胶片；只有 `leica`（M9）、`fujifilm`（X100VI）、`hasselblad`（X2D II 100C）展示机身。
   `nichefilm` 的图标正是那张 CineStill 胶卷产品图，也是这次重组名字的由来。
-- **磨砂双栏主屏。** 应用主屏现在是磨砂双栏布局，以上游布局之上「重放补丁」的方式发布，而非作为源码提交。颜色、三个屏幕开关（`legend_visibility`、`app_title_visibility`、`tag_visibility`）与布局本体分别落在 `catalog/ui-theme.json` 与 `assets/ui/main.xml`；`tools/patch_ui.py` 在**两条构建管道**（本地的 `build_apk.sh`、打 tag 时的 `release.yml`）里、于 `apply_pack` 之后、`gen_recipes` 之前，把它们重放到上游 checkout 上。磨砂是「模拟」的（一层约 0.90 透明度的半透层，没有模糊——`minSdkVersion 10` 既无 RenderScript 也无 RenderEffect），字体是 Quicksand（SIL OFL 1.1），作为 raw 资源随包捆绑，`tests/test_ui_theme.py`（24 个用例）看守布局——丢一个 view id、一个 aapt 解析不了的颜色，或写错一个会让 aapt 无法 inflate、进而让应用启动即崩的可见性值，都不会流到相机上。*（**v0.7.0 的 APK** 里其实并没有这块屏幕：`release.yml` 漏了重放这一步，只有本地构建有。见上方 v0.7.1。）*
+- **磨砂双栏主屏。** 应用主屏现在是磨砂双栏布局，以上游布局之上「重放补丁」的方式发布，而非作为源码提交。颜色、三个屏幕开关（`legend_visibility`、`app_title_visibility`、`tag_visibility`）与布局本体分别落在 `catalog/ui-theme.json` 与 `assets/ui/main.xml`；`tools/patch_ui.py` 在**两条构建管道**（本地的 `build_apk.sh`、打 tag 时的 `release.yml`）里、于 `apply_pack` 之后、`gen_recipes` 之前，把它们重放到上游 checkout 上。磨砂是「模拟」的（一层约 0.90 透明度的半透层，没有模糊——`minSdkVersion 10` 既无 RenderScript 也无 RenderEffect），字体是 Quicksand（SIL OFL 1.1），作为 raw 资源随包捆绑，`tests/test_ui_theme.py`（25 个用例）看守布局——丢一个 view id、一个 aapt 解析不了的颜色，或写错一个会让 aapt 无法 inflate、进而让应用启动即崩的可见性值，都不会流到相机上。*（**v0.7.0 的 APK** 里其实并没有这块屏幕：`release.yml` 漏了重放这一步，只有本地构建有。见上方 v0.7.2。）*
 
 ---
 

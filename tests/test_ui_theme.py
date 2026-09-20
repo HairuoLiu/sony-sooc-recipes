@@ -156,6 +156,44 @@ class TestResourcesResolve(unittest.TestCase):
                          "@drawable references nothing produces — either add it to "
                          "tools/patch_ui.py or to this test's UPSTREAM_DRAWABLES")
 
+    def test_every_id_the_layout_references_is_created_before_it_is_used(self):
+        """aapt resolves ids in a single document-order pass, and that is a hard build error.
+
+        This is not theory. assets/ui/main.xml referenced @id/head on the title while the bar
+        owning @+id/head was declared further down, so aapt failed with "No resource found
+        that matches the given name (at 'layout_toLeftOf' with value '@id/head')" at the very
+        first step of the upstream build - a step that aborts R.java generation, before javac
+        and before any APK exists. It went unnoticed until the release workflow was finally
+        given the patch_ui.py step, because until then nothing had ever compiled this layout:
+        the local pipeline had never been run either, and no test here can run aapt (that
+        needs the 3 GB NDK r16b toolchain). So the rule aapt enforces is enforced statically
+        instead, which costs nothing and catches the whole class.
+
+        A bare @id/x may only appear after @+id/x in the same file. Anything that has to point
+        at an id before its declaration must carry the + itself.
+
+        XML comments are blanked out first, keeping their byte offsets so the reported line
+        numbers still point into the real file. aapt ignores comments, and this file's own
+        comment above the top bar mentions both @+id/head and @id/head while explaining this
+        rule — counting those as references made this very test pass on the broken layout.
+        """
+        raw = patch_ui.UI_LAYOUT.read_text(encoding="utf-8")
+        # Same length, so every match keeps its original offset (and therefore its line).
+        scan = re.sub(r"<!--.*?-->", lambda m: " " * len(m.group(0)), raw, flags=re.S)
+        created: set[str] = set()
+        offenders = []
+        for m in re.finditer(r"@(\+?)id/([A-Za-z0-9_]+)", scan):
+            plus, name = m.group(1), m.group(2)
+            line = raw.count("\n", 0, m.start()) + 1
+            if plus:
+                created.add(name)
+            elif name not in created:
+                offenders.append("line %d: @id/%s is not created earlier in this file"
+                                 % (line, name))
+        self.assertEqual([], offenders,
+                         "aapt would fail at R.java generation - give the first mention a +: "
+                         + "; ".join(offenders))
+
     def test_every_string_is_one_upstream_defines(self):
         raw = patch_ui.UI_LAYOUT.read_text(encoding="utf-8")
         used = referenced(raw, "string")

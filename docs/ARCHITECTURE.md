@@ -361,7 +361,7 @@ sony-sooc-recipes/
 │   ├── test_catalog.py       33 cases + invariants (CI gate 1b)
 │   ├── test_packs.py         pack transform, matrix and subset cases (CI + release)
 │   ├── test_gates.py         the self-test: breaks one thing per gate, asserts failure
-│   ├── test_ui_theme.py      the frosted two-bar main screen: view ids, drawables/strings, #AARRGGBB colours (24 cases)
+│   ├── test_ui_theme.py      the frosted two-bar main screen: view ids, drawables/strings, #AARRGGBB colours (25 cases)
 │   ├── cases.json            pinned values for authored-here recipes
 │   └── smoke_browser.js      browser smoke test (CI gate 4)
 ├── .github/workflows/
@@ -471,10 +471,17 @@ launch. That is the failure the gate exists to catch.
 `tests/test_ui_theme.py` is the only thing standing between a bad colour or a dropped view id in
 `catalog/ui-theme.json` / `assets/ui/` and an APK that fails to inflate its layout on the camera.
 `build/` is wiped before every build, so nothing else in `run_all.py` would notice a broken theme. The
-gate enforces three things: the layout keeps every view id `MainActivity` binds with `findViewById`;
-every drawable and string the layout references resolves; and every colour is `#AARRGGBB`. (24 cases.)
-It runs locally, like the catalog and assets gates — CI runs it as a step named "run UI theme test
-cases".
+gate enforces four things: the layout keeps every view id `MainActivity` binds with `findViewById`;
+every drawable and string the layout references resolves; every colour is `#AARRGGBB`; and every
+`@id/x` a view points at was created earlier in the same file. (25 cases.) It runs locally, like the
+catalog and assets gates — CI runs it as a step named "run UI theme test cases".
+
+That fourth rule is a static stand-in for aapt, and it exists because of a real failure: the layout
+pointed at `@id/head` on one view while the bar owning `@+id/head` was declared further down, and
+aapt resolves ids in a single document-order pass. It failed at the first step of the upstream build
+— during `R.java` generation — so the theme could not compile at all, which stayed invisible for as
+long as no pipeline that ran `patch_ui.py` was ever exercised. aapt itself cannot run here (3 GB of
+NDK r16b), so the rule is checked on the text instead.
 
 > **Honest note.** This is the one gate whose loss would not even turn CI red: the silent `-A
 > assets` fallback means a missing font ships as Droid Sans with no error anywhere. The layout and

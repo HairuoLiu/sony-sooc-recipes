@@ -17,7 +17,7 @@ self-test that proves the gates still fail on broken input.
 
 ---
 
-## v0.7.1 — 2026-09-19 · the release build was not shipping the main screen
+## v0.7.2 — 2026-09-19 · the release build was not shipping the main screen
 
 **The v0.7.0 APKs did not contain the frosted two-bar main screen that v0.7.0 announced.** The
 local build did; the release build did not. `.github/workflows/release.yml` writes the build steps
@@ -27,17 +27,27 @@ otherwise. Every gate stayed green throughout: the theme's tools were all tested
 that the release build ran them. No recipe values changed, and no pack changed. If you installed a
 v0.7.0 APK, the looks on your camera are the looks in this release; what differs is the screen.
 
+*(`v0.7.1` was tagged and published nothing: with the step restored, the build failed at aapt on the
+theme's own layout — see the third bullet — so the fix landed here instead.)*
+
 - **`release.yml` now replays the theme**, in the same position `tools/build_apk.sh` does it — after
   `apply_pack`, before `gen_recipes`.
 - **`tests/test_catalog.py::TestBuildPipelinesAgree` holds the two pipelines together.** It compares
   the transform tools each pipeline runs, in order, and names any the release build is missing. That
   test runs in `release.yml`'s own pre-build gate job, so a release missing a step now fails before
   anything is built instead of publishing.
+- **The theme's layout had never been compiled, and did not compile.** `assets/ui/main.xml` pointed
+  the app title at `@id/head` while the bar owning `@+id/head` was declared further down the file, and
+  aapt resolves ids in a single document-order pass — so the very first build step, `R.java`
+  generation, failed. Nothing had ever noticed because no pipeline that replays the theme had ever
+  run: not in CI, and not locally either. The first mention of `head` now carries the `+`, and
+  `tests/test_ui_theme.py` enforces the rule against the layout text, since aapt itself needs the
+  3 GB NDK toolchain.
 - **The font's licence now travels with the font.** `patch_ui.py` copies `assets/fonts/` whole, so
   `OFL-Quicksand.txt` reaches the APK beside the two Quicksand faces it covers. The OFL's one
   redistribution condition is that the licence accompany the font, and `NOTICE.md` already required
   it — but only the two `.ttf` files were being copied, so every APK so far would have shipped the
-  font with the licence still in the repository. Guarded by a case in `tests/test_ui_theme.py`.
+  font with the licence still in the repository.
 
 ---
 
@@ -84,11 +94,11 @@ v0.7.0 APK, the looks on your camera are the looks in this release; what differs
   `build_apk.sh`, tagged `release.yml`), after `apply_pack` and before `gen_recipes`. The frost is
   simulated (a ~0.90-alpha translucent layer, no blur —
   `minSdkVersion 10` has no RenderScript or RenderEffect), the font is Quicksand (SIL OFL 1.1)
-  bundled as a raw asset, and `tests/test_ui_theme.py` (24 cases) guards the layout so a
+  bundled as a raw asset, and `tests/test_ui_theme.py` (25 cases) guards the layout so a
   dropped view id, an unparseable colour, or a wrong visibility — which kills launch by
   stopping aapt from inflating — never reaches a camera.
   *(In the **v0.7.0 APKs** this screen was not actually present: `release.yml` was missing the
-  replay step, which only the local build had. See v0.7.1 above.)*
+  replay step, which only the local build had. See v0.7.2 above.)*
 
 ---
 
