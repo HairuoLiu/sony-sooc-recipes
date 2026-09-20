@@ -474,5 +474,55 @@ class TestAnchorsMatchUpstream(unittest.TestCase):
             )
 
 
+class TestPickerBrowser(unittest.TestCase):
+    """The FN browser is replayed whole from assets/ui/PickerView.java, like the layout.
+
+    It is upstream code (not patched line-by-line), so the only thing guarding it is this
+    test plus the apply step in tools/patch_ui.py: a checkout builds with whatever
+    PickerView.java upstream shipped unless the replay writes ours over it. The old panel was
+    a black two-column BRAND|recipes browser; the new one is a single white column.
+    """
+
+    def test_picker_template_exists(self):
+        self.assertTrue(patch_ui.PICKER_TEMPLATE.is_file(),
+                        "assets/ui/PickerView.java (the new single-column browser) is missing")
+
+    def test_picker_replaces_the_black_two_column_panel(self):
+        raw = patch_ui.PICKER_TEMPLATE.read_text(encoding="utf-8")
+        # The old panel was black (0xF0101010) with a left BRAND column; both must be gone.
+        self.assertNotIn("0xF0101010", raw, "the picker still paints the old black panel")
+        self.assertNotIn('"BRAND"', raw, "the picker still draws the left BRAND column")
+        self.assertNotIn("colX", raw, "the picker still splits into a brand column + content")
+
+    def test_picker_is_white_and_single_column(self):
+        theme = patch_ui.load_theme(patch_ui.DEFAULT_THEME)
+        text = patch_ui.picker_for(theme, patch_ui.BASE_PACKAGE)
+        # White background comes from frost_top_start, not the old black literal.
+        self.assertIn(patch_ui.java_literal(theme["frost_top_start"]), text)
+        self.assertNotIn("0xF0101010", text)
+
+    def test_picker_fills_the_package_token_per_target(self):
+        theme = patch_ui.load_theme(patch_ui.DEFAULT_THEME)
+        base = patch_ui.picker_for(theme, patch_ui.BASE_PACKAGE)
+        self.assertNotIn(patch_ui.PKG_TOKEN, base)
+        self.assertIn("package com.hairuoliu.sonysoocrecipes;", base)
+        leica = patch_ui.picker_for(theme, "com.hairuoliu.sonysoocrecipes.leica")
+        self.assertNotIn(patch_ui.PKG_TOKEN, leica)
+        self.assertIn("package com.hairuoliu.sonysoocrecipes.leica;", leica)
+        self.assertNotIn("com.hairuoliu.sonysoocrecipes.HintBar", leica)
+
+    def test_picker_has_no_unfilled_token(self):
+        theme = patch_ui.load_theme(patch_ui.DEFAULT_THEME)
+        for pkg in (patch_ui.BASE_PACKAGE, "com.hairuoliu.sonysoocrecipes.leica"):
+            text = patch_ui.picker_for(theme, pkg)
+            leftover = [t for t in patch_ui.PICKER_TOKENS if t in text]
+            self.assertEqual([], leftover, f"unfilled token(s) {leftover} in the picker for {pkg}")
+
+    def test_picker_braces_balance(self):
+        raw = patch_ui.PICKER_TEMPLATE.read_text(encoding="utf-8")
+        self.assertEqual(raw.count("{"), raw.count("}"),
+                         "PickerView.java has unbalanced braces — it would not compile")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

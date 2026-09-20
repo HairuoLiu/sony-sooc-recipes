@@ -16,9 +16,12 @@ re-applies the same change every time, from tracked inputs only:
   * assets/fonts/           the bundled faces, and the licence text that has to travel with
                             them: the OFL's one redistribution condition, see NOTICE.md
 
-It deliberately does NOT restructure Java. MainActivity binds its views by id, and the
-new layout keeps every one of those ids (tests/test_ui_theme.py enforces that), so the
-split needs no Java restructuring at all. Only colour values move - see ANCHORS below.
+It rewrites PickerView.java in full from a tracked template (assets/ui/PickerView.java):
+the in-camera FN browser. MainActivity's own Java is touched only by colour anchors (see
+ANCHORS below) and by the browser-key retarget, because its layout keeps every id MainActivity
+binds. PickerView is a leaf view — no other class depends on its internals — so replacing it
+whole is safe and reviewable in one file, and the same apply step fills its {ui_package} token
+per brand pack.
 
 Every Java edit is anchored on the EXACT upstream string it replaces, and an anchor that
 has vanished is a hard failure rather than a silent no-op. Upstream refactors its own
@@ -37,6 +40,7 @@ ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_THEME = ROOT / "catalog" / "ui-theme.json"
 UI_LAYOUT = ROOT / "assets" / "ui" / "main.xml"
 FONT_DIR = ROOT / "assets" / "fonts"
+PICKER_TEMPLATE = ROOT / "assets" / "ui" / "PickerView.java"
 DEFAULT_FORK = ROOT / "build" / "recipe-lab-sony-pmca"
 
 # The Android package of the all-in-one app. assets/ui/main.xml references the custom
@@ -128,6 +132,20 @@ LAYOUT_TOKENS = {
     "{tag_visibility}": "tag_visibility",
     "{legend_visibility}": "legend_visibility",
 }
+
+# Colour tokens for the brand-browser template (assets/ui/PickerView.java). Every key maps
+# to a catalog/ui-theme.json entry, so the browser's colours live in exactly one place, the
+# same as the main screen. {ui_package} is the one exception: it is filled from the checkout's
+# own AndroidManifest.xml, so a pack's browser references the pack's renamed class.
+PICKER_TOKENS = {
+    "{ui_package}": None,
+    "{picker_bg}": "frost_top_start",
+    "{picker_ink}": "ink",
+    "{picker_dim}": "ink_dim",
+    "{picker_accent}": "accent",
+    "{picker_accent_ink}": "accent_ink",
+    "{picker_rule}": "chip_idle",
+}
 # A wrong value here is not cosmetic: aapt turns android:visibility into an int flag, and a
 # string it does not recognise makes the layout fail to INFLATE - the app then dies on
 # launch, at which point the error says nothing about the theme file that caused it. So the
@@ -171,6 +189,29 @@ def layout_for(theme: dict, package: str = BASE_PACKAGE) -> str:
         raise SystemExit("assets/ui/main.xml still holds an unfilled {...} token - "
                          "every token must be listed in LAYOUT_TOKENS (the package token "
                          "is filled from the checkout's AndroidManifest.xml)")
+    return text
+
+
+def picker_for(theme: dict, package: str = BASE_PACKAGE) -> str:
+    """assets/ui/PickerView.java with colours and the package token filled in.
+
+    The picker is upstream code replayed whole (not patched line-by-line), so this is the
+    one function that turns the tracked template into the file the fork compiles. `package`
+    defaults to the all-in-one base so callers that only render the default app need not pass
+    one; a real build passes the checkout's own package so a pack's browser references its
+    renamed class.
+    """
+    text = PICKER_TEMPLATE.read_text(encoding="utf-8")
+    for token, key in PICKER_TOKENS.items():
+        if key is None:
+            text = text.replace(token, package)
+        else:
+            text = text.replace(token, java_literal(theme[key]))
+    leftover = [t for t in PICKER_TOKENS if t in text]
+    if leftover:
+        raise SystemExit("assets/ui/PickerView.java still holds unfilled token(s) "
+                         f"{leftover} — every token must be listed in PICKER_TOKENS "
+                         "(the package token is filled from the checkout's AndroidManifest.xml)")
     return text
 
 
@@ -258,6 +299,19 @@ def anchors(theme: dict) -> list[tuple[str, str, str, str]]:
          "keyText.setColor(0xCCFFFFFF)",
          f"keyText.setColor({java_literal(theme['legend_key'])})",
          "legend key text"),
+        # The FN browser is now a single column (see assets/ui/PickerView.java), so there is
+        # no brand/groups rail to switch between. UP/DOWN scrolls every recipe (nextRecipe)
+        # instead of jumping a group or stepping inside one — otherwise the picker could not
+        # reach a recipe in the next category. LEFT/RIGHT still toggles browserCol, but the
+        # picker ignores it, so the keys are harmless.
+        ("MainActivity.java",
+         "case K_UP: case K_WHEEL_CCW: case K_DIAL_CCW: if (browserCol == 0) nextGroup(-1); else nextInGroup(-1); return true;",
+         "case K_UP: case K_WHEEL_CCW: case K_DIAL_CCW: nextRecipe(-1); return true;   // single-column picker",
+         "picker up/down scrolls all recipes"),
+        ("MainActivity.java",
+         "case K_DOWN: case K_WHEEL_CW: case K_DIAL_CW: if (browserCol == 0) nextGroup(+1); else nextInGroup(+1); return true;",
+         "case K_DOWN: case K_WHEEL_CW: case K_DIAL_CW: nextRecipe(+1); return true;   // single-column picker",
+         "picker down/up scrolls all recipes"),
     ] + font_java(theme)
 
 
@@ -502,6 +556,14 @@ def main() -> int:
             src = find_source(fork, fname)
             if new not in src.read_text(encoding="utf-8"):
                 problems.append(f"{fname}: {label} is not patched")
+        try:
+            pv = find_source(fork, "PickerView.java")
+        except SystemExit as exc:
+            problems.append(str(exc))
+        else:
+            if not (pv.is_file() and pv.read_text(encoding="utf-8") == picker_for(theme, package)):
+                problems.append("src/.../PickerView.java is not the single-column white "
+                                "browser from assets/ui/PickerView.java")
         for name in fonts:
             if not (fork / "assets" / "fonts" / name).is_file():
                 problems.append(f"assets/fonts/{name} is not in the checkout - it would "
@@ -529,6 +591,17 @@ def main() -> int:
     for name, data in fonts.items():
         write_binary(fork / "assets" / "fonts" / name, data,
                      args.dry_run, report, f"assets/fonts/{name}")
+
+    # The brand browser: replace the upstream two-column black panel with the single-column
+    # white one. Done here, after apply_pack has renamed the package, so the {ui_package}
+    # token in assets/ui/PickerView.java fills to this pack's renamed class.
+    try:
+        picker = find_source(fork, "PickerView.java")
+    except SystemExit as exc:
+        problems.append(str(exc))
+    else:
+        write_file(picker, picker_for(theme, package), args.dry_run, report,
+                   "java: PickerView.java")
 
     for fname, old, new, label in edits:
         apply_text_edit(find_source(fork, fname), old, new, args.dry_run, report, problems,
