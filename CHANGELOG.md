@@ -7,8 +7,8 @@ versioning, with one exception: a **change to a recipe's values** also counts as
 bump. For someone using this, a look whose parameters moved matters more than a new
 function does.
 
-`python tests/run_all.py` must pass all of its gates before a tag is pushed — the seven
-catalog gates plus the self-test that proves the gates still fail on broken input.
+`python tests/run_all.py` must pass all of its gates before a tag is pushed — including the
+self-test that proves the gates still fail on broken input.
 
 > `v0.5.0` was this repository's **first published release**. The development batches that
 > came before it have no Release and therefore no version number; they are listed below as
@@ -52,8 +52,16 @@ catalog gates plus the self-test that proves the gates still fail on broken inpu
   `nichefilm`, `pentax`, `ricoh` and `sony` show film stock; only `leica` (M9), `fujifilm`
   (X100VI) and `hasselblad` (X2D II 100C) show a camera body. The `nichefilm` icon is the
   CineStill film product shot that gave the restructure its name.
-- **Deferred to the next release.** The frosted two-bar main-screen UI theme — a replayed
-  patch over the upstream layout — is not part of this build; it lands in a later version.
+- **Frosted two-bar main screen.** The app's main screen is now a frosted two-bar layout,
+  shipped as a replayed patch over the upstream checkout rather than committed source. The
+  colours, the three on-screen toggles (`legend_visibility`, `app_title_visibility`,
+  `tag_visibility`) and the layout itself live in `catalog/ui-theme.json` and
+  `assets/ui/main.xml`; `tools/patch_ui.py` replays them at build time, after `apply_pack`
+  and before `gen_recipes`. The frost is simulated (a ~0.90-alpha translucent layer, no blur —
+  `minSdkVersion 10` has no RenderScript or RenderEffect), the font is Quicksand (SIL OFL 1.1)
+  bundled as a raw asset, and `tests/test_ui_theme.py` (23 cases) guards the layout so a
+  dropped view id, an unparseable colour, or a wrong visibility — which kills launch by
+  stopping aapt from inflating — never reaches a camera.
 
 ---
 

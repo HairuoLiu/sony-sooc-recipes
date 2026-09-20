@@ -286,9 +286,9 @@ Copy `gr-moriyama`, `kodak-vision2-500t`, `toy-camera-warm`, `toy-camera-cool`,
 
 ---
 
-## 7. Local validation — the seven gates
+## 7. Local validation — the nine gates
 
-Run the pre-push script. It runs all seven gates and reports every failure together —
+Run the pre-push script. It runs all nine gates and reports every failure together —
 it does not stop at the first one, so one broken gate never hides another:
 
 ```bash
@@ -297,20 +297,21 @@ python tests/run_all.py
 
 | Gate | Command | What it blocks |
 |---|---|---|
-| 1/7 validate | `tools/validate_catalog.py` | Structural errors (bad enum, out-of-range value, broken `cross_ref`, non-contiguous group) and provenance errors (a `film-studio` entry carrying `recipe`, or the matrix engine mislabeled MIT). `sat` past the menu ±3 and "`pe` ignores Creative Style" print as **notes**, not errors — those are by-design. |
-| 2/7 test cases | `tests/test_catalog.py` | Invariants for every filter, plus pinned values. `TestAuthoredHaveCases` fails any `authored-here` entry with no case, and any case not pointing at an `authored-here` entry. |
-| 3/7 generated Java | `tools/gen_recipes.py --check --fork` | The on-disk `Recipes.java` differs from what the catalog would generate. **Skipped** if `build/recipe-lab-sony-pmca` is not checked out (so is the fidelity check). |
-| 4/7 browser | `tools/gen_browser.py` + `tests/smoke_browser.js` | `catalog/index.html` is stale or fails to render. **Skipped** if `node` is not on PATH. |
-| 5/7 README counts | `tools/check_readme_counts.py` | The numbers in `README.md` no longer match the catalog. |
-| 6/7 assets | `tools/check_assets.py` | A document pointing at an image that does not exist, a third-party hotlink (status badges excepted), a `docs/assets/samples/` file not named `<recipe-id>--off.jpg` / `--on.jpg` with an id that is in the catalog, or an icon set missing a density. |
-| 7/7 bilingual docs | `tools/check_docs.py` | An English document with no `.zh-CN.md` twin and no declaration saying why, a twin whose English original is gone, translated text baked into a shared `docs/assets/*.svg`, or a count drawn inside a diagram that the catalog has outgrown. |
+| validate | `tools/validate_catalog.py` | Structural errors (bad enum, out-of-range value, broken `cross_ref`, non-contiguous group) and provenance errors (a `film-studio` entry carrying `recipe`, or the matrix engine mislabeled MIT). `sat` past the menu ±3 and "`pe` ignores Creative Style" print as **notes**, not errors — those are by-design. |
+| test cases | `tests/test_catalog.py` | Invariants for every filter, plus pinned values. `TestAuthoredHaveCases` fails any `authored-here` entry with no case, and any case not pointing at an `authored-here` entry. |
+| UI theme | `tests/test_ui_theme.py` | The frosted two-bar main screen keeps every view id `MainActivity` binds with `findViewById`, every drawable and string the layout references resolves, and every colour is `#AARRGGBB`. A wrong visibility value stops aapt from inflating the layout, so the app dies on launch. Runs anywhere — never skipped. |
+| generated Java | `tools/gen_recipes.py --check --fork` | The on-disk `Recipes.java` differs from what the catalog would generate. **Skipped** if `build/recipe-lab-sony-pmca` is not checked out (so is the fidelity check). |
+| browser | `tools/gen_browser.py` + `tests/smoke_browser.js` | `catalog/index.html` is stale or fails to render. **Skipped** if `node` is not on PATH. |
+| README counts | `tools/check_readme_counts.py` | The numbers in `README.md` no longer match the catalog. |
+| assets | `tools/check_assets.py` | A document pointing at an image that does not exist, a third-party hotlink (status badges excepted), a `docs/assets/samples/` file not named `<recipe-id>--off.jpg` / `--on.jpg` with an id that is in the catalog, or an icon set missing a density. |
+| bilingual docs | `tools/check_docs.py` | An English document with no `.zh-CN.md` twin and no declaration saying why, a twin whose English original is gone, translated text baked into a shared `docs/assets/*.svg`, or a count drawn inside a diagram that the catalog has outgrown. |
 | self-test | `tests/test_gates.py` | A gate that no longer fails on broken input. It feeds each gate something it must reject and asserts a non-zero exit — run last, because it is the only gate that temporarily writes probe files. |
 
-Gates 3–4 skip (loudly) when their prerequisite is missing; a missing tool is not a broken
-catalog. All seven passing, plus the self-test, is the bar before you push.
+The generated-Java and browser gates skip (loudly) when their prerequisite is missing; a
+missing tool is not a broken catalog. All nine passing is the bar before you push.
 
-If gate 3 is skipped for lack of a fork but you still want the fidelity proof for a Path A
-recipe, run `check_fidelity.py` manually as shown in §4.
+If the generated-Java gate is skipped for lack of a fork but you still want the fidelity proof
+for a Path A recipe, run `check_fidelity.py` manually as shown in §4.
 
 ---
 

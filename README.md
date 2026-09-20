@@ -198,10 +198,10 @@ Two engines appear in the catalog:
 > allowed it, which it does not. `tools/validate_catalog.py` fails the build if any entry
 > sourced from it carries a `recipe` field.
 
-### The gates — seven locally, one more in CI, plus a self-test
+### The gates — eight locally, one more in CI, plus a self-test
 
-Every change runs through `python tests/run_all.py`, and again in CI. Seven gates run
-anywhere; the fidelity check needs to fetch upstream, so CI runs it. An eighth, the
+Every change runs through `python tests/run_all.py`, and again in CI. Eight gates run
+anywhere; the fidelity check needs to fetch upstream, so CI runs it. A ninth, the
 self-test, breaks one thing per gate and asserts the gate actually fails — a gate that
 has never been seen failing is a decoration, not a gate.
 
@@ -209,6 +209,7 @@ has never been seen failing is a decoration, not a gate.
 |---|---|
 | `validate_catalog.py` | bad enums, out-of-range values, broken group order, **dishonest provenance** |
 | `tests/test_catalog.py` | 33 cases: invariants, ranges, generator round-trip, upstream pin drift |
+| `tests/test_ui_theme.py` | 23 cases: the frosted two-bar main screen keeps every view id `MainActivity` binds, every referenced drawable and string resolves, and every colour is `#AARRGGBB` — a wrong visibility value stops aapt from inflating and kills launch |
 | `check_fidelity.py` | **a recipe value silently changed** — all 77 upstream recipes, value for value *(CI only)* |
 | `gen_recipes.py --check` | someone hand-edited `Recipes.java`, or forgot to regenerate |
 | `smoke_browser.js` | a typo that would ship a blank filter browser |

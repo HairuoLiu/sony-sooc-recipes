@@ -5,7 +5,7 @@
 每个条目记一次上传到 GitHub 的版本。版本号遵循语义化版本，但**配方值本身的变化**也视
 为 minor——对使用者来说，一款滤镜的参数变了，比加个函数影响更大。
 
-发布前必须跑 `python tests/run_all.py`，七道关卡加自测全绿才允许打 tag——自测会给每道关卡喂坏输入，证明它们真的会失败。
+发布前必须跑 `python tests/run_all.py`，全部关卡加自测全绿才允许打 tag——自测会给每道关卡喂坏输入，证明它们真的会失败。
 
 > `v0.5.0` 是本仓库对外发布的**首个版本**。它之前完成的开发批次没有对应的 Release，
 > 因此不带版本号，以「开发批次」列在下方，内容与许可判断原样保留以便追溯。
@@ -35,7 +35,7 @@
 - **九个图标里六个是胶片、不是机身。** `filmstocks`、`kodak`、`nichefilm`、`pentax`、`ricoh`、
   `sony` 展示的是胶片；只有 `leica`（M9）、`fujifilm`（X100VI）、`hasselblad`（X2D II 100C）展示机身。
   `nichefilm` 的图标正是那张 CineStill 胶卷产品图，也是这次重组名字的由来。
-- **推迟到下个版本。** 磨砂双栏主屏 UI 主题（叠在上游布局之上的一次性补丁）不在本次构建中，将在后续版本落地。
+- **磨砂双栏主屏。** 应用主屏现在是磨砂双栏布局，以上游布局之上「重放补丁」的方式发布，而非作为源码提交。颜色、三个屏幕开关（`legend_visibility`、`app_title_visibility`、`tag_visibility`）与布局本体分别落在 `catalog/ui-theme.json` 与 `assets/ui/main.xml`；`tools/patch_ui.py` 在构建时、于 `apply_pack` 之后、`gen_recipes` 之前，把它们重放到上游 checkout 上。磨砂是「模拟」的（一层约 0.90 透明度的半透层，没有模糊——`minSdkVersion 10` 既无 RenderScript 也无 RenderEffect），字体是 Quicksand（SIL OFL 1.1），作为 raw 资源随包捆绑，`tests/test_ui_theme.py`（23 个用例）看守布局——丢一个 view id、一个 aapt 解析不了的颜色，或写错一个会让 aapt 无法 inflate、进而让应用启动即崩的可见性值，都不会流到相机上。
 
 ---
 

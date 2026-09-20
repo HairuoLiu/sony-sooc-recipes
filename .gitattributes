@@ -22,3 +22,9 @@
 *.jpg   binary
 *.jpeg  binary
 *.ico   binary
+# The bundled UI font (assets/fonts/). Declared explicitly rather than left to the
+# `text=auto` heuristic above: a .ttf that git decided to normalise would arrive inside
+# the APK corrupt, createFromAsset would throw, and the app would fall back to the system
+# font - a failure with no error message anywhere.
+*.ttf   binary
+*.otf   binary

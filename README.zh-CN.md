@@ -138,15 +138,16 @@ tools/                   校验器 · 代码生成器 · 保真比对 · 安装�
 手改 `Recipes.java` 是错的——它随时会被重新生成。要加滤镜，改注册表。
 见 **[加一款滤镜](docs/ADDING-FILTERS.zh-CN.md)**。
 
-### 关卡——本地七道，CI 再加一道，另有自测
+### 关卡——本地八道，CI 再加一道，另有自测
 
-每次改动都过 `python tests/run_all.py`，CI 里再过一遍。七道关卡在任何环境都能跑；保真检查要拉上游，所以交给 CI 跑。
-第八道是**自测**：给每道关卡喂一份它必须拒绝的坏输入，断言它真的会失败——从没见过失败的关卡只是装饰，不是关卡。
+每次改动都过 `python tests/run_all.py`，CI 里再过一遍。八道关卡在任何环境都能跑；保真检查要拉上游，所以交给 CI 跑。
+第九道是**自测**：给每道关卡喂一份它必须拒绝的坏输入，断言它真的会失败——从没见过失败的关卡只是装饰，不是关卡。
 
 | 关卡 | 拦住什么 |
 |---|---|
 | `validate_catalog.py` | 枚举非法、取值越界、分组顺序断裂、**来源声明不诚实** |
 | `tests/test_catalog.py` | 33 个用例：不变量、取值范围、生成器往返、上游 pin 漂移 |
+| `tests/test_ui_theme.py` | 23 个用例：磨砂双栏主屏保留 `MainActivity` 绑定的每个 view id、每个引用的 drawable / string 都能解析、每个颜色都是 `#AARRGGBB`——可见性值写错会让 aapt 无法 inflate、启动即崩 |
 | `check_fidelity.py` | **某个配方的数值被悄悄改动** —— 全部 77 条上游配方，逐值对照 *(仅 CI)* |
 | `gen_recipes.py --check` | 有人手改了 `Recipes.java`，或忘了重新生成 |
 | `smoke_browser.js` | 一个会让滤镜浏览器空白出货的拼写错误 |

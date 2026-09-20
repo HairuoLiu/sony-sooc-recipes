@@ -161,6 +161,16 @@ build_target() {
     cp "$ROOT/assets/app-icon/icon-512.png" "$fork/dist/icon-512.png"
   fi
 
+  # The frosted two-bar main screen is replayed here rather than committed to the
+  # checkout: prepare_fork reset this checkout to pristine upstream a few lines ago, so
+  # anything edited by hand under build/ would not have survived to this point anyway.
+  # The inputs are tracked (assets/ui/main.xml + catalog/ui-theme.json), so every target
+  # getting the same theme is one line here instead of nine copies drifting apart.
+  # It runs AFTER apply_pack because the layout points at the custom views by their
+  # fully-qualified name, which apply_pack has just renamed for this pack.
+  echo "==> applying the frosted two-bar UI theme"
+  python "$ROOT/tools/patch_ui.py" --fork "$fork"
+
   echo "==> generating Recipes.java from catalog/filters.json"
   if [[ -n "$pack" ]]; then
     python "$ROOT/tools/gen_recipes.py" --pack "$pack" --fork "$fork"

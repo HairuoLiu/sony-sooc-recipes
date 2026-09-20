@@ -258,12 +258,13 @@ brand together in the browser.
 ## 7. The pipeline and its gates — from editing one number to a published APK
 
 This section traces one change from `filters.json` to a signed APK, and names every gate that can stop
-it. There are **six CI gates** plus the release build.
+it. There are **eight CI gates** plus the release build.
 
 | # | Gate | Script | What it blocks |
 |---|---|---|---|
 | 1 | Registry legal | `validate_catalog.py` | Wrong enum, out-of-range value, broken group contiguity, dishonest licence claim, a `film-studio` entry carrying parameters |
 | 1b | Authored cases | `tests/test_catalog.py` | A home-grown recipe with no pinned case in `tests/cases.json`, or a value that drifted from its case. `TestAuthoredHaveCases` fails the suite if `source: authored-here` has no case |
+| 1c | UI theme (`run UI theme test cases`) | `tests/test_ui_theme.py` | The frosted two-bar main screen: the layout keeps every view id `MainActivity` binds, every referenced drawable and string resolves, and every colour is `#AARRGGBB`. A wrong visibility value stops aapt from inflating — the app dies on launch. Numbered 1c rather than 2 because it is the same kind of check as 1 and 1b: a cheap static check on tracked inputs, in the same job. Gate 2 is already the Recipes.java step |
 | 3 | Fidelity | `check_fidelity.py` | **A recipe value silently changed** vs. upstream — the APK would then shoot different colours than the project it builds on. Compares every recipe value-for-value, expanded to full 15-value form so shorthand spelling matches |
 | 4 | Browser | `gen_browser.py` + `tests/smoke_browser.js` | A typo in the single-file browser that would ship a blank page; also fails if `catalog/index.html` is stale |
 | 5 | README counts | `check_readme_counts.py` | The README's filter counts no longer match the catalog |
@@ -273,7 +274,9 @@ it. There are **six CI gates** plus the release build.
 Steps in order:
 
 1. You edit `catalog/filters.json` (never `Recipes.java`).
-2. Gate 1 + 1b run on every push/PR to `catalog/`, `tools/`, `tests/`.
+2. Gate 1 + 1b run on every push/PR to `catalog/`, `tools/`, `tests/`; the UI theme gate
+   (`tests/test_ui_theme.py`, the CI step named "run UI theme test cases") is part of the same
+   local-gate family and guards the main-screen layout (see [§10](#10-the-main-screen-is-a-replayed-patch-not-committed-source)).
 3. Gate 3 fetches upstream `Recipes.java` and checks value-for-value fidelity.
 4. `gen_recipes.py` regenerates `Recipes.java`; the artifact is uploaded for inspection.
 5. Gate 4 regenerates and smoke-tests the browser.
@@ -342,12 +345,15 @@ sony-sooc-recipes/
 │   ├── check_docs.py         twin coverage, shared diagrams, counts drawn in diagrams (CI gate 7)
 │   ├── install-wifi.sh       Wi-Fi ADB install helper
 │   ├── apply_pack.py         rewrites package name + app name for one brand pack
+│   ├── patch_ui.py           replays the frosted two-bar main screen onto the upstream checkout (after apply_pack, before gen_recipes); adds `-A assets` to the upstream aapt call
+│   ├── preview_ui.py         renders the patched main screen so you can see it without a camera
 │   ├── build_app_icon.py     regenerates the all-in-one launcher icon set from a source photo
 │   └── build_apk.sh          calls upstream build.sh; --pack / --all-packs build the packs
 ├── tests/
 │   ├── test_catalog.py       33 cases + invariants (CI gate 1b)
 │   ├── test_packs.py         pack transform, matrix and subset cases (CI + release)
 │   ├── test_gates.py         the self-test: breaks one thing per gate, asserts failure
+│   ├── test_ui_theme.py      the frosted two-bar main screen: view ids, drawables/strings, #AARRGGBB colours (23 cases)
 │   ├── cases.json            pinned values for authored-here recipes
 │   └── smoke_browser.js      browser smoke test (CI gate 4)
 ├── .github/workflows/
@@ -378,3 +384,81 @@ local and never committed.
 locked by fidelity checks) and PolyForm Noncommercial (Film Studio, name-only) is a *test*, not a
 paragraph. Blurring it is the one mistake that would make the repository unsafe to host, so
 `validate_catalog.py` and `test_catalog.py` fail the build over it.
+
+---
+
+## 10. The main screen is a replayed patch, not committed source
+
+This section explains why the app's frosted two-bar main screen is not in the source tree, and why
+each piece of it is the way it is. If you only want to change a colour or a toggle, edit
+`catalog/ui-theme.json` and `assets/ui/main.xml`; everything below is the *why*.
+
+### Why it is a replayed patch
+
+The main screen is produced by replaying a patch onto the upstream checkout at build time. It is
+**not** source that lives in this repo. Two tracked inputs drive it: `catalog/ui-theme.json` (every
+colour, plus the three on-screen toggles) and `assets/ui/main.xml` (the layout itself).
+`tools/patch_ui.py` replays them onto a checkout, and `tools/preview_ui.py` renders the result so you
+can see it without a camera.
+
+The reason it is a patch and not a hand-edit under `build/`: `build/` is gitignored, and
+`tools/build_apk.sh` resets the checkout to the pinned upstream revision before every build —
+`prepare_fork` runs `git reset --hard` and `git clean -fdxq`. A hand edit made under `build/`
+survives exactly zero builds: the next build throws it away. So the only inputs that matter are the
+tracked ones, and the only writer of the layout is `patch_ui.py`. That is the same
+single-source-of-truth discipline as `filters.json` → `Recipes.java`, just one level further down.
+
+`patch_ui.py` runs in `build_apk.sh` **after** `apply_pack` and **before** `gen_recipes`. The order
+is not arbitrary: the layout references the app's custom views by fully-qualified class name, and
+`apply_pack` renames that class name per brand pack and fills the package in from the checkout's own
+`AndroidManifest.xml`. A layout that named the class before the rename would not match any class the
+pack actually ships.
+
+### The frost is simulated, not blurred
+
+`minSdkVersion 10` (Gingerbread) has no RenderScript (API 11+) and no RenderEffect (API 31+), so
+there is no blur primitive to reach for. A "frosted glass" bar here is what frosted glass was before
+blur existed: a translucent layer at ~0.90 alpha, a faint gradient sheen, and rounded inner corners
+that read as a glass slab. The high alpha is deliberate, not cosmetic — the camera frame behind the
+bars can be arbitrarily bright or dark, and at high enough alpha the composite stays light, so the
+dark text keeps its contrast over any scene. Lower the alpha and that guarantee stops holding: a
+bright frame bleeds through and the text vanishes into it.
+
+### The font is bundled, and aapt fails silently without a flag
+
+The font is **Quicksand** (SIL OFL 1.1), Regular + Bold, about 157 KB the pair, shipped as a raw
+asset under `assets/fonts/` and bound to the views in Java with `Typeface.createFromAsset`. API 10
+ships no rounded system font, and `android:fontFamily` / `res/font` are API 26, so there is no system
+route to a rounded face — the font has to travel with the APK. Consequence: each APK grows by roughly
+the size of the two `.ttf` files.
+
+Critically, `patch_ui.py` also adds `-A assets` to the upstream `build.sh` / `build.cmd` aapt call.
+Upstream ships no `assets/` directory at all, and aapt **silently omits** a missing assets directory
+rather than complaining. If that flag is ever lost, the app does not crash — it quietly renders Droid
+Sans. That silent fallback is the one failure mode here with no error message anywhere: the build
+still succeeds, the gate still passes, and only a human comparing the screen against the design would
+notice. The flag is the only thing standing between the design and a silently wrong font.
+
+### The toggles, and why a wrong value kills launch
+
+Three on-screen toggles live in the theme file: `legend_visibility` (currently `"gone"` — the row of
+glyphs and labels under the chips; with no touchscreen, navigation is the camera's wheel and dial, so
+that row is the only on-screen reminder of what ENTER and AEL/DISP do), `app_title_visibility`, and
+`tag_visibility` (the CS / PE chip behind the recipe name: CS = Creative Style, the camera's own look
+engine, which survives into RAW; PE = Picture Effect, which only lands on JPEG). A wrong visibility
+value is not a soft failure — it makes aapt fail to **inflate** the layout, and the app dies on
+launch. That is the failure the gate exists to catch.
+
+### The gate that protects all of it
+
+`tests/test_ui_theme.py` is the only thing standing between a bad colour or a dropped view id in
+`catalog/ui-theme.json` / `assets/ui/` and an APK that fails to inflate its layout on the camera.
+`build/` is wiped before every build, so nothing else in `run_all.py` would notice a broken theme. The
+gate enforces three things: the layout keeps every view id `MainActivity` binds with `findViewById`;
+every drawable and string the layout references resolves; and every colour is `#AARRGGBB`. (23 cases.)
+It runs locally, like the catalog and assets gates — CI runs it as a step named "run UI theme test
+cases".
+
+> **Honest note.** This is the one gate whose loss would not even turn CI red: the silent `-A
+> assets` fallback means a missing font ships as Droid Sans with no error anywhere. The layout and
+> colour checks are mechanical; the font flag is the part you have to notice by hand.

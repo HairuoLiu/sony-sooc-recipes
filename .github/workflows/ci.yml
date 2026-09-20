@@ -59,6 +59,16 @@ jobs:
       - name: run catalog test cases
         run: python tests/test_catalog.py
 
+      # Gate 1c — the main screen is a replayed patch, not committed source: build/ is
+      # gitignored and build_apk.sh resets it to the pinned upstream revision before every
+      # build, so assets/ui/main.xml and catalog/ui-theme.json are the only tracked copies
+      # of the UI. Nothing else here would notice them breaking — and a bad visibility
+      # value or a dropped view id fails at INFLATE time on the camera, not at build time
+      # here. Numbered 1c, not 2: this is a cheap static check on tracked inputs like
+      # gates 1 and 1b, and gate 2 already means "regenerate Recipes.java".
+      - name: run UI theme test cases
+        run: python tests/test_ui_theme.py
+
       # The pack transform and the release matrix are only exercised on release tags
       # otherwise — a bug there would first surface as a failed release, which is the
       # worst possible time. test_gates.py is the self-test: it breaks one thing per
