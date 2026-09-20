@@ -17,6 +17,30 @@ self-test that proves the gates still fail on broken input.
 
 ---
 
+## v0.7.1 — 2026-09-19 · the release build was not shipping the main screen
+
+**The v0.7.0 APKs did not contain the frosted two-bar main screen that v0.7.0 announced.** The
+local build did; the release build did not. `.github/workflows/release.yml` writes the build steps
+out a second time, and it was missing the `tools/patch_ui.py` step — so all ten v0.7.0 APKs shipped
+upstream's main screen while the CHANGELOG, the README and both architecture documents said
+otherwise. Every gate stayed green throughout: the theme's tools were all tested, and nothing tested
+that the release build ran them. No recipe values changed, and no pack changed. If you installed a
+v0.7.0 APK, the looks on your camera are the looks in this release; what differs is the screen.
+
+- **`release.yml` now replays the theme**, in the same position `tools/build_apk.sh` does it — after
+  `apply_pack`, before `gen_recipes`.
+- **`tests/test_catalog.py::TestBuildPipelinesAgree` holds the two pipelines together.** It compares
+  the transform tools each pipeline runs, in order, and names any the release build is missing. That
+  test runs in `release.yml`'s own pre-build gate job, so a release missing a step now fails before
+  anything is built instead of publishing.
+- **The font's licence now travels with the font.** `patch_ui.py` copies `assets/fonts/` whole, so
+  `OFL-Quicksand.txt` reaches the APK beside the two Quicksand faces it covers. The OFL's one
+  redistribution condition is that the licence accompany the font, and `NOTICE.md` already required
+  it — but only the two `.ttf` files were being copied, so every APK so far would have shipped the
+  font with the licence still in the repository. Guarded by a case in `tests/test_ui_theme.py`.
+
+---
+
 ## v0.7.0 — 2026-09-19 · brand-pack restructure, and all-new icon artwork
 
 - **A ninth brand pack: `filmstocks` (Fuji Film Style).** The Fujifilm pack split in two.
@@ -56,12 +80,15 @@ self-test that proves the gates still fail on broken input.
   shipped as a replayed patch over the upstream checkout rather than committed source. The
   colours, the three on-screen toggles (`legend_visibility`, `app_title_visibility`,
   `tag_visibility`) and the layout itself live in `catalog/ui-theme.json` and
-  `assets/ui/main.xml`; `tools/patch_ui.py` replays them at build time, after `apply_pack`
-  and before `gen_recipes`. The frost is simulated (a ~0.90-alpha translucent layer, no blur —
+  `assets/ui/main.xml`; `tools/patch_ui.py` replays them in **both** build pipelines (local
+  `build_apk.sh`, tagged `release.yml`), after `apply_pack` and before `gen_recipes`. The frost is
+  simulated (a ~0.90-alpha translucent layer, no blur —
   `minSdkVersion 10` has no RenderScript or RenderEffect), the font is Quicksand (SIL OFL 1.1)
-  bundled as a raw asset, and `tests/test_ui_theme.py` (23 cases) guards the layout so a
+  bundled as a raw asset, and `tests/test_ui_theme.py` (24 cases) guards the layout so a
   dropped view id, an unparseable colour, or a wrong visibility — which kills launch by
   stopping aapt from inflating — never reaches a camera.
+  *(In the **v0.7.0 APKs** this screen was not actually present: `release.yml` was missing the
+  replay step, which only the local build had. See v0.7.1 above.)*
 
 ---
 

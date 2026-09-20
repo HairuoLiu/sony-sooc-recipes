@@ -287,20 +287,28 @@ Steps in order:
    English-only, the shared `docs/assets/*.svg` diagrams carry no translated text, and the counts
    drawn inside those diagrams still match the catalog.
 9. On a `v*` tag, `release.yml` re-runs gates 1+1b, then clones upstream at the **pinned
-   `UPSTREAM_SHA`**, rebrands the fork, copies our launcher icon in from `assets/app-icon/`,
-   regenerates, builds with JDK 17 + build-tools 30.0.3 + NDK r16b, and attaches
-   `SonySOOCRecipes-<tag>.apk` + a SHA-256 sum to the GitHub Release.
+   `UPSTREAM_SHA`**, rebrands the fork, applies the pack transform and the launcher icon, replays
+   the frosted main screen (`patch_ui.py`), regenerates, builds with JDK 17 + build-tools 30.0.3 +
+   NDK r16b, and attaches `SonySOOCRecipes-<tag>.apk` + a SHA-256 sum to the GitHub Release.
 
 > **Honest note.** The upstream revision is pinned in **two** places — `catalog/filters.json`
 > (`sources.recipe-lab.fetched_rev`) and `release.yml` (`UPSTREAM_SHA`) — and `test_catalog.py`
 > (`TestPinnedUpstream`) fails if they disagree. A tag must always build the exact upstream it was
 > validated against; an unpinned clone could build a different APK next month.
+>
+> The **build steps themselves** are written out twice for the same reason and carry the same risk:
+> once in `tools/build_apk.sh` and once in `release.yml`. `TestBuildPipelinesAgree` (same file) holds
+> them together, and that test is not theoretical — it exists because the drift had already happened.
+> `release.yml` was missing the `patch_ui.py` step, so the **v0.7.0 APKs shipped upstream's main
+> screen** while this file, the CHANGELOG and the README all described the frosted two-bar screen as
+> shipped. Every gate was green: the theme's tools were all tested, and nothing tested that the
+> release build ran them.
 
 **Brand packs.** The same pipeline also builds one app per camera brand. `catalog/packs.json`
 lists the packs, and `release.yml` derives its build matrix from that file at run time — one
-job per pack plus the all-in-one, each cloning upstream fresh and running `apply_pack.py` then
-`gen_recipes.py --pack <id>`. A pack differs from the all-in-one only in package name,
-`app_name`, and launcher icon; the *why* is in [docs/BRAND-PACKS.md](BRAND-PACKS.md). Gate 6
+job per pack plus the all-in-one, each cloning upstream fresh and running `apply_pack.py`, then
+`patch_ui.py`, then `gen_recipes.py --pack <id>`. A pack differs from the all-in-one only in package
+name, `app_name`, and launcher icon; the *why* is in [docs/BRAND-PACKS.md](BRAND-PACKS.md). Gate 6
 (`check_assets.py`) now also covers `assets/app-icon/` and every
 `assets/app-icon-packs/<icon_set>/`, so a missing density or an orphan icon set fails the build.
 
@@ -353,7 +361,7 @@ sony-sooc-recipes/
 │   ├── test_catalog.py       33 cases + invariants (CI gate 1b)
 │   ├── test_packs.py         pack transform, matrix and subset cases (CI + release)
 │   ├── test_gates.py         the self-test: breaks one thing per gate, asserts failure
-│   ├── test_ui_theme.py      the frosted two-bar main screen: view ids, drawables/strings, #AARRGGBB colours (23 cases)
+│   ├── test_ui_theme.py      the frosted two-bar main screen: view ids, drawables/strings, #AARRGGBB colours (24 cases)
 │   ├── cases.json            pinned values for authored-here recipes
 │   └── smoke_browser.js      browser smoke test (CI gate 4)
 ├── .github/workflows/
@@ -396,8 +404,9 @@ each piece of it is the way it is. If you only want to change a colour or a togg
 ### Why it is a replayed patch
 
 The main screen is produced by replaying a patch onto the upstream checkout at build time. It is
-**not** source that lives in this repo. Two tracked inputs drive it: `catalog/ui-theme.json` (every
-colour, plus the three on-screen toggles) and `assets/ui/main.xml` (the layout itself).
+**not** source that lives in this repo. Three tracked inputs drive it: `catalog/ui-theme.json` (every
+colour, plus the three on-screen toggles), `assets/ui/main.xml` (the layout itself) and
+`assets/fonts/` (the bundled faces and the licence text that has to travel with them).
 `tools/patch_ui.py` replays them onto a checkout, and `tools/preview_ui.py` renders the result so you
 can see it without a camera.
 
@@ -408,7 +417,9 @@ survives exactly zero builds: the next build throws it away. So the only inputs 
 tracked ones, and the only writer of the layout is `patch_ui.py`. That is the same
 single-source-of-truth discipline as `filters.json` → `Recipes.java`, just one level further down.
 
-`patch_ui.py` runs in `build_apk.sh` **after** `apply_pack` and **before** `gen_recipes`. The order
+`patch_ui.py` runs in **both** pipelines — `build_apk.sh` locally, `release.yml` on a tag, which is
+what `TestBuildPipelinesAgree` exists to assert — **after** `apply_pack` and **before**
+`gen_recipes`. The order
 is not arbitrary: the layout references the app's custom views by fully-qualified class name, and
 `apply_pack` renames that class name per brand pack and fills the package in from the checkout's own
 `AndroidManifest.xml`. A layout that named the class before the rename would not match any class the
@@ -439,6 +450,12 @@ Sans. That silent fallback is the one failure mode here with no error message an
 still succeeds, the gate still passes, and only a human comparing the screen against the design would
 notice. The flag is the only thing standing between the design and a silently wrong font.
 
+The licence travels by the same route and for a harder reason: `patch_ui.py` copies `assets/fonts/`
+**whole**, so `OFL-Quicksand.txt` reaches the APK beside the faces it covers. The OFL's one
+redistribution condition is that the licence accompanies the font, and a licence obligation left
+behind in the repository is not met — see [NOTICE.md](../NOTICE.md). It is also the failure mode
+least likely to be noticed, since a missing text file changes nothing about how the app looks.
+
 ### The toggles, and why a wrong value kills launch
 
 Three on-screen toggles live in the theme file: `legend_visibility` (currently `"gone"` — the row of
@@ -455,7 +472,7 @@ launch. That is the failure the gate exists to catch.
 `catalog/ui-theme.json` / `assets/ui/` and an APK that fails to inflate its layout on the camera.
 `build/` is wiped before every build, so nothing else in `run_all.py` would notice a broken theme. The
 gate enforces three things: the layout keeps every view id `MainActivity` binds with `findViewById`;
-every drawable and string the layout references resolves; and every colour is `#AARRGGBB`. (23 cases.)
+every drawable and string the layout references resolves; and every colour is `#AARRGGBB`. (24 cases.)
 It runs locally, like the catalog and assets gates — CI runs it as a step named "run UI theme test
 cases".
 

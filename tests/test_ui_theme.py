@@ -366,6 +366,27 @@ class TestBundledFont(unittest.TestCase):
             self.assertIn(path.read_bytes()[:4], (b"\x00\x01\x00\x00", b"OTTO"),
                           f"assets/fonts/{name} is not a font")
 
+    def test_the_licence_travels_with_the_font(self):
+        """The OFL's one condition, and the one failure nothing else here can see.
+
+        NOTICE.md requires the licence obligation to travel with the APK rather than stay
+        behind in the repository. A payload that quietly dropped the .txt would still
+        build, still look right on the camera, and still pass every other case in this
+        class — a missing text file cannot make the app misbehave. So the payload set is
+        asserted directly instead of trusting the copy loop to keep including it.
+        """
+        theme = patch_ui.load_theme(patch_ui.DEFAULT_THEME)
+        payloads = patch_ui.font_payloads(theme)
+        for name in patch_ui.fonts_for(theme):
+            self.assertIn(name, payloads, f"{name} would not be copied into the checkout")
+        licences = [n for n in payloads if n.lower().endswith(".txt")]
+        self.assertTrue(licences,
+                        "no licence text in the font payload: the OFL requires the licence "
+                        "to ship with the font it covers, and NOTICE.md says so explicitly")
+        text = payloads[licences[0]].decode("utf-8", "replace").upper()
+        self.assertIn("SIL OPEN FONT LICENSE", text,
+                      f"{licences[0]} does not read like the OFL")
+
     def test_a_font_the_theme_invents_is_rejected(self):
         theme = patch_ui.load_theme(patch_ui.DEFAULT_THEME)
         with self.assertRaises(SystemExit, msg="a missing .ttf must stop the build here, "

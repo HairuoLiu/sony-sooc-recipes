@@ -209,7 +209,7 @@ has never been seen failing is a decoration, not a gate.
 |---|---|
 | `validate_catalog.py` | bad enums, out-of-range values, broken group order, **dishonest provenance** |
 | `tests/test_catalog.py` | 33 cases: invariants, ranges, generator round-trip, upstream pin drift |
-| `tests/test_ui_theme.py` | 23 cases: the frosted two-bar main screen keeps every view id `MainActivity` binds, every referenced drawable and string resolves, and every colour is `#AARRGGBB` — a wrong visibility value stops aapt from inflating and kills launch |
+| `tests/test_ui_theme.py` | 24 cases: the frosted two-bar main screen keeps every view id `MainActivity` binds, every referenced drawable and string resolves, and every colour is `#AARRGGBB` — a wrong visibility value stops aapt from inflating and kills launch |
 | `check_fidelity.py` | **a recipe value silently changed** — all 77 upstream recipes, value for value *(CI only)* |
 | `gen_recipes.py --check` | someone hand-edited `Recipes.java`, or forgot to regenerate |
 | `smoke_browser.js` | a typo that would ship a blank filter browser |

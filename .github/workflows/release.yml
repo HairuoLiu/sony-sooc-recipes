@@ -69,7 +69,10 @@ jobs:
           python-version: '3.12'
 
       # A catalog that fails its own gates should never reach the point of producing
-      # something a human installs on a camera.
+      # something a human installs on a camera. test_catalog.py is here rather than only in
+      # ci.yml because it also asserts that THIS file runs every build step build_apk.sh
+      # does (TestBuildPipelinesAgree) — the check has to happen before the build, on the
+      # tree being released, or it cannot stop a release that is missing a step.
       - name: catalog gates
         run: |
           python tools/validate_catalog.py
@@ -214,6 +217,29 @@ jobs:
           cp assets/app-icon/ic_launcher-xhdpi.png   "$F/res/drawable-xhdpi/ic_launcher.png"
           cp assets/app-icon/ic_launcher-xxhdpi.png  "$F/res/drawable-xxhdpi/ic_launcher.png"
           cp assets/app-icon/icon-512.png            "$F/dist/icon-512.png"
+
+      - name: apply the frosted two-bar UI theme
+        # The main screen is a replayed patch, not committed source: build/ is gitignored
+        # and this job starts from a fresh clone, so assets/ui/main.xml and
+        # catalog/ui-theme.json are the only tracked copies of the UI and patch_ui.py is
+        # the only thing that puts them into the checkout.
+        #
+        # It runs AFTER the pack transform because assets/ui/main.xml names the custom
+        # views (HintBar / PickerView / PromptView) by fully-qualified class, and apply_pack
+        # has just renamed that class for this pack. patch_ui fills the layout's
+        # {ui_package} token from the checkout's OWN AndroidManifest.xml, so a brand pack
+        # gets a layout pointing at the pack's classes. Run it before that rename and the
+        # pack's APK inflates a layout naming a class it does not contain — a crash on
+        # launch, with nothing in the build log to say which step caused it.
+        #
+        # Not optional, and it must stay in step with tools/build_apk.sh. It was missing
+        # here for the v0.7.0 tag, so those ten APKs shipped upstream's main screen while
+        # the CHANGELOG and both architecture documents said the frosted two-bar screen was
+        # in them: the theme's own gate passed, because the tools worked — nothing tested
+        # that this file ran them. tests/test_catalog.py::TestBuildPipelinesAgree now
+        # compares the two pipelines, since a comment claiming they mirror each other is
+        # not a test. That file runs in the `targets` job above, before anything is built.
+        run: python tools/patch_ui.py --fork build/recipe-lab-sony-pmca
 
       - name: generate Recipes.java from the catalog
         # --pack narrows the catalog to that pack's groups; with no --pack the all-in-one.

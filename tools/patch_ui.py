@@ -13,6 +13,8 @@ re-applies the same change every time, from tracked inputs only:
 
   * catalog/ui-theme.json   every colour in one reviewable place
   * assets/ui/main.xml      the two-bar layout
+  * assets/fonts/           the bundled faces, and the licence text that has to travel with
+                            them: the OFL's one redistribution condition, see NOTICE.md
 
 It deliberately does NOT restructure Java. MainActivity binds its views by id, and the
 new layout keeps every one of those ids (tests/test_ui_theme.py enforces that), so the
@@ -291,6 +293,26 @@ def fonts_for(theme: dict) -> list[str]:
     return names
 
 
+def font_payloads(theme: dict) -> dict[str, bytes]:
+    """Every file in assets/fonts/, by name — the faces the theme names, and everything
+    else sitting beside them.
+
+    Not just the two .ttf files, and the extras are not decoration. assets/fonts/ also
+    holds Quicksand's OFL text, and the OFL's single redistribution condition is that the
+    licence travels with the font it covers. Shipping the face inside the APK while the
+    licence stayed behind in the repository is precisely the omission NOTICE.md says must
+    not happen — and it is invisible from every angle: a missing text file changes nothing
+    about how the app looks, so only an assertion like the one in tests/test_ui_theme.py
+    can catch it.
+
+    fonts_for() still runs first: a theme naming a face that is not here must fail the
+    build with the face's own name, not sail through as a smaller payload.
+    """
+    fonts_for(theme)
+    return {p.name: p.read_bytes()
+            for p in sorted(FONT_DIR.iterdir()) if p.is_file()}
+
+
 def font_java(theme: dict) -> list[tuple[str, str, str, str]]:
     """MainActivity + Legend edits that bind the bundled face.
 
@@ -449,7 +471,7 @@ def main() -> int:
         theme = load_theme(args.theme)
         drawables = drawables_for(theme)
         edits = anchors(theme)
-        fonts = fonts_for(theme)
+        fonts = font_payloads(theme)
     except KeyError as exc:
         # from None: the KeyError is noise here, the named key is the whole message.
         raise SystemExit(f"catalog/ui-theme.json defines no {exc.args[0]!r} key — every "
@@ -482,7 +504,8 @@ def main() -> int:
                 problems.append(f"{fname}: {label} is not patched")
         for name in fonts:
             if not (fork / "assets" / "fonts" / name).is_file():
-                problems.append(f"assets/fonts/{name} is missing - the APK would carry no font")
+                problems.append(f"assets/fonts/{name} is not in the checkout - it would "
+                                f"not reach the APK")
         for rel, _old, new, label in scripts:
             p = fork / rel
             if not p.is_file() or new not in p.read_text(encoding="utf-8"):
@@ -493,7 +516,7 @@ def main() -> int:
             return 1
         print(f"OK — {fork} carries the frosted two-bar theme "
               f"({len(drawables)} drawables, {len(edits)} Java edits, "
-              f"{len(fonts)} font(s), {len(scripts)} build-script edits)")
+              f"{len(fonts)} font file(s), {len(scripts)} build-script edits)")
         return 0
 
     # ---- apply ---------------------------------------------------------------------
@@ -503,8 +526,8 @@ def main() -> int:
         write_file(fork / "res" / "drawable" / name, text, args.dry_run, report,
                    f"drawable/{name}")
 
-    for name in fonts:
-        write_binary(fork / "assets" / "fonts" / name, (FONT_DIR / name).read_bytes(),
+    for name, data in fonts.items():
+        write_binary(fork / "assets" / "fonts" / name, data,
                      args.dry_run, report, f"assets/fonts/{name}")
 
     for fname, old, new, label in edits:

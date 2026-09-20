@@ -264,18 +264,27 @@ SonySOOCRecipes-<tag>.apk          ──  签名密钥只在本机，永不入�
 6. 关卡 5 核对 README 计数。
 7. 关卡 6 扫描所有 README 与 `docs/*.md` 里的图片引用，遇到指向不存在的文件、第三方外链
    （状态徽章除外）、或 `docs/assets/samples/` 下命名错误的样例时失败。
-8. 推送 `v*` tag 时，`release.yml` 重跑关卡 1+1b，然后按**固定的 `UPSTREAM_SHA`** 克隆上游、
-   改包名、把 `assets/app-icon/` 里的启动图标拷进 fork、重新生成、用 JDK 17 + build-tools 30.0.3
-   + NDK r16b 构建，并把 `SonySOOCRecipes-<tag>.apk` 与 SHA-256 校验和挂到 GitHub Release。
+8. 关卡 7 检查双语文档集：每份文档要么有 `.zh-CN.md` 双生、要么在 `ENGLISH_ONLY` 里说明原因；
+   共用的 `docs/assets/*.svg` 图里不得出现译文（图是两种语言共用的）；图里画着的数字仍与注册表一致。
+9. 推送 `v*` tag 时，`release.yml` 重跑关卡 1+1b，然后按**固定的 `UPSTREAM_SHA`** 克隆上游、
+   改包名、应用品牌包变换与启动图标、重放磨砂主屏（`patch_ui.py`）、重新生成、用 JDK 17 +
+   build-tools 30.0.3 + NDK r16b 构建，并把 `SonySOOCRecipes-<tag>.apk` 与 SHA-256 校验和挂到
+   GitHub Release。
 
 > **实话实说。** 上游版本固定在**两处**——`catalog/filters.json`（`sources.recipe-lab.fetched_rev`）
 > 和 `release.yml`（`UPSTREAM_SHA`）——而且 `test_catalog.py`（`TestPinnedUpstream`）会在两处不一致时
 > 失败。一个 tag 必须构建在它被验证过的那个上游版本上；不固定版本，下个月可能构建出不同的 APK。
+>
+> **构建步骤本身**也因为同样的理由被写了两遍，并带着同样的风险：一遍在 `tools/build_apk.sh`，一遍在
+> `release.yml`。同文件里的 `TestBuildPipelinesAgree` 把两者钉在一起，而这个测试不是假想的——它之所以
+> 存在，是因为这种漂移已经发生过：`release.yml` 漏了 `patch_ui.py` 这一步，于是 **v0.7.0 的 APK 装的是
+> 上游的主屏**，而本文件、CHANGELOG 和 README 都写着磨砂双栏主屏已经发布。当时所有关卡都是绿的：主题的
+> 工具本身都被测过，但没有任何东西测过「发布构建到底跑没跑它们」。
 
 **品牌包。** 同一条管道也按品牌各构建一份 App。`catalog/packs.json` 列出各包，`release.yml` 在
-运行时从这份文件推导构建矩阵 —— 每个包一项加全量版一项，每项各自全新克隆上游并跑 `apply_pack.py`
-再跑 `gen_recipes.py --pack <id>`。一个包与全量版的区别只在包名、`app_name` 与启动图标；*为什么*
-见 [docs/BRAND-PACKS.zh-CN.md](BRAND-PACKS.zh-CN.md)。关卡 6（`check_assets.py`）现在也覆盖
+运行时从这份文件推导构建矩阵 —— 每个包一项加全量版一项，每项各自全新克隆上游并依次跑 `apply_pack.py`、
+`patch_ui.py`、`gen_recipes.py --pack <id>`。一个包与全量版的区别只在包名、`app_name` 与启动图标；
+*为什么*见 [docs/BRAND-PACKS.zh-CN.md](BRAND-PACKS.zh-CN.md)。关卡 6（`check_assets.py`）现在也覆盖
 `assets/app-icon/` 与每个 `assets/app-icon-packs/<icon_set>/`，所以缺一个密度或一套孤儿图标集会
 让构建失败。
 
@@ -328,7 +337,7 @@ sony-sooc-recipes/
 │   ├── test_catalog.py       33 条用例 + 不变量（CI 关卡 1b）
 │   ├── test_packs.py         包转换、发布矩阵与子集用例（CI + release）
 │   ├── test_gates.py         自测：给每道关卡喂坏输入，断言失败
-│   ├── test_ui_theme.py      磨砂双栏主屏：view id、drawable / string、#AARRGGBB 颜色（23 个用例）
+│   ├── test_ui_theme.py      磨砂双栏主屏：view id、drawable / string、#AARRGGBB 颜色（24 个用例）
 │   ├── cases.json            自写配方的钉死值
 │   └── smoke_browser.js      浏览器冒烟测试（CI 关卡 4）
 ├── .github/workflows/
@@ -360,48 +369,15 @@ PolyForm Noncommercial（胶片工坊，只记名字）之间的那条线，是�
 
 ## 10. 主屏是重放补丁，而不是提交的源码
 
-这一节解释为什么应用那套磨砂双栏主屏不在源码树里，以及它每一部分的成因。如果你只想改个颜色或开关，去改 `catalog/ui-theme.json` 和 `assets/ui/main.xml`；下面写的都是「为什么」。
-
-### 为什么它是重放补丁
-
-主屏是在构建时把补丁重放到上游 checkout 上生成的。它**不是**本仓库里的源码。驱动它的只有两个受跟踪输入：`catalog/ui-theme.json`（每种颜色，外加三个屏幕开关）和 `assets/ui/main.xml`（布局本体）。`tools/patch_ui.py` 把它们重放到 checkout 上，`tools/preview_ui.py` 把结果渲染出来，让你不用相机也能看到。
-
-之所以是补丁、而不是在 `build/` 下手改：因为 `build/` 被 gitignore，`tools/build_apk.sh` 在每次构建前把 checkout 重置到钉死的上游版本——`prepare_fork` 会跑 `git reset --hard` 加 `git clean -fdxq`。在 `build/` 下手改的东西，一次构建都活不过：下一次构建直接把它扔掉。所以真正重要的只有受跟踪的输入，而布局唯一的写手是 `patch_ui.py`。这和 `filters.json` → `Recipes.java` 的「单一事实来源」纪律一样，只是又往下一层。
-
-`patch_ui.py` 在 `build_apk.sh` 里跑在 `apply_pack` **之后**、`gen_recipes` **之前**。顺序不是随便定的：布局用全限定类名引用应用的自定义视图，而 `apply_pack` 会按品牌包改名这个类、并从 checkout 自己的 `AndroidManifest.xml` 里把包名填进去。布局若在改名之前就把类名写死，就对不上这个包实际发布的任何类。
-
-### 磨砂是「模拟」的，不是模糊
-
-`minSdkVersion 10`（Gingerbread）既没有 RenderScript（API 11+）也没有 RenderEffect（API 31+），没有任何模糊原语可用。这里的「磨砂玻璃」栏，就是模糊出现之前的磨砂玻璃：一层约 0.90 透明度的半透层、一道淡淡的渐变高光、再加圆内角，读起来像一块玻璃板。高透明度是刻意的、不是装饰——栏后头的相机画面可能任意亮或暗，透明度够高时合成结果始终是浅色的，于是下方的深色文字在任何画面下都保住对比度。降低透明度，这个保证就失效：亮画面会透上来，文字没入其中。
-
-### 字体是打包的，而且少了这个 flag，aapt 会静默失败
-
-字体是 **Quicksand**（SIL OFL 1.1），Regular + Bold，整对约 157 KB，作为 raw 资源放在 `assets/fonts/` 下，在 Java 里用 `Typeface.createFromAsset` 绑到各个视图。API 10 不提供任何圆体系统字体，`android:fontFamily` / `res/font` 又要 API 26，所以系统里没有通往圆体的路——字体只能随 APK 走。后果是：每个 APK 大约增大两个 `.ttf` 的体积。
-
-关键的是，`patch_ui.py` 还会给上游 `build.sh` / `build.cmd` 的 aapt 调用补上 `-A assets`。上游根本不带 `assets/` 目录，而 aapt 遇到缺失的 assets 目录会**静默跳过**，而不是报错。这个 flag 一旦丢失，应用不会崩——它悄悄回退成 Droid Sans。这种静默回退是这里唯一一个没有任何报错信息的失败模式：构建照样成功，关卡照样通过，只有把屏幕和设计稿比对的人才会发现。这个 flag 就是设计与「悄悄错掉的字体」之间唯一的那道闸。
-
-### 三个开关，以及为什么写错值会让启动崩溃
-
-主题文件里有三个屏上开关：`legend_visibility`（当前为 `"gone"`——芯片下方那排字形与标签；没有触屏，导航靠相机的滚轮和拨盘，所以这一排是屏幕上唯一提醒你 ENTER / AEL-DISP 各做什么的地方）、`app_title_visibility`，以及 `tag_visibility`（配方名背后的 CS / PE 芯片：CS = Creative Style，相机自己的观感引擎，能进 RAW；PE = Picture Effect，只落在 JPEG 上）。可见性值写错不是软失败——它会让 aapt 无法 **inflate** 布局，应用启动即崩。这正是这道关卡要抓的失败。
-
-### 看守这一切的那道关卡
-
-`tests/test_ui_theme.py` 是 `catalog/ui-theme.json` / `assets/ui/` 里一个坏颜色或一个丢掉的 view id 与「一台布局 inflate 即崩的 APK」之间唯一的那道闸。因为 `build/` 每次构建前都被清空，所以 `run_all.py` 里的其他关卡谁都不会注意到主题坏了。这道关卡盯三件事：布局保留 `MainActivity` 用 `findViewById` 绑定的每个 view id；布局引用的每个 drawable 和 string 都能解析；每个颜色都是 `#AARRGGBB`。（23 个用例。）它像 catalog 与 assets 关卡一样在本地跑；CI 把它作为一个名叫 `run UI theme test cases` 的步骤来跑。
-
-> **实话实说。** 这是唯一一道丢了都不会让 CI 变红（其实根本不会报错）的关卡：`-A assets` 静默回退意味着缺字体时以 Droid Sans 出货、全程没有任何报错。布局和颜色的检查是机械的；字体这个 flag，才是得靠人手动去注意的那部分。
-
----
-
-## 10. 主屏是重放补丁，而不是提交的源码
-
 这一节解释为什么应用的磨砂双栏主屏不在源码树里，以及它每部分的成因。如果你只想改个颜色或开关，
 去改 `catalog/ui-theme.json` 和 `assets/ui/main.xml`；下面写的都是「为什么」。
 
 ### 为什么是重放补丁
 
-主屏是在构建时把补丁重放到上游 checkout 上得到的。它**不是**落在仓库里的源码。驱动它的是两份被
-跟踪的输入：`catalog/ui-theme.json`（所有颜色，加三个屏幕开关）和 `assets/ui/main.xml`（布局本体）。
-`tools/patch_ui.py` 把这两份重放到 checkout 上，`tools/preview_ui.py` 把重放结果渲染出来，让你
+主屏是在构建时把补丁重放到上游 checkout 上得到的。它**不是**落在仓库里的源码。驱动它的是三份被
+跟踪的输入：`catalog/ui-theme.json`（所有颜色，加三个屏幕开关）、`assets/ui/main.xml`（布局本体）和
+`assets/fonts/`（随包字体，以及必须与字体同行的许可文本）。
+`tools/patch_ui.py` 把这些重放到 checkout 上，`tools/preview_ui.py` 把重放结果渲染出来，让你
 不用相机也能看到。
 
 它是补丁、而不是在 `build/` 下手改的原因：`build/` 被 gitignore，而 `tools/build_apk.sh` 在每次
@@ -410,7 +386,8 @@ PolyForm Noncommercial（胶片工坊，只记名字）之间的那条线，是�
 只有被跟踪的输入，而布局的唯一写手是 `patch_ui.py`。这和 `filters.json` → `Recipes.java` 的「单一
 事实来源」纪律一脉相承，只是又往下沉了一层。
 
-`patch_ui.py` 在 `build_apk.sh` 里、**`apply_pack` 之后、`gen_recipes` 之前**跑。这个顺序不是随便的：
+`patch_ui.py` 在**两条管道**里都跑——本地是 `build_apk.sh`，打 tag 时是 `release.yml`，这正是
+`TestBuildPipelinesAgree` 存在的意义——位置是 **`apply_pack` 之后、`gen_recipes` 之前**。这个顺序不是随便的：
 布局用全限定类名引用应用的自定义 view，而 `apply_pack` 会按品牌包重命名那个类名、并从 checkout 自带的
 `AndroidManifest.xml` 里填包名。一份在重命名之前就写死类名的布局，会匹配不上该包实际打出来的任何类。
 
@@ -435,6 +412,11 @@ PolyForm Noncommercial（胶片工坊，只记名字）之间的那条线，是�
 构建照样成功，关卡照样通过，只有拿屏幕和设计稿比对的人才会发现。这个 flag 是设计与「悄悄用错字体」
 之间唯一的屏障。
 
+许可文本走同一条路，理由更硬：`patch_ui.py` 把 `assets/fonts/` **整个目录**拷进去，所以
+`OFL-Quicksand.txt` 会跟着它覆盖的字体一起进 APK。OFL 唯一的再分发条件就是许可全文必须随字体同行，
+而留在仓库里的许可义务等于没履行——见 [NOTICE.md](../NOTICE.md)。它同时也是最不容易被发现的失败：
+少一个文本文件，应用的任何表现都不会变。
+
 ### 三个开关，以及一个会要命的错值
 
 主题文件里三个屏幕开关：`legend_visibility`（目前是 `"gone"`——芯片下方那排字形与标签；没有触摸屏，
@@ -448,7 +430,7 @@ PE = Picture Effect，只在 JPEG 上落得下来）。一个写错的可见性�
 `tests/test_ui_theme.py` 是唯一挡在「`catalog/ui-theme.json` / `assets/ui/` 里一个坏颜色或一个丢掉的
 view id」与「一个在相机上无法 inflate 布局的 APK」之间的东西。因为 `build/` 在每次构建前被清空，所以
 `run_all.py` 里没有任何别的东西会注意到主题坏掉。关卡强制三件事：布局保留 `MainActivity` 用 `findViewById`
-绑定的每个 view id；布局引用的每个 drawable 和 string 都能解析；每个颜色都是 `#AARRGGBB`。（23 个用例。）
+绑定的每个 view id；布局引用的每个 drawable 和 string 都能解析；每个颜色都是 `#AARRGGBB`。（24 个用例。）
 它像 catalog 与 assets 关卡一样在本地跑——CI 里作为名为 `run UI theme test cases` 的一步跑。
 
 > **实话实说。** 这是唯一一个丢了也不会让 CI 变红的关卡：静默的 `-A assets` 回退意味着缺字体时发出去的是

@@ -21,11 +21,19 @@ Two kinds of tests live here, and they guard different failure modes:
    TestAuthoredHaveCases enforces the rule that makes this stick: an entry marked
    source=authored-here with no pinned case fails the suite. You cannot add a
    home-grown recipe without also writing down what it is supposed to be.
+
+3. What the catalog is built BY (TestPinnedUpstream, TestBuildPipelinesAgree)
+   The catalog is only half of what a tag produces; the other half is the two build
+   pipelines that turn it into an APK — tools/build_apk.sh for a local build,
+   .github/workflows/release.yml for a tag. Both live outside the catalog and nothing
+   else reads them, so these tests are what holds them to the catalog and to each other.
+   They run where it matters: release.yml runs this file as a gate BEFORE it builds.
 """
 
 from __future__ import annotations
 
 import json
+import re
 import sys
 import unittest
 from pathlib import Path
@@ -431,6 +439,89 @@ class TestPinnedUpstream(unittest.TestCase):
         self.assertEqual(cat, wf,
                          "upstream pin drifted: catalog says "
                          f"{cat}, release.yml builds {wf}. Update both.")
+
+
+class TestBuildPipelinesAgree(unittest.TestCase):
+    """One set of build steps, written out twice, kept in step by a test.
+
+    A pristine upstream checkout becomes an APK through tools/build_apk.sh locally and
+    through .github/workflows/release.yml on a tag. Neither file is generated from the
+    other, and both already carry a comment claiming they mirror each other — which is
+    precisely the promise a comment cannot keep.
+
+    It had already broken. build_apk.sh replayed tools/patch_ui.py; release.yml never did.
+    So the v0.7.0 APKs shipped upstream's main screen while CHANGELOG, README and both
+    architecture documents described the frosted two-bar screen as shipped — and every
+    gate stayed green, because the theme tools were all tested but nothing tested that the
+    release build RAN them. The omission is a missing line in a YAML file: invisible in
+    review, and invisible in the APK until it is on a camera and looked at.
+
+    So this does not judge whether either pipeline is right. It asserts the two run the
+    same transform tools in the same order. What counts as a transform tool is discovered
+    from tools/ rather than listed here: one accepting --fork (it operates on the checkout
+    being built) AND --check (it can verify a checkout already carries its change) is a
+    pipeline step by construction, so a new one is covered the day it lands. preview_ui.py
+    takes --fork too but has no --check — it renders a page, it does not transform a
+    checkout — and that rule, not a name in a list here, is what excludes it.
+    """
+
+    BUILD_SH = ROOT / "tools" / "build_apk.sh"
+    RELEASE_YML = ROOT / ".github" / "workflows" / "release.yml"
+    # How far past an invocation to look for its flags: enough for a wrapped YAML line or
+    # a long argument list, short enough not to reach the next step's tool.
+    FLAG_WINDOW = 200
+
+    @classmethod
+    def transform_tools(cls) -> set[str]:
+        """tools/*.py that both mutate a checkout and can verify one."""
+        found = set()
+        for path in (ROOT / "tools").glob("*.py"):
+            text = path.read_text(encoding="utf-8")
+            if (re.search(r'add_argument\(\s*"--fork"', text)
+                    and re.search(r'add_argument\(\s*"--check"', text)):
+                found.add(path.name)
+        return found
+
+    @classmethod
+    def steps_of(cls, path: Path) -> list[str]:
+        """The transform tools a pipeline runs, in the order it first runs them."""
+        text = path.read_text(encoding="utf-8")
+        known = cls.transform_tools()
+        order: list[str] = []
+        for m in re.finditer(r"tools/([A-Za-z_][A-Za-z0-9_]*\.py)", text):
+            name = m.group(1)
+            if name not in known or name in order:
+                continue
+            if "--fork" in text[m.end():m.end() + cls.FLAG_WINDOW]:
+                order.append(name)
+        return order
+
+    def test_the_transform_tools_are_still_discoverable(self):
+        # Load-bearing: if a rename stopped the discovery above from matching anything,
+        # the parity test below would compare two empty lists and pass on nothing.
+        found = self.transform_tools()
+        self.assertIn("patch_ui.py", found, "the --fork/--check discovery rule matched no "
+                                            "transform tools — fix the rule, not this line")
+        self.assertIn("gen_recipes.py", found)
+
+    def test_both_pipelines_run_the_same_steps(self):
+        local = self.steps_of(self.BUILD_SH)
+        release = self.steps_of(self.RELEASE_YML)
+        self.assertTrue(local, f"no transform steps found in {self.BUILD_SH.name}")
+
+        missing = [s for s in local if s not in release]
+        self.assertFalse(
+            missing,
+            "the release build never runs " + ", ".join(f"tools/{s}" for s in missing)
+            + f", which {self.BUILD_SH.name} does run. A tag would then ship an APK that "
+              "differs from the one built and tested locally — this is how the v0.7.0 APKs "
+              "lost the frosted two-bar theme while the documentation said it was there.")
+
+        self.assertEqual(
+            local, release,
+            "the two build pipelines run the same tools in a different order, and the order "
+            "is load-bearing: patch_ui.py fills the layout's {ui_package} token from the "
+            "manifest apply_pack.py has just rewritten")
 
 
 if __name__ == "__main__":
