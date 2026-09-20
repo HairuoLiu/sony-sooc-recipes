@@ -107,7 +107,9 @@
 
 ### 为什么有些配方标着 NOT VERIFIED？
 
-本仓库有 7 款配方是作者自写、且**没在实机上验证过**的：`gr-moriyama`、`kodak-vision2-500t`、Toy Camera 暖/冷、Part Color 红、Posterization、Teal Mood。它们在应用里显示 `NOT VERIFIED`。其余 92 款都和上游项目逐值对齐过。
+因为没上过实机。155 款里，**63 款是本仓库自己写的，一款都没在实机确认过**；77 款是上游项目自带的配方，逐值对齐；另有 15 款是仅登记、编译不进任何 APK 的条目。每款配方的答案都在 `catalog/filters.json` 的 `verified` 字段里，`tools/gen_recipes.py` 会给每个 `verified` 为 false 的条目写上一行 `// NOT VERIFIED ON HARDWARE` 注释。
+
+**这个标记不在哪：界面上没有它。** 它是生成的 `Recipes.java` 里的一行注释，所以屏幕上不会写出来。主屏那个徽标是相机自己的状态 —— `ACTIVE`、`PREVIEW` 或 `PROTECTED` —— [README 的真机照片](../README.zh-CN.md#真机实拍)里就是这样：三款标着未验证的配方，徽标显示的是 `PROTECTED`，不是「未验证」。
 
 > **实话实说。**在用 NOT VERIFIED 配方前，先拿可丢弃的素材试拍，再放到没法重拍的场合上。它们是在引擎边界内拼的近似，不是坏了——只是没在真机上确认过。
 

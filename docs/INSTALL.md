@@ -87,10 +87,13 @@ no release exists yet, build them yourself — see [ARCHITECTURE.md](ARCHITECTUR
 >    camera already has a Sony SOOC Recipes from somewhere else, remove it in the camera first, then
 >    install this one. This applies to packs too: `SonySOOCRecipes-leica` and the all-in-one are
 >    *different packages* and install side by side, but two copies of the same one do not.
-> 2. **Seven recipes are unverified on real hardware:** `gr-moriyama`,
->    `kodak-vision2-500T`, Toy Camera (warm/cold), Part Color (red), Posterization, Teal Mood.
->    They show `NOT VERIFIED` in the app. Try them on discardable footage before trusting them
->    on something you cannot reshoot.
+> 2. **Everything this repository wrote itself is unverified on real hardware** — that is 63
+>    of the 155 recipes today, and it is written per recipe by the `verified` field in
+>    `catalog/filters.json`, which `tools/gen_recipes.py` turns into a
+>    `// NOT VERIFIED ON HARDWARE` comment in the generated `Recipes.java`. Try those on
+>    discardable footage before trusting them on something you cannot reshoot. The marker is
+>    a source comment, not a label the app draws; see the [FAQ](FAQ.md) for what the badge on
+>    the main screen actually means.
 > 3. **Several packs do not give you several cameras.** The camera's settings store is
 >    shared, and only one recipe can be active at a time. Packs differ in what they *ship*,
 >    not in what the camera can *do*.

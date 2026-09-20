@@ -105,9 +105,11 @@ Because the camera cannot do color grain, and its only grain source is the black
 
 ### Why do some recipes say NOT VERIFIED?
 
-Seven recipes in this catalog were written by the repository authors and have **not been tested on real hardware**: `gr-moriyama`, `kodak-vision2-500t`, Toy Camera (warm/cold), Part Color (red), Posterization, and Teal Mood. They show `NOT VERIFIED` in the app. The other 92 are matched value-for-value against the upstream project.
+Because they have not been on a camera. Of the 155 recipes, **63 were written in this repository and not one of them has been confirmed on hardware**; 77 are the upstream project's own recipes, matched value-for-value; and 15 are reference-only entries that compile into nothing. Each recipe carries its own answer in `catalog/filters.json`, in the `verified` field, and `tools/gen_recipes.py` writes a `// NOT VERIFIED ON HARDWARE` comment beside every entry where that field is false.
 
-> **Honest note.** Try a NOT VERIFIED recipe on discardable footage before trusting it on something you cannot reshoot. They are approximations built inside the engine's limits, not broken — just unconfirmed on a real body.
+**Where the marker is not: the app does not print it.** It is a comment in the generated `Recipes.java`, which is why nothing on screen says it. The badge on the main screen is the camera's own status — `ACTIVE`, `PREVIEW` or `PROTECTED` — and the [photographs in the README](../README.md#on-a-real-camera) show exactly that, on three recipes that are marked unverified.
+
+> **Honest note.** Try an unverified recipe on discardable footage before trusting it on something you cannot reshoot. They are approximations built inside the engine's limits, not broken — just unconfirmed on a real body.
 
 ### Can I tweak a recipe myself? Can I get back to the recipe afterward?
 

@@ -74,9 +74,11 @@ https://github.com/HairuoLiu/sony-sooc-recipes/releases
 > 1. **签名用的一次性 key。** CI 没配 keystore，每次构建临时生成一把。用不同 key 签的 APK
 >    **无法覆盖安装**——如果相机上已经装过别处来的 Sony SOOC Recipes，得先在相机里把它删掉再装这个。
 >    品牌包同理：`SonySOOCRecipes-leica` 和全量版是**不同的包**、可以并存，但同一个包装两份不行。
-> 2. **有 7 款配方没上机验证过**：`gr-moriyama`、`kodak-vision2-500T`、Toy Camera 暖/冷、
->    Part Color 红、Posterization、Teal Mood。它们在相机里显示为 `NOT VERIFIED`。先在可丢弃的
->    素材上试，别拿去拍不能重来的东西。
+> 2. **本仓库自写的配方全部没上机验证过** —— 今天是 155 款里的 63 款。这件事逐条写在
+>    `catalog/filters.json` 的 `verified` 字段里，`tools/gen_recipes.py` 会把 false 的那些变成
+>    生成的 `Recipes.java` 里的一行 `// NOT VERIFIED ON HARDWARE` 注释。先在可丢弃的素材上试，
+>    别拿去拍不能重来的东西。**这个标记是源码注释，不是应用画的**——主屏徽标到底表示什么，
+>    见 [FAQ](FAQ.zh-CN.md)。
 > 3. **装多个包不等于多台相机。** 相机的设置存储是共享的，同一时间只有一个配方生效。
 >    包的差别在于**装进去什么**，不在于相机**能做什么**。
 >
