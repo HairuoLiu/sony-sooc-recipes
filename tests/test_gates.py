@@ -13,6 +13,7 @@ asserts a non-zero exit. Four of the seven gates are covered:
     check_readme_counts.py  -- a README marker advertising a number the catalog rejects
     check_assets.py         -- an icon-set directory belonging to no pack
     check_docs.py           -- a zh-CN file whose English original is gone
+    check_docs.py           -- a FAQ question only one of the two languages answers
 
 The other three are skipped by design, and the reason matters: `gen_recipes.py --check`
 and `check_fidelity.py` need an upstream checkout, and the browser smoke test needs
@@ -161,6 +162,26 @@ class TestCheckDocsFails(unittest.TestCase):
             _remove_probe(probe)
         self.assertEqual(r.returncode, 1, "gate passed a translation with no original")
         self.assertIn("no English original", r.stdout)
+
+    def test_a_faq_question_only_one_language_answers_is_rejected(self):
+        """Twin coverage proves the twin EXISTS; it says nothing about the two files still
+        covering the same ground. Drop one question from the twin and the pair looks complete
+        in both languages — that is the drift, and deleting a heading is its exact shape."""
+        twin = ROOT / "docs" / "FAQ.zh-CN.md"
+        english = ROOT / "docs" / "FAQ.md"
+        original = twin.read_text(encoding="utf-8")
+        lines = original.splitlines(keepends=True)
+        victim = next(i for i, l in enumerate(lines) if l.startswith("### "))
+        before = len([l for l in english.read_text(encoding="utf-8").splitlines()
+                      if l.startswith("### ")])
+        try:
+            twin.write_text("".join(lines[:victim] + lines[victim + 1:]), encoding="utf-8")
+            r = run_gate("check_docs.py")
+        finally:
+            twin.write_text(original, encoding="utf-8")
+        self.assertEqual(r.returncode, 1,
+                         "gate passed a FAQ whose two languages answer different questions")
+        self.assertIn(f"asks {before - 1}", r.stdout)
 
 
 class TestLoadPackGuard(unittest.TestCase):

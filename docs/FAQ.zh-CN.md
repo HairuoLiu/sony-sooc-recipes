@@ -31,7 +31,7 @@
 能。分两层：
 
 - **你存进去的配方：** 在应用里按 `TRASH` + 中心键，然后开关机；或在相机上 `Setup → Setting Reset → Camera Settings Reset`。两种都会让这个风格停下生效。
-- **应用本身：** 在相机的 Application 管理里卸载它，连应用存的设置也一起清掉。
+- **应用本身：** 用相机自己的菜单 —— `MENU → Application → Application Management → Manage and Remove`，选中它移除（部分机型的 `Application Management` 在 `Application List` 下面，多一层）。这会连应用存的设置一起清掉。注意**装它的工具 Sony-PMCA-RE 没有卸载命令**——如果你机器上那个菜单项没有或者是灰的，改走 ADB，完整流程见 [README 的卸载一节](../README.zh-CN.md#卸载)。
 
 所以「回到出厂」永远做得到，不需要特殊工具。
 

@@ -58,7 +58,38 @@ python tools/gen_recipes.py --stdout # 看一眼会生成什么
 一句话：**USB 是「能不能装上」，Wi-Fi ADB 是「装上多快」**。ADB 永远无法取代 USB，
 因为开 ADB 所需的 OpenMemories:Tweak 本身就得用 USB 装。**第一次走 USB。**
 
-**有担心的事？** 先看 **[常见问题 FAQ](docs/FAQ.zh-CN.md)**（21 问，含「会不会变砖」「装到一半没电怎么办」「和富士胶片模拟是一回事吗」）。
+**有担心的事？** 先看 **[常见问题 FAQ](docs/FAQ.zh-CN.md)**（含「会不会变砖」「装到一半没电怎么办」「和富士胶片模拟是一回事吗」）。
+
+---
+
+## 卸载
+
+要卸的是**两样东西**，而且不是一回事：**应用**，和它**存进去的配方**。卸掉应用不会把相机的色彩改回去。
+
+**卸应用** —— 用相机自己的菜单：
+
+```
+MENU → Application → Application Management → Manage and Remove → 选中要删的那一项 → 移除
+```
+
+部分机型的 `Application Management` 在 `Application List` 下面（多一层），标签是本地化的
+（`Manage and Remove` / 中文界面为「管理与移除」）。**先退出应用**、回到拍摄界面再操作，别在应用开着的时候删。
+
+**Sony-PMCA-RE 没有卸载功能，这不是漏做，是它根本没有。** 装这些 APK 的工具**没有**卸载命令——
+它的全部子命令就这些：`info`、`install`、`market`、`apk2spk`、`spk2apk`、`firmware`、
+`updatershell`、`serviceshell`、`guess_firmware`、`gps`、`stream`、`wifi`、`print_backup`。
+所以「用装它的工具再把它卸掉」这条路是不存在的。如果你机器上那个菜单项没有、或者是灰的，
+退路是 ADB —— 先用 [OpenMemories:Tweak](https://github.com/ma1co/OpenMemories-Tweak) 打开 ADB
+（见[安装指南](docs/INSTALL.zh-CN.md)的通道 B），然后按包名卸载：
+
+```bash
+adb connect 相机IP:5555
+adb shell pm list packages | grep hairuoliu     # 看相机上实际装了哪几个包
+adb uninstall com.hairuoliu.sonysoocrecipes     # 或 ...sonysoocrecipes.<品牌>
+```
+
+**配方也要还回去。** 卸载应用**不会**回退已经存进相机设置的配方——它仍在 P/A/S/M 和录像下生效。
+还回原样：在应用里按 **TRASH** + 中心键，然后关机重启；或 `Setup → Setting Reset → Camera Settings Reset`。
 
 ---
 

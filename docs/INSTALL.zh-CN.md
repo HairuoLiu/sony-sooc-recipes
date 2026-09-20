@@ -206,9 +206,23 @@ adb disconnect CAMERA_IP:5555
 - **USB 更新（通道 A）**：直接再跑一次安装即可。
 - **ADB 更新（通道 B）**：`adb install -r` 秒级完成。
 - **签名警告（重要）**：因为 CI 用一次性 key 签名，不同 key 签的 APK **无法覆盖安装**。若看到
-  `INSTALL_FAILED_UPDATE_INCOMPATIBLE`，要么用同一密钥重建，要么**先在相机应用管理里卸载同包名
-  旧应用**（卸载会清掉应用设置），再重装。
-- **卸载**：在相机应用管理里移除本应用。这会清掉应用自己的设置。
+  `INSTALL_FAILED_UPDATE_INCOMPATIBLE`，要么用同一密钥重建，要么**先卸载同包名的旧应用**
+  （见下方「卸载」；卸载会清掉应用设置），再重装。
+- **卸载**：用**相机自己的菜单**，不是安装器。
+  `MENU → Application → Application Management → Manage and Remove` → 选中要删的那一项 → 移除。
+  部分机型的 `Application Management` 在 `Application List` 下面（多一层），标签是本地化的
+  （`Manage and Remove` / 中文界面「管理与移除」）。**先退出应用**再操作。这会清掉应用自己的设置。
+
+> **实话实说 —— 装它的工具卸不掉它。** Sony-PMCA-RE **没有卸载命令**。它的全部子命令是
+> `info`、`install`、`market`、`apk2spk`、`spk2apk`、`firmware`、`updatershell`、`serviceshell`、
+> `guess_firmware`、`gps`、`stream`、`wifi`、`print_backup` —— `install` 是它唯一的方向。
+> 所以你机器上的 `Manage and Remove` 项若没有、或是灰的，改走通道 B 用 ADB 卸载：
+>
+> ```bash
+> adb connect CAMERA_IP:5555
+> adb shell pm list packages | grep hairuoliu     # 看相机上装了哪几个包
+> adb uninstall com.hairuoliu.sonysoocrecipes     # 或 ...sonysoocrecipes.<品牌>
+> ```
 
 > **实话实说。** 卸载应用**不会**自动回退你已经存进相机设置的配方。换回原样：应用里按
 > TRASH + 中心键 + 关机重启；或 `Setup → Setting Reset → Camera Settings Reset`。

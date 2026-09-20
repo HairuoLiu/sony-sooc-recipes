@@ -150,7 +150,42 @@ Full walkthrough with per-OS prerequisites and a troubleshooting table:
 
 > **Before you install.** The APK is signed with a key CI generates per build. An APK
 > signed with a different key **cannot be installed over an existing one** — if the body
-> already has a Sony SOOC Recipes from somewhere else, remove it first.
+> already has a Sony SOOC Recipes from somewhere else, remove it first (see *Uninstall* below).
+
+---
+
+## Uninstall
+
+Two different things get removed, and they are not the same operation: the **app**, and the
+**look it stored**. Removing the app does not put the camera's colours back.
+
+**Remove the app** — from the camera's own menu:
+
+```
+MENU → Application → Application Management → Manage and Remove → pick the entry → remove
+```
+
+On some bodies `Application Management` sits one level deeper, under `Application List`, and the
+label is localised (`Manage and Remove` / 管理与移除). Leave the app first — get back to the
+shooting screen — instead of removing it while it is open.
+
+**Sony-PMCA-RE cannot uninstall, and that is not an oversight you can work around.** The tool
+that installs these APKs has no uninstall command: its entire command set is `info`, `install`,
+`market`, `apk2spk`, `spk2apk`, `firmware`, `updatershell`, `serviceshell`, `guess_firmware`,
+`gps`, `stream`, `wifi`, `print_backup`. So the obvious instinct — reach for the installer
+again — has no path. If that menu item is missing or greyed out on your body, the route is ADB:
+turn it on with [OpenMemories-Tweak](https://github.com/ma1co/OpenMemories-Tweak) (see the
+[install guide](docs/INSTALL.md) for Channel B), then uninstall by package name.
+
+```bash
+adb connect CAMERA_IP:5555
+adb shell pm list packages | grep hairuoliu     # which packs are actually on the body
+adb uninstall com.hairuoliu.sonysoocrecipes     # or ...sonysoocrecipes.<brand>
+```
+
+**Undo the look as well.** Uninstalling the app leaves the stored recipe in the camera's settings
+store, still applying in P/A/S/M and video. To go back to stock: in the app press `TRASH` + centre
+button and power-cycle, or `Setup → Setting Reset → Camera Settings Reset`.
 
 ---
 

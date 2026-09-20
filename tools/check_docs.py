@@ -21,6 +21,14 @@ three parts that are actually checkable:
      advertising "99 looks, 13 groups" long after the catalog had passed 150 — the README
      has a counts gate, the diagrams had nothing.
 
+  4. The two FAQs answer the same number of questions. Twin coverage only proves the Chinese
+     file *exists*; it says nothing about the two files still covering the same ground. A
+     question added to one language and not the other leaves a FAQ that reads as complete in
+     both languages, which is exactly the drift nobody notices. Counting headings is a proxy
+     rather than a proof of faithfulness — nothing mechanical can judge that — but for this
+     pair the questions are the unit and they map one-to-one, so a split or a merge is an
+     event worth being told about instead of finding out later.
+
 Check 3 reads the `<text>` nodes and matches a small fixed vocabulary ("N looks",
 "N groups", "N compiled") rather than trying to parse prose. Matching a stable three-word
 phrase is not the same as parsing a wrapped sentence, which the README gate rightly refuses
@@ -114,6 +122,37 @@ def check_twins(errors: list[str], notes: list[str]) -> None:
             errors.append(f"{d}: listed in ENGLISH_ONLY but the file does not exist")
 
 
+def check_faq_parity(errors: list[str]) -> int:
+    """Both FAQs must answer the same number of questions. Returns the count.
+
+    The pair is hardcoded rather than discovered: the invariant "one question, one twin
+    question" is true of the FAQ because questions are the unit of that document. It is not
+    true of prose documents, where a translation may legitimately restructure a section.
+    Applying this sweep everywhere would produce false alarms, and a gate that cries wolf is
+    worse than the drift it was meant to catch.
+    """
+    english = ROOT / "docs" / "FAQ.md"
+    twin = ROOT / "docs" / "FAQ.zh-CN.md"
+    if not english.exists() or not twin.exists():
+        return 0  # check_twins already reports a missing or orphaned twin
+
+    def questions(path: Path) -> list[str]:
+        return [
+            line[4:].strip()
+            for line in path.read_text(encoding="utf-8").splitlines()
+            if line.startswith("### ")
+        ]
+
+    en, zh = questions(english), questions(twin)
+    if len(en) != len(zh):
+        errors.append(
+            f"docs/FAQ.md asks {len(en)} questions and docs/FAQ.zh-CN.md asks {len(zh)}. "
+            f"A question answered in one language only leaves a FAQ that reads as complete "
+            f"in both. Either translate it or delete it from the other side."
+        )
+    return len(en)
+
+
 def check_diagrams(counts: dict[str, int], errors: list[str]) -> int:
     svgs = sorted(ASSETS.glob("*.svg"))
     if not svgs:
@@ -150,6 +189,7 @@ def main() -> int:
     counts = counts_from_catalog()
     check_twins(errors, notes)
     checked = check_diagrams(counts, errors)
+    faq_questions = check_faq_parity(errors)
 
     for n in notes:
         print(f"note: {n}")
@@ -166,7 +206,8 @@ def main() -> int:
     print(
         f"ok — twins accounted for, diagrams language-neutral, "
         f"{checked} diagram counts match the catalog "
-        f"({counts['total']} looks, {counts['compiled']} compiled, {counts['groups']} groups)"
+        f"({counts['total']} looks, {counts['compiled']} compiled, {counts['groups']} groups), "
+        f"both FAQs ask the same {faq_questions} questions"
     )
     return 0
 

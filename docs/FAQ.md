@@ -31,7 +31,7 @@ Don't let it — charge the battery fully and use a data cable before you start.
 Yes. There are two layers:
 
 - **The recipe you stored:** in the app, press `TRASH` + center button, then power-cycle. Or from the camera, `Setup → Setting Reset → Camera Settings Reset`. Either way the style stops applying.
-- **The app itself:** remove it from the camera's Application management. That clears the app's stored settings too.
+- **The app itself:** from the camera's own menu — `MENU → Application → Application Management → Manage and Remove` → pick the entry → remove. (On some bodies `Application Management` sits one level deeper, under `Application List`.) That clears the app's stored settings too. Note that **Sony-PMCA-RE, the tool you installed with, has no uninstall command** — if the menu item is missing or greyed out on your body, uninstall over ADB instead; the full flow is in [Uninstall](../README.md#uninstall).
 
 So "back to stock" is always possible, with no special tools.
 

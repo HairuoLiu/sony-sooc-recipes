@@ -236,10 +236,26 @@ the daemon on the camera keeps running until you disable it in Tweak.
 - **Signature warning (important):** because CI signs with a throwaway key, an APK signed with
   a *different* key cannot overwrite an existing install. If you see
   `INSTALL_FAILED_UPDATE_INCOMPATIBLE`, either rebuild with the same key or **uninstall the
-  same-package-name app in the camera's app management first** (uninstalling clears the app's
+  same-package-name app first** (see *Uninstall* below; uninstalling clears the app's stored
   settings), then reinstall.
-- **Uninstall:** remove the app from the camera's Application management. This clears the app's
-  stored settings.
+- **Uninstall:** the camera's own menu, not the installer.
+  `MENU → Application → Application Management → Manage and Remove` → pick the entry → remove.
+  On some bodies `Application Management` sits one level deeper, under `Application List`, and
+  the label is localised (`Manage and Remove` / 管理与移除). Leave the app first. This clears
+  the app's stored settings.
+
+> **Honest note — the tool that installed it cannot remove it.** Sony-PMCA-RE has **no uninstall
+> command**. Its complete command set is `info`, `install`, `market`, `apk2spk`, `spk2apk`,
+> `firmware`, `updatershell`, `serviceshell`, `guess_firmware`, `gps`, `stream`, `wifi`,
+> `print_backup` — `install` is the only direction it goes. So if the camera's
+> `Manage and Remove` item is missing or greyed out on your body, run the uninstall over ADB
+> (Channel B) instead:
+>
+> ```bash
+> adb connect CAMERA_IP:5555
+> adb shell pm list packages | grep hairuoliu     # which packs are on the body
+> adb uninstall com.hairuoliu.sonysoocrecipes     # or ...sonysoocrecipes.<brand>
+> ```
 
 > **Honest note.** Uninstalling the app does **not** automatically revert a recipe you already
 > stored into the camera's settings. To go back to stock: in the app press TRASH + center,
