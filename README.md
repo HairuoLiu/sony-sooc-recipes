@@ -72,6 +72,10 @@ Press `MENU` and look for an **`Application`** entry.
 run signed firmware. Not this project, not Sony's own store. Reports of this working on an
 a6400 are misreports.
 
+**Confirmed on a real body: the α7S II** — installs, launches, and four packs side by side.
+See [On a real camera](#on-a-real-camera) for the photographs. The rest of the left column is
+supported by the platform rather than tested body by body, and the two are not the same claim.
+
 > The same limitation is why these bodies can never have a 4K menu, a Log curve, or an
 > in-camera LUT. What is possible is bounded by what the camera can *store*.
 
@@ -202,6 +206,43 @@ Things worth knowing:
   quietly discard the effect.
 - **The a5100 has no Fn or AEL button**, so brand-list browsing and the hidden panel are
   unreachable there. The control wheel still reaches every look.
+
+---
+
+## On a real camera
+
+Photographs of the maintainer's own body — not renders, not a mockup. All four are an
+**α7S II** showing the frosted two-bar main screen running on it.
+
+<p align="center">
+  <img src="docs/assets/hardware/01-a7sii-application-list.jpg" width="300" alt="The camera's Application List, showing installed packs and the Application Management entry">
+  <img src="docs/assets/hardware/02-a7sii-leica-silver-soft.jpg" width="300" alt="Leica Silver (soft) on the camera, every value matching the catalog">
+  <img src="docs/assets/hardware/03-a7sii-leica-teal.jpg" width="300" alt="Leica Teal on the camera">
+  <img src="docs/assets/hardware/04-a7sii-leica-vivid.jpg" width="300" alt="Leica Vivid on the camera">
+  <br><sub>
+  Left: the body's <b>Application List</b> — the installed packs, and <b>Application Management</b>,
+  which is the entry you uninstall from (<a href="#uninstall">Uninstall</a>). Then Leica Silver
+  (soft), Leica Teal and Leica Vivid, recipes 18, 19 and 20 of the 20 in the Leica pack.
+  </sub>
+</p>
+
+What these photographs establish, and what they do not:
+
+- **The body runs it, and packs coexist.** Four brand packs installed side by side on one
+  α7S II. That is the coexistence the different package names exist to make possible, seen
+  rather than asserted.
+- **What the screen shows is what the catalog says.** Every chip is a value read back off a
+  real camera, and each one matches `catalog/filters.json` exactly — Leica Silver (soft) is
+  `LIGHT · sat −1 · con −2 · sharp −1 · DRO Lv5`, Leica Teal is `NEUTRAL · −1 · +1 · 0 ·
+  DRO Lv3`, Leica Vivid is `VIVID · +1 · 0 · 0 · DRO Lv4`. No drift between the data and
+  the body.
+- **The badge says `PROTECTED`, not `ACTIVE`.** That is the camera's settings store being
+  write-protected, so these were being *previewed*, not stored — the documented fix is
+  OpenMemories:Tweak with *Backup protection* off. It is left in the crop rather than tidied
+  away because it is what the screen actually said.
+- **It does not make these looks verified.** That a *body* runs the app is a different claim
+  from a *look* being faithful to the film it imitates. The catalog records the second one
+  per recipe, in the `verified` field.
 
 ---
 

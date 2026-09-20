@@ -39,6 +39,10 @@ Apps（PMCA）通道，能收应用；没有，就到此为止——本仓库没
 > NEX-3 / 5 / 5N / F3、以及 a3000 / a3500 没有 Android 子系统，同样没有 `Application`
 > 菜单——它们不在上表「支持」那一列里，**不是漏写**。
 
+**已在真机确认的机型：α7S II**，同时装着四个品牌包。真机照片见
+[README 的真机实拍](../README.zh-CN.md#真机实拍)。左列其余机型是**平台层面**支持
+（机器有这个应用通道），不是逐台实测过——这两件事不是一回事。
+
 ### 你需要准备
 
 - 一台电脑（Windows / macOS / Linux 都行）。
@@ -211,7 +215,13 @@ adb disconnect CAMERA_IP:5555
 - **卸载**：用**相机自己的菜单**，不是安装器。
   `MENU → Application → Application Management → Manage and Remove` → 选中要删的那一项 → 移除。
   部分机型的 `Application Management` 在 `Application List` 下面（多一层），标签是本地化的
-  （`Manage and Remove` / 中文界面「管理与移除」）。**先退出应用**再操作。这会清掉应用自己的设置。
+  （`Manage and Remove` / 中文界面「管理与移除」）。**  先退出应用**再操作。这会清掉应用自己的设置。
+
+<p align="center">
+  <img src="assets/hardware/01-a7sii-application-list.jpg" width="330" alt="α7S II 上的应用程序列表，「应用程序管理」就在列表里">
+  <br><sub>α7S II 上就是这个样子：<b>应用程序管理</b>是应用程序列表<b>里面</b>的一项，
+  这台机器上不需要再进别的子菜单。要卸载就进这一项。真机屏幕照片，不是效果图。</sub>
+</p>
 
 > **实话实说 —— 装它的工具卸不掉它。** Sony-PMCA-RE **没有卸载命令**。它的全部子命令是
 > `info`、`install`、`market`、`apk2spk`、`spk2apk`、`firmware`、`updatershell`、`serviceshell`、

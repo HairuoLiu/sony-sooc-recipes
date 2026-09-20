@@ -44,6 +44,11 @@ method in this repository can install anything on it.
 > The earlier NEX-7, NEX-3 / 5 / 5N / F3, and the a3000 / a3500 have no Android subsystem and
 > no `Application` menu either — their absence from the supported column above is **not an omission**.
 
+**Confirmed on a real body: the α7S II**, with four brand packs installed side by side. Photographs
+of it running are in the [README](../README.md#on-a-real-camera). Everything else in the left
+column is *platform* support — the body has the app channel — rather than a body-by-body test,
+and those are not the same claim.
+
 ### What you need
 
 - A computer (Windows, macOS, or Linux).
@@ -243,6 +248,13 @@ the daemon on the camera keeps running until you disable it in Tweak.
   On some bodies `Application Management` sits one level deeper, under `Application List`, and
   the label is localised (`Manage and Remove` / 管理与移除). Leave the app first. This clears
   the app's stored settings.
+
+<p align="center">
+  <img src="assets/hardware/01-a7sii-application-list.jpg" width="330" alt="The Application List on an A7S II, with Application Management as an entry in the list">
+  <br><sub>What it looks like on an α7S II: <b>Application Management</b> (应用程序管理) is an
+  entry <i>in</i> the Application List, not behind another submenu on this body. That is the one
+  to open. A photograph of the real screen, not a mockup.</sub>
+</p>
 
 > **Honest note — the tool that installed it cannot remove it.** Sony-PMCA-RE has **no uninstall
 > command**. Its complete command set is `info`, `install`, `market`, `apk2spk`, `spk2apk`,

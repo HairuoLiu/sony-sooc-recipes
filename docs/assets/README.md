@@ -16,6 +16,7 @@ docs/assets/
   engines.svg             the two engines compared
   install-flow.svg        download → check → install → verify
   parameters.svg          what a look can be made of, and what it cannot
+  hardware/               photos of a real body running the app  ← contributed
   samples/                before/after photographs        ← contributed
   install/                screenshots of the install flow  ← contributed
   README.md               this file
@@ -62,6 +63,30 @@ dialogue is 200 px wide is not a usable screenshot.
 
 ---
 
+## Hardware photographs
+
+```
+hardware/<NN>-<body>-<slug>.jpg
+```
+
+`01-a7sii-application-list.jpg`, `02-a7sii-leica-silver-soft.jpg`, … Numbered for reading
+order, with the **body in the name**, because the body is the point of the file: it is the
+evidence that a *named* camera runs this app. A photo that does not say which body it is
+proves only that some camera somewhere did.
+
+These are photographs of hardware, not screen captures, so the rule differs from `install/`:
+
+- **Crop to the model marking plus the screen.** Keep the mark. Without it the picture loses
+  the one thing it is evidence for, and the screen alone cannot carry it.
+- **Do not correct the perspective into a flat rectangle.** A phone photo of a hinged screen
+  is at an angle, and straightening it turns a document into a rendering. The angle is part
+  of what makes it a photograph of a real body.
+- **Do not tidy a badge out of the crop.** If the screen says `PROTECTED`, the file ships
+  saying `PROTECTED`, and the caption explains what that means. A screenshot cropped to show
+  only the happy path is a false claim; showing the real state and naming it is not.
+
+---
+
 ## Contributing images
 
 1. Add the files following the naming above.
@@ -90,9 +115,16 @@ dialogue is 200 px wide is not a usable screenshot.
 - 实拍样张：`samples/<配方 id>--off.jpg` 和 `--on.jpg` 成对，id 必须与
   `catalog/filters.json` 里的 `id` 完全一致
 - 安装截图：`install/<两位序号>-<英文短名>.png`，序号保证阅读顺序
+- 真机照片：`hardware/<两位序号>-<机身>-<英文短名>.jpg`，**机身名必须进文件名**——
+  这张照片的全部价值就是"某一台**指名**的机器跑起来了"，不写机身的照片只能证明"某台机器跑起来了"
 
 成对样张的唯一要求是**两张之间只有配方不同**：同一场景、同一光线、同一曝光、
 同一白平衡。拍带有肤色、植物和中性灰的画面最能说明问题。
+
+**真机照片的规矩和安装截图不同**（它是"拍硬件"，不是"截屏"）：裁到**机身型号字样 + 屏幕**，
+字样必须留着；**不要把斜拍的屏幕拉平成矩形**——拉平就把一张实拍变成了渲染图；
+**也不要把徽标裁掉**——屏幕上写着 `PROTECTED` 就让它带着 `PROTECTED` 发出去，
+在图注里说明它是什么意思。只留"顺利路径"的截图是假声明，展示真实状态并讲清楚不是。
 
 `tools/check_assets.py` 会检查：文档引用的图是否都存在、样张 id 是否能在注册表里找到。
 改完图记得跑一遍。

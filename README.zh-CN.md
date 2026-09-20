@@ -15,6 +15,9 @@
 关掉应用、关机重启，风格依然是相机在 P/A/S/M 和录像**全部模式**下的默认。
 直出的 JPEG 就带滤镜。
 
+**已在真机确认的机型：α7S II** —— 装得上、打得开、四个品牌包同时并存。实拍照片见
+[真机实拍](#真机实拍)。支持列表里的其他机型是**平台层面**支持，没有逐台实测过，这两件事不是一回事。
+
 > SOOC = Straight Out Of Camera，直出。
 > 这不是「后期套 LUT」，是把风格写进相机，拍的时候就定了。
 
@@ -90,6 +93,38 @@ adb uninstall com.hairuoliu.sonysoocrecipes     # 或 ...sonysoocrecipes.<品牌
 
 **配方也要还回去。** 卸载应用**不会**回退已经存进相机设置的配方——它仍在 P/A/S/M 和录像下生效。
 还回原样：在应用里按 **TRASH** + 中心键，然后关机重启；或 `Setup → Setting Reset → Camera Settings Reset`。
+
+---
+
+## 真机实拍
+
+维护者自己机器上的照片——不是渲染图、不是效果图。四张都是 **α7S II**，屏幕上跑的就是磨砂双栏主界面。
+
+<p align="center">
+  <img src="docs/assets/hardware/01-a7sii-application-list.jpg" width="300" alt="相机应用程序列表，含已装包与「应用程序管理」入口">
+  <img src="docs/assets/hardware/02-a7sii-leica-silver-soft.jpg" width="300" alt="Leica Silver (soft) 在相机上，每个数值都与 catalog 一致">
+  <img src="docs/assets/hardware/03-a7sii-leica-teal.jpg" width="300" alt="Leica Teal 在相机上">
+  <img src="docs/assets/hardware/04-a7sii-leica-vivid.jpg" width="300" alt="Leica Vivid 在相机上">
+  <br><sub>
+  最左：相机的<b>应用程序列表</b>——已装的几个包，以及<b>应用程序管理</b>，卸载就是从这一项进去
+  （见 <a href="#卸载">卸载</a>）。其余三张是 Leica Silver（柔）、Leica Teal、Leica Vivid，
+  Leica 包 20 款里的第 18、19、20 款。
+  </sub>
+</p>
+
+这几张照片能证明什么、不能证明什么：
+
+- **机器跑得起来，而且多个包能并存。** 一台 α7S II 上同时装着四个品牌包。这正是"包名必须各不相同"
+  要换来的那个并存，是看见的，不是声称的。
+- **屏幕上写的就是 catalog 里的。** 每个数值都是从真机读回来的，且与 `catalog/filters.json` 逐值一致——
+  Leica Silver（柔）是 `LIGHT · sat −1 · con −2 · sharp −1 · DRO Lv5`，Leica Teal 是
+  `NEUTRAL · −1 · +1 · 0 · DRO Lv3`，Leica Vivid 是 `VIVID · +1 · 0 · 0 · DRO Lv4`。
+  数据与真机之间没有漂移。
+- **徽标显示的是 `PROTECTED`，不是 `ACTIVE`。** 那表示相机的设置存储区被写保护，所以当时是**在预览**
+  而不是存储——按文档处理即可：装 OpenMemories:Tweak 关掉 *Backup protection*。这一处**没有裁掉**，
+  因为屏幕当时就是这么显示的。
+- **它不能证明这些观感是"已验证"的。** 「某台**机身**跑得起来」和「某款**观感**忠实于它模仿的胶片」
+  是两件事。后者由 catalog 逐条记录在 `verified` 字段里。
 
 ---
 
