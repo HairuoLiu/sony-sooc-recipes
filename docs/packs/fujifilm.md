@@ -44,5 +44,5 @@ These are **approximations**, not Fujifilm's own colour science. A Sony body in 
 
 ## Links
 
-- Catalog menu: [README.md](../README.md) · [README.zh-CN.md](../README.zh-CN.md)
+- Catalog menu: [README.md](README.md) · [README.zh-CN.md](README.zh-CN.md)
 - Brand packs index: [BRAND-PACKS.md](../BRAND-PACKS.md) · [BRAND-PACKS.zh-CN.md](../BRAND-PACKS.zh-CN.md)

@@ -7,13 +7,16 @@ a decoration. A refactor that made `check_assets.py` accept a wrong-sized icon, 
 `validate_catalog.py` swallow an unknown style, would have sailed through CI green.
 
 So each test here deliberately breaks one thing, runs the gate as a subprocess, and
-asserts a non-zero exit. Four of the seven gates are covered:
+asserts a non-zero exit:
 
     validate_catalog.py     -- a catalog with an unknown group
     check_readme_counts.py  -- a README marker advertising a number the catalog rejects
     check_assets.py         -- an icon-set directory belonging to no pack
     check_docs.py           -- a zh-CN file whose English original is gone
     check_docs.py           -- a FAQ question only one of the two languages answers
+    check_docs.py           -- a link into a heading that is not there
+    check_docs.py           -- a link to a file that is not there
+    cataloglib.load_pack    -- a pack listing no groups, and an unknown pack id
 
 The other three are skipped by design, and the reason matters: `gen_recipes.py --check`
 and `check_fidelity.py` need an upstream checkout, and the browser smoke test needs
@@ -182,6 +185,38 @@ class TestCheckDocsFails(unittest.TestCase):
         self.assertEqual(r.returncode, 1,
                          "gate passed a FAQ whose two languages answer different questions")
         self.assertIn(f"asks {before - 1}", r.stdout)
+
+    def test_a_link_into_a_heading_that_is_not_there_is_rejected(self):
+        """Renaming a heading silently breaks every link aimed at it. The id is invisible
+        in a rendered page and the link text still reads the way it always did, so nothing
+        short of resolving the id can see the break — which is why this gate has to exist
+        before any document gets restructured."""
+        readme = ROOT / "README.md"
+        original = readme.read_text(encoding="utf-8")
+        try:
+            readme.write_text(
+                original + "\n\n[nowhere](#this-heading-was-renamed)\n", encoding="utf-8")
+            r = run_gate("check_docs.py")
+        finally:
+            readme.write_text(original, encoding="utf-8")
+        self.assertEqual(r.returncode, 1, "gate passed a link into a missing heading")
+        self.assertIn("has no matching heading", r.stdout)
+
+    def test_a_link_to_a_file_that_is_not_there_is_rejected(self):
+        """Relative links resolve against the file holding them, not the repository root.
+        That difference is invisible while you write `docs/X.md` looking at a tree view,
+        and it is exactly how `../README.md` came to point at a docs/README.md that never
+        existed in three of the pack pages."""
+        readme = ROOT / "README.md"
+        original = readme.read_text(encoding="utf-8")
+        try:
+            readme.write_text(
+                original + "\n\n[missing](docs/no-such-page.md)\n", encoding="utf-8")
+            r = run_gate("check_docs.py")
+        finally:
+            readme.write_text(original, encoding="utf-8")
+        self.assertEqual(r.returncode, 1, "gate passed a link to a file that does not exist")
+        self.assertIn("does not exist", r.stdout)
 
 
 class TestLoadPackGuard(unittest.TestCase):

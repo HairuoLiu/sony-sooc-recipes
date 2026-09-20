@@ -39,5 +39,5 @@ These are **approximations**, not Ricoh's own colour science. A Sony body in the
 
 ## Links
 
-- Catalog menu: [README.md](../README.md) · [README.zh-CN.md](../README.zh-CN.md)
+- Catalog menu: [README.md](README.md) · [README.zh-CN.md](README.zh-CN.md)
 - Brand packs index: [BRAND-PACKS.md](../BRAND-PACKS.md) · [BRAND-PACKS.zh-CN.md](../BRAND-PACKS.zh-CN.md)

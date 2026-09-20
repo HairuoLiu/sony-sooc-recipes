@@ -44,5 +44,5 @@
 
 ## 链接
 
-- 目录菜单：[README.md](../README.md) · [README.zh-CN.md](../README.zh-CN.md)
+- 目录菜单：[README.md](README.md) · [README.zh-CN.md](README.zh-CN.md)
 - 品牌包索引：[BRAND-PACKS.md](../BRAND-PACKS.md) · [BRAND-PACKS.zh-CN.md](../BRAND-PACKS.zh-CN.md)

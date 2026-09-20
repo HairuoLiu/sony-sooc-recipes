@@ -26,6 +26,10 @@ docs/assets/
 
 ## Sample photographs
 
+**There are none yet, and this is the contribution that would help most.** Every look in the
+catalog is a row of numbers until somebody points a body at a scene and shows what came out.
+If you have a supported body and a spare ten minutes, this page is waiting for you.
+
 Two files per look, named so the pair is unmistakable:
 
 ```

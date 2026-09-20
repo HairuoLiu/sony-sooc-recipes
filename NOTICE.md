@@ -29,9 +29,12 @@ CI 配置 —— 均为本项目原创，采用 **[MIT](LICENSE)**。
   - `Recipes.java` 的**类结构**（构造函数重载、常量表、`GROUP_START`/`GROUP_COUNT` 静态块）
     —— 生成的 `Recipes.java` 是它的直接派生物，因此保留 MIT 头与署名
 - **作者**：André Domingues（[voxivoid](https://github.com/voxivoid)）
-- **本项目做的改动**：新增 7 款配方（`gr-moriyama`、`kodak-vision2-500t`、
-  `toy-camera-warm`、`toy-camera-cool`、`part-color-red`、`posterization-color`、
-  `teal-mood`，全部标 `verified: false`）；把配方表从手写 Java 改为由 JSON 生成
+- **本项目做的改动**：新增了 63 款自写配方（最初的一批是 `gr-moriyama`、
+  `kodak-vision2-500t`、`toy-camera-warm`、`toy-camera-cool`、`part-color-red`、
+  `posterization-color`、`teal-mood`），全部标 `verified: false`；把配方表从手写 Java
+  改为由 JSON 生成。**哪些是自写的、请以 `catalog/filters.json` 的 `verified` 字段为准
+  （今天 155 款里有 63 款为 false）**——早先这里写的是「7 款」，那是配方库还很小时的
+  遗留数字，catalog 涨上去之后没人重算。手写计数会腐烂，字段不会。
 
 ### ukiki0718-netizen/sony-a5100-film-studio — 15 款风格的登记
 

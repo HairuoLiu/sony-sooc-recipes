@@ -159,6 +159,6 @@ It is safe **only on a trusted network, used briefly**. Opening ADB (via OpenMem
 
 ## Where do I start if I just want a certain look?
 
-Open the filter browser at [`catalog/index.html`](catalog/index.html) — a single-file, no-dependency page that lists all 155 recipes with their groups and tones. Filter by brand (Kodak, Fujifilm, Ricoh GR, Ilford…), by color vs. mono, or by engine, then find the recipe whose name matches the film you have in mind.
+Open the filter browser at [`catalog/index.html`](../catalog/index.html) — a single-file, no-dependency page that lists all 155 recipes with their groups and tones. Filter by brand (Kodak, Fujifilm, Ricoh GR, Ilford…), by color vs. mono, or by engine, then find the recipe whose name matches the film you have in mind.
 
 If you are unsure, start from the look you already like: a warm everyday negative? Try `kodak-portra-400` or `fuji-superia-400`. A moody cinematic night? Try `cinestill-800t`. A clean black-and-white? Try `ilford-hp5` or `acros`. Pick one, install it, shoot a roll, and switch from there — the whole point is that trying the next look costs you nothing but a dial turn.
