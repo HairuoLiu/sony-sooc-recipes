@@ -3,7 +3,7 @@
 
     python tools/build_matrix.py            # the matrix, as JSON, one line
     python tools/build_matrix.py --ids      # just the pack ids, one per line
-    python tools/build_matrix.py --apks     # just the expected APK filenames
+    python tools/build_matrix.py --apk-for ID  # the expected APK filename for one target
 
 Consumed by .github/workflows/release.yml and tools/build_apk.sh.
 

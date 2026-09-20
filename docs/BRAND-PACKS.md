@@ -25,8 +25,8 @@ all-in-one app and a single brand pack is three things:
 
 1. the Android **package name** — `com.hairuoliu.sonysoocrecipes` becomes
    `com.hairuoliu.sonysoocrecipes.<id>`;
-2. the **`app_name`** string (e.g. `Leica Looks`);
-3. the **launcher icon** — each pack shows that brand's most famous camera.
+2. the **`app_name`** string (e.g. `Leica Style`);
+3. the **launcher icon** — three packs show that brand's most famous camera body; the other six depict film stock.
 
 `tools/apply_pack.py` performs the transform on a fresh, already-rebranded checkout;
 `tools/gen_recipes.py --pack <id>` then emits only that pack's groups into `Recipes.java`.
@@ -96,15 +96,15 @@ number is not a bug (see the notes below the table).
 
 | `id` | `app_name` | Source groups | Compiled recipes |
 |---|---|---|---|
-| `leica` | Leica Looks | `leica` | 20 |
-| `fujifilm` | Fujifilm Looks | `fuji-sim` | 16 |
-| `filmstocks` | Fuji Film Looks | `fuji-film` | 10 |
-| `ricoh` | Ricoh GR Looks | `ricoh-gr` | 11 |
-| `kodak` | Kodak Looks | `kodak` | 20 |
-| `pentax` | Pentax Looks | `pentax` | 11 |
-| `ilford` | Cinestill + Ilford Looks | `ilford`, `cine` | 9 |
-| `hasselblad` | Hasselblad Looks | `hasselblad` | 4 |
-| `sony` | Sony Looks | `sony` | 8 |
+| `leica` | Leica Style | `leica` | 20 |
+| `fujifilm` | Fujifilm Style | `fuji-sim` | 16 |
+| `filmstocks` | Fuji Film Style | `fuji-film` | 10 |
+| `ricoh` | Ricoh GR Style | `ricoh-gr` | 11 |
+| `kodak` | Kodak Style | `kodak` | 20 |
+| `pentax` | Pentax Style | `pentax` | 11 |
+| `nichefilm` | Niche Film Style | `ilford`, `cine`, `other-stocks` | 26 |
+| `hasselblad` | Hasselblad Style | `hasselblad` | 4 |
+| `sony` | Sony Style | `sony` | 8 |
 
 Three counts are smaller than — or add up differently from — their group sizes, and that is expected:
 
@@ -112,8 +112,10 @@ Three counts are smaller than — or add up differently from — their group siz
   belong to `fuji-film`, which is now the separate `filmstocks` pack. So this pack holds 16.
 - **`ricoh`** lists 16 entries in `ricoh-gr`, of which **11** are compilable (the other 5
   are `film-studio-matrix` reference-only).
-- **`ilford`** now spans two groups: **5** from `ilford` plus **4** from `cine` (a
-  motion-picture look family, not an Ilford product), for 9 in the pack.
+- **`nichefilm`** now spans three groups: **5** from `ilford` (Ilford B&W), **4** from `cine`
+  (a motion-picture look family, not an Ilford product) and **17** from `other-stocks` (a mixed
+  bag of heritage brands — Agfa, Polaroid, Ferrania and others — with no single brand behind it),
+  for **26** in the pack. `other-stocks` previously shipped only inside the all-in-one app.
 
 So if a pack's number looks low, check whether its group mixes in the other engine before
 assuming something was dropped. `tools/gen_recipes.py --pack <id>` prints the emitted
@@ -124,9 +126,9 @@ group(s) and warns when a requested group contributed nothing compilable.
 ## 5. What a pack can and cannot contain
 
 A pack is a single-brand slice of the catalog. The defining rule: **a pack's groups must
-all belong to one brand**, because the pack's icon and its `app_name` (`<Brand> Looks`)
+all belong to one brand**, because the pack's icon and its `app_name` (`<Brand> Style`)
 advertise exactly one brand. A pack that mixed Leica and Kodak recipes under a "Leica
-Looks" name would be lying about what it contains.
+Style" name would be lying about what it contains.
 
 **Groups deliberately in no pack.** These stay reachable in the all-in-one app, which is
 still built and still published. `catalog/packs.json` records them in `unassigned_groups`
@@ -137,13 +139,12 @@ bug report:
 |---|---|
 | `canon-nikon` | Spans two brands — it has to be split into one pack per brand first |
 | `pana-olympus` | Spans two brands — same split required |
-| `other-stocks` | Mixed heritage stocks (Agfa, Polaroid, Ferrania …) with no single brand |
 | `app-look` | Not a camera brand — social / app filter looks |
 
 `canon-nikon` and `pana-olympus` are the only ones with a clear path to becoming packs:
 split each into `canon` and `nikon` (or `panasonic` and `olympus`) groups, then each gets
-its own pack entry. The other two are category groups, not brands, and are unlikely ever
-to be packs.
+its own pack entry. The remaining one (`app-look`) is a category group, not a brand, and is
+unlikely ever to be a pack.
 
 A pack also cannot contain `film-studio-matrix` entries — those are reference-only and
 compile nowhere, so they simply do not appear in the emitted `Recipes.java`.
@@ -221,9 +222,10 @@ checkout. `--dry-run` reports every change without writing.
 
 ## 7. Icons — where they come from, how they are generated, and the attribution obligation
 
-Each pack's launcher icon is built from a photograph of that brand's best-known camera — or,
-for `filmstocks`, `kodak` and `ilford`, from a film canister rather than a camera (those three
-packs are named after film stock, not a body). **All nine** now use **all-rights-reserved
+Each pack's launcher icon is built from a photograph of that brand's product. **Three** packs
+depict a camera body — `leica` (the M9), `fujifilm` (the X100VI) and `hasselblad` (the X2D II
+100C) — while the other **six** depict film: `filmstocks`, `kodak`, `nichefilm`, `pentax`,
+`ricoh` and `sony` (those six packs are named after film stock, not a body). **All nine** now use **all-rights-reserved
 commercial photographs supplied by the user**, with no licence granted — `ricoh` and `pentax`
 were the last two Wikimedia Commons photographs and have been swapped out too, so no
 free-licensed image ships in any APK. The provenance of each one and the relaxed licence rule
@@ -270,13 +272,13 @@ original artwork in this repo.
 
 ## 8. Naming and trademark — the honest statement
 
-The `app_name` uses a **`<Brand> Looks`** form rather than a bare brand name or a camera
+The `app_name` uses a **`<Brand> Style`** form rather than a bare brand name or a camera
 model number. The reason is narrow and practical: naming a distributed app after a
 trademark *implies endorsement*, and endorsement is the risk that actually gets a project
-taken down. "Leica Looks" describes what the app does with Leica's style; "Leica" alone
+taken down. "Leica Style" describes what the app does with Leica's style; "Leica" alone
 would suggest Leica made or blessed it.
 
-**State this plainly: the `<Brand> Looks` form is risk reduction, not a clearance.** Using
+**State this plainly: the `<Brand> Style` form is risk reduction, not a clearance.** Using
 a brand name in an app's name is still trademark use. Nominative or descriptive use —
 truthfully saying what the app is *for* — is a *defence* in some jurisdictions, not a
 *permission*, and app stores are stricter than courts. The all-in-one app stays
@@ -329,9 +331,9 @@ Say you want a `contax` pack. Step by step:
 
 1. **Edit `catalog/packs.json`.** Add an entry to `packs`:
    ```json
-   { "id": "contax", "app_name": "Contax Looks", "groups": ["contax"], "icon_set": "contax" }
+   { "id": "contax", "app_name": "Contax Style", "groups": ["contax"], "icon_set": "contax" }
    ```
-   Use the `<Brand> Looks` form for `app_name` (§8). The `groups` must be **one brand
+   Use the `<Brand> Style` form for `app_name` (§8). The `groups` must be **one brand
    only** — if the brand's recipes currently live in a group that also spans another brand
    (like `canon-nikon`), split that group in `catalog/filters.json` first.
 

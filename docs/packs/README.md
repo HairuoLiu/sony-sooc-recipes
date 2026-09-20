@@ -20,17 +20,17 @@ APK, so they are excluded from every count here.
 | APK (app name) | Package name | Compiled recipes | Groups | Page |
 |---|---|---:|---|---|
 | **Sony SOOC Recipes** (all-in-one) | `com.hairuoliu.sonysoocrecipes` | **140** | 14 | [all-in-one](all-in-one.md) |
-| Leica Looks | `com.hairuoliu.sonysoocrecipes.leica` | **20** | 1 | [leica](leica.md) |
-| Fujifilm Looks | `com.hairuoliu.sonysoocrecipes.fujifilm` | **16** | 1 | [fujifilm](fujifilm.md) |
-| Fuji Film Looks | `com.hairuoliu.sonysoocrecipes.filmstocks` | **10** | 1 | [filmstocks](filmstocks.md) |
-| Ricoh GR Looks | `com.hairuoliu.sonysoocrecipes.ricoh` | **11** | 1 | [ricoh](ricoh.md) |
-| Kodak Looks | `com.hairuoliu.sonysoocrecipes.kodak` | **20** | 1 | [kodak](kodak.md) |
-| Pentax Looks | `com.hairuoliu.sonysoocrecipes.pentax` | **11** | 1 | [pentax](pentax.md) |
-| Cinestill + Ilford Looks | `com.hairuoliu.sonysoocrecipes.ilford` | **9** | 2 | [ilford](ilford.md) |
-| Hasselblad Looks | `com.hairuoliu.sonysoocrecipes.hasselblad` | **4** | 1 | [hasselblad](hasselblad.md) |
-| Sony Looks | `com.hairuoliu.sonysoocrecipes.sony` | **8** | 1 | [sony](sony.md) |
+| Leica Style | `com.hairuoliu.sonysoocrecipes.leica` | **20** | 1 | [leica](leica.md) |
+| Fujifilm Style | `com.hairuoliu.sonysoocrecipes.fujifilm` | **16** | 1 | [fujifilm](fujifilm.md) |
+| Fuji Film Style | `com.hairuoliu.sonysoocrecipes.filmstocks` | **10** | 1 | [filmstocks](filmstocks.md) |
+| Ricoh GR Style | `com.hairuoliu.sonysoocrecipes.ricoh` | **11** | 1 | [ricoh](ricoh.md) |
+| Kodak Style | `com.hairuoliu.sonysoocrecipes.kodak` | **20** | 1 | [kodak](kodak.md) |
+| Pentax Style | `com.hairuoliu.sonysoocrecipes.pentax` | **11** | 1 | [pentax](pentax.md) |
+| Niche Film Style | `com.hairuoliu.sonysoocrecipes.nichefilm` | **26** | 3 | [nichefilm](nichefilm.md) |
+| Hasselblad Style | `com.hairuoliu.sonysoocrecipes.hasselblad` | **4** | 1 | [hasselblad](hasselblad.md) |
+| Sony Style | `com.hairuoliu.sonysoocrecipes.sony` | **8** | 1 | [sony](sony.md) |
 
-**140 + 20 + 16 + 10 + 11 + 20 + 11 + 9 + 4 + 8 = 249** recipe-listings, but the underlying
+**140 + 20 + 16 + 10 + 11 + 20 + 11 + 26 + 4 + 8 = 266** recipe-listings, but the underlying
 catalog holds **155** filter entries (140 compiled + 15 reference-only). The sum exceeds
 155 because a brand pack is a *view* over the shared catalog, not a copy — the 140 all-in-one
 recipes are the same recipes you also find inside the individual packs, just presented in one

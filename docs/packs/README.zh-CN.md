@@ -18,17 +18,17 @@
 | APK（应用名） | 包名 | 已编译配方数 | 分组数 | 子页面 |
 |---|---|---:|---|---|
 | **Sony SOOC Recipes**（全量版） | `com.hairuoliu.sonysoocrecipes` | **140** | 14 | [all-in-one](all-in-one.zh-CN.md) |
-| Leica Looks | `com.hairuoliu.sonysoocrecipes.leica` | **20** | 1 | [leica](leica.zh-CN.md) |
-| Fujifilm Looks | `com.hairuoliu.sonysoocrecipes.fujifilm` | **16** | 1 | [fujifilm](fujifilm.zh-CN.md) |
-| Fuji Film Looks | `com.hairuoliu.sonysoocrecipes.filmstocks` | **10** | 1 | [filmstocks](filmstocks.zh-CN.md) |
-| Ricoh GR Looks | `com.hairuoliu.sonysoocrecipes.ricoh` | **11** | 1 | [ricoh](ricoh.zh-CN.md) |
-| Kodak Looks | `com.hairuoliu.sonysoocrecipes.kodak` | **20** | 1 | [kodak](kodak.zh-CN.md) |
-| Pentax Looks | `com.hairuoliu.sonysoocrecipes.pentax` | **11** | 1 | [pentax](pentax.zh-CN.md) |
-| Cinestill + Ilford Looks | `com.hairuoliu.sonysoocrecipes.ilford` | **9** | 2 | [ilford](ilford.zh-CN.md) |
-| Hasselblad Looks | `com.hairuoliu.sonysoocrecipes.hasselblad` | **4** | 1 | [hasselblad](hasselblad.zh-CN.md) |
-| Sony Looks | `com.hairuoliu.sonysoocrecipes.sony` | **8** | 1 | [sony](sony.zh-CN.md) |
+| Leica Style | `com.hairuoliu.sonysoocrecipes.leica` | **20** | 1 | [leica](leica.zh-CN.md) |
+| Fujifilm Style | `com.hairuoliu.sonysoocrecipes.fujifilm` | **16** | 1 | [fujifilm](fujifilm.zh-CN.md) |
+| Fuji Film Style | `com.hairuoliu.sonysoocrecipes.filmstocks` | **10** | 1 | [filmstocks](filmstocks.zh-CN.md) |
+| Ricoh GR Style | `com.hairuoliu.sonysoocrecipes.ricoh` | **11** | 1 | [ricoh](ricoh.zh-CN.md) |
+| Kodak Style | `com.hairuoliu.sonysoocrecipes.kodak` | **20** | 1 | [kodak](kodak.zh-CN.md) |
+| Pentax Style | `com.hairuoliu.sonysoocrecipes.pentax` | **11** | 1 | [pentax](pentax.zh-CN.md) |
+| Niche Film Style | `com.hairuoliu.sonysoocrecipes.nichefilm` | **26** | 3 | [nichefilm](nichefilm.zh-CN.md) |
+| Hasselblad Style | `com.hairuoliu.sonysoocrecipes.hasselblad` | **4** | 1 | [hasselblad](hasselblad.zh-CN.md) |
+| Sony Style | `com.hairuoliu.sonysoocrecipes.sony` | **8** | 1 | [sony](sony.zh-CN.md) |
 
-**140 + 20 + 16 + 10 + 11 + 20 + 11 + 9 + 4 + 8 = 249** 条「配方列表」，但底层目录其实只有
+**140 + 20 + 16 + 10 + 11 + 20 + 11 + 26 + 4 + 8 = 266** 条「配方列表」，但底层目录其实只有
 **155** 个滤镜条目（140 已编译 + 15 仅供查阅）。总和大于 155，是因为品牌包只是共享目录上的
 *视图*，而非副本——全量版里的 140 条配方，与各个单品牌包里的配方是同一批，只是汇在一处还是
 拆成十处呈现的区别。

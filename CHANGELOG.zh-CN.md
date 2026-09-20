@@ -12,25 +12,30 @@
 
 ---
 
-## Unreleased — 2026-09-19 · 第九个品牌包，与全套新图标素材
+## v0.7.0 — 2026-09-19 · 品牌包重组，与全套新图标素材
 
-- **第九个品牌包：`filmstocks`（Fuji Film Looks）。** 富士包一拆为二。`fujifilm` 现在只含相机
+- **第九个品牌包：`filmstocks`（Fuji Film Style）。** 富士包一拆为二。`fujifilm` 现在只含相机
   *模拟*——来自 `fuji-sim` 组的 16 款已编译配方；富士真实*胶卷*（来自 `fuji-film` 组的 10 款已编译
   配方）移到新的 `filmstocks` 包。发布现在共 **十个** APK：全量版加九个单品牌包，较 v0.6.0 的九个又多一个。
-- **`ilford` 改名为 `Cinestill + Ilford Looks`。** 它现在还带 `cine` 组——4 个电影感风格
-  （Cinestill 50D、Cinestill 800T、Classic Cinema、Rec709 Video）——`ilford` 与 `cine` 两组合计 9 款
-  已编译配方。`cine` 是电影感风格家族，并非伊尔福产品；它从 `unassigned_groups` 移进了这个包。
-- **所有品牌包图标重制为透明剪影。** 每个包图标现在都从源照片里抠出的透明剪影，与全量版图标风格一致。
-- **九个包图标全部用用户提供的商业素材。** `leica`、`fujifilm`、`filmstocks`、`kodak`、`ilford`、
+- **`ilford` 被 `nichefilm`（Niche Film Style）取代。** 旧的 `ilford` 包（「Cinestill + Ilford
+  Looks」，`ilford` + `cine` 两组，9 款配方）改名为 `nichefilm`，并吸收 `other-stocks`（17 款已编译的
+  复古/小众胶片配方——Agfa、Polaroid、Ferrania 等），使 `ilford`、`cine`、`other-stocks` 三组合计
+  **26** 款。原因：该包图标是一张 CineStill 胶卷产品图，从来都对不上「Cinestill + Ilford」这个名字；
+  把这批小众/复古胶片归到一个包里，既修正了这个名实不符，也给 `other-stocks` 安了家（它此前只随全量版发布）。
+  `cine` 是电影感风格家族、并非伊尔福产品，`other-stocks` 则是一堆混血胶片品牌、背后没有单一品牌。
+- **所有包的 App 名从「<X> Looks」统一改为「<X> Style」。** 九个包一致，让名字读作风格描述、
+  而非背书意味。
+- **新的启动图标落在深色拉圆角底上。** 每个包图标都是从其源素材里抠出的机身或胶片剪影，再压到一块近黑的圆角底（RGB 28,28,30 ≈ #1C1C1E）上，让深色主体在深色壁纸上依旧清晰。旧的纯透明剪影仍可用 `--no-bg` 生成。
+- **九个包图标全部用用户提供的商业素材。**   `leica`、`fujifilm`、`filmstocks`、`kodak`、`nichefilm`、
   `hasselblad`、`sony`、`ricoh`、`pentax` 现在用的是用户专门提供的、保留全部权利的商业照片 / 厂商官方渲染，
   未授予任何许可。风险由发布方承担；诚实的来源与「放宽许可」的约定见 `assets/app-icon-packs/CREDITS.md`。
   `ricoh` 与 `pentax` 是最后两张 Wikimedia Commons **CC BY 2.0** 照片，如今也已换掉，所以**没有任何
   自由许可图片随任一 APK 发布、也不再有署名义务**；它们原先的署名行是**删除**而非保留——为一张早已不发布的
   照片留着署名，本身就是虚假标注。
-- **其中五个图标换了题材。** `filmstocks` 改为富士胶卷罐（它是按胶片命名，不是按机身）；`ilford` 改为
-  CineStill 胶卷产品图，不再是原先拼合的 Cinestill + Ilford；`sony`、`ricoh`、`pentax` 改为用户提供的
-  相机图，不再是 Wikimedia 上的 α7 / Ricoh GR / Pentax K1000 照片。三张无题注来图的具体机型**尚未核实**，
-  详见 CREDITS.md。
+- **九个图标里六个是胶片、不是机身。** `filmstocks`、`kodak`、`nichefilm`、`pentax`、`ricoh`、
+  `sony` 展示的是胶片；只有 `leica`（M9）、`fujifilm`（X100VI）、`hasselblad`（X2D II 100C）展示机身。
+  `nichefilm` 的图标正是那张 CineStill 胶卷产品图，也是这次重组名字的由来。
+- **推迟到下个版本。** 磨砂双栏主屏 UI 主题（叠在上游布局之上的一次性补丁）不在本次构建中，将在后续版本落地。
 
 ---
 

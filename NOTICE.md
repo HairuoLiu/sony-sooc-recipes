@@ -202,3 +202,36 @@ APK 走 —— 它会进本文件（下方表格）与每个包的发布说明�
 - 品牌包图标**也抠掉了背景**，与全量版默认图标同样渲染为透明剪影（抠图用
   `tools/cut_camera_covers.py`，渲染用 `tools/build_pack_icons.py`），见 `docs/BRAND-PACKS.md` §7。
 - 再分发这些包的人，自行承担对应的商标与署名风险（见 `docs/BRAND-PACKS.md` §8）。
+
+---
+
+## 六、界面字体（随 APK 分发）
+
+主屏那套圆润字形是 **Quicksand**（Regular + Bold 两个字重），随 APK 一起分发，所以它的
+许可与署名必须跟着 APK 走 —— 和品牌包图标是同一个道理。
+
+| 项目 | 内容 |
+|---|---|
+| 字体 | Quicksand（Regular 400 / Bold 700） |
+| 许可 | **SIL Open Font License 1.1**，OFL 允许自由再分发，包括打包进商业软件 |
+| 许可全文 | 已随仓库分发：`assets/fonts/OFL-Quicksand.txt` |
+| 版权 | Copyright 2011 The Quicksand Project Authors（<https://github.com/andrew-paglinawan/QuicksandFamily>），保留字体名 "Quicksand" |
+| 取得来源 | Google Fonts 上游仓库 `ofl/quicksand/` |
+| 分发的文件 | `assets/fonts/Quicksand-Regular.ttf`（79 KB）、`assets/fonts/Quicksand-Bold.ttf`（79 KB） |
+
+**为什么必须打包字体，而不是在 XML 里指定**：本项目的 `minSdkVersion` 是 10
+（Android 2.3.7）。Gingerbread 系统只带 Droid Sans 系列，**没有任何圆体可选**；
+`android:fontFamily` 与 `res/font` 是 API 26 才有的东西，这里都用不了。所以字体以
+原始资源（asset）形式打包，由 `tools/patch_ui.py` 在构建时拷进 `assets/fonts/` 并在
+Java 里绑定到各个视图。上游的打包命令原本不带 `-A`，该脚本已同步修改 `build.sh` 与
+`build.cmd`。
+
+**OFL 对本仓库的影响**：OFL 不要求使用它的软件开源，也不禁止商用；它只要求（a）再分发
+时附带许可全文 —— 已放进 `assets/fonts/OFL-Quicksand.txt`；（b）不得单独出售字体本身
+（我们不这么做）；（c）衍生字体不得再使用保留字体名（我们未修改字体文件）。
+因此**本仓库整体仍是 MIT**，字体只是随附的一件 OFL 素材 —— 与第五节那些第三方图片同理，它随 APK
+分发，所以许可义务必须与 APK 同行，而不是只留在本文件里。
+
+**如果要换字体**：把另一套 **OFL 或 Apache-2.0** 的 `.ttf` 放进 `assets/fonts/`，改
+`catalog/ui-theme.json` 里的 `font_regular` / `font_bold` 两个键即可，其余不用动。
+同理请一并更新本节表格与许可文件 —— **不要用没有明确再分发许可的字体**。

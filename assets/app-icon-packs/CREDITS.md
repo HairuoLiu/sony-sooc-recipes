@@ -1,18 +1,21 @@
 # Brand-pack icon artwork — provenance and licences
 
-Most brand packs carry a launcher icon built from a photograph of the camera that pack is
-named after. Three packs are the exception, and one is a merged app:
+Most brand packs carry a launcher icon built from a photograph of a *film product*, not a
+camera body. Three packs are the exception — they depict a camera body — and one merges several
+film families into a single app:
 
-- `filmstocks` is named after a film stock, not a camera — its icon shows Fujifilm film
-  canisters.
-- `kodak` keeps the Kodak name, but its current icon is a Kodak Gold 400 / 400 film canister,
-  not a camera body.
-- `ilford` is now the **Cinestill + Ilford** app, and its icon is a CineStill film product
-  shot, not a camera.
+- `leica` shows the Leica M9, a camera body.
+- `fujifilm` shows the Fujifilm X100VI, a camera body.
+- `hasselblad` shows the Hasselblad X2D II 100C, a camera body.
+- `filmstocks` is named after a film stock, not a camera — its icon shows Fujifilm film canisters.
+- `kodak` keeps the Kodak name, but its icon is a Kodak Gold 400 / 400 film canister, not a camera body.
+- `nichefilm` is the **Niche Film Style** app (`ilford` + `cine` + `other-stocks`), and its icon is a CineStill film product shot, not a camera.
+- `pentax`, `ricoh` and `sony` are each a user-supplied film product image — the user has confirmed the picture, and no model or stock name is claimed for any of them.
 
-So the "famous camera" premise holds for six of the nine packs (`leica`, `fujifilm`, `ricoh`,
-`pentax`, `hasselblad`, `sony`); the other three (`filmstocks`, `kodak`, `ilford`) depict film
-stock. This file records where every one of those photographs came from and under what licence,
+So the "famous camera" premise holds for only **three** of the nine packs (`leica`, `fujifilm`,
+`hasselblad`); the other **six** (`filmstocks`, `ricoh`, `kodak`, `pentax`, `nichefilm`, `sony`)
+depict **film stock**, not a camera body — which is honest, because those packs' recipes are
+film simulations. This file records where every one of those photographs came from and under what licence,
 because whenever a CC BY or other attribution-bearing image is used, **that attribution is a
 licence condition, not a courtesy**. As of now no such image ships — see below — but the
 record has to stay accurate either way, since a credit left behind for a photograph that is no
@@ -69,13 +72,13 @@ in the table any more.
 |------|---------|----------------|---------|--------|
 | `leica` | Leica M9 (2009) | sketch.vip — Leica M9 product render | **All rights reserved** — user-supplied, no licence granted | sketch.vip M9 render |
 | `fujifilm` | Fujifilm X100VI (2023) | fujifilm-x.b-cdn.net — X100VI product thumbnail (480×480) | **All rights reserved** — user-supplied, no licence granted | fujifilm-x.b-cdn.net X100VI product thumbnail |
-| `filmstocks` | Fujifilm film canisters | user-supplied product photograph | **All rights reserved** — user-supplied, no licence granted | user-supplied (pasted image) |
-| `ricoh` | Ricoh camera (user-supplied) | user-supplied product photograph | **All rights reserved** — user-supplied, no licence granted | user-supplied (pasted image) |
+| `filmstocks` | Fujifilm film canisters (film stock) | user-supplied product photograph | **All rights reserved** — user-supplied, no licence granted | user-supplied (pasted image) |
+| `ricoh` | Ricoh film product (user-supplied) | user-supplied product photograph | **All rights reserved** — user-supplied, no licence granted | user-supplied (pasted image) |
 | `kodak` | Kodak Gold 400 / 400 film canister | prophotosupply.com — Kodak Gold 400 product photo | **All rights reserved** — user-supplied, no licence granted | prophotosupply.com Kodak Gold 400 |
-| `pentax` | Pentax camera (user-supplied; source was already a transparent cut-out) | user-supplied product photograph | **All rights reserved** — user-supplied, no licence granted | user-supplied (pasted image) |
-| `ilford` | CineStill film product | user-supplied product photograph | **All rights reserved** — user-supplied, no licence granted | user-supplied (pasted image) |
+| `pentax` | Pentax film product (user-supplied; source was already a transparent cut-out) | user-supplied product photograph | **All rights reserved** — user-supplied, no licence granted | user-supplied (pasted image) |
+| `nichefilm` | CineStill film product | user-supplied product photograph | **All rights reserved** — user-supplied, no licence granted | user-supplied (pasted image) |
 | `hasselblad` | Hasselblad X2D II 100C (2022) | cameraelectronic.com.au — official X2D II 100C render (Shopify CDN) | **All rights reserved** — user-supplied, no licence granted | cameraelectronic.com.au product page (Shopify CDN) |
-| `sony` | Sony camera | user-supplied product photograph | **All rights reserved** — user-supplied, no licence granted | user-supplied (pasted image) |
+| `sony` | Sony film product (user-supplied) | user-supplied product photograph | **All rights reserved** — user-supplied, no licence granted | user-supplied (pasted image) |
 
 No pack currently needs a visible credit for its icon, because none ships licensed material;
 the whole set is user-supplied and unlicensed, and the distribution risk sits with the
@@ -96,11 +99,11 @@ application distributing it — forcing this whole app under CC BY-SA, which it 
 replaced by the user-supplied X100VI product thumbnail above. Do not reinstate it, and check
 the licence before adding any photograph here.
 
-## Which camera (or film stock) each pack uses, and why
+## Which subject (camera body or film product) each pack uses, and why
 
-The pick is "the brand's most famous camera", which is a judgement call. For the three packs
-whose icon is a film canister rather than a camera, the same judgement applies to the *film
-stock* depicted. The reasoning, kept here so it can be argued with rather than rediscovered:
+The pick is "the brand's most famous camera", which is a judgement call. For the six packs
+whose icon is film rather than a camera body, the same judgement applies to the *film stock*
+depicted. The reasoning, kept here so it can be argued with rather than rediscovered:
 
 - **Leica M9** — Leica's first full-frame digital M-rangefinder (2009), the digital form of
   the M body the M3 established. The M3's reasoning — the M-mount and the twin-window
@@ -109,32 +112,35 @@ stock* depicted. The reasoning, kept here so it can be argued with rather than r
 - **Kodak Gold 400 / 400 canister** — Kodak Gold 400 is one of Kodak's best-selling consumer
   colour negatives, and its canister is the most recognisable Kodak object that is not a
   camera. The earlier Instamatic 255-X pick was a camera; the current icon is the film itself.
-- **Ilford / Cinestill — CineStill film product** — `ilford` is now the **Cinestill +
-  Ilford** app, and its icon is a CineStill film product shot. Note that the `cine` group is a
+- **nichefilm — CineStill film product** — this pack gathers the **niche and heritage film
+  stocks**: the `ilford` group, the `cine` group and `other-stocks` (Agfa, Polaroid,
+  Ferrania…), 26 recipes in total. Its icon is a CineStill film product shot, which is why the
+  old "Cinestill + Ilford Looks" name never matched — the pack is now named after the niche
+  films it carries rather than after one brand. Note that the `cine` group is a
   **motion-picture look family** (Cinestill 50D, Cinestill 800T, classic cinema, Rec709) and is
-  **not** an Ilford product — it is grouped into this pack for distribution convenience, not
-  because it is an Ilford film.
-- **Pentax** — the earlier icon was the K1000 (roughly three million units, and for two
-  decades the default "first film camera" in every photography course; the 1957 Asahi Pentax
-  created the modern Japanese SLR layout, but the K1000 is the model people actually
-  recognise). That CC BY photograph has since been replaced by a **user-supplied Pentax
-  product image**, whose exact model has **not been verified** — update this line once it is.
+  **not** an Ilford product.
+- **Pentax — user-supplied film product** — the earlier icon was the K1000 (roughly three
+  million units, and for two decades the default "first film camera" in every photography
+  course; the 1957 Asahi Pentax created the modern Japanese SLR layout, but the K1000 is the
+  model people actually recognise). That CC BY photograph has since been replaced by a
+  **user-supplied Pentax film image**. This pack's recipes are film simulations, so film rather
+  than a body is the honest subject. The source arrived already keyed out, with its own alpha.
 - **Hasselblad X2D II 100C** — Hasselblad's current 100 MP medium-format mirrorless body
   (2022); the modern continuation of the 500C's modular 6×6 shape that means "Hasselblad". The
   500C's electronic sibling, the 500EL, went to the Moon on Apollo.
-- **Ricoh** — the earlier icon was the GR (2013), which brought APS-C quality into a pocketable
-  fixed-lens body and became the street-photography tool of its generation; the name descends
-  from the film GR1 that Daido Moriyama used, and that GR1 is the alternative pick. That CC BY
-  photograph has since been replaced by a **user-supplied Ricoh product image**, whose exact
-  model has **not been verified** — update this line once it is.
+- **Ricoh — user-supplied film product** — the earlier icon was the GR (2013), which brought
+  APS-C quality into a pocketable fixed-lens body and became the street-photography tool of its
+  generation; the name descends from the film GR1 that Daido Moriyama used. That CC BY
+  photograph has since been replaced by a **user-supplied Ricoh film image** — this pack's
+  recipes are film simulations, so film rather than a body is the honest subject.
 - **Fujifilm X100VI** — the current X100-series camera (2023); the hybrid optical/electronic
   viewfinder compact the original X100 (2011) started. Now the visual shorthand for "Fujifilm
   camera".
-- **Sony** — the earlier icon was the α7 (ILCE-7), the first full-frame mirrorless camera and
-  the origin of that whole market segment; the α7 III is the best-selling descendant and the
-  RX100 is the other defensible pick. That CC BY photograph has since been replaced by a
-  **user-supplied Sony camera image**, whose exact model has **not been verified** — update
-  this line once it is.
+- **Sony — user-supplied film product** — the earlier icon was the α7 (ILCE-7), the first
+  full-frame mirrorless camera and the origin of that whole market segment; the α7 III is the
+  best-selling descendant. That CC BY photograph has since been replaced by a **user-supplied
+  Sony film image** — this pack's recipes are film simulations, so film rather than a body is
+  the honest subject.
 - **filmstocks — Fujifilm film canisters** — this pack is named after Fujifilm's *film stocks*
   rather than a camera, so its icon is Fujifilm film canisters instead of a body. The recipes in
   the pack (Pro 400H, Superia 400, C200 …) are all Fujifilm colour negatives.
@@ -152,14 +158,23 @@ python tools/build_pack_icons.py                                   # render ever
 python tools/build_pack_icons.py --pack leica                      # render one
 ```
 
-`tools/build_pack_icons.py` keys the camera or film stock out of its photograph into a
-transparent silhouette (the same treatment as `assets/app-icon/`); its docstring explains the
-framing and keying. If a master is replaced, re-run the render — the PNGs are committed,
-so a stale render would otherwise ship.
+`tools/build_pack_icons.py` keys the camera or film product out of its photograph into a
+silhouette and composites it onto a solid near-black rounded tile (RGB(28,28,30) ≈ #1C1C1E),
+so a dark subject stays legible on a dark launcher wallpaper; the rounded corners stay and
+everything outside the rounded rect is transparent, so the icon reads as a launcher badge rather
+than a square photo. Pass `--no-bg` to recover the previous transparent-only silhouette. Its
+docstring explains the two rendering paths and the framing/keying. If a master is replaced,
+re-run the render — the PNGs are committed, so a stale render would otherwise ship.
+
+**The silhouettes now sit on a dark tile.** A pure cut-out was legible on a light wallpaper but
+a dark subject (the Leica M9, the Hasselblad body) disappeared into a dark one, so the render
+composites each silhouette onto a solid near-black rounded tile (RGB(28,28,30) ≈ #1C1C1E).
+Everything outside the rounded rect stays fully transparent, so it still reads as a launcher
+badge rather than a square photo. `--no-bg` restores the transparent-only rendering.
 
 ## Trademark
 
 Separately from copyright: the pack names and the cameras depicted are trademarks of their
 respective owners, and this project is not affiliated with or endorsed by any of them. See
 the naming discussion in `docs/BRAND-PACKS.md` — that section is deliberately not optimistic
-about what a `<Brand> Looks` app name does and does not achieve.
+about what a `<Brand> Style` app name does and does not achieve.

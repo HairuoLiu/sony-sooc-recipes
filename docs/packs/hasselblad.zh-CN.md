@@ -1,4 +1,4 @@
-# Hasselblad Looks — SonySOOCRecipes-hasselblad.apk
+# Hasselblad Style — SonySOOCRecipes-hasselblad.apk
 
 <p align="center"><a href="hasselblad.md">English</a> · <b>简体中文</b></p>
 
@@ -6,7 +6,7 @@
 
 | | |
 |---|---|
-| 应用名称 | Hasselblad Looks |
+| 应用名称 | Hasselblad Style |
 | 包名 | com.hairuoliu.sonysoocrecipes.hasselblad |
 | APK 文件名 | SonySOOCRecipes-hasselblad.apk |
 | 已编译配方 | 4 |

@@ -1,4 +1,4 @@
-# Ricoh GR Looks — SonySOOCRecipes-ricoh.apk
+# Ricoh GR Style — SonySOOCRecipes-ricoh.apk
 
 <p align="center"><b>English</b> · <a href="ricoh.zh-CN.md">简体中文</a></p>
 
@@ -6,7 +6,7 @@
 
 | | |
 |---|---|
-| **App name** | Ricoh GR Looks |
+| **App name** | Ricoh GR Style |
 | **Package name** | com.hairuoliu.sonysoocrecipes.ricoh |
 | **APK filename** | SonySOOCRecipes-ricoh.apk |
 | **Compiled recipes** | 11 |

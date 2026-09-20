@@ -17,22 +17,30 @@ catalog gates plus the self-test that proves the gates still fail on broken inpu
 
 ---
 
-## Unreleased — 2026-09-19 · a ninth brand pack, and all-new icon artwork
+## v0.7.0 — 2026-09-19 · brand-pack restructure, and all-new icon artwork
 
-- **A ninth brand pack: `filmstocks` (Fuji Film Looks).** The Fujifilm pack split in two.
+- **A ninth brand pack: `filmstocks` (Fuji Film Style).** The Fujifilm pack split in two.
   `fujifilm` now carries only the camera *simulations* — 16 compiled recipes from the
   `fuji-sim` group — and the Fujifilm film *stocks* (10 compiled recipes from the `fuji-film`
   group) moved to the new `filmstocks` pack. The release now ships **ten** APKs: the
   all-in-one plus nine single-brand packs, up from v0.6.0's nine.
-- **`ilford` renamed `Cinestill + Ilford Looks`.** It now also carries the `cine` group — 4
-  motion-picture looks (Cinestill 50D, Cinestill 800T, Classic Cinema, Rec709 Video) — for 9
-  compiled recipes across the `ilford` and `cine` groups. The `cine` group is a
-  motion-picture look family, not an Ilford product; it moved out of `unassigned_groups` into
-  this pack.
-- **All pack icons re-cut as transparent silhouettes.** Every pack icon is now a transparent
-  silhouette keyed from its source photograph, matching the all-in-one icon's style.
+- **`ilford` replaced by `nichefilm` (Niche Film Style).** The old `ilford` pack ("Cinestill +
+  Ilford Looks", groups `ilford` + `cine`, 9 recipes) was renamed to `nichefilm` and absorbed
+  `other-stocks` (17 compiled heritage recipes — Agfa, Polaroid, Ferrania and others), giving
+  **26** recipes across `ilford`, `cine` and `other-stocks`. Reason: the pack's icon is a
+  CineStill film product shot, which never matched a "Cinestill + Ilford" name; gathering the
+  niche / heritage film stocks into one pack fixes that mismatch and gives `other-stocks` a
+  home (it previously shipped only inside the all-in-one). The `cine` group is a
+  motion-picture look family, not an Ilford product, and `other-stocks` is a mixed bag of
+  heritage brands with no single brand behind it.
+- **All pack app names changed from "<X> Looks" to "<X> Style".** All nine packs, uniformly,
+  so the names read as stylistic rather than as an endorsement.
+- **New launcher icons on a dark rounded tile.** Every pack icon is a silhouette of its
+  camera or film stock, keyed from its source and composited onto a solid near-black rounded
+  tile (RGB 28,28,30 ≈ #1C1C1E) so dark subjects stay legible on dark wallpapers. The
+  previous transparent-only silhouette remains available with `--no-bg`.
 - **All nine pack icons use user-supplied commercial material.** `leica`, `fujifilm`,
-  `filmstocks`, `kodak`, `ilford`, `hasselblad`, `sony`, `ricoh` and `pentax` now use
+  `filmstocks`, `kodak`, `nichefilm`, `hasselblad`, `sony`, `ricoh` and `pentax` now use
   all-rights-reserved commercial photographs / official manufacturer renders supplied by the
   user, with no licence granted. The publishing party carries the risk; see
   `assets/app-icon-packs/CREDITS.md` for the honest provenance and the relaxed licence rule.
@@ -40,12 +48,12 @@ catalog gates plus the self-test that proves the gates still fail on broken inpu
   free-licensed image ships in any APK and there is no attribution obligation left — their
   former credit lines were removed rather than left behind for photographs that are no longer
   distributed.
-- **Five of those icons changed subject.** `filmstocks` shows Fujifilm film canisters (it is
-  named after the film, not a body), `ilford` a CineStill film product instead of the earlier
-  composed Cinestill + Ilford pair, `sony` a user-supplied camera image instead of the Wikimedia
-  α7 photograph, and both `ricoh` and `pentax` user-supplied camera images instead of their
-  Wikimedia `Ricoh GR` and `Pentax K1000` photographs. The exact camera models behind the three
-  replacement images supplied without captions have **not** been verified; see CREDITS.md.
+- **Six of the nine icons depict film, not a camera body.** `filmstocks`, `kodak`,
+  `nichefilm`, `pentax`, `ricoh` and `sony` show film stock; only `leica` (M9), `fujifilm`
+  (X100VI) and `hasselblad` (X2D II 100C) show a camera body. The `nichefilm` icon is the
+  CineStill film product shot that gave the restructure its name.
+- **Deferred to the next release.** The frosted two-bar main-screen UI theme — a replayed
+  patch over the upstream layout — is not part of this build; it lands in a later version.
 
 ---
 

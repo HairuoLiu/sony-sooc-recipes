@@ -4,17 +4,21 @@ One icon set per brand pack, keyed by the pack's `icon_set` in `catalog/packs.js
 `tools/apply_pack.py` copies the matching set into the fork's `res/drawable-*` — a pack
 with no set here silently keeps `../app-icon/`, so a half-finished set cannot break a build.
 
-| Directory | Pack | Camera / depicts |
+| Directory | Pack | Subject / depicts |
 |---|---|---|
 | `filmstocks/` | `filmstocks` | Fujifilm film canisters (film stock) |
 | `fujifilm/` | `fujifilm` | Fujifilm X100VI |
 | `hasselblad/` | `hasselblad` | Hasselblad X2D II 100C |
-| `ilford/` | `ilford` | CineStill film product (film stock) |
 | `kodak/` | `kodak` | Kodak Gold 400 / 400 canister (film stock) |
 | `leica/` | `leica` | Leica M9 |
-| `pentax/` | `pentax` | Pentax camera (user-supplied; source already had a transparent background) |
-| `ricoh/` | `ricoh` | Ricoh camera (user-supplied) |
-| `sony/` | `sony` | Sony camera |
+| `nichefilm/` | `nichefilm` | CineStill film product (film stock) |
+| `pentax/` | `pentax` | Pentax film product (user-supplied) |
+| `ricoh/` | `ricoh` | Ricoh film product (user-supplied) |
+| `sony/` | `sony` | Sony film product (user-supplied) |
+
+Six of the nine depict **film**, not a camera body — `filmstocks`, `kodak`, `nichefilm`,
+`pentax`, `ricoh`, `sony` — because those packs' recipes are film simulations. Only `leica`
+(M9), `fujifilm` (X100VI) and `hasselblad` (X2D II 100C) depict a camera body.
 
 Each directory holds the same five files as `../app-icon/`, at the same pixel sizes and in
 the same transparent RGBA format, plus `master.jpg` — the source photograph, downscaled to
@@ -62,14 +66,19 @@ main subject are dropped as specks (`--min-blob-frac`; the default keeps only th
 a multi-object cover such as three canisters needs a lower fraction or the extra objects vanish),
 and the result is centred and enlarged to fill ~80% of the square — that is
 `tools/cut_camera_covers.py`. `tools/build_pack_icons.py` then renders the cut-out at the four
-densities, intersecting its alpha with the rounded-rect mask so the corners stay rounded *and*
-the background stays transparent.
+densities, intersecting its alpha with the rounded-rect mask so the corners stay rounded.
+
+**The silhouette is then composited onto a solid dark tile** (RGB(28,28,30) ≈ #1C1C1E), which
+is the current default. A pure cut-out read fine on a light wallpaper but a dark subject — the
+Leica M9, the Hasselblad body — vanished into a dark one; the dark tile fixes that. Everything
+outside the rounded rect stays fully transparent, so it still reads as a launcher badge rather
+than a square photo. `--no-bg` restores the transparent-only rendering.
 
 The visible consequence, and the reason this is worth stating plainly: **both the all-in-one
-icon and the pack icons are transparent silhouettes** cut from their source photograph. The
-packs are told apart by which camera or film stock each silhouette depicts, not by a
-photographic background — giving each pack its own cover is the whole point of making them
-recognisable at a glance.
+icon and the pack icons are silhouettes cut from their source photograph**, each now sitting on
+the same dark rounded tile. The packs are told apart by which camera or film stock each
+silhouette depicts, not by a photographic background — giving each pack its own cover is the
+whole point of making them recognisable at a glance.
 
 See the header of `tools/build_pack_icons.py` for the two rendering paths and the reasoning
 behind each step.

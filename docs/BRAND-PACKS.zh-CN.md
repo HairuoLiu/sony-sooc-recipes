@@ -19,8 +19,8 @@
 之间，全部差异只有三样：
 
 1. Android **包名** —— `com.hairuoliu.sonysoocrecipes` 变成 `com.hairuoliu.sonysoocrecipes.<id>`；
-2. **`app_name`** 字符串（例如 `Leica Looks`）；
-3. **启动图标** —— 每个包展示该品牌最知名的相机。
+2. **`app_name`** 字符串（例如 `Leica Style`）；
+3. **启动图标** —— 其中三个包展示该品牌最知名的机身，另外六个展示胶片。
 
 `tools/apply_pack.py` 在一个全新的、已经改过包名的 checkout 上做这个转换；
 `tools/gen_recipes.py --pack <id>` 随后只把该包的组写进 `Recipes.java`。其余一切 —— 引擎、
@@ -76,15 +76,15 @@ Fujifilm 包又会覆盖 Leica 包 —— 最后你只剩一个 App，且是最�
 
 | `id` | `app_name` | 来源组 | 编译进的配方数 |
 |---|---|---|---|
-| `leica` | Leica Looks | `leica` | 20 |
-| `fujifilm` | Fujifilm Looks | `fuji-sim` | 16 |
-| `filmstocks` | Fuji Film Looks | `fuji-film` | 10 |
-| `ricoh` | Ricoh GR Looks | `ricoh-gr` | 11 |
-| `kodak` | Kodak Looks | `kodak` | 20 |
-| `pentax` | Pentax Looks | `pentax` | 11 |
-| `ilford` | Cinestill + Ilford Looks | `ilford`, `cine` | 9 |
-| `hasselblad` | Hasselblad Looks | `hasselblad` | 4 |
-| `sony` | Sony Looks | `sony` | 8 |
+| `leica` | Leica Style | `leica` | 20 |
+| `fujifilm` | Fujifilm Style | `fuji-sim` | 16 |
+| `filmstocks` | Fuji Film Style | `fuji-film` | 10 |
+| `ricoh` | Ricoh GR Style | `ricoh-gr` | 11 |
+| `kodak` | Kodak Style | `kodak` | 20 |
+| `pentax` | Pentax Style | `pentax` | 11 |
+| `nichefilm` | Niche Film Style | `ilford`, `cine`, `other-stocks` | 26 |
+| `hasselblad` | Hasselblad Style | `hasselblad` | 4 |
+| `sony` | Sony Style | `sony` | 8 |
 
 有三个数字比组的总条目小（或两组合计），这是预期的：
 
@@ -92,8 +92,9 @@ Fujifilm 包又会覆盖 Leica 包 —— 最后你只剩一个 App，且是最�
   现在已拆成独立的 `filmstocks` 包。所以这个包含 16 条。
 - **`ricoh`** 的 `ricoh-gr` 有 16 条，其中 **11** 条可编译（另 5 条是 `film-studio-matrix`
   仅登记）。
-- **`ilford`** 现在跨两个组：`ilford` 的 **5** 条加上 `cine` 的 **4** 条（电影感风格家族，
-  并非伊尔福产品），共 9 条。
+- **`nichefilm`** 现在跨三个组：`ilford` 的 **5** 条（伊尔福黑白）、`cine` 的 **4** 条（电影感
+  风格家族，并非伊尔福产品），以及 `other-stocks` 的 **17** 条（一堆混血胶片品牌——Agfa、Polaroid、
+  Ferrania 等，背后没有单一品牌），共 **26** 条。`other-stocks` 此前只随全量版 App 发布。
 
 所以某个包的数字看起来低时，先看看它的组是不是混进了另一套引擎，再怀疑是不是丢了东西。
 `tools/gen_recipes.py --pack <id>` 会打印实际写出的组，并在某个请求的组没贡献任何可编译配方时
@@ -104,8 +105,8 @@ Fujifilm 包又会覆盖 Leica 包 —— 最后你只剩一个 App，且是最�
 ## 5. 一个包能装什么、不能装什么
 
 一个包是 catalog 里**单品牌**的一片。铁律：**一个包的组必须全属于同一品牌**，因为包的图标和它的
-`app_name`（`<Brand> Looks`）标榜的就是这一个品牌。一个包把 Leica 和 Kodak 配方塞在「Leica
-Looks」名下，等于对自己的内容撒谎。
+`app_name`（`<Brand> Style`）标榜的就是这一个品牌。一个包把 Leica 和 Kodak 配方塞在「Leica
+Style」名下，等于对自己的内容撒谎。
 
 **刻意不进任何包的组。** 这些仍可在全量版 App 里用到，全量版照常构建、照常发布。`catalog/packs.json`
 把它们记在 `unassigned_groups` 里并附理由，而不是悄悄删掉，好让这个缺口显在数据里，而不是藏在
@@ -115,11 +116,11 @@ Looks」名下，等于对自己的内容撒谎。
 |---|---|
 | `canon-nikon` | 跨两个品牌 —— 得先拆成每个品牌一个包 |
 | `pana-olympus` | 跨两个品牌 —— 同理要拆 |
-| `other-stocks` | 混血胶片（Agfa、Polaroid、Ferrania …），没有单一品牌 |
 | `app-look` | 不是相机品牌 —— 是社交 / App 滤镜风 |
 
 `canon-nikon` 和 `pana-olympus` 是唯一有清晰路径变成包的：各自拆成 `canon` 与 `nikon`（或
-`panasonic` 与 `olympus`）组，然后各写一个包条目。其余两个是类别组、不是品牌，基本不可能成为包。
+`panasonic` 与 `olympus`）组，然后各写一个包条目。剩下那一个（`app-look`）是类别组、不是品牌，
+基本不可能成为包。
 
 一个包也不能装 `film-studio-matrix` 条目 —— 那些仅登记、哪都编译不进，自然不会出现在写出的
 `Recipes.java` 里。
@@ -183,8 +184,9 @@ src/com/hairuoliu/sonysoocrecipes/        （基包）
 
 ## 7. 图标 —— 从哪来、怎么生成、以及归属义务
 
-每个包的启动图标，是用**该品牌最知名相机的照片**构建的——`filmstocks`、`kodak`、`ilford`
-这三个包是胶片罐而非相机（它们是按胶片命名，不是按机身）。**九个包现在全部**用**用户专门提供的、
+每个包的启动图标，是用**该品牌产品的照片**构建的——**三个**包展示相机机身（`leica` 的 M9、
+`fujifilm` 的 X100VI、`hasselblad` 的 X2D II 100C），另外**六个**展示胶片：`filmstocks`、
+`kodak`、`nichefilm`、`pentax`、`ricoh`、`sony`（这六个包按胶片命名，不是按机身）。**九个包现在全部**用**用户专门提供的、
 保留全部权利的商业照片，未授予任何许可** —— `ricoh` 与 `pentax` 是最后两张 Wikimedia Commons
 照片，也已换成用户来图，所以**没有任何自由许可图片随任一 APK 发布**。逐张来源与「放宽许可」的约定记在
 `assets/app-icon-packs/CREDITS.md` 里；而因为图标随 APK 一起发布，许可与署名必须**随 APK 走**：它进
@@ -221,11 +223,11 @@ Kārlis Dambrāns；Pentax K1000，作者 Terry Presley），必须署名。这�
 
 ## 8. 命名与商标 —— 实话实说
 
-`app_name` 用 **`<Brand> Looks`** 形式，而不是裸品牌名或相机型号数字。理由很窄也很实际：用一个商标
-给分发的 App 命名，**暗示背书**，而背书才是真能让一个项目被下架的风险。`Leica Looks` 描述的是这个
+`app_name` 用 **`<Brand> Style`** 形式，而不是裸品牌名或相机型号数字。理由很窄也很实际：用一个商标
+给分发的 App 命名，**暗示背书**，而背书才是真能让一个项目被下架的风险。`Leica Style` 描述的是这个
 App 拿 Leica 的味道做了什么；单独的 `Leica` 会让人以为 Leica 做了或认可了它。
 
-**直说：`<Brand> Looks` 形式是降低风险，不是获得许可。** 在 App 名里用品牌名仍然是商标使用。指示性
+**直说：`<Brand> Style` 形式是降低风险，不是获得许可。** 在 App 名里用品牌名仍然是商标使用。指示性
 或描述性使用 —— 如实说明这个 App 是*为*什么用的 —— 在某些司法辖区是一种*抗辩*，不是*许可*，而应用
 商店比法院更严。全量版 App 保持品牌中立（`Sony SOOC Recipes`）并仍是默认下载，正是为了让项目的主分发
 不挂任何一个品牌的名。
@@ -269,9 +271,9 @@ tools/build_apk.sh --all-packs         # 全量版 App + packs.json 里的每个
 
 1. **改 `catalog/packs.json`。** 往 `packs` 里加一条：
    ```json
-   { "id": "contax", "app_name": "Contax Looks", "groups": ["contax"], "icon_set": "contax" }
+   { "id": "contax", "app_name": "Contax Style", "groups": ["contax"], "icon_set": "contax" }
    ```
-   `app_name` 用 `<Brand> Looks` 形式（§8）。`groups` 必须**只有一个品牌** —— 如果该品牌配方当前
+   `app_name` 用 `<Brand> Style` 形式（§8）。`groups` 必须**只有一个品牌** —— 如果该品牌配方当前
    在一个还跨另一品牌的组里（如 `canon-nikon`），先在 `catalog/filters.json` 里把它拆开。
 
 2. **确认组是单品牌且可编译。** 跑 `tools/gen_recipes.py --pack contax` 看输出：它打印写出的组，并在

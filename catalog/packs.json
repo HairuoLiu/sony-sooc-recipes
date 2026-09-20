@@ -21,55 +21,55 @@
   "packs": [
     {
       "id": "leica",
-      "app_name": "Leica Looks",
+      "app_name": "Leica Style",
       "groups": ["leica"],
       "icon_set": "leica"
     },
     {
       "id": "fujifilm",
-      "app_name": "Fujifilm Looks",
+      "app_name": "Fujifilm Style",
       "groups": ["fuji-sim"],
       "icon_set": "fujifilm"
     },
     {
       "id": "filmstocks",
-      "app_name": "Fuji Film Looks",
+      "app_name": "Fuji Film Style",
       "groups": ["fuji-film"],
       "icon_set": "filmstocks"
     },
     {
       "id": "ricoh",
-      "app_name": "Ricoh GR Looks",
+      "app_name": "Ricoh GR Style",
       "groups": ["ricoh-gr"],
       "icon_set": "ricoh"
     },
     {
       "id": "kodak",
-      "app_name": "Kodak Looks",
+      "app_name": "Kodak Style",
       "groups": ["kodak"],
       "icon_set": "kodak"
     },
     {
       "id": "pentax",
-      "app_name": "Pentax Looks",
+      "app_name": "Pentax Style",
       "groups": ["pentax"],
       "icon_set": "pentax"
     },
     {
-      "id": "ilford",
-      "app_name": "Cinestill + Ilford Looks",
-      "groups": ["ilford", "cine"],
-      "icon_set": "ilford"
+      "id": "nichefilm",
+      "app_name": "Niche Film Style",
+      "groups": ["ilford", "cine", "other-stocks"],
+      "icon_set": "nichefilm"
     },
     {
       "id": "hasselblad",
-      "app_name": "Hasselblad Looks",
+      "app_name": "Hasselblad Style",
       "groups": ["hasselblad"],
       "icon_set": "hasselblad"
     },
     {
       "id": "sony",
-      "app_name": "Sony Looks",
+      "app_name": "Sony Style",
       "groups": ["sony"],
       "icon_set": "sony"
     }
@@ -82,7 +82,6 @@
     ],
     "canon-nikon": "spans two brands - needs one pack each before it can be split",
     "pana-olympus": "spans two brands - needs one pack each before it can be split",
-    "other-stocks": "mixed heritage stocks (Agfa, Polaroid, Ferrania...) - no single brand",
     "app-look": "not a camera brand - social/app filter looks"
   }
 }

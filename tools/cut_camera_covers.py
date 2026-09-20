@@ -31,6 +31,7 @@ white) so the committed source record stays uniform.
 """
 
 import argparse
+import io
 import sys
 from pathlib import Path
 
@@ -49,7 +50,7 @@ MODEL = "u2net"
 FILL = 0.80
 
 PACKS = ["leica", "fujifilm", "filmstocks", "ricoh", "kodak", "pentax",
-         "ilford", "hasselblad", "sony"]
+         "nichefilm", "hasselblad", "sony"]
 
 
 def cut(master: Path) -> Image.Image:
@@ -60,7 +61,7 @@ def cut(master: Path) -> Image.Image:
                  alpha_matting_foreground_threshold=240,
                  alpha_matting_background_threshold=10,
                  alpha_matting_erode_size=10)
-    return Image.open(__import__("io").BytesIO(out)).convert("RGBA")
+    return Image.open(io.BytesIO(out)).convert("RGBA")
 
 
 def load_prekeyed(path: Path) -> Image.Image | None:

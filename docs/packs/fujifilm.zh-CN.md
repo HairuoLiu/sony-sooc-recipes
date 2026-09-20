@@ -1,4 +1,4 @@
-# Fujifilm Looks — SonySOOCRecipes-fujifilm.apk
+# Fujifilm Style — SonySOOCRecipes-fujifilm.apk
 
 <p align="center"><a href="fujifilm.md">English</a> · <b>简体中文</b></p>
 
@@ -6,7 +6,7 @@
 
 | | |
 |---|---|
-| **应用名称** | Fujifilm Looks |
+| **应用名称** | Fujifilm Style |
 | **包名** | com.hairuoliu.sonysoocrecipes.fujifilm |
 | **APK 文件名** | SonySOOCRecipes-fujifilm.apk |
 | **已编译配方数** | 16 |

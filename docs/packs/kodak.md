@@ -1,10 +1,10 @@
-# Kodak Looks — SonySOOCRecipes-kodak.apk
+# Kodak Style — SonySOOCRecipes-kodak.apk
 
 <p align="center"><b>English</b> · <a href="kodak.zh-CN.md">简体中文</a></p>
 
 ## Summary
 
-- **App name:** Kodak Looks
+- **App name:** Kodak Style
 - **Package name:** com.hairuoliu.sonysoocrecipes.kodak
 - **APK filename:** SonySOOCRecipes-kodak.apk
 - **Compiled recipes:** 20

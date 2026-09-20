@@ -1,4 +1,4 @@
-# Fuji Film Looks — SonySOOCRecipes-filmstocks.apk
+# Fuji Film Style — SonySOOCRecipes-filmstocks.apk
 
 <p align="center"><b>English</b> · <a href="filmstocks.zh-CN.md">简体中文</a></p>
 
@@ -6,7 +6,7 @@
 
 | | |
 |---|---|
-| App name | Fuji Film Looks |
+| App name | Fuji Film Style |
 | Package name | com.hairuoliu.sonysoocrecipes.filmstocks |
 | APK filename | SonySOOCRecipes-filmstocks.apk |
 | Compiled recipes | 10 |

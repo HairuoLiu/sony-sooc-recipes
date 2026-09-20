@@ -1,10 +1,10 @@
-# Kodak Looks — SonySOOCRecipes-kodak.apk
+# Kodak Style — SonySOOCRecipes-kodak.apk
 
 <p align="center"><a href="kodak.md">English</a> · <b>简体中文</b></p>
 
 ## 概要
 
-- **应用名称：** Kodak Looks
+- **应用名称：** Kodak Style
 - **包名：** com.hairuoliu.sonysoocrecipes.kodak
 - **APK 文件名：** SonySOOCRecipes-kodak.apk
 - **已编译配方数：** 20

@@ -1,4 +1,4 @@
-# Fujifilm Looks — SonySOOCRecipes-fujifilm.apk
+# Fujifilm Style — SonySOOCRecipes-fujifilm.apk
 
 <p align="center"><b>English</b> · <a href="fujifilm.zh-CN.md">简体中文</a></p>
 
@@ -6,7 +6,7 @@
 
 | | |
 |---|---|
-| **App name** | Fujifilm Looks |
+| **App name** | Fujifilm Style |
 | **Package name** | com.hairuoliu.sonysoocrecipes.fujifilm |
 | **APK filename** | SonySOOCRecipes-fujifilm.apk |
 | **Compiled recipes** | 16 |

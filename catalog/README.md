@@ -131,7 +131,7 @@ python tools/gen_recipes.py --stdout  # 看生成结果
 | 字段 | 必填 | 说明 |
 |---|---|---|
 | `id` | ✔ | 包标识，也是包名后缀、源码子目录名、图标集目录名 |
-| `app_name` | ✔ | 装到相机上显示的名字，约定用 `<Brand> Looks` 形式（见 BRAND-PACKS §8） |
+| `app_name` | ✔ | 装到相机上显示的名字，约定用 `<Brand> Style` 形式（见 BRAND-PACKS §8） |
 | `groups` | ✔ | 该包编译进的 `groups[].id` 列表，**必须同属一个品牌** |
 | `icon_set` | ✔ | 图标集目录名，对应 `assets/app-icon-packs/<icon_set>/` |
 
@@ -147,7 +147,6 @@ python tools/gen_recipes.py --stdout  # 看生成结果
 |---|---|
 | `canon-nikon` | 跨两个品牌——要先拆成各一个包 |
 | `pana-olympus` | 跨两个品牌——同理要拆 |
-| `other-stocks` | 混血胶片，无单一品牌 |
 | `app-look` | 不是相机品牌，是社交 / App 滤镜风 |
 
 新增一个包时，往 `packs` 加一项即可；`release.yml` 的矩阵会自动纳入，无需改工作流。

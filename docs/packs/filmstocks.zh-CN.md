@@ -1,4 +1,4 @@
-# Fuji Film Looks — SonySOOCRecipes-filmstocks.apk
+# Fuji Film Style — SonySOOCRecipes-filmstocks.apk
 
 <p align="center"><a href="filmstocks.md">English</a> · <b>简体中文</b></p>
 
@@ -6,7 +6,7 @@
 
 | | |
 |---|---|
-| 应用名称 | Fuji Film Looks |
+| 应用名称 | Fuji Film Style |
 | 包名 | com.hairuoliu.sonysoocrecipes.filmstocks |
 | APK 文件名 | SonySOOCRecipes-filmstocks.apk |
 | 已编译配方 | 10 |

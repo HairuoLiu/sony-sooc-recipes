@@ -23,10 +23,15 @@ halo or eat the camera.
 Two rendering paths, chosen per pack by whether a cut-out exists:
 
   * **Cut-out (preferred).** If `ROOT.parent/camera-covers/cutout/<pack-id>.png` exists,
-    `render_rgba()` renders it as a transparent silhouette. That source was already keyed
-    semantically by tools/cut_camera_covers.py (rembg / U-Net), which *can* separate a black
-    camera from a dark background. The cut-out's own alpha is intersected with the rounded
-    mask, so the corners round off *and* the keyed background stays transparent.
+    `render_rgba()` renders it as a silhouette on a solid dark rounded tile. That source was
+    already keyed semantically by tools/cut_camera_covers.py (rembg / U-Net), which *can*
+    separate a black camera from a dark background. The silhouette is laid over a near-black
+    rounded-rect fill (RGB(28,28,30) ≈ #1C1C1E) so a dark subject stays legible on a dark
+    launcher wallpaper, and the two alphas are intersected with the rounded mask: the corners
+    round off, the keyed background is replaced by the dark fill, and everything outside the
+    rounded rect stays fully transparent — which is what makes it read as a launcher badge
+    rather than a square photo. The previous transparent-only behaviour is still available
+    with `--no-bg`.
   * **Framed (fallback).** With no cut-out, `render()` falls back to `master.jpg`: the
     subject is located against the photograph's own border colour and framed into a rounded
     square — padded rather than cropped, so the camera is never cut off. A framed tile is a
@@ -227,31 +232,45 @@ def render(square: Image.Image, out: Path) -> list[tuple[Path, int]]:
     return written
 
 
-def render_rgba(square: Image.Image, out: Path) -> list[tuple[Path, int]]:
+def render_rgba(square: Image.Image, out: Path, with_bg: bool = True
+                ) -> list[tuple[Path, int]]:
     """Like render(), but for a *cut-out* master whose own alpha is the transparent
-    camera silhouette.
+    camera (or film) silhouette.
 
     The plain render() overwrites alpha with the rounded-rect mask, which would turn the
-    cut-out's soft, see-through camera back into an opaque rectangle. Here the two alphas
-    are intersected instead: the outer corners are rounded AND the camera keeps its
-    keyed-out background. The square is expected to already be centred and sized (the
-    camera filling ~FILL of the side) — that is what tools/cut_camera_covers.py produces.
+    cut-out's soft, see-through subject back into an opaque rectangle. Here the subject's
+    alpha is intersected with the rounded mask instead, so the outer corners round off and
+    the keyed-out background stays keyed.
+
+    By default (``with_bg=True``) the silhouette is then composited onto a solid dark
+    rounded tile (RGB(28,28,30) ≈ #1C1C1E) so a dark subject stays legible on a dark
+    launcher wallpaper — the dark fill is what keeps a black camera readable against a
+    black wallpaper. Everything outside the rounded rect is left fully transparent either
+    way, so the icon reads as a launcher badge rather than a square photo. Pass
+    ``with_bg=False`` (or the ``--no-bg`` flag) to keep the previous transparent-only
+    behaviour. The square is expected to already be centred and sized (the subject filling
+    ~FILL of the side) — that is what tools/cut_camera_covers.py produces.
     """
+    def tile(side: int) -> Image.Image:
+        art = square.resize((side, side), Image.LANCZOS).convert("RGBA")
+        mask_pil = rounded_mask(side)
+        mask = np.asarray(mask_pil).astype(np.uint16)
+        # Clip the silhouette to the rounded rect first, so nothing can survive outside it.
+        alpha = np.asarray(art.split()[-1]).astype(np.uint16)
+        art.putalpha(Image.fromarray((alpha * mask // 255).astype(np.uint8), "L"))
+        if with_bg:
+            bg = Image.new("RGBA", (side, side), (28, 28, 30, 255))
+            bg.putalpha(mask_pil)
+            art = Image.alpha_composite(bg, art)
+        return art
+
     written: list[tuple[Path, int]] = []
     for name, side in DENSITIES.items():
-        art = square.resize((side, side), Image.LANCZOS).convert("RGBA")
-        alpha = np.asarray(art.split()[-1]).astype(np.uint16)
-        mask = np.asarray(rounded_mask(side)).astype(np.uint16)
-        new_a = (alpha * mask // 255).astype(np.uint8)
-        art.putalpha(Image.fromarray(new_a, "L"))
+        art = tile(side)
         p = out / f"ic_launcher-{name}.png"
         art.save(p)
         written.append((p, side))
-    art = square.resize((LARGE, LARGE), Image.LANCZOS).convert("RGBA")
-    alpha = np.asarray(art.split()[-1]).astype(np.uint16)
-    mask = np.asarray(rounded_mask(LARGE)).astype(np.uint16)
-    new_a = (alpha * mask // 255).astype(np.uint8)
-    art.putalpha(Image.fromarray(new_a, "L"))
+    art = tile(LARGE)
     p = out / f"icon-{LARGE}.png"
     art.save(p)
     written.append((p, LARGE))
@@ -291,6 +310,10 @@ def main() -> int:
     ap.add_argument("--import", dest="import_dir", type=Path, metavar="DIR",
                     help="copy DIR/<pack-id>.jpg in as the master for each pack, then stop "
                          "(downscaled to %d px; run again without --import to render)" % MASTER_MAX)
+    ap.add_argument("--no-bg", dest="no_bg", action="store_true",
+                    help="render cut-outs as transparent silhouettes (the previous default); "
+                         "without this, each silhouette is composited onto a solid dark "
+                         "rounded tile so dark subjects stay legible on dark wallpapers")
     args = ap.parse_args()
 
     packs = load_packs(DEFAULT_PACKS)
@@ -325,7 +348,7 @@ def main() -> int:
         cut = (args.cutout / f"{pid}.png") if args.cutout else None
         if cut is not None and cut.is_file():
             square = Image.open(cut).convert("RGBA")
-            written = render_rgba(square, set_dir)
+            written = render_rgba(square, set_dir, with_bg=not args.no_bg)
             src = f"{cut.name} (cut-out)"
         else:
             master = set_dir / "master.jpg"

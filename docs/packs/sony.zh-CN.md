@@ -1,10 +1,10 @@
-# Sony Looks — SonySOOCRecipes-sony.apk
+# Sony Style — SonySOOCRecipes-sony.apk
 
 <p align="center"><a href="sony.md">English</a> · <b>简体中文</b></p>
 
 ## 概要
 
-- **应用名称：** Sony Looks
+- **应用名称：** Sony Style
 - **包名：** com.hairuoliu.sonysoocrecipes.sony
 - **APK 文件名：** SonySOOCRecipes-sony.apk
 - **已编译配方数：** 8

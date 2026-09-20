@@ -1,10 +1,10 @@
-# Leica Looks — SonySOOCRecipes-leica.apk
+# Leica Style — SonySOOCRecipes-leica.apk
 
 <p align="center"><b>English</b> · <a href="leica.zh-CN.md">简体中文</a></p>
 
 ## Summary
 
-- **App name:** Leica Looks
+- **App name:** Leica Style
 - **Package name:** com.hairuoliu.sonysoocrecipes.leica
 - **APK filename:** SonySOOCRecipes-leica.apk
 - **Compiled recipes:** 20
