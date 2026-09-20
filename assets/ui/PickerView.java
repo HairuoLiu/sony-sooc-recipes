@@ -44,9 +44,9 @@ public class PickerView extends View {
         bg.setColor({picker_bg});
         edge.setColor(0x66F2B85C); edge.setStyle(Paint.Style.STROKE); edge.setStrokeWidth(d);
         sel.setColor(ACCENT);
-        head.setColor({picker_dim}); head.setTextSize(9 * d); head.setFakeBoldText(true);
-        item.setColor({picker_ink}); item.setTextSize(13 * d);
-        small.setColor({picker_dim}); small.setTextSize(10 * d);
+        head.setColor({picker_dim}); head.setTextSize(11 * d); head.setFakeBoldText(true);
+        item.setColor({picker_ink}); item.setTextSize(15 * d);
+        small.setColor({picker_dim}); small.setTextSize(12 * d);
         rule.setColor({picker_rule});
         track.setColor(0x260F1B26); thumb.setColor(0xCCF2B85C);
     }
@@ -84,7 +84,11 @@ public class PickerView extends View {
         c.drawLine(pad, top - 5 * d, w - pad, top - 5 * d, rule);
 
         // list
-        float y = listTop;
+        // Anchor row `first` at the top of the viewport, so the window scrolls with the
+        // selection. The naive version (y = listTop + drawFlat*rowH) draws every row at its
+        // absolute offset, which pushes the selected recipe far below `bottom` the moment
+        // you scroll past the first screenful — the panel renders blank.
+        float y = listTop - first * rowH;
         int drawFlat = 0;
         for (int gg = 0; gg < ng; gg++) {
             if (drawFlat >= first && y < bottom) {

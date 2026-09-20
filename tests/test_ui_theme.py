@@ -523,6 +523,69 @@ class TestPickerBrowser(unittest.TestCase):
         self.assertEqual(raw.count("{"), raw.count("}"),
                          "PickerView.java has unbalanced braces — it would not compile")
 
+    def test_picker_font_is_bumped_by_two(self):
+        """The FN browser font was nudged +2 sizes (see the user's font-bump request).
+
+        PickerView scales every size by the device density d, so the bump is +2 in the
+        density-independent part: header 9->11, recipe name 13->15, summary 10->12. This
+        locks the decision so a later edit cannot silently shrink it back.
+        """
+        raw = patch_ui.PICKER_TEMPLATE.read_text(encoding="utf-8")
+        self.assertIn("head.setTextSize(11 * d)", raw, "header font should be 11*d (+2)")
+        self.assertIn("item.setTextSize(15 * d)", raw, "recipe-name font should be 15*d (+2)")
+        self.assertIn("small.setTextSize(12 * d)", raw, "summary font should be 12*d (+2)")
+        # the old sizes must be gone from the three paint declarations (the baselines in
+        # onDraw still use 13*d etc. as vertical offsets, so only the setTextSize lines)
+        self.assertNotIn("head.setTextSize(9 * d)", raw)
+        self.assertNotIn("item.setTextSize(13 * d)", raw)
+        self.assertNotIn("small.setTextSize(10 * d)", raw)
+
+
+class TestPreviewPickerRenders(unittest.TestCase):
+    """tools/preview_picker.py is the only way to see the FN browser without the camera.
+
+    The browser is Canvas-drawn, so the layout-aware preview_ui cannot reach it; this tool
+    mirrors PickerView.onDraw() from the catalog and theme. Like TestPreviewRenders, it is
+    not a gate on the APK, but it is useless if it silently stops reflecting the browser.
+    """
+
+    def setUp(self):
+        sys.path.insert(0, str(ROOT / "tools"))
+        try:
+            import preview_picker  # noqa: PLC0415
+        except ImportError as exc:                     # pragma: no cover
+            self.skipTest(f"preview_picker is not importable: {exc}")
+        self.preview_picker = preview_picker
+
+    def test_the_page_builds_from_the_catalog_and_theme(self):
+        theme = patch_ui.load_theme(patch_ui.DEFAULT_THEME)
+        catalog = json.loads(self.preview_picker.CATALOG.read_text(encoding="utf-8"))
+        selected = self.preview_picker.pick_selected(catalog, None)
+        page = self.preview_picker.build_html(theme, catalog, 2, selected, "Quicksand")
+        self.assertIn("RECIPES", page, "the preview does not show the browser header")
+        # both the current and the bumped frame are on the page
+        self.assertIn("Current (9 / 13 / 10 sp)", page)
+        self.assertIn("After (+2:", page)
+        # the window must actually render recipe rows, not a blank panel (the scroll
+        # anchor bug drew the selection off-screen and showed nothing)
+        self.assertIn("rgba(242,184,92", page,
+                      "no selection highlight drawn — the browser window rendered blank")
+        self.assertIsNone(re.search(r"\{[a-z_]+\}", page),
+                          "an unfilled {token} reached the preview page")
+
+    def test_the_bump_changes_the_rendered_font_size(self):
+        """The bumped frame must actually draw larger text than the current one.
+
+        A bump that changed nothing would make the preview a lie; this checks the two
+        frames disagree on the rendered name font.
+        """
+        theme = patch_ui.load_theme(patch_ui.DEFAULT_THEME)
+        catalog = json.loads(self.preview_picker.CATALOG.read_text(encoding="utf-8"))
+        selected = self.preview_picker.pick_selected(catalog, None)
+        before = self.preview_picker.render_frame(theme, catalog, 0, selected, "Quicksand")
+        after = self.preview_picker.render_frame(theme, catalog, 2, selected, "Quicksand")
+        self.assertNotEqual(before, after, "the bumped frame is identical to the current one")
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
