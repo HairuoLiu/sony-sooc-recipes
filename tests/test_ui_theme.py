@@ -523,22 +523,25 @@ class TestPickerBrowser(unittest.TestCase):
         self.assertEqual(raw.count("{"), raw.count("}"),
                          "PickerView.java has unbalanced braces — it would not compile")
 
-    def test_picker_font_is_bumped_by_two(self):
-        """The FN browser font was nudged +2 sizes (see the user's font-bump request).
+    def test_picker_font_is_the_approved_nine_thirteen_ten(self):
+        """The FN browser font is pinned at 9sp / 13sp / 10sp.
 
-        PickerView scales every size by the device density d, so the bump is +2 in the
-        density-independent part: header 9->11, recipe name 13->15, summary 10->12. This
-        locks the decision so a later edit cannot silently shrink it back.
+        History: it was bumped to 11/15/12 on request, and every visual defect reported since
+        (text running under the PE tag, text escaping the gold selection bar, a tag that no
+        longer lined up with the two text lines) traced back to that bump. The bumps were
+        reverted and the layout fixes kept — 9/13/10 is now the signed-off baseline, and this
+        locks it so a later edit cannot silently grow it again.
+
+        Careful: 13*d / 10*d also appear as vertical baselines in onDraw, so only assert on
+        the setTextSize declarations.
         """
         raw = patch_ui.PICKER_TEMPLATE.read_text(encoding="utf-8")
-        self.assertIn("head.setTextSize(11 * d)", raw, "header font should be 11*d (+2)")
-        self.assertIn("item.setTextSize(15 * d)", raw, "recipe-name font should be 15*d (+2)")
-        self.assertIn("small.setTextSize(12 * d)", raw, "summary font should be 12*d (+2)")
-        # the old sizes must be gone from the three paint declarations (the baselines in
-        # onDraw still use 13*d etc. as vertical offsets, so only the setTextSize lines)
-        self.assertNotIn("head.setTextSize(9 * d)", raw)
-        self.assertNotIn("item.setTextSize(13 * d)", raw)
-        self.assertNotIn("small.setTextSize(10 * d)", raw)
+        self.assertIn("head.setTextSize(9 * d)", raw, "header font should be 9*d")
+        self.assertIn("item.setTextSize(13 * d)", raw, "recipe-name font should be 13*d")
+        self.assertIn("small.setTextSize(10 * d)", raw, "summary font should be 10*d")
+        self.assertNotIn("head.setTextSize(11 * d)", raw, "the +2 bump is back on the header")
+        self.assertNotIn("item.setTextSize(15 * d)", raw, "the +2 bump is back on the name")
+        self.assertNotIn("small.setTextSize(12 * d)", raw, "the +2 bump is back on the summary")
 
     def test_picker_text_stays_clear_of_the_tag(self):
         """Long recipe names must not run under the PE/CS tag, and the tag must be centred
@@ -568,7 +571,7 @@ class TestPickerBrowser(unittest.TestCase):
         rowH is 30d, hence the bottom must reach at least rowH-2d.
         """
         raw = patch_ui.PICKER_TEMPLATE.read_text(encoding="utf-8")
-        self.assertIn("r.set(x - 6 * d, y - 1 * d, xr + 6 * d, y + rowH - 2 * d)", raw,
+        self.assertIn("r.set(x - 6 * d, y + d / 2, xr + 6 * d, y + rowH - 2 * d)", raw,
                       "the selection bar does not extend far enough to cover the sub-text")
         self.assertNotIn("y + rowH - 5 * d", raw,
                          "the selection bar still stops above the sub-text descenders")

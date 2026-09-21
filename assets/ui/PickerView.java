@@ -44,9 +44,13 @@ public class PickerView extends View {
         bg.setColor({picker_bg});
         edge.setColor(0x66F2B85C); edge.setStyle(Paint.Style.STROKE); edge.setStrokeWidth(d);
         sel.setColor(ACCENT);
-        head.setColor({picker_dim}); head.setTextSize(11 * d); head.setFakeBoldText(true);
-        item.setColor({picker_ink}); item.setTextSize(15 * d);
-        small.setColor({picker_dim}); small.setTextSize(12 * d);
+        // 9sp / 13sp / 10sp — the sizes signed off against the preview. These were once bumped
+        // to 11/15/12 and every visual defect since (text under the tag, text escaping the
+        // selection bar, misaligned tag) traced back to that bump. Keep them here; get extra
+        // legibility from the layout, not from a larger font.
+        head.setColor({picker_dim}); head.setTextSize(9 * d); head.setFakeBoldText(true);
+        item.setColor({picker_ink}); item.setTextSize(13 * d);
+        small.setColor({picker_dim}); small.setTextSize(10 * d);
         rule.setColor({picker_rule});
         track.setColor(0x260F1B26); thumb.setColor(0xCCF2B85C);
     }
@@ -106,10 +110,10 @@ public class PickerView extends View {
                     int idx = start + k; Recipes.Recipe rc = Recipes.ALL[idx];
                     boolean on = idx == selected;
                     if (on) {
-                        // The bar must reach the sub-text descenders (~y+27d) without sheeting
-                        // empty gold above the name: the name's glyph top sits at ~y+2d, so a
-                        // top edge of y-1d leaves a snug strip and nothing more.
-                        r.set(x - 6 * d, y - 1 * d, xr + 6 * d, y + rowH - 2 * d);
+                        // Top edge keeps a fixed ~2.75d strip above the name glyphs. The glyph
+                        // top moves with the font (13d here, 15d during the +2 bump), so this
+                        // must be re-tuned whenever setTextSize changes.
+                        r.set(x - 6 * d, y + d / 2, xr + 6 * d, y + rowH - 2 * d);
                         c.drawRoundRect(r, 4 * d, 4 * d, sel);
                     }
                     // The tag lives in a fixed column on the right. Reserve that column and
