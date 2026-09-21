@@ -637,5 +637,86 @@ class TestPreviewPickerRenders(unittest.TestCase):
         self.assertNotEqual(before, after, "the bumped frame is identical to the current one")
 
 
+class TestPreviewMirrorsTheBrowser(unittest.TestCase):
+    """preview_picker.py and PickerView.java state the same layout numbers twice.
+
+    The preview exists so the browser can be judged in pixels without the camera. That
+    promise only holds while its copy of the geometry is the copy that ships. Every defect
+    fixed over the last rounds — text running under the PE/CS tag, text escaping the gold
+    selection bar, the header sitting on its own divider — was found by eye against this
+    preview, so any silent divergence means the next round is judged against a layout the
+    camera will never draw.
+
+    Nothing here restates a number. Each one is pulled out of both files and compared, so a
+    change on either side is either mirrored on the other or a failure with the two values
+    named in the message.
+    """
+
+    # One entry per shared value: how each side spells the *same* thing.
+    JAVA_SIDE = {
+        "pad":            r"pad\s*=\s*([\d.]+)\s*\*\s*d",
+        "header reserve": r"top\s*=\s*pad\s*\+\s*([\d.]+)\s*\*\s*d",
+        "footer reserve": r"bottom\s*=\s*h\s*-\s*pad\s*-\s*([\d.]+)\s*\*\s*d",
+        "row height":     r"rowH\s*=\s*([\d.]+)\s*\*\s*d",
+        "header size":    r"head\.setTextSize\(\s*([\d.]+)\s*\*\s*d\s*\)",
+        "name size":      r"item\.setTextSize\(\s*([\d.]+)\s*\*\s*d\s*\)",
+        "sub-text size":  r"small\.setTextSize\(\s*([\d.]+)\s*\*\s*d\s*\)",
+    }
+    PYTHON_SIDE = {
+        "pad":            r"pad\s*=\s*([\d.]+)\s*\*\s*d",
+        "header reserve": r"top\s*=\s*pad\s*\+\s*([\d.]+)\s*\*\s*d",
+        "footer reserve": r"bottom\s*=\s*SCREEN_H\s*-\s*pad\s*-\s*([\d.]+)\s*\*\s*d",
+        "row height":     r"row_h\s*=\s*([\d.]+)\s*\*\s*d",
+        "header size":    r"head_sz\s*=\s*\(\s*([\d.]+)\s*\+\s*bump\s*\)\s*\*\s*d",
+        "name size":      r"item_sz\s*=\s*\(\s*([\d.]+)\s*\+\s*bump\s*\)\s*\*\s*d",
+        "sub-text size":  r"small_sz\s*=\s*\(\s*([\d.]+)\s*\+\s*bump\s*\)\s*\*\s*d",
+    }
+
+    @staticmethod
+    def _java() -> str:
+        return patch_ui.PICKER_TEMPLATE.read_text(encoding="utf-8")
+
+    @staticmethod
+    def _python() -> str:
+        return (ROOT / "tools" / "preview_picker.py").read_text(encoding="utf-8")
+
+    def _stated_value(self, source: str, pattern: str, where: str, what: str) -> str:
+        found = re.search(pattern, source)
+        self.assertIsNotNone(
+            found,
+            f"{where} no longer declares {what}; the preview can no longer be trusted to "
+            f"mirror the browser ({pattern})",
+        )
+        return found.group(1)
+
+    def test_both_sides_declare_the_same_geometry(self):
+        java, python = self._java(), self._python()
+        for what in self.JAVA_SIDE:
+            ship = self._stated_value(java, self.JAVA_SIDE[what], "PickerView.java", what)
+            preview = self._stated_value(python, self.PYTHON_SIDE[what],
+                                         "preview_picker.py", what)
+            self.assertEqual(
+                ship, preview,
+                f"{what} diverged: the APK draws {ship} but the preview draws {preview}, so "
+                "pixels approved in the preview are not the pixels that ship.",
+            )
+
+    def test_the_guarded_geometry_is_still_the_signed_off_sizes(self):
+        """9/13/10 sp is the set signed off against the preview; do not drift off it silently.
+
+        The sizes were once bumped to 11/15/12 and every visual defect afterwards traced
+        back to that bump. Extracting them (rather than restating them) means this only
+        fails when someone actually changes them — which should be a deliberate act.
+        """
+        java = self._java()
+        for what in ("header size", "name size", "sub-text size"):
+            self.assertEqual(
+                self._stated_value(java, self.JAVA_SIDE[what], "PickerView.java", what),
+                {"header size": "9", "name size": "13", "sub-text size": "10"}[what],
+                f"{what} moved off the signed-off value; re-review the browser in the preview "
+                "before shipping new sizes",
+            )
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

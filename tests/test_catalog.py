@@ -429,9 +429,21 @@ class TestPinnedUpstream(unittest.TestCase):
                 return line.split(":", 1)[1].strip().strip('"').lower()
         return None
 
-    def test_catalog_pins_a_full_sha(self):
-        self.assertIsNotNone(self._sha_in_catalog(),
-                             "sources.recipe-lab.fetched_rev should carry a 40-char SHA")
+    @staticmethod
+    def _sha_in_build_script() -> str | None:
+        """The local half of the pipeline writes the pin as UPSTREAM_SHA=, not as YAML.
+
+        tools/build_apk.sh and release.yml are two spellings of the same checkout steps, and
+        _sha_in_workflow() looks for the YAML colon — so without this the shell copy is the
+        one pin nothing guards. See TestBuildPipelinesAgree for why that matters.
+        """
+        path = ROOT / "tools" / "build_apk.sh"
+        if not path.exists():
+            return None
+        for line in path.read_text(encoding="utf-8").splitlines():
+            if line.startswith("UPSTREAM_SHA="):
+                return line.split("=", 1)[1].strip().strip('"').lower()
+        return None
 
     def test_release_workflow_pins_the_same_sha(self):
         cat, wf = self._sha_in_catalog(), self._sha_in_workflow()
@@ -439,6 +451,18 @@ class TestPinnedUpstream(unittest.TestCase):
         self.assertEqual(cat, wf,
                          "upstream pin drifted: catalog says "
                          f"{cat}, release.yml builds {wf}. Update both.")
+
+    def test_catalog_pins_a_full_sha(self):
+        self.assertIsNotNone(self._sha_in_catalog(),
+                             "sources.recipe-lab.fetched_rev should carry a 40-char SHA")
+
+    def test_build_script_pins_the_same_sha(self):
+        cat, local = self._sha_in_catalog(), self._sha_in_build_script()
+        self.assertIsNotNone(local, "tools/build_apk.sh has no UPSTREAM_SHA")
+        self.assertEqual(cat, local,
+                         "a local build would clone a different upstream than CI: catalog "
+                         f"says {cat}, tools/build_apk.sh builds {local}. The catalog pin, "
+                         "release.yml and this script all have to agree.")
 
 
 class TestBuildPipelinesAgree(unittest.TestCase):

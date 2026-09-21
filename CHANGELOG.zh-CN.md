@@ -12,6 +12,19 @@
 
 ---
 
+## v0.7.4 — 2026-09-21 · 预览图必须与 APK 用同一套尺寸
+
+不改任何配方值，不改任何品牌包。这是一次结构评审后的仓库健康版本：三处能被测试守住的漏洞被守住，一个死文件被删掉。
+
+- **`tools/preview_picker.py` 与 `assets/ui/PickerView.java` 不会再悄悄对不上。** 两个文件各自写了一遍浏览器的几何——内边距、头部与底部的预留、行高，以及 9/13/10 sp 三个字号——而预览是在没有相机时判断这些像素的唯一依据。新增的 `TestPreviewMirrorsTheBrowser` 会从两边各自把这六个值抽出来比对，只改一边就会失败，并且错误信息里直接给出两边各自的数值。v0.7.2 以来修掉的每一个视觉缺陷都是对着这份预览用眼睛看出来的，这正是两份拷贝必须绑在一起的原因。
+- **上游 pin 的第三份拷贝现在也被守住了。** 同一个上游 SHA 写在 `catalog/filters.json`、`.github/workflows/release.yml` 和 `tools/build_apk.sh` 三处，但 `TestPinnedUpstream` 只认 YAML 的写法（`UPSTREAM_SHA:`），从不读 shell 里的 `UPSTREAM_SHA=`。也就是说本地构建完全可能克隆到和 CI 不同的上游，而全程关卡是绿的。新增的 `test_build_script_pins_the_same_sha` 补上了这一处。
+- **`catalog/index.html` 现在标出了自己从哪来。** 它由 `tools/gen_browser.py` 生成、并且是有意提交的，此前却没有任何标记——手工改一下看起来完全合理，然后会在下次生成时被覆盖。生成器现在会输出 `AUTO-GENERATED` 头。`tests/run_all.py` 的「是否过期」关卡立刻发现了这个变化，这正是它在起作用。
+- **删除 `docs/packs/_packs_data.json`**（5,081 行）。没有任何代码读它，也没有任何脚本生成它，而它里面写的还是 `catalog_version: 0.6.0`——目录早就走到 0.7.x 了。它等于同一批计数的又一份过期副本，而这个仓库一直在花力气保证这种计数只存在一处。需要的话仍可从 git 历史找回。
+
+*评估过但刻意没做：* 重命名 `tools/validate_catalog.py`、`tools/patch_ui.py`，以及挪走 `catalog/ui-theme.json`。这三个名字在 CHANGELOG、两份 README、两份架构文档和测试里被引用约二十处，改名的改动量远大于它能带来的清晰度，而它们本来就在 `README.md` 的工具表里写清楚了，那才是真正会去找它们的地方。
+
+---
+
 ## v0.7.2 — 2026-09-19 · 发布构建根本没把主屏装进去
 
 **v0.7.0 的 APK 里并没有它自己宣布的磨砂双栏主屏。** 本地构建有，发布构建没有：`.github/workflows/release.yml`
