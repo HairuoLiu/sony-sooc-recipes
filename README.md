@@ -134,6 +134,28 @@ then power-cycle — some settings only settle after a restart. That is the whol
 - **The a5100 has no Fn or AEL button**, so brand-list browsing and the hidden panel are
   unreachable there. The control wheel still reaches every look.
 
+### Two screens
+
+Opening the app gives you the **frosted two-bar main screen** — the look's name centred with
+its `CS`/`PE` tag, the camera's own status badge (`ACTIVE` / `PREVIEW` / `PROTECTED`), tuning,
+lossless compression and the parameter chips, split into a slim bar above and a slim bar below
+so the live view stays visible behind them.
+
+Press **Fn** and you get the **recipe browser**: one white single-column list holding every
+look this APK carries, grouped by category. Each row carries its name, a one-line summary of
+what it does to the image, and whether it is `CS` or `PE` — Creative Style also applies to
+RAW, Picture Effect only reaches JPEG.
+
+| Key | Does |
+| --- | --- |
+| ↑ ↓ or either dial | move through every look |
+| centre button | preview the highlighted look, and close the browser |
+| `ENTER` again, back on the main screen | actually store it on the camera |
+| Fn · MENU · AEL · DISP | close the browser |
+
+The browser is a separate screen rather than a restyle of the main one: it takes its own
+colours from `catalog/ui-theme.json` and leaves the main screen exactly as it was.
+
 ---
 
 ## Uninstall
