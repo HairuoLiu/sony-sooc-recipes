@@ -103,7 +103,11 @@ public class PickerView extends View {
                     int idx = start + k; Recipes.Recipe rc = Recipes.ALL[idx];
                     boolean on = idx == selected;
                     if (on) {
-                        r.set(x - 4 * d, y - 3 * d, xr + 4 * d, y + rowH - 5 * d);
+                        // The +2 font bump made the text taller than this bar: with name at
+                        // baseline y+13d (15d font) and sub-text at y+24d (12d font), the
+                        // sub-text descenders reach ~y+27d, so the old bottom of y+rowH-5d
+                        // (== y+25d) cut through them. Grow the bar to actually cover the text.
+                        r.set(x - 6 * d, y - 4 * d, xr + 6 * d, y + rowH - 2 * d);
                         c.drawRoundRect(r, 4 * d, 4 * d, sel);
                     }
                     // The tag lives in a fixed column on the right. Reserve that column and

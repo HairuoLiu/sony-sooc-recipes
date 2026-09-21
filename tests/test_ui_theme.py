@@ -559,6 +559,20 @@ class TestPickerBrowser(unittest.TestCase):
                       "the PE/CS tag must be a wider pill (16d padding, 52d floor), "
                       "not the old tight box")
 
+    def test_the_selection_bar_covers_the_enlarged_text(self):
+        """The gold selection bar must actually cover the row's text.
+
+        The +2 font bump made this fail silently: name baseline y+13d (15d font) and
+        sub-text baseline y+24d (12d font) put the sub-text descenders at ~y+27d, while the
+        bar stopped at y+rowH-5d (== y+25d) — so it cut through the bottom of the text.
+        rowH is 30d, hence the bottom must reach at least rowH-2d.
+        """
+        raw = patch_ui.PICKER_TEMPLATE.read_text(encoding="utf-8")
+        self.assertIn("r.set(x - 6 * d, y - 4 * d, xr + 6 * d, y + rowH - 2 * d)", raw,
+                      "the selection bar does not extend far enough to cover the sub-text")
+        self.assertNotIn("y + rowH - 5 * d", raw,
+                         "the selection bar still stops above the sub-text descenders")
+
 
 class TestPreviewPickerRenders(unittest.TestCase):
     """tools/preview_picker.py is the only way to see the FN browser without the camera.

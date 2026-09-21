@@ -234,9 +234,9 @@ def render_frame(theme: dict, catalog: dict, bump: int, selected_flat: int,
                 on = idx == selected_flat
                 if on:
                     rows.append(
-                        f'<div style="position:absolute;left:{pad - 4 * d}px;'
-                        f'top:{y - 3 * d}px;width:{SCREEN_W - 2 * pad + 8 * d}px;'
-                        f'height:{row_h - 5 * d}px;background:{accent};'
+                        f'<div style="position:absolute;left:{pad - 6 * d}px;'
+                        f'top:{y - 4 * d}px;width:{SCREEN_W - 2 * pad + 12 * d}px;'
+                        f'height:{row_h + 2 * d}px;background:{accent};'
                         f'border-radius:{4 * d}px"></div>')
                 name_col = accent_ink if on else ink
                 sum_col = accent_ink if on else dim
