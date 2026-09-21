@@ -22,13 +22,15 @@
 </p>
 
 <p align="center">
-  <img src="docs/assets/hardware/02-a7sii-leica-silver-soft.jpg" width="420" alt="The recipes app on a Sony alpha 7S II with Leica Silver (soft) selected">
+  <img src="docs/assets/hardware/03-a7sii-main-screen-cinestill-50d.jpg" width="420" alt="The recipes app on a Sony alpha 7S II with Cinestill 50D (Blue Velvet) selected">
   <br><sub>Running on a real α7S II — not a render. Every number on that screen was read back off the body, and every one matches the catalog exactly.</sub>
 </p>
 
 Sony closed its PlayMemories Camera Apps store in 2021, and every body made before late 2016
 lost its app channel. Those bodies still run an Android userspace, which means they can still
-be given things. This project collects 155 film looks into one APK you install once. After
+be given things. This project collects 155 film looks into one APK you install once. If that is
+more than you want to scroll through on a 3-inch screen, **nine per-brand APKs ship the same
+code with only one brand's looks inside** — install Kodak Style and the list holds Kodak. After
 that the look is not an app running in the background — it is simply what the camera does.
 Close the app, power-cycle, and your JPEG comes out graded in **P, A, S, M and video**.
 
@@ -184,26 +186,45 @@ and how to reset the stored look, is in **[docs/INSTALL.md](docs/INSTALL.md)**.
 
 ## On a real camera
 
-Photographs of the maintainer's own body — not renders, not a mockup. All three are an
-**α7S II** with the frosted two-bar main screen running on it.
+Photographs of the maintainer's own body — not renders, not a mockup. All five are an
+**α7S II** with the frosted two-bar main screen and the FN browser running on it.
 
 <p align="center">
-  <img src="docs/assets/hardware/01-a7sii-application-list.jpg" width="300" alt="The camera's Application List, showing installed packs and the Application Management entry">
-  <img src="docs/assets/hardware/03-a7sii-leica-teal.jpg" width="300" alt="Leica Teal on the camera">
-  <img src="docs/assets/hardware/04-a7sii-leica-vivid.jpg" width="300" alt="Leica Vivid on the camera">
+  <img src="docs/assets/hardware/01-a7sii-application-list.jpg" width="300" alt="The camera's Application List, showing Niche Film Style, Pentax Style, Ricoh GR Style, Fuji Film Style, Fujifilm Style and Hasselblad Style installed">
+  <img src="docs/assets/hardware/02-a7sii-application-list-more.jpg" width="300" alt="The same Application List scrolled on: Fuji Film Style, Fujifilm Style, Hasselblad Style, Kodak Style, Leica Style and the PlayMemories Camera Apps entry">
+  <img src="docs/assets/hardware/03-a7sii-main-screen-cinestill-50d.jpg" width="300" alt="The main screen showing Cinestill 50D (Blue Velvet): standard style, saturation -1, contrast +1, 5600K white balance">
   <br><sub>
-  The <b>Application List</b> — the installed packs, and <b>Application Management</b>, the entry you
-  uninstall from. Then Leica Teal and Leica Vivid, recipes 19 and 20 of the 20 in the Leica pack.
+  The <b>Application List</b>, scrolled over two frames — one entry per pack, nine of them on
+  this body. Then the <b>main screen</b>, with the Niche Film Style pack's Cinestill 50D
+  (Blue Velvet) selected.
   </sub>
 </p>
 
-- **Packs coexist.** Four brand packs installed side by side on one α7S II. That is what the
-  different package names exist to make possible, seen rather than asserted.
-- **The screen matches the catalog.** Leica Teal reads `NEUTRAL · −1 · +1 · 0 · DRO Lv3` and
-  Leica Vivid `VIVID · +1 · 0 · 0 · DRO Lv4` — both exactly what `catalog/filters.json` holds.
-- **The badge says `PROTECTED`.** The camera's settings store was write-protected, so these
-  were being *previewed*, not stored; the fix is OpenMemories:Tweak with *Backup protection*
-  off. It stays in the crop because it is what the screen said.
+<p align="center">
+  <img src="docs/assets/hardware/04-a7sii-browser-cine.jpg" width="300" alt="The FN recipe browser reading RECIPES 26, in the CINE group, with Cinestill 50D (Blue Velvet) selected">
+  <img src="docs/assets/hardware/05-a7sii-browser-ricoh-gr.jpg" width="300" alt="The FN recipe browser reading RECIPES 11, in the RICOH GR group, with GR Positive Film selected">
+  <br><sub>
+  The <b>FN browser</b> — a screen of its own, opened with the <b>Fn</b> key. On the left, the
+  Niche Film Style pack: 26 looks, scrolled to its 4-look CINE group. On the right, the Ricoh GR
+  Style pack: 11 looks, all of them RICOH GR. Same app, same body, different pack.
+  </sub>
+</p>
+
+- **The counts on screen are the catalog's.** `CINE · 4` is the catalog's four `cine` recipes,
+  and `RECIPES · 26` is the Niche Film Style pack — ilford 5, cine 4, other-stocks 17. The Ricoh
+  screen says `RECIPES · 11` because the `ricoh-gr` group's sixteen entries include five that are
+  reference-only and compile into nothing; only the eleven that compile reach the camera. That
+  split is `catalog/filters.json`, not a rounding.
+- **The values on screen are the catalog's.** Cinestill 50D (Blue Velvet) reads
+  `Standard · −1/+1 · 5600K B2` — which is `sat −1, con +1, wb 5600K, ab −2` in the catalog. GR
+  Positive Film reads `Standard · +3/+2 · A2` against `sat 3, con 2, wb ab 2`.
+- **Packs coexist, and you only need one.** Nine brand packs installed side by side on one body.
+  That is what the different package names exist to make possible — seen rather than asserted.
+  It also means you never have to carry all of them: each pack holds one brand's looks, so the
+  browser on the camera stays as short as the brand you actually shoot.
+- **The badge says `PROTECTED`.** The camera's settings store was write-protected, so this was
+  being *previewed*, not stored; the fix is OpenMemories:Tweak with *Backup protection* off. It
+  stays in the crop because it is what the screen said.
 - **It does not make the looks verified.** That a *body* runs the app is one claim; a *look*
   being faithful to its film is another, recorded per recipe in `verified`.
 

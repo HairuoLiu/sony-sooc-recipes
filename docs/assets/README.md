@@ -73,7 +73,7 @@ dialogue is 200 px wide is not a usable screenshot.
 hardware/<NN>-<body>-<slug>.jpg
 ```
 
-`01-a7sii-application-list.jpg`, `02-a7sii-leica-silver-soft.jpg`, … Numbered for reading
+`01-a7sii-application-list.jpg`, `02-a7sii-application-list-more.jpg`, … Numbered for reading
 order, with the **body in the name**, because the body is the point of the file: it is the
 evidence that a *named* camera runs this app. A photo that does not say which body it is
 proves only that some camera somewhere did.

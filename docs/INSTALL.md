@@ -256,7 +256,7 @@ the daemon on the camera keeps running until you disable it in Tweak.
   <img src="assets/hardware/01-a7sii-application-list.jpg" width="330" alt="The Application List on an A7S II, with Application Management as an entry in the list">
   <br><sub>What it looks like on an α7S II: <b>Application Management</b> (应用程序管理) is an
   entry <i>in</i> the Application List, not behind another submenu on this body. That is the one
-  to open. A photograph of the real screen, not a mockup.</sub>
+  to open. A photograph of the real screen, not a mockup. Nine packs installed side by side on one body — that is what the different package names buy you, and why you never have to carry all of them.</sub>
 </p>
 
 > **Honest note — the tool that installed it cannot remove it.** Sony-PMCA-RE has **no uninstall

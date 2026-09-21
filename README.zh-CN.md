@@ -30,6 +30,9 @@ a6000 的直出和屏幕有多难看你心里有数。索尼 2021 年关了应�
 
 本项目把散落在社区里的配方汇总成**一份数据**，再编译成 APK 装回去。
 
+一份数据也可以**只装一个品牌**：九个品牌包共用同一套代码，每个包里只放该品牌的配方——
+装 Kodak Style，相机上的列表里就只有柯达。三英寸屏幕上要翻的东西，和你拍的牌子一样少。
+
 ---
 
 ## 快速开始
@@ -119,30 +122,39 @@ adb uninstall com.hairuoliu.sonysoocrecipes     # 或 ...sonysoocrecipes.<品牌
 
 ## 真机实拍
 
-维护者自己机器上的照片——不是渲染图、不是效果图。四张都是 **α7S II**，屏幕上跑的就是磨砂双栏主界面。
+维护者自己机器上的照片——不是渲染图、不是效果图。五张都是 **α7S II**，屏幕上跑的就是磨砂双栏主界面和 FN 浏览器。
 
 <p align="center">
-  <img src="docs/assets/hardware/01-a7sii-application-list.jpg" width="300" alt="相机应用程序列表，含已装包与「应用程序管理」入口">
-  <img src="docs/assets/hardware/02-a7sii-leica-silver-soft.jpg" width="300" alt="Leica Silver (soft) 在相机上，每个数值都与 catalog 一致">
-  <img src="docs/assets/hardware/03-a7sii-leica-teal.jpg" width="300" alt="Leica Teal 在相机上">
-  <img src="docs/assets/hardware/04-a7sii-leica-vivid.jpg" width="300" alt="Leica Vivid 在相机上">
+  <img src="docs/assets/hardware/01-a7sii-application-list.jpg" width="300" alt="相机应用程序列表：Niche Film Style、Pentax Style、Ricoh GR Style、Fuji Film Style、Fujifilm Style、Hasselblad Style">
+  <img src="docs/assets/hardware/02-a7sii-application-list-more.jpg" width="300" alt="同一列表往下滚：Fuji Film Style、Fujifilm Style、Hasselblad Style、Kodak Style、Leica Style 与 PlayMemories Camera Apps 入口">
+  <img src="docs/assets/hardware/03-a7sii-main-screen-cinestill-50d.jpg" width="300" alt="主屏选中 Cinestill 50D (Blue Velvet)：Standard 风格，饱和度 −1、对比度 +1、白平衡 5600K">
   <br><sub>
-  最左：相机的<b>应用程序列表</b>——已装的几个包，以及<b>应用程序管理</b>，卸载就是从这一项进去
-  （见 <a href="#卸载">卸载</a>）。其余三张是 Leica Silver（柔）、Leica Teal、Leica Vivid，
-  Leica 包 20 款里的第 18、19、20 款。
+  <b>应用程序列表</b>分两帧拍完——一个包一项，这台机器上有九个。然后是<b>主屏</b>，
+  Niche Film Style 包里选中 Cinestill 50D (Blue Velvet)。
   </sub>
 </p>
 
-这几张照片能证明什么、不能证明什么：
+<p align="center">
+  <img src="docs/assets/hardware/04-a7sii-browser-cine.jpg" width="300" alt="FN 浏览器显示 RECIPES 26，当前在 CINE 组，选中 Cinestill 50D (Blue Velvet)">
+  <img src="docs/assets/hardware/05-a7sii-browser-ricoh-gr.jpg" width="300" alt="FN 浏览器显示 RECIPES 11，当前在 RICOH GR 组，选中 GR Positive Film">
+  <br><sub>
+  <b>FN 浏览器</b>——按 <b>Fn</b> 键打开的独立一屏。左边是 Niche Film Style 包：26 款，停在只有 4 款的 CINE 组。
+  右边是 Ricoh GR Style 包：11 款，全是 RICOH GR。同一个应用、同一台机身，只是装的包不同。
+  </sub>
+</p>
 
-- **机器跑得起来，而且多个包能并存。** 一台 α7S II 上同时装着四个品牌包。这正是"包名必须各不相同"
-  要换来的那个并存，是看见的，不是声称的。
-- **屏幕上写的就是 catalog 里的。** 每个数值都是从真机读回来的，且与 `catalog/filters.json` 逐值一致——
-  Leica Silver（柔）是 `LIGHT · sat −1 · con −2 · sharp −1 · DRO Lv5`，Leica Teal 是
-  `NEUTRAL · −1 · +1 · 0 · DRO Lv3`，Leica Vivid 是 `VIVID · +1 · 0 · 0 · DRO Lv4`。
-  数据与真机之间没有漂移。
+- **屏幕上的数字就是 catalog 里的。** `CINE · 4` 对应 catalog 里四款 `cine`；`RECIPES · 26` 是
+  Niche Film Style 包本身（ilford 5 + cine 4 + other-stocks 17）。Ricoh 那一屏写 `RECIPES · 11`，
+  是因为 `ricoh-gr` 组的 16 条里有 5 条仅供参考、不参与编译，真正进相机的是 11 条——
+  这个差值是 `catalog/filters.json` 定的，不是四舍五入。
+- **屏幕上的数值就是 catalog 里的。** Cinestill 50D (Blue Velvet) 显示 `Standard · −1/+1 · 5600K B2`，
+  对应 catalog 的 `sat −1, con +1, wb 5600K, ab −2`；GR Positive Film 显示 `Standard · +3/+2 · A2`，
+  对应 `sat 3, con 2, wb ab 2`。数据与真机之间没有漂移。
+- **多个包能并存，但你只需要装一个。** 一台机身上并排放着九个品牌包——这正是"包名必须各不相同"
+  要换来的结果，是看见的，不是声称的。反过来它也意味着你不必背着全部九个：每个包只装一个品牌的配方，
+  相机上那张列表就和你真正拍的牌子一样短。
 - **徽标显示的是 `PROTECTED`，不是 `ACTIVE`。** 那表示相机的设置存储区被写保护，所以当时是**在预览**
-  而不是存储——按文档处理即可：装 OpenMemories:Tweak 关掉 *Backup protection*。这一处**没有裁掉**，
+  而不是存储——装 OpenMemories:Tweak 关掉 *Backup protection* 即可。这一处**没有裁掉**，
   因为屏幕当时就是这么显示的。
 - **它不能证明这些观感是"已验证"的。** 「某台**机身**跑得起来」和「某款**观感**忠实于它模仿的胶片」
   是两件事。后者由 catalog 逐条记录在 `verified` 字段里。
