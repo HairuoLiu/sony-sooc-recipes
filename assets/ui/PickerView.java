@@ -106,21 +106,28 @@ public class PickerView extends View {
                         r.set(x - 4 * d, y - 3 * d, xr + 4 * d, y + rowH - 5 * d);
                         c.drawRoundRect(r, 4 * d, 4 * d, sel);
                     }
+                    // The tag lives in a fixed column on the right. Reserve that column and
+                    // clip the recipe name + sub-text to it, so a long name (the +2 font made
+                    // this visible) cannot run under the tag. The tag is centred between the
+                    // name line (baseline y+13d) and the sub-text line (baseline y+24d).
+                    String tag = rc.isEffect() ? "PE" : "CS";
+                    float tw = head.measureText(tag) + 8 * d, tx = xr - tw;
+                    c.save();
+                    c.clipRect(x - 4 * d, y, tx - 6 * d, y + rowH);
                     item.setColor(on ? {picker_accent_ink} : {picker_ink});
                     item.setFakeBoldText(on);
                     c.drawText(rc.name, x, y + 13 * d, item);
                     small.setColor(on ? {picker_accent_ink} : {picker_dim});
                     c.drawText(rc.summary(), x, y + 24 * d, small);
+                    c.restore();
+                    item.setFakeBoldText(false);
 
-                    String tag = rc.isEffect() ? "PE" : "CS";
-                    float tw = head.measureText(tag) + 8 * d, tx = xr - tw;
-                    r.set(tx, y + 4 * d, tx + tw, y + 16 * d);
+                    r.set(tx, y + 12 * d, tx + tw, y + 24 * d);
                     tagBg.setColor(on ? 0x331A1208
                                      : (rc.isEffect() ? 0x55B8741A : {picker_rule}));
                     c.drawRoundRect(r, 2 * d, 2 * d, tagBg);
                     head.setColor(on ? {picker_accent_ink} : {picker_dim});
-                    c.drawText(tag, tx + 4 * d, y + 13 * d, head);
-                    item.setFakeBoldText(false);
+                    c.drawText(tag, tx + 4 * d, y + 21 * d, head);
                 }
                 y += rowH;
                 if (y > bottom && drawFlat >= first + visible) break;

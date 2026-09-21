@@ -240,19 +240,24 @@ def render_frame(theme: dict, catalog: dict, bump: int, selected_flat: int,
                         f'border-radius:{4 * d}px"></div>')
                 name_col = accent_ink if on else ink
                 sum_col = accent_ink if on else dim
+                tag = "PE" if rc["is_effect"] else "CS"
+                tag_w = head_sz + 8 * d
+                # reserve the tag column on the right and clip the name/sub-text to it, so a
+                # long name cannot run under the tag (mirrors PickerView's clipRect)
+                name_max = SCREEN_W - 2 * pad - tag_w - 8 * d
                 rows.append(
                     f'<div style="position:absolute;left:{pad}px;top:{y + 1 * d}px;'
-                    f'font-size:{item_sz}px;font-weight:700;color:{name_col};'
-                    f'font-family:{fam_css}">{html.escape(rc["name"])}</div>')
+                    f'max-width:{name_max}px;overflow:hidden;text-overflow:ellipsis;'
+                    f'white-space:nowrap;font-size:{item_sz}px;font-weight:700;'
+                    f'color:{name_col};font-family:{fam_css}">{html.escape(rc["name"])}</div>')
                 rows.append(
                     f'<div style="position:absolute;left:{pad}px;top:{y + 13 * d}px;'
-                    f'font-size:{small_sz}px;color:{sum_col};'
+                    f'max-width:{name_max}px;overflow:hidden;text-overflow:ellipsis;'
+                    f'white-space:nowrap;font-size:{small_sz}px;color:{sum_col};'
                     f'font-family:{fam_css}">{html.escape(rc["summary"])}</div>')
-                tag = "PE" if rc["is_effect"] else "CS"
-                tw = head_sz + 8 * d
                 rows.append(
-                    f'<div style="position:absolute;right:{pad}px;top:{y + 4 * d}px;'
-                    f'width:{tw}px;height:{12 * d}px;line-height:{12 * d}px;text-align:center;'
+                    f'<div style="position:absolute;right:{pad}px;top:{y + 12 * d}px;'
+                    f'width:{tag_w}px;height:{12 * d}px;line-height:{12 * d}px;text-align:center;'
                     f'font-size:{9 * d}px;font-weight:700;border-radius:{2 * d}px;'
                     f'color:{sum_col};background:{rule if not on else "rgba(26,18,8,.2)"};'
                     f'font-family:{fam_css}">{tag}</div>')

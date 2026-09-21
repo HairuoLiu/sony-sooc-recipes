@@ -540,6 +540,22 @@ class TestPickerBrowser(unittest.TestCase):
         self.assertNotIn("item.setTextSize(13 * d)", raw)
         self.assertNotIn("small.setTextSize(10 * d)", raw)
 
+    def test_picker_text_stays_clear_of_the_tag(self):
+        """Long recipe names must not run under the PE/CS tag, and the tag must be centred
+        between the name and sub-text lines (see the font-bump feedback).
+
+        The name/sub-text are clipped to the left of the tag column, and the tag rect is
+        drawn at y+12d..y+24d (between the name baseline y+13d and sub baseline y+24d),
+        not at the old top-aligned y+4d..y+16d.
+        """
+        raw = patch_ui.PICKER_TEMPLATE.read_text(encoding="utf-8")
+        self.assertIn("c.clipRect(x - 4 * d, y, tx - 6 * d, y + rowH)", raw,
+                      "recipe text is not clipped clear of the tag column")
+        self.assertIn("r.set(tx, y + 12 * d, tx + tw, y + 24 * d)", raw,
+                      "the PE/CS tag is not centred between the two text lines")
+        self.assertNotIn("y + 4 * d, tx + tw, y + 16 * d", raw,
+                         "the tag is still top-aligned with the name line")
+
 
 class TestPreviewPickerRenders(unittest.TestCase):
     """tools/preview_picker.py is the only way to see the FN browser without the camera.
