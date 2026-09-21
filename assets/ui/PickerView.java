@@ -111,7 +111,9 @@ public class PickerView extends View {
                     // this visible) cannot run under the tag. The tag is centred between the
                     // name line (baseline y+13d) and the sub-text line (baseline y+24d).
                     String tag = rc.isEffect() ? "PE" : "CS";
-                    float tw = head.measureText(tag) + 8 * d, tx = xr - tw;
+                    // Wider pill: generous padding around the 2-char label, with a floor so a
+                    // short "PE"/"CS" still reads as a deliberate chip rather than a tight box.
+                    float tw = Math.max(head.measureText(tag) + 16 * d, 52 * d), tx = xr - tw;
                     c.save();
                     c.clipRect(x - 4 * d, y, tx - 6 * d, y + rowH);
                     item.setColor(on ? {picker_accent_ink} : {picker_ink});

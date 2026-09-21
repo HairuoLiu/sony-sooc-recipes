@@ -241,7 +241,7 @@ def render_frame(theme: dict, catalog: dict, bump: int, selected_flat: int,
                 name_col = accent_ink if on else ink
                 sum_col = accent_ink if on else dim
                 tag = "PE" if rc["is_effect"] else "CS"
-                tag_w = head_sz + 8 * d
+                tag_w = max(head_sz + 16 * d, 52 * d)
                 # reserve the tag column on the right and clip the name/sub-text to it, so a
                 # long name cannot run under the tag (mirrors PickerView's clipRect)
                 name_max = SCREEN_W - 2 * pad - tag_w - 8 * d

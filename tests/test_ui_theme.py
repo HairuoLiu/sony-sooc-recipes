@@ -555,6 +555,9 @@ class TestPickerBrowser(unittest.TestCase):
                       "the PE/CS tag is not centred between the two text lines")
         self.assertNotIn("y + 4 * d, tx + tw, y + 16 * d", raw,
                          "the tag is still top-aligned with the name line")
+        self.assertIn("head.measureText(tag) + 16 * d, 52 * d", raw,
+                      "the PE/CS tag must be a wider pill (16d padding, 52d floor), "
+                      "not the old tight box")
 
 
 class TestPreviewPickerRenders(unittest.TestCase):
