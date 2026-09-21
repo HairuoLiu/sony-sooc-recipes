@@ -185,7 +185,7 @@ def render_frame(theme: dict, catalog: dict, bump: int, selected_flat: int,
         total += 1 + counts[g]
 
     pad = 12 * d
-    top = pad + 16 * d
+    top = pad + 20 * d
     bottom = SCREEN_H - pad - 24 * d
     list_top = top
     list_h = bottom - list_top
@@ -235,8 +235,8 @@ def render_frame(theme: dict, catalog: dict, bump: int, selected_flat: int,
                 if on:
                     rows.append(
                         f'<div style="position:absolute;left:{pad - 6 * d}px;'
-                        f'top:{y - 4 * d}px;width:{SCREEN_W - 2 * pad + 12 * d}px;'
-                        f'height:{row_h + 2 * d}px;background:{accent};'
+                        f'top:{y - 1 * d}px;width:{SCREEN_W - 2 * pad + 12 * d}px;'
+                        f'height:{row_h - 1 * d}px;background:{accent};'
                         f'border-radius:{4 * d}px"></div>')
                 name_col = accent_ink if on else ink
                 sum_col = accent_ink if on else dim

@@ -59,7 +59,10 @@ public class PickerView extends View {
         float w = getWidth(), h = getHeight(), pad = 12 * d;
         c.drawRect(0, 0, w, h, bg);
 
-        float top = pad + 16 * d, bottom = h - pad - 24 * d;     // header / footer reserved
+        // top reserves the header band: the divider sits at top-5d and the list starts at
+        // top. pad+16d left the divider almost touching the "RECIPES · N" descriptors (the
+        // baseline is at pad+7d), so raise the reserve to give the header real breathing room.
+        float top = pad + 20 * d, bottom = h - pad - 24 * d;     // header / footer reserved
         float listTop = top, listH = bottom - listTop;
         float rowH = 30 * d;
         float x = pad, xr = w - pad;
@@ -103,11 +106,10 @@ public class PickerView extends View {
                     int idx = start + k; Recipes.Recipe rc = Recipes.ALL[idx];
                     boolean on = idx == selected;
                     if (on) {
-                        // The +2 font bump made the text taller than this bar: with name at
-                        // baseline y+13d (15d font) and sub-text at y+24d (12d font), the
-                        // sub-text descenders reach ~y+27d, so the old bottom of y+rowH-5d
-                        // (== y+25d) cut through them. Grow the bar to actually cover the text.
-                        r.set(x - 6 * d, y - 4 * d, xr + 6 * d, y + rowH - 2 * d);
+                        // The bar must reach the sub-text descenders (~y+27d) without sheeting
+                        // empty gold above the name: the name's glyph top sits at ~y+2d, so a
+                        // top edge of y-1d leaves a snug strip and nothing more.
+                        r.set(x - 6 * d, y - 1 * d, xr + 6 * d, y + rowH - 2 * d);
                         c.drawRoundRect(r, 4 * d, 4 * d, sel);
                     }
                     // The tag lives in a fixed column on the right. Reserve that column and

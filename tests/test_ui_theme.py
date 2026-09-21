@@ -568,10 +568,24 @@ class TestPickerBrowser(unittest.TestCase):
         rowH is 30d, hence the bottom must reach at least rowH-2d.
         """
         raw = patch_ui.PICKER_TEMPLATE.read_text(encoding="utf-8")
-        self.assertIn("r.set(x - 6 * d, y - 4 * d, xr + 6 * d, y + rowH - 2 * d)", raw,
+        self.assertIn("r.set(x - 6 * d, y - 1 * d, xr + 6 * d, y + rowH - 2 * d)", raw,
                       "the selection bar does not extend far enough to cover the sub-text")
         self.assertNotIn("y + rowH - 5 * d", raw,
                          "the selection bar still stops above the sub-text descenders")
+        self.assertNotIn("y - 4 * d, xr + 6 * d", raw,
+                         "the bar sheets empty gold well above the name glyphs again")
+
+    def test_the_header_has_room_above_its_divider(self):
+        """'RECIPES · N' must not sit on top of the divider line below it.
+
+        The baseline is at pad+7d and the divider at top-5d. With top = pad+16d the two were
+        only ~2d apart below the descenders, which read as the title sitting on the rule.
+        """
+        raw = patch_ui.PICKER_TEMPLATE.read_text(encoding="utf-8")
+        self.assertIn("float top = pad + 20 * d, bottom = h - pad - 24 * d;", raw,
+                      "the header band no longer reserves room above the divider")
+        self.assertIn("c.drawLine(pad, top - 5 * d, w - pad, top - 5 * d, rule);", raw,
+                      "the divider moved; re-check its clearance from the header baseline")
 
 
 class TestPreviewPickerRenders(unittest.TestCase):
