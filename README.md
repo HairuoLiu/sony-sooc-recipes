@@ -1,9 +1,9 @@
 <h1 align="center">sony-sooc-recipes</h1>
 
 <p align="center">
-  <b>Film looks, compiled into an APK, installed inside a Sony camera Sony stopped updating.</b>
+  <b>Turn a Sony camera Sony stopped updating into the cameras you wish it were — Leica, Hasselblad, Fujifilm, Ricoh, Pentax and more — with 155 film and camera looks, straight out of camera.</b>
   <br>
-  <sub>155 looks · 140 compiled into the APK · 14 groups · straight-out-of-camera JPEG</sub>
+  <sub>155 looks · 140 compiled into the APK · 14 groups — film stocks &amp; other cameras' colour, straight-out-of-camera JPEG</sub>
 </p>
 
 <!-- counts: total=155 compiled=140 -->
@@ -32,11 +32,13 @@
 
 Sony closed its PlayMemories Camera Apps store in 2021, and every body made before late 2016
 lost its app channel. Those bodies still run an Android userspace, which means they can still
-be given things. This project collects 155 film looks into one APK you install once. If that is
-more than you want to scroll through on a 3-inch screen, **nine per-brand APKs ship the same
-code with only one brand's looks inside** — install Kodak Style and the list holds Kodak. After
-that the look is not an app running in the background — it is simply what the camera does.
-Close the app, power-cycle, and your JPEG comes out graded in **P, A, S, M and video**.
+be given a new personality. This project turns a Sony into the cameras you reach for — a Leica
+monochrome, a Hasselblad natural, a Fujifilm colour, a Ricoh GR contrast, a Pentax reversal — and
+folds 155 film looks in besides. All of it lands in one APK you install once. If that is more than
+you want to scroll through on a 3-inch screen, **nine per-brand APKs ship the same code with only
+one camera's looks inside** — install Leica Style and the list reads Leica. After that the look is
+not an app running in the background — it is simply what the camera does. Close the app,
+power-cycle, and your JPEG comes out graded in **P, A, S, M and video**.
 
 > **Honest note.** These are approximations, not anybody's colour science. An a6000 has no
 > Picture Profile menu and cannot store a tone curve, so each look is assembled from what the
@@ -94,9 +96,11 @@ you care about. **[docs/FAQ.md](docs/FAQ.md#safety)** answers the rest.
 
 ## What's inside
 
-155 looks in 14 groups. **[The filter browser](catalog/index.html)** lists every one, searchable
-and filterable — it is a single self-contained HTML file, so download it and open it locally
-rather than viewing the source on GitHub.
+155 looks in 14 groups — film stocks and the colour of other cameras alike. The hook is the
+camera simulation: a Sony that shoots like a **Leica**, **Hasselblad**, **Fujifilm**, **Ricoh GR**
+or **Pentax**, not just a film stock. **[The filter browser](catalog/index.html)** lists every one,
+searchable and filterable — it is a single self-contained HTML file, so download it and open it
+locally rather than viewing the source on GitHub.
 
 | Group | Count | Representative looks |
 |---|---|---|
