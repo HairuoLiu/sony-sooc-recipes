@@ -22,8 +22,12 @@
 </p>
 
 <p align="center">
-  <img src="docs/assets/hardware/03-a7sii-main-screen-cinestill-50d.jpg" width="420" alt="The recipes app on a Sony alpha 7S II with Cinestill 50D (Blue Velvet) selected">
-  <br><sub>Running on a real α7S II — not a render. Every number on that screen was read back off the body, and every one matches the catalog exactly.</sub>
+  <img src="docs/assets/hardware/01-a7sii-application-list.jpg" width="300" alt="The camera's Application List: every brand Style pack installed side by side — Hasselblad Style, Ricoh GR Style, Kodak Style, Leica Style, Niche Film Style, Pentax Style and more">
+  <img src="docs/assets/hardware/03-a7sii-main-screen-cinestill-50d.jpg" width="300" alt="The screen you land on inside one pack — Cinestill 50D (Blue Velvet) selected on the frosted main screen">
+  <br><sub>
+  <b>Left:</b> the Application List — one entry per brand pack, nine of them on one body.
+  <b>Right:</b> the screen you land in when you open one — a real look already selected.
+  </sub>
 </p>
 
 Sony closed its PlayMemories Camera Apps store in 2021, and every body made before late 2016
@@ -186,17 +190,16 @@ and how to reset the stored look, is in **[docs/INSTALL.md](docs/INSTALL.md)**.
 
 ## On a real camera
 
-Photographs of the maintainer's own body — not renders, not a mockup. All five are an
-**α7S II** with the frosted two-bar main screen and the FN browser running on it.
+The two shots at the top of this page are the maintainer's own α7S II. The three below
+round it out — the Application List scrolled past the first frame, and the FN browser in
+two different packs. None are renders or mockups.
 
 <p align="center">
-  <img src="docs/assets/hardware/01-a7sii-application-list.jpg" width="300" alt="The camera's Application List, showing Niche Film Style, Pentax Style, Ricoh GR Style, Fuji Film Style, Fujifilm Style and Hasselblad Style installed">
   <img src="docs/assets/hardware/02-a7sii-application-list-more.jpg" width="300" alt="The same Application List scrolled on: Fuji Film Style, Fujifilm Style, Hasselblad Style, Kodak Style, Leica Style and the PlayMemories Camera Apps entry">
-  <img src="docs/assets/hardware/03-a7sii-main-screen-cinestill-50d.jpg" width="300" alt="The main screen showing Cinestill 50D (Blue Velvet): standard style, saturation -1, contrast +1, 5600K white balance">
   <br><sub>
-  The <b>Application List</b>, scrolled over two frames — one entry per pack, nine of them on
-  this body. Then the <b>main screen</b>, with the Niche Film Style pack's Cinestill 50D
-  (Blue Velvet) selected.
+  The <b>Application List</b> scrolled — the rest of the nine packs on this body (Kodak Style,
+  Leica Style, Hasselblad Style, the Fujifilm and Fuji Film entries, and the PlayMemories
+  Camera Apps entry). The first frame is the photograph at the top of this page.
   </sub>
 </p>
 

@@ -4,6 +4,14 @@
   <a href="README.md">English</a> · <b>简体中文</b>
 </p>
 
+<p align="center">
+  <img src="docs/assets/hardware/01-a7sii-application-list.jpg" width="300" alt="相机应用程序列表：Niche Film Style、Pentax Style、Ricoh GR Style、Fuji Film Style、Fujifilm Style、Hasselblad Style">
+  <img src="docs/assets/hardware/03-a7sii-main-screen-cinestill-50d.jpg" width="300" alt="主屏选中 Cinestill 50D (Blue Velvet)：Standard 风格，饱和度 −1、对比度 +1、白平衡 5600K">
+  <br><sub>
+  <b>左边：</b>相机上的「应用程序列表」——每个品牌一个条目，一台机身上并排九个。<b>右边：</b>你点进去后落到的主屏，已经选中了一款观感。
+  </sub>
+</p>
+
 <!-- counts: total=155 compiled=140 -->
 <!-- The line above is checked against catalog/filters.json by CI. If you change the
      catalog, update it — a mismatch fails the build. Do not reword it. -->
@@ -122,15 +130,14 @@ adb uninstall com.hairuoliu.sonysoocrecipes     # 或 ...sonysoocrecipes.<品牌
 
 ## 真机实拍
 
-维护者自己机器上的照片——不是渲染图、不是效果图。五张都是 **α7S II**，屏幕上跑的就是磨砂双栏主界面和 FN 浏览器。
+本页顶部的两张是维护者自己机器上的 **α7S II**。下面这三张补全——应用程序列表往下滚过第一帧，以及 FN 浏览器在两个不同包里的样子。都不是渲染图、不是效果图。
 
 <p align="center">
-  <img src="docs/assets/hardware/01-a7sii-application-list.jpg" width="300" alt="相机应用程序列表：Niche Film Style、Pentax Style、Ricoh GR Style、Fuji Film Style、Fujifilm Style、Hasselblad Style">
   <img src="docs/assets/hardware/02-a7sii-application-list-more.jpg" width="300" alt="同一列表往下滚：Fuji Film Style、Fujifilm Style、Hasselblad Style、Kodak Style、Leica Style 与 PlayMemories Camera Apps 入口">
-  <img src="docs/assets/hardware/03-a7sii-main-screen-cinestill-50d.jpg" width="300" alt="主屏选中 Cinestill 50D (Blue Velvet)：Standard 风格，饱和度 −1、对比度 +1、白平衡 5600K">
   <br><sub>
-  <b>应用程序列表</b>分两帧拍完——一个包一项，这台机器上有九个。然后是<b>主屏</b>，
-  Niche Film Style 包里选中 Cinestill 50D (Blue Velvet)。
+  <b>应用程序列表</b>往下滚——这台机器上九个包里的其余几个（Kodak Style、Leica Style、
+  Hasselblad Style、Fujifilm / Fuji Film 两个入口，以及 PlayMemories Camera Apps 入口）。
+  第一帧就是本页顶部的那张。
   </sub>
 </p>
 
