@@ -102,6 +102,9 @@ or **Pentax**, not just a film stock. **[The filter browser](catalog/index.html)
 searchable and filterable — it is a single self-contained HTML file, so download it and open it
 locally rather than viewing the source on GitHub.
 
+<details>
+<summary>Show all 155 looks, grouped (full table)</summary>
+
 | Group | Count | Representative looks |
 |---|---|---|
 | **Sony** | 8 | FL (film-like) · IN (instant) · VV2 |
@@ -123,6 +126,8 @@ locally rather than viewing the source on GitHub.
 brand than everything? The ten APKs — the all-in-one plus nine brand packs — are in
 **[docs/BRAND-PACKS.md](docs/BRAND-PACKS.md)**, and what each one actually contains is listed
 in **[docs/packs/README.md](docs/packs/README.md)**.
+
+</details>
 
 > **Honest note.** Whether a *look* is faithful to the film it imitates is recorded per recipe,
 > in the `verified` field of `catalog/filters.json`. Sixty-three were written here and not one
@@ -170,6 +175,10 @@ colours from `catalog/ui-theme.json` and leaves the main screen exactly as it wa
 
 ## Uninstall
 
+<details>
+<summary>Show the uninstall steps — and how to put the camera's colours back</summary>
+
+
 Two different things come off, and removing one does not remove the other: the **app**, and
 the **look it stored**. Putting the camera's colours back is a separate step.
 
@@ -190,9 +199,15 @@ greyed out, the route is ADB — turn it on with
 `adb uninstall com.hairuoliu.sonysoocrecipes` (or `...sonysoocrecipes.<brand>`). The full flow,
 and how to reset the stored look, is in **[docs/INSTALL.md](docs/INSTALL.md)**.
 
+</details>
+
 ---
 
 ## On a real camera
+
+<details>
+<summary>Show the photos from a real α7S II</summary>
+
 
 The two shots at the top of this page are the maintainer's own α7S II. The three below
 round it out — the Application List scrolled past the first frame, and the FN browser in
@@ -235,9 +250,15 @@ two different packs. None are renders or mockups.
 - **It does not make the looks verified.** That a *body* runs the app is one claim; a *look*
   being faithful to its film is another, recorded per recipe in `verified`.
 
+</details>
+
 ---
 
 ## Read next
+
+<details>
+<summary>Show where to go next (docs index)</summary>
+
 
 | If you want to | Go to |
 |---|---|
@@ -252,9 +273,15 @@ Everything here is generated from `catalog/filters.json` and held in place by ga
 locally and again on every push. That machinery is written down rather than hidden — none of it
 is needed to put a look on a camera.
 
+</details>
+
 ---
 
 ## Origin and licence
+
+<details>
+<summary>Show upstream sources and licences</summary>
+
 
 | Upstream | Contribution | Licence | Redistributed |
 |---|---|---|---|
@@ -270,6 +297,8 @@ owners, used here only to describe the look a recipe aims at. **This project is 
 with or endorsed by any of them.** Every value is a community-derived approximation, not
 official colour science. Full provenance: **[NOTICE.md](NOTICE.md)** ·
 **[CHANGELOG](CHANGELOG.md)**.
+
+</details>
 
 ---
 

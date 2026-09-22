@@ -101,6 +101,10 @@ python tools/gen_recipes.py --stdout # 看一眼会生成什么
 
 ## 卸载
 
+<details>
+<summary>展开：卸载步骤（以及如何把相机的色彩还回去）</summary>
+
+
 要卸的是**两样东西**，而且不是一回事：**应用**，和它**存进去的配方**。卸掉应用不会把相机的色彩改回去。
 
 **卸应用** —— 用相机自己的菜单：
@@ -128,9 +132,15 @@ adb uninstall com.hairuoliu.sonysoocrecipes     # 或 ...sonysoocrecipes.<品牌
 **配方也要还回去。** 卸载应用**不会**回退已经存进相机设置的配方——它仍在 P/A/S/M 和录像下生效。
 还回原样：在应用里按 **TRASH** + 中心键，然后关机重启；或 `Setup → Setting Reset → Camera Settings Reset`。
 
+</details>
+
 ---
 
 ## 真机实拍
+
+<details>
+<summary>展开：α7S II 真机实拍照片</summary>
+
 
 本页顶部的两张是维护者自己机器上的 **α7S II**。下面这三张补全——应用程序列表往下滚过第一帧，以及 FN 浏览器在两个不同包里的样子。都不是渲染图、不是效果图。
 
@@ -168,12 +178,17 @@ adb uninstall com.hairuoliu.sonysoocrecipes     # 或 ...sonysoocrecipes.<品牌
 - **它不能证明这些观感是"已验证"的。** 「某台**机身**跑得起来」和「某款**观感**忠实于它模仿的胶片」
   是两件事。后者由 catalog 逐条记录在 `verified` 字段里。
 
+</details>
+
 ---
 
 ## 配方一览
 
 155 款，14 个组（13 个品牌/胶片组 + 1 个 App Look 组）。重头戏是**机型模拟组**——Leica、Hasselblad、Fuji Sim、Ricoh GR、Pentax、Canon/Nikon、Pana/Olympus，把别家相机的色彩搬进索尼；胶片组（Kodak、Cine、Ilford、Other Stocks）是另一半。完整可筛选的列表打开 **[滤镜浏览器](catalog/index.html)**。
 （GitHub 上直接打开是源码，下载后用浏览器打开即可。）
+
+<details>
+<summary>展开：全部 155 款配方分组一览表</summary>
 
 | 品牌组 | 数量 | 代表 |
 |---|---|---|
@@ -196,6 +211,8 @@ adb uninstall com.hairuoliu.sonysoocrecipes     # 或 ...sonysoocrecipes.<品牌
 
 **按 APK 拆分。** 当前代码树共十个 APK——全量版加九个单品牌包（由 v0.6.0 的九个发展而来）。想知道每个 APK 到底含多少
 配方、里面每一款分别是什么，见 **[docs/packs/README.zh-CN.md](docs/packs/README.zh-CN.md)**。
+
+</details>
 
 ---
 
@@ -227,6 +244,10 @@ DRO、图片效果，外加一个索尼从未在菜单里公开的色彩矩阵�
 ---
 
 ## 项目结构
+
+<details>
+<summary>展开：代码结构与 CI 关卡</summary>
+
 
 ```
 catalog/filters.json   ★ 唯一事实来源 —— 所有配方都登记在这里
@@ -269,9 +290,15 @@ tools/                   校验器 · 代码生成器 · 保真比对 · 安装�
 
 > **77 条上游配方逐值一致，0 漂移。**
 
+</details>
+
 ---
 
 ## 数据来自哪里
+
+<details>
+<summary>展开：数据来源与许可边界</summary>
+
 
 | 上游 | 贡献 | 许可 | 可否再分发 |
 |---|---|---|---|
@@ -294,6 +321,8 @@ tools/                   校验器 · 代码生成器 · 保真比对 · 安装�
   标着 `verified: false`（**未在实机验证**）
 
 **本项目与索尼、富士、柯达、理光等公司无任何关联，未获其背书。**
+
+</details>
 
 ---
 
