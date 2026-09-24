@@ -29,11 +29,11 @@ CI 配置 —— 均为本项目原创，采用 **[MIT](LICENSE)**。
   - `Recipes.java` 的**类结构**（构造函数重载、常量表、`GROUP_START`/`GROUP_COUNT` 静态块）
     —— 生成的 `Recipes.java` 是它的直接派生物，因此保留 MIT 头与署名
 - **作者**：André Domingues（[voxivoid](https://github.com/voxivoid)）
-- **本项目做的改动**：新增了 63 款自写配方（最初的一批是 `gr-moriyama`、
+- **本项目做的改动**：新增了 72 款自写配方（最初的一批是 `gr-moriyama`、
   `kodak-vision2-500t`、`toy-camera-warm`、`toy-camera-cool`、`part-color-red`、
   `posterization-color`、`teal-mood`），全部标 `verified: false`；把配方表从手写 Java
   改为由 JSON 生成。**哪些是自写的、请以 `catalog/filters.json` 的 `verified` 字段为准
-  （今天 155 款里有 63 款为 false）**——早先这里写的是「7 款」，那是配方库还很小时的
+  （今天 164 款里有 72 款为 false）**——早先这里写的是「7 款」，那是配方库还很小时的
   遗留数字，catalog 涨上去之后没人重算。手写计数会腐烂，字段不会。
 
 ### ukiki0718-netizen/sony-a5100-film-studio — 15 款风格的登记
@@ -147,7 +147,7 @@ LUT 收藏与各厂商对机身色彩模式、胶片种类的**公开描述**。
 | 材料 | 来源 | 许可 | 本仓库是否分发其内容 |
 |---|---|---|---|
 | 本仓库代码与文档 | 原创 | MIT | ✔ |
-| 140 款可编译配方参数 | voxivoid（77）+ 本项目（63） | MIT | ✔ |
+| 149 款可编译配方参数 | voxivoid（77）+ 本项目（72） | MIT | ✔ |
 | `Recipes.java` 类结构 | voxivoid | MIT | ✔（生成物，保留署名） |
 | 15 款胶片工坊风格 | ukiki0718 | PolyForm NC | ✘ 仅名称与来源标注 |
 | 理光模组方法论 | bonyback1 | Apache-2.0 | ✘ 仅参考 |
@@ -168,8 +168,7 @@ LUT 收藏与各厂商对机身色彩模式、胶片种类的**公开描述**。
 
 品牌包（`docs/BRAND-PACKS.md`）的启动图标，由 `tools/build_pack_icons.py` 生成进
 `assets/app-icon-packs/<icon_set>/`。图标随 APK 一起发布，所以一旦用了带许可义务的素材，署名就必须随
-APK 走 —— 它会进本文件（下方表格）与每个包的发布说明。**目前九个包全部用用户专门为本项目提供的
-商业产品照片 / 厂商官方渲染图，全部保留权利、未授予任何许可**，因此没有任何 CC BY 照片在发布之列、
+APK 走 —— 它会进本文件（下方表格）与每个包的发布说明。**目前十个包中，九个用用户专门为本项目提供的商业产品照片 / 厂商官方渲染图，全部保留权利、未授予任何许可**；`cinema` 包为原创手绘图标，不基于任何第三方照片，同样无第三方权利、无署名义务。因此没有任何 CC BY 照片在发布之列、
 也没有法定署名义务；风险由发布方承担。逐张的取舍与权利说明见 `assets/app-icon-packs/CREDITS.md`。
 
 | 包 (`id`) | 品牌 | 图标描绘 | 作者 / 来源 | 许可 | 来源页 |
@@ -180,11 +179,12 @@ APK 走 —— 它会进本文件（下方表格）与每个包的发布说明�
 | `ricoh` | Ricoh | Ricoh 相机（用户来图） | 用户提供的产品图 | **保留全部权利**——用户提供，未授予许可 | 用户提供的产品图 |
 | `kodak` | Kodak | Gold 400 / 400 胶卷罐 | prophotosupply.com（Kodak Gold 400 产品照片） | **保留全部权利**——用户提供，未授予许可 | prophotosupply.com Kodak Gold 400 |
 | `pentax` | Pentax | Pentax 相机（用户来图，自带透明底） | 用户提供的产品图 | **保留全部权利**——用户提供，未授予许可 | 用户提供的产品图 |
-| `ilford` | Cinestill + Ilford | CineStill 胶卷产品图 | 用户提供的产品图 | **保留全部权利**——用户提供，未授予许可 | 用户提供的产品图 |
+| `nichefilm` | Niche Film | CineStill 胶卷 + 复古胶片（CineStill film product shot） | 用户提供的产品图 | **保留全部权利**——用户提供，未授予许可 | 用户提供的产品图 |
 | `hasselblad` | Hasselblad | X2D II 100C | cameraelectronic.com.au（官方 X2D II 100C 渲染，Shopify CDN） | **保留全部权利**——用户提供，未授予许可 | cameraelectronic.com.au 产品页（Shopify CDN） |
 | `sony` | Sony | Sony 相机 | 用户提供的产品图 | **保留全部权利**——用户提供，未授予许可 | 用户提供的产品图 |
+| `cinema` | Cinema LUT | 原创手绘图标（original drawn artwork） | 本项目原创 / original artwork by this project | **原创作品，无第三方权利**——不基于任何第三方照片 | n/a |
 
-九个包全部有图标，**九张全部是用户提供的商业照片 / 厂商渲染图，保留全部权利、未授予任何许可**，
+十个包全部有图标，**九张是用户提供的商业照片 / 厂商渲染图、一张（`cinema`）是原创手绘，均保留全部权利、未授予任何许可**，
 因此**没有法定署名义务**（分销风险由发布方承担）。曾经用 Wikimedia Commons **CC BY 2.0** 照片的
 `ricoh` 与 `pentax` 也已换成用户来图，本表格里不再有任何 CC BY 素材 —— 但这不等于可以松懈：下表与
 `CREDITS.md` 必须逐张保持真实，一旦换回带许可义务的图，署名义务立刻恢复。
@@ -195,7 +195,7 @@ APK 走 —— 它会进本文件（下方表格）与每个包的发布说明�
 
 几点必须说清的边界：
 
-- **`CC BY` 允许商用，但必须署名。** 不署名就商用违反许可。目前九张图标里**没有 CC BY 素材**，这条
+- **`CC BY` 允许商用，但必须署名。** 不署名就商用违反许可。目前十张图标里**没有 CC BY 素材**，这条
   义务处于「空置」状态；将来若引入任何 `CC BY` 照片，署名必须随 APK 走 —— 本表格是一处，每个包的
   发布说明是另一处。同理，改用回 CC BY 素材时，被替换掉的那一行必须同步移除，不能留下幽灵署名。
 - **`CC BY-SA` 被刻意排除。** 它的「相同方式共享」条款会波及整个 App，而不只是那张图标，所以品牌包

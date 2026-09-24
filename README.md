@@ -1,12 +1,12 @@
 <h1 align="center">sony-sooc-recipes</h1>
 
 <p align="center">
-  <b>Turn a Sony camera Sony stopped updating into the cameras you wish it were — Leica, Hasselblad, Fujifilm, Ricoh, Pentax and more — with 155 film and camera looks, straight out of camera.</b>
+  <b>Turn a Sony camera Sony stopped updating into the cameras you wish it were — Leica, Hasselblad, Fujifilm, Ricoh, Pentax and more — with 164 film and camera looks, straight out of camera.</b>
   <br>
-  <sub>155 looks · 140 compiled into the APK · 14 groups — film stocks &amp; other cameras' colour, straight-out-of-camera JPEG</sub>
+  <sub>164 looks · 149 compiled into the APK · 15 groups — film stocks &amp; other cameras' colour, straight-out-of-camera JPEG</sub>
 </p>
 
-<!-- counts: total=155 compiled=140 -->
+<!-- counts: total=164 compiled=149 -->
 <!-- The line above is checked against catalog/filters.json by CI. Change the catalog,
      change this line — a mismatch fails the build. Do not reword it. -->
 
@@ -34,8 +34,8 @@ Sony closed its PlayMemories Camera Apps store in 2021, and every body made befo
 lost its app channel. Those bodies still run an Android userspace, which means they can still
 be given a new personality. This project turns a Sony into the cameras you reach for — a Leica
 monochrome, a Hasselblad natural, a Fujifilm colour, a Ricoh GR contrast, a Pentax reversal — and
-folds 155 film looks in besides. All of it lands in one APK you install once. If that is more than
-you want to scroll through on a 3-inch screen, **nine per-brand APKs ship the same code with only
+folds 164 film looks in besides. All of it lands in one APK you install once. If that is more than
+you want to scroll through on a 3-inch screen, **ten per-brand APKs ship the same code with only
 one camera's looks inside** — install Leica Style and the list reads Leica. After that the look is
 not an app running in the background — it is simply what the camera does. Close the app,
 power-cycle, and your JPEG comes out graded in **P, A, S, M and video**.
@@ -100,14 +100,14 @@ you care about. **[docs/FAQ.md](docs/FAQ.md#safety)** answers the rest.
 
 ## What's inside
 
-155 looks in 14 groups — film stocks and the colour of other cameras alike. The hook is the
+164 looks in 15 groups — film stocks and the colour of other cameras alike. The hook is the
 camera simulation: a Sony that shoots like a **Leica**, **Hasselblad**, **Fujifilm**, **Ricoh GR**
 or **Pentax**, not just a film stock. **[The filter browser](catalog/index.html)** lists every one,
 searchable and filterable — it is a single self-contained HTML file, so download it and open it
 locally rather than viewing the source on GitHub.
 
 <details>
-<summary>Show all 155 looks, grouped (full table)</summary>
+<summary>Show all 164 looks, grouped (full table)</summary>
 
 | Group | Count | Representative looks |
 |---|---|---|
@@ -124,17 +124,18 @@ locally rather than viewing the source on GitHub.
 | **Pana / Olympus** | 4 | L.Monochrome D · Pop Art |
 | **Other Stocks** | 17 | Adox · Lomochrome · ORWO · Rollei · Svema · Ambrotype |
 | **Ilford** | 5 | HP5 · Delta 3200 · Pan F 50 |
+| **Kino LUT** | 9 | Kino Cool 4 … Kino Warm 4 |
 | **App Look** | 5 | Toy Camera warm/cool · Part Color red · Posterization · Teal Mood |
 
-**140** of those compile into an APK; the rest are registered by name only. Rather have one
-brand than everything? The ten APKs — the all-in-one plus nine brand packs — are in
+**149** of those compile into an APK; the rest are registered by name only. Rather have one
+brand than everything? The eleven APKs — the all-in-one plus ten brand packs — are in
 **[docs/BRAND-PACKS.md](docs/BRAND-PACKS.md)**, and what each one actually contains is listed
 in **[docs/packs/README.md](docs/packs/README.md)**.
 
 </details>
 
 > **Honest note.** Whether a *look* is faithful to the film it imitates is recorded per recipe,
-> in the `verified` field of `catalog/filters.json`. Sixty-three were written here and not one
+> in the `verified` field of `catalog/filters.json`. Seventy-two were written here and not one
 > has been confirmed on hardware yet. The app prints none of that — the marker survives only
 > as a comment in the generated source, which is why nothing above says it either. The badge
 > on the main screen is the camera's own status: `ACTIVE`, `PREVIEW` or `PROTECTED`.

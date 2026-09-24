@@ -12,15 +12,15 @@
   </sub>
 </p>
 
-<!-- counts: total=155 compiled=140 -->
+<!-- counts: total=164 compiled=149 -->
 <!-- The line above is checked against catalog/filters.json by CI. If you change the
      catalog, update it — a mismatch fails the build. Do not reword it. -->
 
 **把老索尼变成你心心念念的那台相机——莱卡、哈苏、富士、理光、宾得，胶片观感只是顺手带上。**
 
-针对索尼 PlayMemories Camera Apps（PMCA）机型（a6000 · a6300 · a6500 · a5100 · NEX · RX100 III–V · a7 II 一代），一个装进相机内部的应用：**155 款**别家相机色彩与胶片配方，其中 **140 款可直接编译进 APK**。
+针对索尼 PlayMemories Camera Apps（PMCA）机型（a6000 · a6300 · a6500 · a5100 · NEX · RX100 III–V · a7 II 一代），一个装进相机内部的应用：**164 款**别家相机色彩与胶片配方，其中 **149 款可直接编译进 APK**。
 
-重点不在「155 款胶片」，而在**一台索尼拍出莱卡、哈苏、富士、理光、宾得的味道**——胶片观感是赠品。
+重点不在「164 款胶片」，而在**一台索尼拍出莱卡、哈苏、富士、理光、宾得的味道**——胶片观感是赠品。
 关掉应用、关机重启，风格依然是相机在 P/A/S/M 和录像**全部模式**下的默认。直出的 JPEG 就带风格。
 
 **已在真机确认的机型：α7S II** —— 装得上、打得开、四个品牌包同时并存。实拍照片见
@@ -43,7 +43,7 @@ a6000 的直出和屏幕有多难看你心里有数；索尼 2021 年关了应�
 那些机器的味道；胶片观感（Portra、Cinestill、HP5……）是同一套机制顺手做的。所有配方汇总成
 **一份数据**，再编译成 APK 装回去。
 
-一份数据也可以**只装一个品牌**：九个品牌包共用同一套代码，每个包里只放该品牌的配方——
+一份数据也可以**只装一个品牌**：十个品牌包共用同一套代码，每个包里只放该品牌的配方——
 装 Leica Style，相机上的列表里就只有莱卡。三英寸屏幕上要翻的东西，和你拍的牌子一样少。
 
 ---
@@ -187,11 +187,11 @@ adb uninstall com.hairuoliu.sonysoocrecipes     # 或 ...sonysoocrecipes.<品牌
 
 ## 配方一览
 
-155 款，14 个组（13 个品牌/胶片组 + 1 个 App Look 组）。重头戏是**机型模拟组**——Leica、Hasselblad、Fuji Sim、Ricoh GR、Pentax、Canon/Nikon、Pana/Olympus，把别家相机的色彩搬进索尼；胶片组（Kodak、Cine、Ilford、Other Stocks）是另一半。完整可筛选的列表打开 **[滤镜浏览器](catalog/index.html)**。
+164 款，15 个组（14 个品牌/胶片组 + 1 个 App Look 组）。重头戏是**机型模拟组**——Leica、Hasselblad、Fuji Sim、Ricoh GR、Pentax、Canon/Nikon、Pana/Olympus，把别家相机的色彩搬进索尼；胶片组（Kodak、Cine、Ilford、Other Stocks）是另一半。完整可筛选的列表打开 **[滤镜浏览器](catalog/index.html)**。
 （GitHub 上直接打开是源码，下载后用浏览器打开即可。）
 
 <details>
-<summary>展开：全部 155 款配方分组一览表</summary>
+<summary>展开：全部 164 款配方分组一览表</summary>
 
 | 品牌组 | 数量 | 代表 |
 |---|---|---|
@@ -208,11 +208,12 @@ adb uninstall com.hairuoliu.sonysoocrecipes     # 或 ...sonysoocrecipes.<品牌
 | **Pana / Olympus** | 4 | L.Monochrome D · Pop Art |
 | **Other Stocks** | 17 | Adox · Lomochrome · ORWO · Rollei · Svema · 湿版 |
 | **Ilford** | 5 | HP5 · Delta 3200 · Pan F 50 |
+| **Kino LUT** | 9 | Kino 冷调4 … Kino 暖调4 |
 | **App Look** | 5 | Toy Camera 暖/冷 · Part Color 红 · Posterization · Teal Mood |
 
-（数量含仅登记的胶片工坊风格；编译进 APK 的是 140 款。）
+（数量含仅登记的胶片工坊风格；编译进 APK 的是 149 款。）
 
-**按 APK 拆分。** 当前代码树共十个 APK——全量版加九个单品牌包（由 v0.6.0 的九个发展而来）。想知道每个 APK 到底含多少
+**按 APK 拆分。** 当前代码树共十一个 APK——全量版加十个单品牌包（由 v0.6.0 的九个发展而来）。想知道每个 APK 到底含多少
 配方、里面每一款分别是什么，见 **[docs/packs/README.zh-CN.md](docs/packs/README.zh-CN.md)**。
 
 </details>

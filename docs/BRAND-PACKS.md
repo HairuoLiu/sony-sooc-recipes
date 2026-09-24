@@ -26,7 +26,7 @@ all-in-one app and a single brand pack is three things:
 1. the Android **package name** — `com.hairuoliu.sonysoocrecipes` becomes
    `com.hairuoliu.sonysoocrecipes.<id>`;
 2. the **`app_name`** string (e.g. `Leica Style`);
-3. the **launcher icon** — three packs show that brand's most famous camera body; the other six depict film stock.
+3. the **launcher icon** — three packs show that brand's most famous camera body; six depict film stock; the `cinema` pack uses original drawn artwork (no photograph).
 
 `tools/apply_pack.py` performs the transform on a fresh, already-rebranded checkout;
 `tools/gen_recipes.py --pack <id>` then emits only that pack's groups into `Recipes.java`.
@@ -55,7 +55,7 @@ makes "install only the brand you want" mean anything. With distinct package nam
 camera treats each pack as a separate app, and you can have the Leica, Kodak and Ricoh
 packs installed at once, each with its own icon, none clobbering the others. Without it,
 the entire brand-pack idea collapses into a single installed app — which is exactly the
-"155 recipes, tedious to scroll through" situation the packs were meant to escape.
+"164 recipes, tedious to scroll through" situation the packs were meant to escape.
 
 ---
 
@@ -88,7 +88,7 @@ because this is the single most common point of confusion.
 
 ## 4. The pack table
 
-Nine packs today, built from the catalog. The *compiled recipe count* is the number
+Ten packs today, built from the catalog. The *compiled recipe count* is the number
 actually emitted into `Recipes.java` for that pack — after dropping entries that belong to
 the other engine (`film-studio-matrix`, reference-only) and entries that are reference-only
 for another brand. It is **not** the same as the group's total entry count, and a smaller
@@ -105,6 +105,7 @@ number is not a bug (see the notes below the table).
 | `nichefilm` | Niche Film Style | `ilford`, `cine`, `other-stocks` | 26 |
 | `hasselblad` | Hasselblad Style | `hasselblad` | 4 |
 | `sony` | Sony Style | `sony` | 8 |
+| `cinema` | Cinema LUT | `kino` | 9 |
 
 Three counts are smaller than — or add up differently from — their group sizes, and that is expected:
 
@@ -222,10 +223,10 @@ checkout. `--dry-run` reports every change without writing.
 
 ## 7. Icons — where they come from, how they are generated, and the attribution obligation
 
-Each pack's launcher icon is built from a photograph of that brand's product. **Three** packs
+Each pack's launcher icon is built from a photograph of that brand's product — except `cinema`, which uses original drawn artwork. **Three** packs
 depict a camera body — `leica` (the M9), `fujifilm` (the X100VI) and `hasselblad` (the X2D II
-100C) — while the other **six** depict film: `filmstocks`, `kodak`, `nichefilm`, `pentax`,
-`ricoh` and `sony` (those six packs are named after film stock, not a body). **All nine** now use **all-rights-reserved
+100C) — while **six** depict film: `filmstocks`, `kodak`, `nichefilm`, `pentax`,
+`ricoh` and `sony` (those six packs are named after film stock, not a body). The `cinema` pack is original drawn artwork and ships no photograph. **All nine photographic packs** now use **all-rights-reserved
 commercial photographs supplied by the user**, with no licence granted — `ricoh` and `pentax`
 were the last two Wikimedia Commons photographs and have been swapped out too, so no
 free-licensed image ships in any APK. The provenance of each one and the relaxed licence rule
@@ -251,9 +252,7 @@ release the pack icons are **also** keyed — each is a transparent silhouette c
 source photograph, matching the all-in-one's style rather than keeping the rectangular photo.
 Do not describe the pack icons as rectangular photographic tiles; they are not.
 
-**The attribution obligation currently applies to none of the nine packs — but it comes back
-the moment a licensed image does.** All nine packs now use all-rights-reserved commercial
-photographs supplied by the user; no licence was granted, so there is no attribution
+**The attribution obligation currently applies to none of the packs — but it comes back the moment a licensed image does.** The nine photographic packs use all-rights-reserved commercial photographs supplied by the user; the `cinema` pack is original artwork and needs no licence. No licence was granted, so there is no attribution
 obligation — only the publisher's risk of distributing them. `ricoh` and `pentax` used to be
 the exception: they carried Wikimedia Commons **CC BY 2.0** photographs (Ricoh GR by
 Kārlis Dambrāns, Pentax K1000 by Terry Presley) and had to be credited. Both have since been

@@ -15,10 +15,12 @@ with no set here silently keeps `../app-icon/`, so a half-finished set cannot br
 | `pentax/` | `pentax` | Pentax film product (user-supplied) |
 | `ricoh/` | `ricoh` | Ricoh film product (user-supplied) |
 | `sony/` | `sony` | Sony film product (user-supplied) |
+| `cinema/` | `cinema` | 35 mm negative strip (drawn in-repo, not photographed) |
 
-Six of the nine depict **film**, not a camera body — `filmstocks`, `kodak`, `nichefilm`,
+Six of the ten depict **film**, not a camera body — `filmstocks`, `kodak`, `nichefilm`,
 `pentax`, `ricoh`, `sony` — because those packs' recipes are film simulations. Only `leica`
-(M9), `fujifilm` (X100VI) and `hasselblad` (X2D II 100C) depict a camera body.
+(M9), `fujifilm` (X100VI) and `hasselblad` (X2D II 100C) depict a camera body. `cinema` is the
+one whose master is a **drawing** rather than a photograph; see `CREDITS.md`.
 
 Each directory holds the same five files as `../app-icon/`, at the same pixel sizes and in
 the same transparent RGBA format, plus `master.jpg` — the source photograph, downscaled to
@@ -41,9 +43,10 @@ python tools/build_pack_icons.py --pack leica
 
 ## Read CREDITS.md before touching any of this
 
-`CREDITS.md` records the author, licence and provenance of every photograph here. **All nine
-are now user-supplied commercial renders with no licence at all** — the publisher carries the
-risk of distributing them, and there is no attribution obligation today. `ricoh` and `pentax`
+`CREDITS.md` records the author, licence and provenance of every photograph here. **Nine of the
+ten are user-supplied commercial renders with no licence at all** — the publisher carries the
+risk of distributing them, and there is no attribution obligation today. The tenth, `cinema`, is
+drawn in this repository and carries no third-party rights at all. `ricoh` and `pentax`
 were the last two **CC BY 2.0** images (commercial use permitted only with attribution, which
 had to travel with the APK rather than live in this repository) and have since been replaced,
 so no licensed photograph ships in any pack. Treat that as the current state, not as a rule

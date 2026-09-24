@@ -59,6 +59,7 @@ GROUP_JAVA = {
     "pana-olympus": "PANOLY",
     "other-stocks": "OTHER",
     "ilford": "ILFORD",
+    "kino": "KINO",
     "app-look": "APPLOOK",
 }
 

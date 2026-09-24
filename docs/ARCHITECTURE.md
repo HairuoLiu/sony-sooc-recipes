@@ -21,10 +21,10 @@ instead.
 This section orients you. The rest of the file is reference: by the end you should understand how a
 single JSON file becomes colours on a ten-year-old sensor, and where that path stops.
 
-The repository holds **155 filters** across **14 groups** and **2 engines**:
+The repository holds **164 filters** across **15 groups** and **2 engines**:
 
-- **140** are compiled into the app (engine `recipe-lab`): **77** transcribed verbatim from the
-  upstream project, plus **63** authored in this repository (the camera-simulation, film, brand-pack
+- **149** are compiled into the app (engine `recipe-lab`): **77** transcribed verbatim from the
+  upstream project, plus **72** authored in this repository (the camera-simulation, film, brand-pack
   and app-look batches).
 - **15** are reference-only entries (engine `film-studio-matrix`) — catalogued by name, never
   compiled, never parameterised.

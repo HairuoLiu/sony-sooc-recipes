@@ -81,6 +81,13 @@
       "app_name_zh": "索尼风格",
       "groups": ["sony"],
       "icon_set": "sony"
+    },
+    {
+      "id": "cinema",
+      "app_name": "Cinema LUT",
+      "app_name_zh": "电影滤镜",
+      "groups": ["kino"],
+      "icon_set": "cinema"
     }
   ],
   "unassigned_groups": {

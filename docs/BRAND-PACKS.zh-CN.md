@@ -20,7 +20,7 @@
 
 1. Android **包名** —— `com.hairuoliu.sonysoocrecipes` 变成 `com.hairuoliu.sonysoocrecipes.<id>`；
 2. **`app_name`** 字符串（例如 `Leica Style`）；
-3. **启动图标** —— 其中三个包展示该品牌最知名的机身，另外六个展示胶片。
+3. **启动图标** —— 其中三个包展示该品牌最知名的机身，六个展示胶片；`cinema` 包则用原创手绘图标。
 
 `tools/apply_pack.py` 在一个全新的、已经改过包名的 checkout 上做这个转换；
 `tools/gen_recipes.py --pack <id>` 随后只把该包的组写进 `Recipes.java`。其余一切 —— 引擎、
@@ -43,7 +43,7 @@ Fujifilm 包又会覆盖 Leica 包 —— 最后你只剩一个 App，且是最�
 每个品牌的后缀（`...sonysoocrecipes.leica`、`...sonysoocrecipes.fujifilm` …）才让「只装你想要的
 品牌」这句话有意义。包名不同，相机就把每个包当作独立应用，Leica、Kodak、Ricoh 三个包可以同装，
 各自一张图标，互不相踩。没有它，整个品牌包的想法就塌回「一个已装 App」 —— 而这恰恰是要逃离的
-「155 款配方，滚半天」的处境。
+「164 款配方，滚半天」的处境。
 
 ---
 
@@ -70,7 +70,7 @@ Fujifilm 包又会覆盖 Leica 包 —— 最后你只剩一个 App，且是最�
 
 ## 4. 品牌包一览
 
-今天共 9 个包，都从 catalog 构建。「**编译进的配方数**」是该包实际写进 `Recipes.java` 的数量 ——
+今天共 10 个包，都从 catalog 构建。「**编译进的配方数**」是该包实际写进 `Recipes.java` 的数量 ——
 扣掉属于另一套引擎（`film-studio-matrix`，仅登记）以及仅登记给其他品牌的条目之后。它**不等于**
 该组的总条目数，数字偏小不是 bug（见下表下方的说明）。
 
@@ -85,6 +85,7 @@ Fujifilm 包又会覆盖 Leica 包 —— 最后你只剩一个 App，且是最�
 | `nichefilm` | Niche Film Style | `ilford`, `cine`, `other-stocks` | 26 |
 | `hasselblad` | Hasselblad Style | `hasselblad` | 4 |
 | `sony` | Sony Style | `sony` | 8 |
+| `cinema` | Cinema LUT | `kino` | 9 |
 
 有三个数字比组的总条目小（或两组合计），这是预期的：
 
@@ -184,9 +185,9 @@ src/com/hairuoliu/sonysoocrecipes/        （基包）
 
 ## 7. 图标 —— 从哪来、怎么生成、以及归属义务
 
-每个包的启动图标，是用**该品牌产品的照片**构建的——**三个**包展示相机机身（`leica` 的 M9、
+每个包的启动图标，是用**该品牌产品的照片**构建的——`cinema` 包除外，它用原创手绘图标。**三个**包展示相机机身（`leica` 的 M9、
 `fujifilm` 的 X100VI、`hasselblad` 的 X2D II 100C），另外**六个**展示胶片：`filmstocks`、
-`kodak`、`nichefilm`、`pentax`、`ricoh`、`sony`（这六个包按胶片命名，不是按机身）。**九个包现在全部**用**用户专门提供的、
+`kodak`、`nichefilm`、`pentax`、`ricoh`、`sony`（这六个包按胶片命名，不是按机身）。`cinema` 包是原创手绘、不随附任何照片。**九个摄影类包现在全部**用**用户专门提供的、
 保留全部权利的商业照片，未授予任何许可** —— `ricoh` 与 `pentax` 是最后两张 Wikimedia Commons
 照片，也已换成用户来图，所以**没有任何自由许可图片随任一 APK 发布**。逐张来源与「放宽许可」的约定记在
 `assets/app-icon-packs/CREDITS.md` 里；而因为图标随 APK 一起发布，许可与署名必须**随 APK 走**：它进
@@ -207,8 +208,8 @@ src/com/hairuoliu/sonysoocrecipes/        （基包）
 可绘制）。本版本起，品牌包图标**也**做了抠图——每张都是从源照片里裁出的透明剪影，与全量版风格一致，
 而非保留整张矩形照片。不要说品牌包图标是矩形照片；它们不是。
 
-**归属义务目前九个包一个都不适用——但只要再用带许可的图，它立刻回来。** 九个包现在全部用用户提供的、
-保留全部权利的商业照片；未授予任何许可，因此没有署名义务，只有发布方承担分发风险。`ricoh` 与
+**归属义务目前所有包都不适用——但只要再用带许可的图，它立刻回来。** 九个摄影类包用用户提供的、
+保留全部权利的商业照片，`cinema` 包是原创作品、无需许可；未授予任何许可，因此没有署名义务，只有发布方承担分发风险。`ricoh` 与
 `pentax` 过去是例外：它们用的是 Wikimedia Commons 上的 **CC BY 2.0** 照片（Ricoh GR，作者
 Kārlis Dambrāns；Pentax K1000，作者 Terry Presley），必须署名。这两张如今也都换成了用户来图，
 所以当下发布的素材里没有任何带许可的内容。相应的署名行也已在 `NOTICE.md` 与 `CREDITS.md` 里同步删掉 ——

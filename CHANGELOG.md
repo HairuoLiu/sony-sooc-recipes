@@ -17,6 +17,35 @@ self-test that proves the gates still fail on broken input.
 
 ---
 
+## v0.82 — 2026-09-25 · the tenth pack: Cinema LUT
+
+No recipe values changed from v0.81's *look* — but nine new `authored-here` recipes were added
+and one new brand pack ships them.
+
+- **A tenth brand pack: `cinema` (Cinema LUT).** Nine `kino`-group recipes — Kino Cool 4 … Kino
+  Warm 4 — are compiled into a dedicated APK (`com.hairuoliu.sonysoocrecipes.cinema`). The release
+  now ships **eleven** APKs: the all-in-one plus ten single-brand packs, up from v0.81's ten.
+- **Measured from the user's purchased KinoLUT `.cube` set, not copied.** 45 cube files
+  (5 exposure steps × 9 white-balance variants) were analysed: the per-channel white-balance gains
+  hold `gainG ≡ 1.000` (which maps onto the camera's A/B axis), the mid-grey anchor sits at
+  −49.46 mired relative to 6500 K, and the nine variants span 4500–6300 K at `gm +2`. Each recipe's
+  `kelvin`/`ab`/`gm` are set from those measurements.
+- **Honest about what a camera settings store cannot do.** KinoLUT's signature *shadow-only* teal
+  cast (≈ 13000 K) needs a per-tone LUT the camera has no support for, so it is **not** reproduced —
+  only the matched mid-tone is. The fitted 3×3 matrix lands at roughly 65% of the original's chroma,
+  which is the ceiling for this engine. **All nine are `verified: false`** (no hardware confirmation
+  yet), and the Toy Camera picture effect was deliberately declined as a route to a look.
+- **No LUT is redistributed.** Only the camera-storable parameter values were re-authored here; the
+  `.cube` files themselves are never shipped. This is original approximation within the camera's
+  parameter space, not a port of KinoLUT.
+- **The all-in-one now compiles 149 recipes across 15 groups** (the `kino` group is among them).
+  See `docs/packs/all-in-one.md` and `docs/packs/cinema.md`.
+
+*Known gap:* like the rest of the authored set, the `kino` recipes have **not** been confirmed on
+hardware — the numbers are derived from the LUTs, not from a body running them.
+
+---
+
 ## v0.81 — 2026-09-24 · the app now speaks the camera's language
 
 No recipe values changed. This is a language release, plus the documentation rewrite that

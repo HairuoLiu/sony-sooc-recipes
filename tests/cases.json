@@ -1576,6 +1576,222 @@
         "ev": 0,
         "dro": 4
       }
+    },
+    {
+      "id": "kino-cool4",
+      "why": "Kino Standard with the LUT's own COOL4 white-balance step folded in: measured -19.4 mired against STANDARD as a pure amber<->blue move (the fitted green-channel gain is 1.000), so 4500 K instead of 4900 K under roughly 6500 K daylight.",
+      "fields": {
+        "name": "Kino Cool 4",
+        "group": "kino",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": 0,
+        "con": 0,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "K", "kelvin": 4500, "ab": 0, "gm": 2 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 5
+      }
+    },
+    {
+      "id": "kino-cool3",
+      "why": "Kino Standard with the LUT's own COOL3 white-balance step folded in: measured -15.5 mired against STANDARD as a pure amber<->blue move, so 4600 K instead of 4900 K under roughly 6500 K daylight.",
+      "fields": {
+        "name": "Kino Cool 3",
+        "group": "kino",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": 0,
+        "con": 0,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "K", "kelvin": 4600, "ab": 0, "gm": 2 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 5
+      }
+    },
+    {
+      "id": "kino-cool2",
+      "why": "Kino Standard with the LUT's own COOL2 white-balance step folded in: measured -11.8 mired against STANDARD as a pure amber<->blue move, so 4700 K instead of 4900 K under roughly 6500 K daylight.",
+      "fields": {
+        "name": "Kino Cool 2",
+        "group": "kino",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": 0,
+        "con": 0,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "K", "kelvin": 4700, "ab": 0, "gm": 2 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 5
+      }
+    },
+    {
+      "id": "kino-cool1",
+      "why": "Kino Standard with the LUT's own COOL1 white-balance step folded in: measured -7.0 mired against STANDARD as a pure amber<->blue move, so 4800 K instead of 4900 K under roughly 6500 K daylight.",
+      "fields": {
+        "name": "Kino Cool 1",
+        "group": "kino",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": 0,
+        "con": 0,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "K", "kelvin": 4800, "ab": 0, "gm": 2 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 5
+      }
+    },
+    {
+      "id": "kino-standard",
+      "why": "Reverse-engineered from the KinoLUT by Cineplus pack (KinoLUT R709 / Exposure_WB Variations), measured rather than guessed: the base look renders a neutral mid grey at CCT 9580 K / Duv +0.0193, i.e. about 49 mired of blue plus a green lean. Under roughly 6500 K daylight that splits into WB 4900 K for the blue half and gm +2 for the green half. Lifted blacks of 4.7 per cent become DRO Lv5; the measured mean curve slope is 1.06, so contrast and saturation stay at 0.",
+      "fields": {
+        "name": "Kino Standard",
+        "group": "kino",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": 0,
+        "con": 0,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "K", "kelvin": 4900, "ab": 0, "gm": 2 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 5
+      }
+    },
+    {
+      "id": "kino-warm1",
+      "why": "Kino Standard with the LUT's own WARM1 white-balance step folded in: measured +15.9 mired against STANDARD as a pure amber<->blue move, so 5300 K instead of 4900 K under roughly 6500 K daylight.",
+      "fields": {
+        "name": "Kino Warm 1",
+        "group": "kino",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": 0,
+        "con": 0,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "K", "kelvin": 5300, "ab": 0, "gm": 2 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 5
+      }
+    },
+    {
+      "id": "kino-warm2",
+      "why": "Kino Standard with the LUT's own WARM2 white-balance step folded in: measured +27.2 mired against STANDARD as a pure amber<->blue move, so 5700 K instead of 4900 K under roughly 6500 K daylight.",
+      "fields": {
+        "name": "Kino Warm 2",
+        "group": "kino",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": 0,
+        "con": 0,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "K", "kelvin": 5700, "ab": 0, "gm": 2 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 5
+      }
+    },
+    {
+      "id": "kino-warm3",
+      "why": "Kino Standard with the LUT's own WARM3 white-balance step folded in: measured +36.5 mired against STANDARD as a pure amber<->blue move, so 6000 K instead of 4900 K under roughly 6500 K daylight.",
+      "fields": {
+        "name": "Kino Warm 3",
+        "group": "kino",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": 0,
+        "con": 0,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "K", "kelvin": 6000, "ab": 0, "gm": 2 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 5
+      }
+    },
+    {
+      "id": "kino-warm4",
+      "why": "Kino Standard with the LUT's own WARM4 white-balance step folded in: measured +45.2 mired against STANDARD as a pure amber<->blue move, the warmest of the nine steps, so 6300 K instead of 4900 K under roughly 6500 K daylight.",
+      "fields": {
+        "name": "Kino Warm 4",
+        "group": "kino",
+        "engine": "recipe-lab",
+        "source": "authored-here",
+        "tone": "color",
+        "verified": false
+      },
+      "recipe": {
+        "style": "NEUTRAL",
+        "sat": 0,
+        "con": 0,
+        "sharp": 0,
+        "matrix": 0,
+        "wb": { "mode": "K", "kelvin": 6300, "ab": 0, "gm": 2 },
+        "pe": 0,
+        "sub": 0,
+        "ev": 0,
+        "dro": 5
+      }
     }
   ]
 }

@@ -9,11 +9,11 @@
 | 应用名称 | Sony SOOC Recipes |
 | 包名 | com.hairuoliu.sonysoocrecipes |
 | APK 文件名 | SonySOOCRecipes.apk |
-| 已编译配方 | 140 |
-| 来源分组 | Sony、Fuji Sim、Fuji Film、Kodak、Cine、Ricoh GR、Leica、Hasselblad、Canon / Nikon、Pentax、Pana / Olympus、Other Stocks、Ilford、App Look |
+| 已编译配方 | 149 |
+| 来源分组 | Sony、Fuji Sim、Fuji Film、Kodak、Cine、Ricoh GR、Leica、Hasselblad、Canon / Nikon、Pentax、Pana / Olympus、Other Stocks、Ilford、Kino LUT、App Look |
 | 目录版本 | 0.6.0（更新于 2026-09-13） |
 
-**一句话概览：** 这是主包——**140** 个已编译配方，横跨 **14** 个来源分组（目录中的全部品牌与风格）。
+**一句话概览：** 这是主包——**149** 个已编译配方，横跨 **15** 个来源分组（目录中的全部品牌与风格）。
 
 ## Sony（8）
 
@@ -214,6 +214,22 @@
 | Ilford Delta 100 | Ilford Delta 100 | 黑白 | 极细 T 颗粒 100 度黑白。 |
 | Ilford Delta 3200 | Ilford Delta 3200 | 黑白 | 高速、氛围感的颗粒 T 颗粒黑白。 |
 | Ilford Pan F 50 | Ilford Pan F 50 | 黑白 | 极细颗粒的慢速 50 度黑白。 |
+
+## Kino LUT（9）
+
+| 名称 | 中文 | 类型 | 简述 |
+|------|------|------|------|
+| Kino Cool 4 | Kino 冷调 4 | 彩色 | 九款里最冷——相对 STANDARD 测得 −19.4 mired。创意风格 NEUTRAL；DRO Lv5；白平衡 4500 K。 |
+| Kino Cool 3 | Kino 冷调 3 | 彩色 | 相对 STANDARD 测得 −15.5 mired。创意风格 NEUTRAL；DRO Lv5；白平衡 4600 K。 |
+| Kino Cool 2 | Kino 冷调 2 | 彩色 | 相对 STANDARD 测得 −11.8 mired。创意风格 NEUTRAL；DRO Lv5；白平衡 4700 K。 |
+| Kino Cool 1 | Kino 冷调 1 | 彩色 | 相对 STANDARD 测得 −7.0 mired。创意风格 NEUTRAL；DRO Lv5；白平衡 4800 K。 |
+| Kino Standard | Kino 标准 | 彩色 | STANDARD 参考步——校准时以它为准。创意风格 NEUTRAL；DRO Lv5；白平衡 4900 K。 |
+| Kino Warm 1 | Kino 暖调 1 | 彩色 | 相对 STANDARD 测得 +15.9 mired。创意风格 NEUTRAL；DRO Lv5；白平衡 5300 K。 |
+| Kino Warm 2 | Kino 暖调 2 | 彩色 | 相对 STANDARD 测得 +27.2 mired。创意风格 NEUTRAL；DRO Lv5；白平衡 5700 K。 |
+| Kino Warm 3 | Kino 暖调 3 | 彩色 | 相对 STANDARD 测得 +36.5 mired。创意风格 NEUTRAL；DRO Lv5；白平衡 6000 K。 |
+| Kino Warm 4 | Kino 暖调 4 | 彩色 | 九款里最暖——相对 STANDARD 测得 +45.2 mired。创意风格 NEUTRAL；DRO Lv5；白平衡 6300 K。 |
+
+这九款从购买的 Kino 系电影 LUT 测量而来（见 [cinema.zh-CN.md](cinema.zh-CN.md)）；该观感只在阴影里偏青，相机无法复现——详见该页诚实说明。
 
 ## App Look（5）
 

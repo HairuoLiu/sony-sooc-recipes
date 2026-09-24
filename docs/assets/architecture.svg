@@ -33,7 +33,7 @@
 
   <rect class="box-h" x="24" y="48" width="140" height="62" rx="7"/>
   <text class="t" x="94" y="72" text-anchor="middle">filters.json</text>
-  <text class="s" x="94" y="89" text-anchor="middle">155 looks, 14 groups</text>
+  <text class="s" x="94" y="89" text-anchor="middle">164 looks, 15 groups</text>
   <text class="s" x="94" y="102" text-anchor="middle">single source of truth</text>
 
   <path class="arrow" d="M168 79 L206 79"/>

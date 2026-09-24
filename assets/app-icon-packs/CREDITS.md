@@ -1,8 +1,8 @@
 # Brand-pack icon artwork — provenance and licences
 
 Most brand packs carry a launcher icon built from a photograph of a *film product*, not a
-camera body. Three packs are the exception — they depict a camera body — and one merges several
-film families into a single app:
+camera body. Three packs are the exception — they depict a camera body — one merges several
+film families into a single app, and one is **not a photograph at all**:
 
 - `leica` shows the Leica M9, a camera body.
 - `fujifilm` shows the Fujifilm X100VI, a camera body.
@@ -11,11 +11,14 @@ film families into a single app:
 - `kodak` keeps the Kodak name, but its icon is a Kodak Gold 400 / 400 film canister, not a camera body.
 - `nichefilm` is the **Niche Film Style** app (`ilford` + `cine` + `other-stocks`), and its icon is a CineStill film product shot, not a camera.
 - `pentax`, `ricoh` and `sony` are each a user-supplied film product image — the user has confirmed the picture, and no model or stock name is claimed for any of them.
+- `cinema` is the one **drawn** icon: a 35 mm negative strip, rendered in-repo rather than
+  photographed, because a LUT pack has no product to photograph and a drawing carries no
+  third-party rights at all.
 
-So the "famous camera" premise holds for only **three** of the nine packs (`leica`, `fujifilm`,
-`hasselblad`); the other **six** (`filmstocks`, `ricoh`, `kodak`, `pentax`, `nichefilm`, `sony`)
+So the "famous camera" premise holds for only **three** of the ten packs (`leica`, `fujifilm`,
+`hasselblad`); another **six** (`filmstocks`, `ricoh`, `kodak`, `pentax`, `nichefilm`, `sony`)
 depict **film stock**, not a camera body — which is honest, because those packs' recipes are
-film simulations. This file records where every one of those photographs came from and under what licence,
+film simulations — and `cinema` depicts neither, because there is nothing to depict. This file records where every one of those photographs came from and under what licence,
 because whenever a CC BY or other attribution-bearing image is used, **that attribution is a
 licence condition, not a courtesy**. As of now no such image ships — see below — but the
 record has to stay accurate either way, since a credit left behind for a photograph that is no
@@ -63,10 +66,11 @@ credit for a photograph that no longer ships would attribute material the APK do
 
 ## Attribution table
 
-Nine packs have an icon, and all nine carry **no licence at all** — all-rights-reserved
+Ten packs have an icon. Nine of them carry **no licence at all** — all-rights-reserved
 commercial photographs supplied by the user, recorded below with their source but with **no
-attribution obligation**, because no licence was granted. There is therefore no CC BY material
-in the table any more.
+attribution obligation**, because no licence was granted. The tenth, `cinema`, is drawn inside
+this repository rather than licensed or supplied, so it has no rights holder to credit.
+There is therefore no CC BY material in the table any more.
 
 | Pack | Depicts | Author / source | Licence | Source |
 |------|---------|----------------|---------|--------|
@@ -79,6 +83,7 @@ in the table any more.
 | `nichefilm` | CineStill film product | user-supplied product photograph | **All rights reserved** — user-supplied, no licence granted | user-supplied (pasted image) |
 | `hasselblad` | Hasselblad X2D II 100C (2022) | cameraelectronic.com.au — official X2D II 100C render (Shopify CDN) | **All rights reserved** — user-supplied, no licence granted | cameraelectronic.com.au product page (Shopify CDN) |
 | `sony` | Sony film product (user-supplied) | user-supplied product photograph | **All rights reserved** — user-supplied, no licence granted | user-supplied (pasted image) |
+| `cinema` | 35 mm negative strip (drawn, not photographed) | this project — original vector-style drawing | **Original work** — no third-party rights, no licence needed | generated locally; see "How the masters were produced" |
 
 No pack currently needs a visible credit for its icon, because none ships licensed material;
 the whole set is user-supplied and unlicensed, and the distribution risk sits with the
@@ -144,6 +149,14 @@ depicted. The reasoning, kept here so it can be argued with rather than rediscov
 - **filmstocks — Fujifilm film canisters** — this pack is named after Fujifilm's *film stocks*
   rather than a camera, so its icon is Fujifilm film canisters instead of a body. The recipes in
   the pack (Pro 400H, Superia 400, C200 …) are all Fujifilm colour negatives.
+- **cinema — a drawn 35 mm negative strip** — this pack ships a commercial cine-LUT look, not a
+  brand and not a stock: its recipes are a measured transcription of one purchased .cube set, so
+  there is no camera and no film canister that would be honest to show. It is the only icon here
+  that is **drawn rather than photographed**, which also makes it the only one with no rights
+  holder: the amber base, the punched sprockets and the teal frames are all primitives from
+  Pillow, committed as `master.jpg` and rendered by the same tool as every other pack. That
+  makes it the only icon in the set that carries **zero** distribution risk, and the natural
+  template if any other pack ever needs art that cannot be photographed.
 
 ## How the masters were produced
 
@@ -151,6 +164,14 @@ depicted. The reasoning, kept here so it can be argued with rather than rediscov
 research recorded; it is a scratch directory and is **not** part of this repository. What is
 committed is, per pack, `master.jpg` (downscaled to 1600 px on the long edge, JPEG q88) and
 the five generated PNGs.
+
+`cinema` is the exception to "the master is a photograph": its `master.jpg` is a drawing, made
+once and committed like any other master. It is deliberately painted on the same near-black the
+renderer uses for its tiles (RGB(28,28,30) ≈ #1C1C1E) — the framing step finds the subject by
+comparing it against the master's own border colour, and a charcoal strip on a near-black
+background would have fallen inside its 26-per-channel tolerance and been read as background
+rather than as a subject. That is why the strip is amber. Re-render it exactly like the rest:
+`python tools/build_pack_icons.py --pack cinema`.
 
 ```
 python tools/build_pack_icons.py --import <dir-of-<pack-id>.jpg>   # bring a master in

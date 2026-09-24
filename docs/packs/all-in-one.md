@@ -9,11 +9,11 @@
 | App name | Sony SOOC Recipes |
 | Package name | com.hairuoliu.sonysoocrecipes |
 | APK filename | SonySOOCRecipes.apk |
-| Compiled recipes | 140 |
-| Source groups | Sony, Fuji Sim, Fuji Film, Kodak, Cine, Ricoh GR, Leica, Hasselblad, Canon / Nikon, Pentax, Pana / Olympus, Other Stocks, Ilford, App Look |
+| Compiled recipes | 149 |
+| Source groups | Sony, Fuji Sim, Fuji Film, Kodak, Cine, Ricoh GR, Leica, Hasselblad, Canon / Nikon, Pentax, Pana / Olympus, Other Stocks, Ilford, Kino LUT, App Look |
 | Catalog version | 0.6.0 (updated 2026-09-13) |
 
-**At a glance:** this is the master pack — **140** compiled recipes spanning **14** source groups (every brand and style in the catalog).
+**At a glance:** this is the master pack — **149** compiled recipes spanning **15** source groups (every brand and style in the catalog).
 
 ## Sony (8)
 
@@ -214,6 +214,22 @@
 | Ilford Delta 100 | Ilford Delta 100 | B&W | Very fine T-grain 100 B&W. |
 | Ilford Delta 3200 | Ilford Delta 3200 | B&W | Fast, moody grainy T-grain B&W. |
 | Ilford Pan F 50 | Ilford Pan F 50 | B&W | Super-fine slow 50 ISO B&W. |
+
+## Kino LUT (9)
+
+| Name | 中文 | Type | Short description |
+|------|------|------|-------------------|
+| Kino Cool 4 | Kino 冷调 4 | Colour | Coolest of the nine — measured −19.4 mired against STANDARD. Creative Style NEUTRAL; DRO Lv5; WB 4500 K. |
+| Kino Cool 3 | Kino 冷调 3 | Colour | Measured −15.5 mired against STANDARD. Creative Style NEUTRAL; DRO Lv5; WB 4600 K. |
+| Kino Cool 2 | Kino 冷调 2 | Colour | Measured −11.8 mired against STANDARD. Creative Style NEUTRAL; DRO Lv5; WB 4700 K. |
+| Kino Cool 1 | Kino 冷调 1 | Colour | Measured −7.0 mired against STANDARD. Creative Style NEUTRAL; DRO Lv5; WB 4800 K. |
+| Kino Standard | Kino 标准 | Colour | The STANDARD reference step — the recipe to calibrate against. Creative Style NEUTRAL; DRO Lv5; WB 4900 K. |
+| Kino Warm 1 | Kino 暖调 1 | Colour | Measured +15.9 mired against STANDARD. Creative Style NEUTRAL; DRO Lv5; WB 5300 K. |
+| Kino Warm 2 | Kino 暖调 2 | Colour | Measured +27.2 mired against STANDARD. Creative Style NEUTRAL; DRO Lv5; WB 5700 K. |
+| Kino Warm 3 | Kino 暖调 3 | Colour | Measured +36.5 mired against STANDARD. Creative Style NEUTRAL; DRO Lv5; WB 6000 K. |
+| Kino Warm 4 | Kino 暖调 4 | Colour | Warmest of the nine — measured +45.2 mired against STANDARD. Creative Style NEUTRAL; DRO Lv5; WB 6300 K. |
+
+These nine are measured from a purchased Kino-family cine LUT (see [cinema.md](cinema.md)); the look's shadow-only teal is **not** reproduced — see that page's honest note.
 
 ## App Look (5)
 
