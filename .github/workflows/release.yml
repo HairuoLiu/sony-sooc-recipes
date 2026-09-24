@@ -250,6 +250,17 @@ jobs:
             python tools/gen_recipes.py --fork build/recipe-lab-sony-pmca
           fi
 
+      - name: write the Chinese launcher label
+        # Mirrors tools/build_apk.sh, and takes --pack exactly like gen_recipes above:
+        # the all-in-one never runs apply_pack, so its package name cannot identify it.
+        # tests/test_catalog.py asserts the two pipelines agree.
+        run: |
+          if [ -n "${{ matrix.pack }}" ]; then
+            python tools/patch_i18n.py --pack "${{ matrix.pack }}" --fork build/recipe-lab-sony-pmca
+          else
+            python tools/patch_i18n.py --fork build/recipe-lab-sony-pmca
+          fi
+
       - name: build
         run: |
           export ANDROID_SDK="$ANDROID_SDK_ROOT"

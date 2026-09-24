@@ -22,54 +22,63 @@
     {
       "id": "leica",
       "app_name": "Leica Style",
+      "app_name_zh": "徕卡风格",
       "groups": ["leica"],
       "icon_set": "leica"
     },
     {
       "id": "fujifilm",
       "app_name": "Fujifilm Style",
+      "app_name_zh": "富士模拟",
       "groups": ["fuji-sim"],
       "icon_set": "fujifilm"
     },
     {
       "id": "filmstocks",
       "app_name": "Fuji Film Style",
+      "app_name_zh": "富士胶片",
       "groups": ["fuji-film"],
       "icon_set": "filmstocks"
     },
     {
       "id": "ricoh",
       "app_name": "Ricoh GR Style",
+      "app_name_zh": "理光 GR 风格",
       "groups": ["ricoh-gr"],
       "icon_set": "ricoh"
     },
     {
       "id": "kodak",
       "app_name": "Kodak Style",
+      "app_name_zh": "柯达风格",
       "groups": ["kodak"],
       "icon_set": "kodak"
     },
     {
       "id": "pentax",
       "app_name": "Pentax Style",
+      "app_name_zh": "宾得风格",
       "groups": ["pentax"],
       "icon_set": "pentax"
     },
     {
       "id": "nichefilm",
       "app_name": "Niche Film Style",
+      "app_name_zh": "小众胶片",
       "groups": ["ilford", "cine", "other-stocks"],
       "icon_set": "nichefilm"
     },
     {
       "id": "hasselblad",
       "app_name": "Hasselblad Style",
+      "app_name_zh": "哈苏风格",
       "groups": ["hasselblad"],
       "icon_set": "hasselblad"
     },
     {
       "id": "sony",
       "app_name": "Sony Style",
+      "app_name_zh": "索尼风格",
       "groups": ["sony"],
       "icon_set": "sony"
     }

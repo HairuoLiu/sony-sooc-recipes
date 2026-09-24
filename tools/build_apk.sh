@@ -178,6 +178,13 @@ build_target() {
     python "$ROOT/tools/gen_recipes.py" --fork "$fork"
   fi
 
+  echo "==> writing the Chinese launcher label"
+  if [[ -n "$pack" ]]; then
+    python "$ROOT/tools/patch_i18n.py" --pack "$pack" --fork "$fork"
+  else
+    python "$ROOT/tools/patch_i18n.py" --fork "$fork"
+  fi
+
   # Fidelity against upstream is meaningful only for the all-in-one. A pack is by
   # construction a SUBSET of the all-in-one's recipes, so comparing it against the full
   # upstream file would report every recipe the pack legitimately does not carry. What

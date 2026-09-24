@@ -302,6 +302,10 @@ def main() -> int:
         report.append(f"app_name -> {pack['app_name']!r}" if n
                       else 'app_name: no <string name="app_name"> found')
 
+    # The Chinese twin of the launcher label is NOT written here: apply_pack runs before
+    # patch_ui, and pack vs all-in-one is still being decided at that point. tools/
+    # patch_i18n.py writes res/values-zh/ last, reading the package name back out.
+
     apk = apk_name(pack)
     renamed: list[str] = []
     for f in ("build.sh", "build.cmd"):

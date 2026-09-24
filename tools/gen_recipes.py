@@ -94,17 +94,21 @@ HEADER = '''package {package};
  * sub     : effect sub-parameter (Soft High-key tint, Toy tone, Partial hue, Posterization mode)
  */
 public class Recipes {{
+    /** True when the camera's Android locale is Chinese. Resolved once, at class load —
+     *  the language a body reports cannot change while the app is running. */
+    public static final boolean ZH = "zh".equals(java.util.Locale.getDefault().getLanguage());
+
     public static class Recipe {{
         public final int group; public final String name; public final int style, sat, con, sharp, matrix, wbMode, kelvin, ab, gm, pe, ev, dro, sub;
-        Recipe(int group, String name, int style, int sat, int con, int sharp, int matrix, int wbMode, int kelvin, int ab, int gm) {{
-            this(group, name, style, sat, con, sharp, matrix, wbMode, kelvin, ab, gm, 0, 0, DRO_AUTO);
+        Recipe(int group, String name, String nameZh, int style, int sat, int con, int sharp, int matrix, int wbMode, int kelvin, int ab, int gm) {{
+            this(group, name, nameZh, style, sat, con, sharp, matrix, wbMode, kelvin, ab, gm, 0, 0, DRO_AUTO);
         }}
-        Recipe(int group, String name, int style, int sat, int con, int sharp, int matrix, int wbMode, int kelvin, int ab, int gm, int pe, int ev, int dro) {{
-            this(group, name, style, sat, con, sharp, matrix, wbMode, kelvin, ab, gm, pe, ev, dro, 0);
+        Recipe(int group, String name, String nameZh, int style, int sat, int con, int sharp, int matrix, int wbMode, int kelvin, int ab, int gm, int pe, int ev, int dro) {{
+            this(group, name, nameZh, style, sat, con, sharp, matrix, wbMode, kelvin, ab, gm, pe, ev, dro, 0);
         }}
-        Recipe(int group, String name, int style, int sat, int con, int sharp, int matrix, int wbMode, int kelvin, int ab, int gm, int pe, int ev, int dro, int sub) {{
+        Recipe(int group, String name, String nameZh, int style, int sat, int con, int sharp, int matrix, int wbMode, int kelvin, int ab, int gm, int pe, int ev, int dro, int sub) {{
             this.sub = sub;
-            this.group = group; this.name = name; this.style = style; this.sat = sat; this.con = con; this.sharp = sharp; this.matrix = matrix;
+            this.group = group; this.name = (ZH && nameZh != null) ? nameZh : name; this.style = style; this.sat = sat; this.con = con; this.sharp = sharp; this.matrix = matrix;
             this.wbMode = wbMode; this.kelvin = kelvin; this.ab = ab; this.gm = gm; this.pe = pe; this.ev = ev; this.dro = dro;
         }}
         public boolean isEffect() {{ return pe != 0; }}
@@ -126,13 +130,23 @@ public class Recipes {{
     /** index = stored enum; value = runtime color-mode name (API) */
     public static final String[] STYLE_NAMES = {{ "?", "standard", "vivid", "neutral", "portrait", "landscape", "mono", "clear", "deep", "light", "sunset", "night", "red-leaves", "sepia" }};
     public static final String[] STYLE_LABEL = {{ "?", "Standard", "Vivid", "Neutral", "Portrait", "Landscape", "B&W", "Clear", "Deep", "Light", "Sunset", "Night", "Autumn", "Sepia" }};
+    public static final String[] STYLE_LABEL_ZH = {{ "?", "标准", "鲜艳", "中性", "人像", "风景", "黑白", "清晰", "深邃", "明亮", "日落", "夜景", "秋叶", "棕褐" }};
 
     private static final int AUTO = 1, K = 14;
 
     /** Picture Effect: stored byte = index in the runtime list (verified) */
     public static final String[] PE_KEYS = {{ "off", "toy-camera", "pop-color", "posterization", "retro-photo", "soft-high-key", "part-color", "rough-mono", "soft-focus", "hdr-art", "richtone-mono", "miniature", "illust", "watercolor" }};
     public static final String[] PE_LABEL = {{ "off", "Toy", "Pop", "Poster", "Retro", "High-key", "Part col", "HC mono", "Soft foc", "HDR art", "Rich mono", "Miniature", "Illust", "Watercol" }};
+    public static final String[] PE_LABEL_ZH = {{ "关", "玩具", "流行", "海报", "复古", "高调", "局部色", "高反差单色", "柔焦", "HDR 绘画", "丰富单色", "微缩", "插画", "水彩" }};
     public static final int PE_OFF = 0, PE_TOY = 1, PE_POP = 2, PE_RETRO = 4, PE_HIGHKEY = 5, PE_HCMONO = 7;
+    /** Chinese twins are swapped in over the English arrays when the body reports zh.
+     *  The arrays stay the single source every screen reads, so no call site changes. */
+    static {{
+        if (ZH) {{
+            System.arraycopy(STYLE_LABEL_ZH, 0, STYLE_LABEL, 0, STYLE_LABEL_ZH.length);
+            System.arraycopy(PE_LABEL_ZH, 0, PE_LABEL, 0, PE_LABEL_ZH.length);
+        }}
+    }}
     /** effect sub-parameter (tint / tone / hue / mode): runtime key, stored slot, value names - index = stored byte */
     public static String subKey(int pe) {{ switch (pe) {{ case 5: return "pe-soft-high-key-effect"; case 1: return "pe-toy-camera-effect"; case 6: return "pe-part-color-effect"; case 3: return "pe-posterization-effect"; default: return null; }} }}
     public static int subId(int pe) {{ switch (pe) {{ case 5: return 0x010709d8; case 1: return 0x010706f3; case 6: return 0x010706ee; case 3: return 0x010706ef; default: return 0; }} }}
@@ -162,11 +176,12 @@ def emit_recipe(f: dict, group_const: str) -> str:
     """One `new Recipe(...)` line, using the shortest upstream constructor that fits."""
     r = f["recipe"]
     name = f["name"].replace('"', '\\"')
+    name_zh = str(f.get("name_zh") or f["name"]).replace('"', '\\"')
 
     wb = r["wb"]
     wb_const = "AUTO" if wb["mode"] == "AUTO" else "K"
     head = (
-        f'{group_const}, "{name}", {r["style"]}, {r["sat"]}, {r["con"]}, {r["sharp"]}, '
+        f'{group_const}, "{name}", "{name_zh}", {r["style"]}, {r["sat"]}, {r["con"]}, {r["sharp"]}, '
         f'{r["matrix"]}, {wb_const}, {wb["kelvin"]}, {wb["ab"]}, {wb["gm"]}'
     )
 
@@ -232,6 +247,12 @@ def generate(catalog: dict, group_ids: list[str] | None = None,
         + ", ".join(f'"{g["label"]}"' for g in groups)
         + " };"
     )
+    out.append(
+        "    public static final String[] GROUPS_ZH = { "
+        + ", ".join(f'"{g.get("label_zh") or g["label"]}"' for g in groups)
+        + " };"
+    )
+    out.append("    static { if (ZH) System.arraycopy(GROUPS_ZH, 0, GROUPS, 0, GROUPS_ZH.length); }")
     out.append(
         "    private static final int "
         + ", ".join(f'{GROUP_JAVA[g["id"]]} = {i}' for i, g in enumerate(groups))

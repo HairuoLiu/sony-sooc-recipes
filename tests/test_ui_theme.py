@@ -390,10 +390,17 @@ class TestBundledFont(unittest.TestCase):
     failure with no error message anywhere. Everything here guards against that silence.
     """
 
-    def test_the_theme_names_two_files_that_are_actually_there(self):
+    def test_the_theme_names_four_files_that_are_actually_there(self):
+        """Two Latin faces and two CJK faces — one pair per language.
+
+        The CJK pair is not decoration. These bodies may carry no Chinese system font at
+        all, and a missing face does not announce itself: createFromAsset throws, the
+        catch swallows it, and every Chinese recipe name renders as tofu — which reads as
+        a data bug rather than a missing font.
+        """
         theme = patch_ui.load_theme(patch_ui.DEFAULT_THEME)
         names = patch_ui.fonts_for(theme)          # raises on a name with no file
-        self.assertEqual(2, len(names))
+        self.assertEqual(4, len(names))
         for name in names:
             path = patch_ui.FONT_DIR / name
             self.assertTrue(path.is_file(), f"assets/fonts/{name} is missing")

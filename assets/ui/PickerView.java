@@ -87,7 +87,7 @@ public class PickerView extends View {
 
         // top header
         head.setColor({picker_ink});
-        c.drawText("RECIPES  ·  " + Recipes.ALL.length, pad, pad + 7 * d, head);
+        c.drawText((Recipes.ZH ? "配方  ·  " : "RECIPES  ·  ") + Recipes.ALL.length, pad, pad + 7 * d, head);
         c.drawLine(pad, top - 5 * d, w - pad, top - 5 * d, rule);
 
         // list
@@ -120,7 +120,7 @@ public class PickerView extends View {
                     // clip the recipe name + sub-text to it, so a long name (the +2 font made
                     // this visible) cannot run under the tag. The tag is centred between the
                     // name line (baseline y+13d) and the sub-text line (baseline y+24d).
-                    String tag = rc.isEffect() ? "PE" : "CS";
+                    String tag = Recipes.ZH ? (rc.isEffect() ? "效果" : "风格") : (rc.isEffect() ? "PE" : "CS");
                     // Wider pill: generous padding around the 2-char label, with a floor so a
                     // short "PE"/"CS" still reads as a deliberate chip rather than a tight box.
                     float tw = Math.max(head.measureText(tag) + 16 * d, 52 * d), tx = xr - tw;

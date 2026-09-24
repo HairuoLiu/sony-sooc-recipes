@@ -79,6 +79,8 @@
   "legend_visibility": "gone",
   "font_regular": "Quicksand-Regular.ttf",
   "font_bold": "Quicksand-Bold.ttf",
+  "font_regular_zh": "NotoSansSC-Regular.ttf",
+  "font_bold_zh": "NotoSansSC-Bold.ttf",
   "frost_top_start": "#F2FBFDFF",
   "frost_top_end": "#E8F2F7FA",
   "frost_bottom_start": "#E8F2F7FA",

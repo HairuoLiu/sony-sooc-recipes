@@ -312,7 +312,7 @@ def anchors(theme: dict) -> list[tuple[str, str, str, str]]:
          "case K_DOWN: case K_WHEEL_CW: case K_DIAL_CW: if (browserCol == 0) nextGroup(+1); else nextInGroup(+1); return true;",
          "case K_DOWN: case K_WHEEL_CW: case K_DIAL_CW: nextRecipe(+1); return true;   // single-column picker",
          "picker down/up scrolls all recipes"),
-    ] + font_java(theme)
+    ] + font_java(theme) + label_java()
 
 
 # The two packaging lines that decide whether anything under assets/ reaches the APK.
@@ -337,10 +337,12 @@ def fonts_for(theme: dict) -> list[str]:
     would simply not exist inside the APK, createFromAsset throws, the catch swallows it,
     and the app renders the system font — indistinguishable from success unless you look.
     """
-    names = [str(theme.get("font_regular", "")), str(theme.get("font_bold", ""))]
+    names = [str(theme.get("font_regular", "")), str(theme.get("font_bold", "")),
+             str(theme.get("font_regular_zh", "")), str(theme.get("font_bold_zh", ""))]
     for name in names:
         if not name:
-            raise SystemExit("catalog/ui-theme.json needs both font_regular and font_bold")
+            raise SystemExit("catalog/ui-theme.json needs font_regular, font_bold, "
+                             "font_regular_zh and font_bold_zh")
         if not (FONT_DIR / name).is_file():
             raise SystemExit(f"catalog/ui-theme.json names {name!r} but there is no "
                              f"assets/fonts/{name} — drop the .ttf in, or pick another face")
@@ -367,6 +369,27 @@ def font_payloads(theme: dict) -> dict[str, bytes]:
             for p in sorted(FONT_DIR.iterdir()) if p.is_file()}
 
 
+def label_java() -> list[tuple[str, str, str, str]]:
+    """The on-screen words upstream hardcodes into MainActivity, switched by locale.
+
+    These four are the only text in the app that is neither a recipe name (which comes
+    from Recipes.java) nor a group label, so they are the last thing that would still
+    read as English on a Chinese body. Each replacement keeps the English branch intact:
+    Recipes.ZH is resolved once at class load, so there is no per-draw cost.
+    """
+    return [
+        ("MainActivity.java", 'tag.setText(edit[R_PE] != 0 ? "PE" : "CS");',
+         'tag.setText(Recipes.ZH ? (edit[R_PE] != 0 ? "效果" : "风格") : (edit[R_PE] != 0 ? "PE" : "CS"));',
+         "CS/PE tag"),
+        ("MainActivity.java", 'badge.setText("PROTECTED");',
+         'badge.setText(Recipes.ZH ? "受保护" : "PROTECTED");', "status badge PROTECTED"),
+        ("MainActivity.java", 'badge.setText("PREVIEW");',
+         'badge.setText(Recipes.ZH ? "预览中" : "PREVIEW");', "status badge PREVIEW"),
+        ("MainActivity.java", 'badge.setText("ACTIVE");',
+         'badge.setText(Recipes.ZH ? "已启用" : "ACTIVE");', "status badge ACTIVE"),
+    ]
+
+
 def font_java(theme: dict) -> list[tuple[str, str, str, str]]:
     """MainActivity + Legend edits that bind the bundled face.
 
@@ -376,7 +399,7 @@ def font_java(theme: dict) -> list[tuple[str, str, str, str]]:
     missing is absurd. And the bold face falls back to a synthesised bold rather than to
     regular, so a theme that names only one file still reads as bold where it should.
     """
-    regular, bold = fonts_for(theme)
+    regular, bold, regular_zh, bold_zh = fonts_for(theme)
     return [
         ("MainActivity.java", FONT_CALL_ANCHOR,
          FONT_CALL_ANCHOR + "\n        applyFont();",
@@ -393,8 +416,8 @@ def font_java(theme: dict) -> list[tuple[str, str, str, str]]:
          "        if (uiFontTried) return;\n"
          "        uiFontTried = true;\n"
          "        try {\n"
-         f'            uiFontRegular = Typeface.createFromAsset(getAssets(), "fonts/{regular}");\n'
-         f'            uiFontBold = Typeface.createFromAsset(getAssets(), "fonts/{bold}");\n'
+         f'            uiFontRegular = Typeface.createFromAsset(getAssets(), Recipes.ZH ? "fonts/{regular_zh}" : "fonts/{regular}");\n'
+         f'            uiFontBold = Typeface.createFromAsset(getAssets(), Recipes.ZH ? "fonts/{bold_zh}" : "fonts/{bold}");\n'
          "        } catch (Throwable t) { uiFontRegular = null; uiFontBold = null; }\n"
          "    }\n"
          "\n"

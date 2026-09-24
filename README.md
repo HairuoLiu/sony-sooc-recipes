@@ -40,6 +40,10 @@ one camera's looks inside** — install Leica Style and the list reads Leica. Af
 not an app running in the background — it is simply what the camera does. Close the app,
 power-cycle, and your JPEG comes out graded in **P, A, S, M and video**.
 
+**Language follows the camera.** Put the body into 简体中文 and every recipe name, group
+and on-screen label switches to Chinese — the same APK, no separate download to hunt for.
+A body left in English stays English.
+
 > **Honest note.** These are approximations, not anybody's colour science. An a6000 has no
 > Picture Profile menu and cannot store a tone curve, so each look is assembled from what the
 > body can actually hold. **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** is where those
