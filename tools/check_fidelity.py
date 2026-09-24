@@ -20,6 +20,14 @@ The comparison is semantic, not textual. Both sides are expanded to the full 15-
 form using the constructor defaults, so upstream's occasional long-hand spelling of a
 default tail compares equal to our compact output while any real value drift still fails.
 
+Since v0.81 every generated `new Recipe(...)` carries a SECOND string argument: the
+Chinese twin of the name, which the app swaps in when the camera's locale is Chinese.
+Upstream has no such argument, so it is peeled off and ignored here — a recipe's identity
+is its English name and its 15 values, and the translation must not be able to look like
+drift. When that argument was added, this tool counted it as a value, every recipe came
+back "<unparsed 10 values>", and the gate reported all 77 upstream recipes as drifted.
+`tests/test_catalog.py::TestFidelityParser` is what stops that from recurring silently.
+
 Recipes this repository adds on top are reported separately — they are deliberately not
 upstream's, and they are expected to be unverified.
 """
@@ -38,7 +46,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from gen_recipes import DEFAULT_CATALOG, generate  # noqa: E402
 
 CALL = re.compile(r"new Recipe\(\s*(.*?)\s*\)\s*,", re.S)
-HEAD = re.compile(r'^\s*([A-Z][A-Z0-9_]*)\s*,\s*"([^"]*)"')
+
+# Group constant, English name, then — optional on purpose — the Chinese twin we append
+# so the app can follow the camera's language. It is matched and discarded, because it is
+# our own addition and upstream will never have it. Written as an optional group rather
+# than a second required one so the same parser still reads a checkout that predates it.
+HEAD = re.compile(r'^\s*([A-Z][A-Z0-9_]*)\s*,\s*"([^"]*)"\s*,\s*(?:"[^"]*"\s*,\s*)?')
 
 # The upstream project's constructors, as value counts after group and name are peeled off.
 SHORT = 9    # style sat con sharp matrix wbMode kelvin ab gm

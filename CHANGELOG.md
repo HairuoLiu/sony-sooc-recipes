@@ -17,6 +17,53 @@ self-test that proves the gates still fail on broken input.
 
 ---
 
+## v0.81 — 2026-09-24 · the app now speaks the camera's language
+
+No recipe values changed. This is a language release, plus the documentation rewrite that
+had piled up behind it.
+
+- **Every string in the app follows the camera.** All 140 compiled recipes, all 14 group
+  names and every on-screen label now carry a Chinese twin. `Recipes.java` resolves
+  `java.util.Locale.getDefault()` once at class load and swaps them in, so **one APK serves
+  both languages** — there is no separate Chinese build to hunt for, and no flag to set.
+  A body left in English stays English.
+- **A subsetted CJK font ships inside the APK.** Noto Sans SC sits in `assets/fonts/` cut
+  down to the 299 characters the app actually draws: two files of ~57 KB each, against
+  **17.7 MB** for the variable font they were cut from. A camera with a few megabytes of
+  application storage cannot carry the uncut font, so this is what makes the translation
+  shippable at all. Its OFL licence travels with it, next to Quicksand's.
+- **The nine brand packs each got their own Chinese launcher name** (徕卡风格, 富士模拟,
+  哈苏风格 …), written by `tools/patch_i18n.py` — deliberately not by `apply_pack.py`,
+  which runs before the package name exists to key off.
+- **The fidelity gate was fixed.** Adding a second string argument to every generated
+  `new Recipe(...)` broke `tools/check_fidelity.py`'s parser, which counted it as a recipe
+  value and reported **all 77 upstream recipes as drifted** when not one value had moved.
+  The gate is skipped locally (it needs an upstream checkout) and runs only in CI, so
+  nothing here could see it. `TestFidelityParser` now asserts the parser still reads the
+  Java we generate, and that a translation is not part of a recipe's identity.
+- **Both READMEs were reframed and folded.** The hook is now what the catalog actually is
+  — camera simulation (Leica, Hasselblad, Fujifilm, Ricoh, Pentax) with the film stocks
+  alongside — not "155 film looks". Five secondary sections per README moved into
+  `<details>` blocks so the landing page is only what someone deciding to install needs.
+
+*Known gap:* the Chinese rendering has **not** been confirmed on hardware. The strings and
+the font are in the APK and the gates prove they were built, but no one has yet put a body
+into 简体中文 and looked at the screen. That last step still needs a camera.
+
+---
+
+## v0.8 — 2026-09-22 · the front page shows the thing instead of describing it
+
+Documentation only — no recipe values, no pack, no code.
+
+- **Both READMEs open on a two-up hero**: the camera's own Application List beside the
+  app's main screen. Everything above it was prose about what the app does; the two shots
+  are the answer to that, and they are the only thing on this page that is not a claim.
+- **The repository description moved to English** and was rewritten around camera
+  simulation, which is the part of this project that is not available anywhere else.
+
+---
+
 ## v0.7.4 — 2026-09-21 · the preview is now held to the same layout as the APK
 
 No recipe values changed, and no pack changed. This is a repository-health release from a

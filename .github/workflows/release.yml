@@ -337,10 +337,12 @@ jobs:
         # filenames, the sha256 commands) are language-neutral either way, and the four
         # caveats are the only prose a user has to act on.
         #
-        # No backticks in the English prose below: these are double-quoted echo arguments,
-        # and a backtick inside them would be command substitution, not formatting. No
-        # recipe or group counts either — a number written here would silently rot the next
-        # time the catalog changes.
+        # No backticks in the prose below: these are double-quoted echo arguments, and a
+        # backtick inside them would be command substitution, not formatting. No recipe or
+        # group counts either — a number written here would silently rot the next time the
+        # catalog changes. "Seven looks are not verified" used to be one such number, and it
+        # was wrong for a long time: the honest answer is per recipe, in the verified field
+        # of catalog/filters.json, which is the only place the count actually lives.
         run: |
           TAG="${{ steps.tag.outputs.value }}"
           N=dist/notes.md
@@ -348,15 +350,20 @@ jobs:
           echo "" >> "$N"
           echo "**Install**: see docs/INSTALL.md. The first install goes over USB; do not use Wi-Fi ADB." >> "$N"
           echo "" >> "$N"
+          echo "**Language follows the camera.** Set the body to 简体中文 and every recipe name," >> "$N"
+          echo "group and on-screen label switches to Chinese — the same APK, no separate" >> "$N"
+          echo "download to look for. A body left in English stays English." >> "$N"
+          echo "" >> "$N"
           echo "### Read these four before installing" >> "$N"
           echo "" >> "$N"
           echo "1. **The signing key is single-use.** With no keystore configured, every build" >> "$N"
           echo "   generates a fresh key. An APK signed with a different key **cannot overwrite**" >> "$N"
           echo "   an existing install — if your camera already has a Sony SOOC Recipes from" >> "$N"
           echo "   anywhere else, uninstall it first." >> "$N"
-          echo "2. **Seven looks are not verified on hardware** (gr-moriyama, kodak-vision2-500t," >> "$N"
-          echo "   Toy Camera warm/cold, Part Color red, Posterization, Teal Mood). Try those on" >> "$N"
-          echo "   discardable footage before trusting them." >> "$N"
+          echo "2. **Some looks are not verified on hardware.** Every recipe answers this for" >> "$N"
+          echo "   itself, in the verified field of catalog/filters.json: the ones this repository" >> "$N"
+          echo "   wrote itself are false, and each is marked in the generated Recipes.java. Try" >> "$N"
+          echo "   those on discardable footage before trusting them." >> "$N"
           echo "3. **The version shown inside the app is upstream's, not this tag.** Upstream reads" >> "$N"
           echo "   its version from AndroidManifest.xml; this repository only replaces the recipe" >> "$N"
           echo "   table. Trust the tag." >> "$N"
@@ -399,8 +406,10 @@ jobs:
           echo "" >> "$N"
           echo "本仓库的配方表，打成可安装的 APK。安装见 docs/INSTALL.md（第一次走 USB，别用 Wi-Fi ADB）。" >> "$N"
           echo "" >> "$N"
+          echo "**界面语言跟随相机**：机身设为简体中文，配方名、分组和界面文字自动切中文，同一个 APK，不用另找中文版。" >> "$N"
+          echo "" >> "$N"
           echo "- **签名是一次性的**：不同 key 签的 APK 无法覆盖安装，相机上若已装过别处来的，先卸载。" >> "$N"
-          echo "- **7 款配方未上机验证**（gr-moriyama、kodak-vision2-500t、Toy Camera 暖/冷、Part Color 红、Posterization、Teal Mood），先在可丢弃素材上试。" >> "$N"
+          echo "- **部分配方未上机验证**：catalog/filters.json 里每款都有自己的 verified 字段，本仓库自写的那部分为 false，生成的 Recipes.java 中也会标注，先在可丢弃素材上试。" >> "$N"
           echo "- **App 内版本号是上游的**，不是这个 tag，以 tag 为准。" >> "$N"
           echo "- **品牌包共享相机设置存储**：装多个包不会得到多台相机，同一时间只有一个配方生效。" >> "$N"
 

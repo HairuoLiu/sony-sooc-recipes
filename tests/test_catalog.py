@@ -80,6 +80,17 @@ def _load_cases() -> dict:
 CASES_DATA = _load_cases()
 
 
+def _load_tool(name: str):
+    """Import a tool script by name — tools/ is not a package, so tests borrow the same
+    sys.path trick check_fidelity.py uses to import gen_recipes."""
+    tools = str(ROOT / "tools")
+    sys.path.insert(0, tools)
+    try:
+        return __import__(name)  # noqa: PLC0415
+    finally:
+        sys.path.remove(tools)
+
+
 class TestRegistry(unittest.TestCase):
     """The file has to be a well-formed registry before it can be anything else."""
 
@@ -400,6 +411,49 @@ class TestGenerator(unittest.TestCase):
         """The 77 upstream ids are load-bearing: check_fidelity.py matches on them."""
         upstream_ids = {f["id"] for f in FILTERS if f.get("source") == "recipe-lab"}
         self.assertEqual(len(upstream_ids), 77)
+
+
+class TestFidelityParser(unittest.TestCase):
+    """The fidelity gate reads generated Java with a regex, so it breaks whenever the
+    generated line changes shape — and it breaks by reporting DRIFT, which is the one
+    message that must never be false.
+
+    That happened in v0.81. Every `new Recipe(...)` grew a second string argument, the
+    Chinese twin of the name; the parser counted it as a recipe value; all 155 recipes
+    came back `<unparsed 10 values>`; and CI failed with "77 upstream recipe(s) drifted"
+    while not one value had moved. Nothing else in the repository could see it: the gate
+    needs an upstream checkout, so it is skipped in the local suite and runs only in CI,
+    which is exactly why the parser needs a test that runs everywhere.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.fid = _load_tool("check_fidelity")
+
+    def test_the_chinese_twin_is_not_part_of_a_recipes_identity(self):
+        """The same look with and without a translation must compare equal — otherwise an
+        added name_zh reads as 77 recipes silently changing colour."""
+        bare = 'FUJI, "Classic Chrome", 1, 2, 3, 4, 0, AUTO, 0, 0, 0'
+        with_zh = 'FUJI, "Classic Chrome", "经典正片", 1, 2, 3, 4, 0, AUTO, 0, 0, 0'
+        self.assertEqual(self.fid.canonical(bare), self.fid.canonical(with_zh))
+        self.assertNotIn("unparsed", self.fid.canonical(with_zh)[1])
+
+    def test_a_recipe_without_a_translation_still_parses(self):
+        """The twin is optional in the parser because it is optional upstream: a checkout
+        predating v0.81 must stay comparable, not just the current one."""
+        name, key = self.fid.canonical('GR, "GR Retro", 1, 2, 3, 4, 0, AUTO, 0, 0, 0')
+        self.assertEqual("GR Retro", name)
+        self.assertNotIn("unparsed", key)
+
+    def test_every_generated_recipe_parses(self):
+        counter, _ = self.fid.parse(_load_tool("gen_recipes").generate(CATALOG_DATA))
+        unparsed = [k for k in counter if k.startswith("<unparsed")]
+        self.assertEqual([], unparsed[:5],
+                         "the fidelity gate cannot read the Java we generate — it would "
+                         "report every one of these as drifted upstream recipes")
+        self.assertEqual(len(RECIPE_LAB), sum(counter.values()),
+                         "the gate parsed a different number of recipes than the catalog "
+                         "compiled, so its drift report would be incomplete")
 
 
 class TestPinnedUpstream(unittest.TestCase):
