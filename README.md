@@ -18,8 +18,8 @@
 
 <p align="center">
   <img src="docs/assets/hardware/01-a7sii-application-list.jpg" width="460" alt="The camera's Application List: every brand Style pack installed side by side">
-  <img src="docs/assets/hardware/03-a7sii-main-screen-cinestill-50d.jpg" width="460" alt="Inside one pack: a real look already selected on the frosted main screen">
-  <br><sub><b>Left:</b> one entry per brand pack, nine of them on one body. <b>Right:</b> the screen you land in when you open one — a look already selected.</sub>
+  <img src="docs/assets/hardware/02-a7sii-live-preview.jpg" width="460" alt="Open a pack and you land on a live preview you flip through with left/right">
+  <br><sub><b>Left:</b> one entry per brand pack, nine of them on one body. <b>Right:</b> open one and you land on a live preview you flip through left/right.</sub>
 </p>
 
 **One Windows file, one click.** Download the installer, run it, plug the camera in — it finds the body by
@@ -84,8 +84,8 @@ Before installing, if the body already carries a Sony SOOC Recipes from elsewher
 ## On a real camera
 
 <p align="center">
-  <img src="docs/assets/hardware/01-a7sii-application-list.jpg" width="440" alt="Application List with nine brand packs side by side">
-  <img src="docs/assets/hardware/03-a7sii-main-screen-cinestill-50d.jpg" width="440" alt="Main screen with Cinestill 50D selected">
+  <img src="docs/assets/hardware/03-a7sii-recipe-browser.jpg" width="440" alt="Open a look to see its recipe — every parameter listed">
+  <img src="docs/assets/hardware/04-a7sii-parameter-editor.jpg" width="440" alt="The parameter editor: a JPG/RAW switch and fine-tuned controls">
 </p>
 
 **Confirmed on a real α7S II** — installs, launches, nine packs side by side. Photographs in

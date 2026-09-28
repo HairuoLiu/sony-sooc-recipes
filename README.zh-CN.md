@@ -14,8 +14,8 @@
 
 <p align="center">
   <img src="docs/assets/hardware/01-a7sii-application-list.jpg" width="460" alt="相机应用程序列表：每个品牌一个条目，一台机身上并排九个">
-  <img src="docs/assets/hardware/03-a7sii-main-screen-cinestill-50d.jpg" width="460" alt="主屏选中 Cinestill 50D：Standard 风格，饱和度 −1、对比度 +1、白平衡 5600K">
-  <br><sub><b>左边：</b>相机上的「应用程序列表」——每个品牌一个条目，一台机身上并排九个。<b>右边：</b>点进去落到的主屏，已经选中了一款观感。</sub>
+  <img src="docs/assets/hardware/02-a7sii-live-preview.jpg" width="460" alt="应用主屏：极简的实时预览，左右滑动切换滤镜">
+  <br><sub><b>左边：</b>相机上的「应用程序列表」——每个品牌一个条目，一台机身上并排九个。<b>右边：</b>打开一款配方，落到能左右切换滤镜的实时预览主屏。</sub>
 </p>
 
 **一个 Windows 文件，一次点击。** 下载安装器、双击运行、插上相机——它自己认出机身，一条进度条把观感写进相机。
@@ -75,8 +75,8 @@
 ## 真机实拍
 
 <p align="center">
-  <img src="docs/assets/hardware/01-a7sii-application-list.jpg" width="440" alt="应用程序列表：九个品牌包并排">
-  <img src="docs/assets/hardware/03-a7sii-main-screen-cinestill-50d.jpg" width="440" alt="主屏选中 Cinestill 50D">
+  <img src="docs/assets/hardware/03-a7sii-recipe-browser.jpg" width="440" alt="点进一款观感，看到它的配方——每个参数都列出来">
+  <img src="docs/assets/hardware/04-a7sii-parameter-editor.jpg" width="440" alt="参数修改界面：支持 JPG / RAW 切换，各种参数可微调">
 </p>
 
 **已在真机确认的机型：α7S II** —— 装得上、打得开、九个包同时并存。实拍照片见
