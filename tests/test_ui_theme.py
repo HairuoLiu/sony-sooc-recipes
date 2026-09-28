@@ -558,9 +558,10 @@ class TestEditorKeyAxes(unittest.TestCase):
 
     def test_up_down_walks_the_list_in_the_editor(self):
         new = self._new("editor: up/down walks the list")
-        self.assertIn("if (bottomOnly) moveChip(e.getScanCode() == K_UP ? -1 : +1);", new,
-                      "UP must move the selection UP the list (moveChip(-1)) before focus "
-                      "can claim the key — the editor is a vertical list now")
+        self.assertIn("if (bottomOnly) moveEditorRow(e.getScanCode() == K_UP ? -1 : +1);", new,
+                      "UP must move the selection UP the list before focus can claim the "
+                      "key — the editor is a vertical list now. v1.0.0: it walks via "
+                      "moveEditorRow so the cursor lands on PE-overridden (disabled) rows too")
         self.assertIn("else if (focus) stepValue(", new,
                       "the main screen's focused UP/DOWN must keep dialling the value")
         self.assertIn("else toggleLine();", new,
@@ -826,14 +827,25 @@ class TestEditorView(unittest.TestCase):
 
     def test_editor_lists_every_row_and_greys_disabled_ones(self):
         """The editor must carry the disabled-rows affordance, or a Picture Effect recipe
-        looks like it lost half its controls again. v0.92: the note is the user's wording
-        （不能改动）, and the current value stays readable above it."""
+        looks like it lost half its controls again. v1.0.0: the note is the user's wording
+        （不能改动） and rides the value string itself — MainActivity appends it to the value
+        so it reads "标准（不能改动）" on one line, instead of a second line under the value
+        (which read as noise on hardware). The template still reads the disabled flag to grey
+        the row out; it no longer draws its own second-line note."""
         raw = patch_ui.EDITOR_TEMPLATE.read_text(encoding="utf-8")
-        self.assertIn('c.drawText(Recipes.ZH ? "（不能改动）" : "(read-only)", xr, y + 24 * d, note);',
-                      raw,
-                      "the editor no longer marks a Picture Effect's overridden rows")
         self.assertIn("boolean disabled = off != null && off[i];", raw,
                       "the editor does not read the disabled flag for each row")
+        # the （不能改动） note now comes from MainActivity, not a second line in the template
+        self.assertNotIn('c.drawText(Recipes.ZH ? "（不能改动）" : "(read-only)", xr, y + 24 * d, note);',
+                         raw,
+                         "the editor still draws the read-only note on its own second line — "
+                         "MainActivity should append it to the value instead")
+        theme = patch_ui.load_theme(patch_ui.DEFAULT_THEME)
+        appended = [n for _f, _o, n, label in patch_ui.anchors(theme)
+                    if label == "editor: read-only note rides the value"]
+        self.assertEqual(len(appended), 1, "the read-only-note anchor is missing or duplicated")
+        self.assertIn('(Recipes.ZH ? "（不能改动）" : " (read-only)")', appended[0],
+                      "MainActivity does not append the （不能改动） note to the value string")
 
     def test_editor_values_end_at_the_right_edge(self):
         """v0.91 hardware report: the right side showed nothing. The value was drawn

@@ -162,15 +162,12 @@ public class EditorView extends View {
             c.clipRect(mid, y, xr, y + ROW_H * d);
             item.setColor(disabled ? {editor_dim} : on ? {editor_accent_ink} : {editor_ink});
             item.setTextAlign(Paint.Align.RIGHT);
-            c.drawText(values[i], xr, y + 17 * d, item);
             // A Picture Effect overrides the Creative Style parameters on the body, so they
-            // are listed (they exist) but visibly not in play — the value stays readable,
-            // with the why right under it.
-            if (disabled) {
-                note.setTextAlign(Paint.Align.RIGHT);
-                c.drawText(Recipes.ZH ? "（不能改动）" : "(read-only)", xr, y + 24 * d, note);
-                note.setTextAlign(Paint.Align.LEFT);
-            }
+            // are listed (they exist) but visibly not in play. MainActivity appends the why —
+            // "（不能改动）" / "(read-only)" — to the value string itself, so the reason sits
+            // right after the value ("标准（不能改动）") instead of on a second line under it,
+            // which read as noise on the hardware.
+            c.drawText(values[i], xr, y + 17 * d, item);
             item.setTextAlign(Paint.Align.LEFT);
             c.restore();
         }

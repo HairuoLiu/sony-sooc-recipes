@@ -16,6 +16,21 @@ self-test that proves the gates still fail on broken input.
 
 ---
 
+## 1.0.1 — editor fixes from the α7S II
+
+Three fixes from testing 1.0.0 on a real body, all inside the settings editor.
+
+- **The read-only note rides the value, not a second line under it.** A parameter a Picture
+  Effect overrides now reads `标准（不能改动）` / `Standard (read-only)` on one line, the
+  note appended to the value itself. It used to draw on a separate line below the value,
+  which read as noise.
+- **Overridden rows are now selectable.** The editor's ↑ ↓ used to skip a PE-overridden row
+  entirely, so you could never land the cursor on it to see what was there. It now walks the
+  whole list — you can move onto a disabled row, you just can't dial it.
+- **Saving returns to the recipe list.** Pressing the centre key to store a recipe dropped
+  you onto a blank view (overlay `2`) and you had to press again. It now returns to the
+  screen the editor opened from — normally the recipe list — in one press.
+
 ## 1.0.0 — first release
 
 The first tagged release: the whole catalog, the bilingual UI, and the brand-pack split,

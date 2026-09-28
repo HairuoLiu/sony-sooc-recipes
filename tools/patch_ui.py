@@ -618,7 +618,7 @@ def anchors(theme: dict) -> list[tuple[str, str, str, str]]:
         # through to nextRecipe inside the editor and changed the recipe mid-edit).
         ("MainActivity.java",
          "                if (focus) stepValue(e.getScanCode() == K_UP ? +1 : -1); else toggleLine();",
-         "                if (bottomOnly) moveChip(e.getScanCode() == K_UP ? -1 : +1);     // v0.92: UP/DOWN walk the list\n"
+         "                if (bottomOnly) moveEditorRow(e.getScanCode() == K_UP ? -1 : +1);     // v1.0.0: UP/DOWN walk every row, disabled included\n"
          "                else if (focus) stepValue(e.getScanCode() == K_UP ? +1 : -1); else toggleLine();",
          "editor: up/down walks the list"),
         # v0.90/0.91 history: LEFT/RIGHT walked the rows. v0.92 swaps the axes with the
@@ -711,12 +711,15 @@ def anchors(theme: dict) -> list[tuple[str, str, str, str]]:
          "        float w = getWidth(), h = getHeight(), pad = 16 * d;",
          "font: PromptView paints"),
         # Storing used to leave the panel on screen. Now every commit returns to the pure
-        # viewfinder: focused chip, recipe line, pill or hidden — all of them.
+        # viewfinder: focused chip, recipe line, pill or hidden — all of them. v1.0.0: it
+        # also returns to the screen the editor opened FROM (overlayPrev, normally the recipe
+        # list at overlay 3) rather than a blank view — saving from the editor used to land
+        # on overlay 2 (everything hidden) and the user had to press again to get the list.
         ("MainActivity.java",
          "            case K_ENTER: if (row == 0 || overlay != 0) writeAll(); else setFocus(!focus); return true;",
-         "            case K_ENTER: if (bottomOnly || row == 0 || overlay != 0 || focus) { writeAll(); bottomOnly = false; focus = false; row = 0; overlay = 2; render(); } else setFocus(true); return true;",
+         "            case K_ENTER: if (bottomOnly || row == 0 || overlay != 0 || focus) { writeAll(); bottomOnly = false; focus = false; row = 0; overlay = overlayPrev; render(); } else setFocus(true); return true;",
          "auto-hide after store"),
-    ] + STRENGTH + font_java(theme) + label_java() + perf()
+    ] + STRENGTH + font_java(theme) + label_java() + perf() + editor_ux()
 
 
 # The two packaging lines that decide whether anything under assets/ reaches the APK.
@@ -1010,6 +1013,58 @@ def perf() -> list[tuple[str, str, str, str]]:
          "        applyPreview(); render();\n    }\n\n    /** enumerated rows (names, not numbers) scroll endlessly */",
          "        applyPreviewSoon(); render();\n    }\n\n    /** enumerated rows (names, not numbers) scroll endlessly */",
          "perf: dial coalesces the preview"),
+    ]
+
+
+def editor_ux() -> list[tuple[str, str, str, str]]:
+    """Hardware-driven editor fixes (α7S II, v1.0.0 feedback), appended last so they match
+    the text the editor/v0.9x anchors above have already produced.
+
+    Three things the hardware asked for, and where each landed:
+    1. The read-only note rode a second line UNDER the value ("0" then "（不能改动）"
+       below it), which read as noise. The note now rides the value string itself —
+       MainActivity appends "（不能改动）" / " (read-only)" to the value, so the editor
+       draws "标准（不能改动）" on one line. The EditorView template stops drawing its own
+       second-line note (see assets/ui/EditorView.java). → the anchor below.
+    2. A row a Picture Effect overrides was un-selectable: the editor's UP/DOWN walked the
+       list through moveChip(), which skips rows where rowVisible() is false — and every
+       PE-overridden row is invisible on the main screen, so the cursor could never land on
+       one to show it. The editor now walks with moveEditorRow(), which steps the ORDER list
+       one entry at a time and lands on disabled rows too. You can move onto one, you just
+       cannot dial it (stepValue already returns early on rowDisabled). The UP/DOWN call
+       itself is rewritten by the v0.92 "up/down walks the list" anchor above (it now calls
+       moveEditorRow directly); this function only ADDS the moveEditorRow method the call
+       needs. → the anchor below.
+    3. Saving from the editor left a blank view (overlay 2) instead of returning to the
+       recipe list. That fix lives in the "auto-hide after store" anchor above — its
+       store path now returns to overlayPrev, the screen the editor opened from. Nothing
+       extra to add here.
+    """
+    return [
+        # --- the read-only note rides the value string --------------------------------
+        ("MainActivity.java",
+         "            values[k] = fmt(i, edit[i]);",
+         "            values[k] = fmt(i, edit[i]) + (rowDisabled(i) ? (Recipes.ZH ? \"（不能改动）\" : \" (read-only)\") : \"\");",
+         "editor: read-only note rides the value"),
+        # --- the editor walks every row, disabled included -----------------------------
+        ("MainActivity.java",
+         "        row = ORDER[pos]; lastChip = row; render();\n"
+         "    }\n\n"
+         "    /** UP/DOWN: switch between the recipe line and the chip strip */",
+         "        row = ORDER[pos]; lastChip = row; render();\n"
+         "    }\n\n"
+         "    /** UP/DOWN in the editor: step the ORDER list one row at a time, landing on\n"
+         "     *  disabled rows too — you can select a PE-overridden row, you just cannot dial\n"
+         "     *  it. moveChip() is wrong here because it skips rows where rowVisible() is\n"
+         "     *  false, and every PE-overridden row is invisible on the main screen. */\n"
+         "    private void moveEditorRow(int dir) {\n"
+         "        int pos = 0;\n"
+         "        for (int k = 0; k < ORDER.length; k++) if (ORDER[k] == row) pos = k;\n"
+         "        pos = (pos + ORDER.length + dir) % ORDER.length;\n"
+         "        row = ORDER[pos]; lastChip = row; render();\n"
+         "    }\n\n"
+         "    /** UP/DOWN: switch between the recipe line and the chip strip */",
+         "editor: moveEditorRow steps every row"),
     ]
 
 
