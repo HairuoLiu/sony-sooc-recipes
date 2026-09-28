@@ -1,7 +1,11 @@
 # Sony SOOC Recipes · 索尼直出配方
 
 <p align="center">
-  <a href="README.md">English</a> · <b>简体中文</b>
+  <b>简体中文</b> · <a href="README-English.md">English version</a>
+  &nbsp;·&nbsp;
+  <a href="https://github.com/HairuoLiu/sony-sooc-recipes/actions/workflows/ci.yml"><img src="https://github.com/HairuoLiu/sony-sooc-recipes/actions/workflows/ci.yml/badge.svg" alt="catalog gates"></a>
+  <a href="https://github.com/HairuoLiu/sony-sooc-recipes/releases/latest"><img src="https://img.shields.io/badge/download-Windows%20installer-2f81f7" alt="下载 Windows 安装器"></a>
+  <img src="https://img.shields.io/badge/license-MIT-3fb950" alt="MIT 许可">
 </p>
 
 <p align="center">
@@ -13,20 +17,18 @@
 <!-- counts: total=164 compiled=149 -->
 
 <p align="center">
-  <img src="docs/assets/hardware/01-a7sii-application-list.jpg" width="460" alt="相机应用程序列表：每个品牌一个条目，一台机身上并排九个">
-  <img src="docs/assets/hardware/02-a7sii-live-preview.jpg" width="460" alt="应用主屏：极简的实时预览，左右滑动切换滤镜">
+  <img src="docs/assets/hardware/01-a7sii-application-list.jpg" width="430" alt="相机应用程序列表：每个品牌一个条目，一台机身上并排九个">
+  <img src="docs/assets/hardware/02-a7sii-live-preview.jpg" width="430" alt="应用主屏：极简的实时预览，左右滑动切换滤镜">
   <br><sub><b>左边：</b>相机上的「应用程序列表」——每个品牌一个条目，一台机身上并排九个。<b>右边：</b>打开一款配方，落到能左右切换滤镜的实时预览主屏。</sub>
 </p>
 
-**一个 Windows 文件，一次点击。** 下载安装器、双击运行、插上相机——它自己认出机身，一条进度条把观感写进相机。
-**不用 APK、不用工具链、不用命令行**，配方就装在安装器里。
+**一个 Windows 文件，一次点击。** 下载安装器、双击运行、插上相机——它自己认出机身，一条进度条把观感写进相机。**不用 APK、不用工具链、不用命令行**，配方就装在安装器里。
 
 ---
 
 ## 你有哪些胶片模拟
 
-安装器把你的索尼变成别家相机。每个**品牌包**是一个独立应用，只装那个品牌的观感、包名不同、可在相机侧并存——
-你只装自己拍的牌子。
+安装器把你的索尼变成别家相机。每个**品牌包**是一个独立应用，只装那个品牌的观感、包名不同、可在相机侧并存——你只装自己拍的牌子。
 
 ### 免费安装器 —— Base（6 个包，91 款）
 
@@ -39,8 +41,7 @@
 | 理光 GR 风格 | 11 | GR 正片 · GR 高反差黑白 · GR 森山风 |
 | 索尼风格 | 8 | 索尼 FL（胶片感）· 索尼 IN（即显）· 索尼 VV2 |
 
-完整阵容还包括 **徕卡、哈苏、宾得、电影滤镜、单色** 等风格，以及**装了全部 149 款的「全量版」应用**——
-单独分发。每一款都可筛选、可搜索：**[滤镜浏览器](catalog/index.html)**（单个 HTML 文件，下载后用浏览器打开即可）。
+完整阵容还包括 **徕卡、哈苏、宾得、电影滤镜、单色** 等风格，以及**装了全部 149 款的「全量版」应用**——单独分发。每一款都可筛选、可搜索：**[滤镜浏览器](catalog/index.html)**（单个 HTML 文件，下载后用浏览器打开即可）。
 
 ---
 
@@ -48,22 +49,32 @@
 
 **一个文件、一次点击。不用 APK、不用工具链、不用命令行。**
 
-1. **下载** `SonySOOCRecipes-Base-CN.exe`：
-   [Releases](https://github.com/HairuoLiu/sony-sooc-recipes/releases/latest)——这是**唯一**要下的东西。
-   （要英文界面就用 `SonySOOCRecipes-Base-EN.exe`，同一个安装器。）
-2. **准备相机** —— 充满电、机内插好 SD 卡、一根**能传数据**的 USB 线，并把相机设为
-   `设置（工具箱）→ USB 连接 → 海量存储`。开机插线，等屏幕显示 `USB Mode`。
-3. **双击运行安装器，一路点下去。** 它自己认出相机，然后列出它带的配方包（默认全选）；
-   不要的取消勾选，点「下一步」。全部约 **10–15 分钟**，窗口可以最小化。
-4. **拔线、关机再开机，开拍。** `MENU → 应用程序 → 应用程序列表` 里每个包一个条目，
-   之后风格就是相机自己的行为，**P / A / S / M 和录像**全部模式生效。
+### 第 1 步 · 下载安装器
+从 [Releases](https://github.com/HairuoLiu/sony-sooc-recipes/releases/latest) 下载 `SonySOOCRecipes-Base-CN.exe`——这是**唯一**要下的东西。要英文界面就用 `SonySOOCRecipes-Base-EN.exe`，同一个安装器。
+
+### 第 2 步 · 连接相机
+充满电、机内插好 SD 卡、一根**能传数据**的 USB 线，并把相机设为 `设置（工具箱）→ USB 连接 → 海量存储`。开机插线，等屏幕显示 `USB Mode`。
 
 <p align="center">
-  <img src="docs/assets/install/zh-CN/01-connect-camera.png" width="330" alt="安装器第 1 步：提示「相机已连接」，下方有「立即重新检测」按钮">
-  <img src="docs/assets/install/zh-CN/02-choose-packs.png" width="330" alt="安装器第 2 步：它带的配方包列表，默认全选，右上角有「全选」">
-  <img src="docs/assets/install/zh-CN/03-installing.png" width="330" alt="安装器第 3 步：进度条显示「正在安装 1/6」">
-  <br><sub><b>第 1 步 · 连接相机</b> · <b>第 2 步 · 选择配方</b> · <b>第 3 步 · 正在安装</b></sub>
+  <img src="docs/assets/install/zh-CN/01-connect-camera.png" alt="安装器第 2 步：提示「相机已连接」，下方有「立即重新检测」按钮">
 </p>
+
+### 第 3 步 · 选择配方包
+双击运行安装器，它自己认出相机，然后列出它带的配方包（默认全选）；不要的取消勾选，点「下一步」。全部约 **10–15 分钟**，窗口可以最小化。
+
+<p align="center">
+  <img src="docs/assets/install/zh-CN/02-choose-packs.png" alt="安装器第 3 步：它带的配方包列表，默认全选，右上角有「全选」">
+</p>
+
+### 第 4 步 · 开始安装
+点「下一步」后进度条开始走，约 **10–15 分钟**，窗口可以最小化。
+
+<p align="center">
+  <img src="docs/assets/install/zh-CN/03-installing.png" alt="安装器第 4 步：进度条显示「正在安装 1/6」">
+</p>
+
+### 第 5 步 · 拔线开拍
+`MENU → 应用程序 → 应用程序列表` 里每个包一个条目，之后风格就是相机自己的行为，**P / A / S / M 和录像**全部模式生效。
 
 > **只支持 Windows。** 安装器是 Windows 程序（Windows 7 SP1 – 11），没有 macOS / Linux 版；预编译的 APK 也不再发布。
 
@@ -75,12 +86,12 @@
 ## 真机实拍
 
 <p align="center">
-  <img src="docs/assets/hardware/03-a7sii-recipe-browser.jpg" width="440" alt="点进一款观感，看到它的配方——每个参数都列出来">
-  <img src="docs/assets/hardware/04-a7sii-parameter-editor.jpg" width="440" alt="参数修改界面：支持 JPG / RAW 切换，各种参数可微调">
+  <img src="docs/assets/hardware/03-a7sii-recipe-browser.jpg" width="430" alt="点进一款观感，看到它的配方——每个参数都列出来">
+  <img src="docs/assets/hardware/04-a7sii-parameter-editor.jpg" width="430" alt="参数修改界面：支持 JPG / RAW 切换，各种参数可微调">
+  <br><sub><b>左边：</b>点进一款观感，看到它的配方——每个参数都列出来。<b>右边：</b>参数修改界面，支持 JPG / RAW 切换，各种参数可微调。</sub>
 </p>
 
-**已在真机确认的机型：α7S II** —— 装得上、打得开、九个包同时并存。实拍照片见
-**[安装指南](docs/INSTALL.zh-CN.md)**。支持列表里的其他机型是**平台层面**支持，没有逐台实测过，这两件事不是一回事。
+**已在真机确认的机型：α7S II** —— 装得上、打得开、九个包同时并存。实拍照片见 **[安装指南](docs/INSTALL.zh-CN.md)**。支持列表里的其他机型是**平台层面**支持，没有逐台实测过，这两件事不是一回事。
 
 ---
 

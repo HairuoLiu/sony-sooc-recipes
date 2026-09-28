@@ -46,7 +46,7 @@ method in this repository can install anything on it.
 > no `Application` menu either — their absence from the supported column above is **not an omission**.
 
 **Confirmed on a real body: the α7S II**, with nine brand packs installed side by side. Photographs
-of it running are in the [README](../README.md#on-a-real-camera). Everything else in the left
+of it running are in the [README](../README-English.md#on-a-real-camera). Everything else in the left
 column is *platform* support — the body has the app channel — rather than a body-by-body test,
 and those are not the same claim.
 

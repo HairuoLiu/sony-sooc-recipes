@@ -1,130 +1,126 @@
-<h1 align="center">sony-sooc-recipes</h1>
+# Sony SOOC Recipes · 索尼直出配方
 
 <p align="center">
-  <b>Turn your Sony into a Leica, Hasselblad, Fujifilm, Ricoh or Pentax — with 164 film and camera looks, straight out of camera.</b>
+  <b>简体中文</b> · <a href="README-English.md">English version</a>
+  &nbsp;·&nbsp;
+  <a href="https://github.com/HairuoLiu/sony-sooc-recipes/actions/workflows/ci.yml"><img src="https://github.com/HairuoLiu/sony-sooc-recipes/actions/workflows/ci.yml/badge.svg" alt="catalog gates"></a>
+  <a href="https://github.com/HairuoLiu/sony-sooc-recipes/releases/latest"><img src="https://img.shields.io/badge/download-Windows%20installer-2f81f7" alt="下载 Windows 安装器"></a>
+  <img src="https://img.shields.io/badge/license-MIT-3fb950" alt="MIT 许可">
+</p>
+
+<p align="center">
+  <b>把你的索尼变成莱卡、哈苏、富士、理光、宾得——**164 款**别家相机色彩与胶片配方，直出 JPEG。</b>
   <br>
-  <sub>164 looks · 149 installable · 15 groups — film stocks &amp; other cameras' colour, SOOC JPEG</sub>
+  <sub>**164 款**别家相机色彩与胶片配方，其中 **149 款可装进相机**——胶片观感与机型模拟，全部 SOOC</sub>
 </p>
 
 <!-- counts: total=164 compiled=149 -->
 
 <p align="center">
-  <b>English</b> · <a href="README.zh-CN.md">简体中文</a>
-  &nbsp;·&nbsp;
-  <a href="https://github.com/HairuoLiu/sony-sooc-recipes/actions/workflows/ci.yml"><img src="https://github.com/HairuoLiu/sony-sooc-recipes/actions/workflows/ci.yml/badge.svg" alt="catalog gates"></a>
-  <a href="https://github.com/HairuoLiu/sony-sooc-recipes/releases/latest"><img src="https://img.shields.io/badge/download-Windows%20installer-2f81f7" alt="download the Windows installer"></a>
-  <img src="https://img.shields.io/badge/license-MIT-3fb950" alt="MIT licence">
+  <img src="docs/assets/hardware/01-a7sii-application-list.jpg" width="430" alt="相机应用程序列表：每个品牌一个条目，一台机身上并排九个">
+  <img src="docs/assets/hardware/02-a7sii-live-preview.jpg" width="430" alt="应用主屏：极简的实时预览，左右滑动切换滤镜">
+  <br><sub><b>左边：</b>相机上的「应用程序列表」——每个品牌一个条目，一台机身上并排九个。<b>右边：</b>打开一款配方，落到能左右切换滤镜的实时预览主屏。</sub>
 </p>
 
-<p align="center">
-  <img src="docs/assets/hardware/01-a7sii-application-list.jpg" width="460" alt="The camera's Application List: every brand Style pack installed side by side">
-  <img src="docs/assets/hardware/02-a7sii-live-preview.jpg" width="460" alt="Open a pack and you land on a live preview you flip through with left/right">
-  <br><sub><b>Left:</b> one entry per brand pack, nine of them on one body. <b>Right:</b> open one and you land on a live preview you flip through left/right.</sub>
-</p>
-
-**One Windows file, one click.** Download the installer, run it, plug the camera in — it finds the body by
-itself and writes the looks across USB behind a single progress bar. **No APK to fetch, no toolchain, no
-command line.** The recipes ship *inside* the installer.
+**一个 Windows 文件，一次点击。** 下载安装器、双击运行、插上相机——它自己认出机身，一条进度条把观感写进相机。**不用 APK、不用工具链、不用命令行**，配方就装在安装器里。
 
 ---
 
-## What film simulations you get
+## 你有哪些胶片模拟
 
-The installer turns your Sony into other cameras. Each **brand pack** is one app that carries that brand's
-looks under its own name, so they install side by side and you take only the brands you actually shoot.
+安装器把你的索尼变成别家相机。每个**品牌包**是一个独立应用，只装那个品牌的观感、包名不同、可在相机侧并存——你只装自己拍的牌子。
 
-### Free installer — Base (6 packs, 91 looks)
+### 免费安装器 —— Base（6 个包，91 款）
 
-| Film simulation | Looks | A taste of what's inside |
+| 胶片模拟 | 款数 | 里面有什么 |
 |---|---:|---|
-| Fujifilm Style | 16 | Classic Chrome · Nostalgic Neg · Acros +R |
-| Fuji Film Style | 10 | Pro 400H · Reala 500D · Fujicolor Print Industrial 400 |
-| Kodak Style | 20 | Portra 400 · Gold 200 · Double-X 5222 · Vision3 |
-| Niche Film Style | 26 | Ilford HP5 · Cinestill 50D/800T · Lomochrome |
-| Ricoh GR Style | 11 | GR Positive Film · GR Hi-Contrast B&W · Moriyama |
-| Sony Style | 8 | FL (film-like) · IN (instant) · VV2 |
+| 富士模拟 | 16 | 经典正片 · 怀旧负片 · ACROS 红滤镜 |
+| 富士胶片风格 | 10 | 富士 Pro 400H · 富士 Reala 500D · 富士工业打印 400 |
+| 柯达风格 | 20 | 柯达 Portra 400 · 柯达 Gold 200 · 柯达 Eastman Double-X 5222 · 柯达 Vision3 500T（日光） |
+| 小众胶片风格 | 26 | 伊尔福 HP5 · Cinestill 50D（蓝丝绒）· Cinestill 800T · Lomochrome Metropolis |
+| 理光 GR 风格 | 11 | GR 正片 · GR 高反差黑白 · GR 森山风 |
+| 索尼风格 | 8 | 索尼 FL（胶片感）· 索尼 IN（即显）· 索尼 VV2 |
 
-The full lineup also includes **Leica, Hasselblad, Pentax, Cinema LUT and Monochrome** styles, plus an
-**all-in-one app that carries all 149 looks** — available separately.
-Every look, searchable and filterable: **[the filter browser](catalog/index.html)** (a single HTML file —
-download and open it locally rather than viewing the source on GitHub).
+完整阵容还包括 **徕卡、哈苏、宾得、电影滤镜、单色** 等风格，以及**装了全部 149 款的「全量版」应用**——单独分发。每一款都可筛选、可搜索：**[滤镜浏览器](catalog/index.html)**（单个 HTML 文件，下载后用浏览器打开即可）。
 
 ---
 
-## Install in one click
+## 一键安装
 
-**One file. One click. No APK, no toolchain, no command line.**
+**一个文件、一次点击。不用 APK、不用工具链、不用命令行。**
 
-1. **Download** `SonySOOCRecipes-Base-EN.exe` from
-   [Releases](https://github.com/HairuoLiu/sony-sooc-recipes/releases/latest) — the only download there is.
-   *(Reading Chinese? `SonySOOCRecipes-Base-CN.exe` is the same installer in Chinese.)*
-2. **Prepare the body** — charged battery, memory card in, a **data-capable** USB cable, and
-   `Setup → USB Connection → Mass Storage`. Power on, plug in, wait for `USB Mode`.
-3. **Run the installer and click through.** It finds the camera, lists its packs (all ticked); untick
-   what you don't want and press **Next**. About **10–15 minutes**; the window can be minimised.
-4. **Unplug, power off and on, and shoot.** `MENU → Application → Application List` now holds one entry
-   per pack, and the looks are simply how the camera behaves in **P, A, S, M and video**.
+### 第 1 步 · 下载安装器
+从 [Releases](https://github.com/HairuoLiu/sony-sooc-recipes/releases/latest) 下载 `SonySOOCRecipes-Base-CN.exe`——这是**唯一**要下的东西。要英文界面就用 `SonySOOCRecipes-Base-EN.exe`，同一个安装器。
+
+### 第 2 步 · 连接相机
+充满电、机内插好 SD 卡、一根**能传数据**的 USB 线，并把相机设为 `设置（工具箱）→ USB 连接 → 海量存储`。开机插线，等屏幕显示 `USB Mode`。
 
 <p align="center">
-  <img src="docs/assets/install/en/01-connect-camera.png" width="330" alt="Step 1: Camera connected, with a Detect Again button">
-  <img src="docs/assets/install/en/02-choose-packs.png" width="330" alt="Step 2: the packs it carries, all ticked, with a Select All box">
-  <img src="docs/assets/install/en/03-installing.png" width="330" alt="Step 3: a progress bar reading Installing 1/6">
-  <br><sub><b>1 · Connect</b> · <b>2 · Choose</b> · <b>3 · Install</b></sub>
+  <img src="docs/assets/install/zh-CN/01-connect-camera.png" alt="安装器第 2 步：提示「相机已连接」，下方有「立即重新检测」按钮">
 </p>
 
-> **Windows only.** The installer is a Windows program (Windows 7 SP1 – 11); there is no macOS or Linux
-> build. The pre-built APKs are no longer published — the installer does the same job in place.
+### 第 3 步 · 选择配方包
+双击运行安装器，它自己认出相机，然后列出它带的配方包（默认全选）；不要的取消勾选，点「下一步」。全部约 **10–15 分钟**，窗口可以最小化。
 
-Detailed steps, prerequisites and troubleshooting: **[docs/INSTALL.md](docs/INSTALL.md)**.
-Before installing, if the body already carries a Sony SOOC Recipes from elsewhere, remove it first — see
-**[Uninstall](#uninstall)**.
+<p align="center">
+  <img src="docs/assets/install/zh-CN/02-choose-packs.png" alt="安装器第 3 步：它带的配方包列表，默认全选，右上角有「全选」">
+</p>
+
+### 第 4 步 · 开始安装
+点「下一步」后进度条开始走，约 **10–15 分钟**，窗口可以最小化。
+
+<p align="center">
+  <img src="docs/assets/install/zh-CN/03-installing.png" alt="安装器第 4 步：进度条显示「正在安装 1/6」">
+</p>
+
+### 第 5 步 · 拔线开拍
+`MENU → 应用程序 → 应用程序列表` 里每个包一个条目，之后风格就是相机自己的行为，**P / A / S / M 和录像**全部模式生效。
+
+> **只支持 Windows。** 安装器是 Windows 程序（Windows 7 SP1 – 11），没有 macOS / Linux 版；预编译的 APK 也不再发布。
+
+完整图文步骤、各系统前置条件和排错表见 **[安装指南](docs/INSTALL.zh-CN.md)**。
+装之前如果这台机器上已经有别处来的 Sony SOOC Recipes，先删掉——见[卸载](#卸载)。
 
 ---
 
-## On a real camera
+## 真机实拍
 
 <p align="center">
-  <img src="docs/assets/hardware/03-a7sii-recipe-browser.jpg" width="440" alt="Open a look to see its recipe — every parameter listed">
-  <img src="docs/assets/hardware/04-a7sii-parameter-editor.jpg" width="440" alt="The parameter editor: a JPG/RAW switch and fine-tuned controls">
+  <img src="docs/assets/hardware/03-a7sii-recipe-browser.jpg" width="430" alt="点进一款观感，看到它的配方——每个参数都列出来">
+  <img src="docs/assets/hardware/04-a7sii-parameter-editor.jpg" width="430" alt="参数修改界面：支持 JPG / RAW 切换，各种参数可微调">
+  <br><sub><b>左边：</b>点进一款观感，看到它的配方——每个参数都列出来。<b>右边：</b>参数修改界面，支持 JPG / RAW 切换，各种参数可微调。</sub>
 </p>
 
-**Confirmed on a real α7S II** — installs, launches, nine packs side by side. Photographs in
-**[docs/INSTALL.md](docs/INSTALL.md)**. The rest of the supported column is *platform* support, not a
-body-by-body test.
+**已在真机确认的机型：α7S II** —— 装得上、打得开、九个包同时并存。实拍照片见 **[安装指南](docs/INSTALL.zh-CN.md)**。支持列表里的其他机型是**平台层面**支持，没有逐台实测过，这两件事不是一回事。
 
 ---
 
 <details>
-<summary><b>Uninstall</b></summary>
+<summary><b>卸载</b></summary>
 
-## Uninstall
+## 卸载
 
 ```
-MENU → Application → Application Management → Manage and Remove → pick the entry → remove
+MENU → Application → Application Management → Manage and Remove → 选中要删的那一项 → 移除
 ```
 
-If that menu item is missing or greyed out, uninstall over ADB
-(`adb uninstall com.hairuoliu.sonysoocrecipes.<brand>`). Removing the app does **not** undo a stored look —
-to reset colours, in the app press **TRASH** + centre button, power-cycle, or
-`Setup → Setting Reset → Camera Settings Reset`. Full flow: **[docs/INSTALL.md](docs/INSTALL.md)**.
+如果那个菜单项没有、或者是灰的，走 ADB 卸载（`adb uninstall com.hairuoliu.sonysoocrecipes.<品牌>`）。
+卸掉应用**不会**回退已经存进相机设置的配方——还回原样：在应用里按 **TRASH** + 中心键，关机重启，或
+`Setup → Setting Reset → Camera Settings Reset`。完整流程见 **[安装指南](docs/INSTALL.zh-CN.md)**。
 
 </details>
 
 ---
 
-## Disclaimer
+## 免责声明
 
-**Unofficial personal project, not affiliated with anyone.** Not made, endorsed or approved by Sony, nor by
-Fujifilm, Kodak, Leica, Hasselblad, Ricoh, Pentax or any brand named in a recipe. Every trademark belongs
-to its owner; names are used only to describe the look a recipe aims at. The recipes are community-derived
-approximations, not official colour science. Third-party software with no warranty — install at your own
-risk. If you redistribute, the risk moves to you.
-Provenance and licences: **[NOTICE.md](NOTICE.md)** · icons: `assets/app-icon-packs/CREDITS.md`.
+**这是个人非官方项目，与任何厂商都无关联。** 不由索尼制作、认可或批准，也与配方名或包名里出现的富士、柯达、徕卡、哈苏、理光、宾得等品牌无关。
+所有商标归各自所有者；这里出现这些名字，只是为了说明某款配方**想模仿什么**。配方是社区推导的近似，不是官方色彩科学。第三方软件、无任何担保，风险自负。你若转发，风险随之转移给你。
+来源与许可：**[NOTICE.md](NOTICE.md)** · 图标：`assets/app-icon-packs/CREDITS.md`。
 
 ---
 
-## Licence
+## 授权
 
-This repository's own code, data structure and documentation: **[MIT](LICENSE)**. Recipe *values* come
-from upstream and keep the upstream licence — see [NOTICE.md](NOTICE.md). Fifteen matrix looks are
-recorded by name only and are **not** redistributable.
+本仓库代码 MIT。**本项目不改固件**，只写相机设置存储区里你本来就能手设的值。
+装任何东西前先备份存储卡，先用可丢弃的素材试拍。软件按现状提供，不保证兼容性、色彩准确性或无侵权。

@@ -12,10 +12,11 @@ Two kinds of number are checked, by two different mechanisms:
 
        <!-- counts: total=93 compiled=78 -->
 
-   This also checks that the marker agrees with the prose a reader actually sees. Both
-   READMEs are checked, each in its own language — the English page is the front door,
-   and a translated page that quietly still says the old number is worse than no
-   translation at all.
+   This also checks that the marker agrees with the prose a reader actually sees. All
+   three READMEs are checked: README.md is the default (Chinese) front door, README.zh-CN.md
+   is GitHub's zh-locale mirror of it, and README-English.md is the opt-in English page —
+   a translated page that quietly still says the old number is worse than no translation
+   at all.
 
 2. **Every other doc** under `docs/` is scanned for a count the reader will read as
    "how many recipes the project has": `N recipes`, `N looks`, `N 款`, `N 款配方`,
@@ -53,14 +54,21 @@ MARKER = re.compile(r"<!--\s*counts:\s*total=(\d+)\s+compiled=(\d+)\s*-->")
 # actually counts is the recipes this project can store in a body — engine `recipe-lab` in
 # catalog/filters.json, as against the film-studio-matrix ones that are registered by name
 # only. Say that, not the intermediate artifact.
+# README.md is the default (Chinese) front door; README.zh-CN.md is GitHub's
+# zh-locale mirror of it; README-English.md is the opt-in English page. Both
+# Chinese files must show the Chinese phrases; the English page shows English.
 READMES = {
     "README.md": (
-        "{total} looks",
-        "{compiled} installable",
+        "**{total} 款**",
+        "**{compiled} 款可装进相机**",
     ),
     "README.zh-CN.md": (
         "**{total} 款**",
         "**{compiled} 款可装进相机**",
+    ),
+    "README-English.md": (
+        "{total} looks",
+        "{compiled} installable",
     ),
 }
 

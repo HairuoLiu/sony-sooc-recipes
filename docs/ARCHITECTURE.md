@@ -541,5 +541,5 @@ and RAW+JPEG quietly discard the effect. The **a5100 has no Fn or AEL button**, 
 the hidden panel are unreachable there; the control wheel still reaches every look.
 
 To remove a stored look: in the app press **TRASH** + centre button, then power-cycle, or from the camera
-`Setup → Setting Reset → Camera Settings Reset`. See [Uninstall](../README.md#uninstall) for removing the
+`Setup → Setting Reset → Camera Settings Reset`. See [Uninstall](../README-English.md#uninstall) for removing the
 app itself.

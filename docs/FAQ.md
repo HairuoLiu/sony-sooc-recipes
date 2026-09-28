@@ -31,7 +31,7 @@ Don't let it — charge the battery fully and use a data cable before you start.
 Yes. There are two layers:
 
 - **The recipe you stored:** in the app, press `TRASH` + center button, then power-cycle. Or from the camera, `Setup → Setting Reset → Camera Settings Reset`. Either way the style stops applying.
-- **The app itself:** from the camera's own menu — `MENU → Application → Application Management → Manage and Remove` → pick the entry → remove. (On some bodies `Application Management` sits one level deeper, under `Application List`.) That clears the app's stored settings too. Note that **Sony-PMCA-RE, the tool you installed with, has no uninstall command** — if the menu item is missing or greyed out on your body, uninstall over ADB instead; the full flow is in [Uninstall](../README.md#uninstall).
+- **The app itself:** from the camera's own menu — `MENU → Application → Application Management → Manage and Remove` → pick the entry → remove. (On some bodies `Application Management` sits one level deeper, under `Application List`.) That clears the app's stored settings too. Note that **Sony-PMCA-RE, the tool you installed with, has no uninstall command** — if the menu item is missing or greyed out on your body, uninstall over ADB instead; the full flow is in [Uninstall](../README-English.md#uninstall).
 
 So "back to stock" is always possible, with no special tools.
 
@@ -59,7 +59,7 @@ The line directly above it, `Switching to app install mode`, is **not** a succes
 
 **The boundary is autumn 2012.** The PMCA app platform starts with the **NEX-5R / NEX-6** (announced August–September 2012) — the first bodies with the Android subsystem. The earlier **NEX-7** (August 2011), NEX-3 / NEX-5 / NEX-5N / NEX-F3, and the a3000 / a3500 have no such subsystem and no `Application` menu at all. They look a lot like the "supported" column above, but they cannot take an app — which is exactly what the installer means when it prints `This camera does not support apps. Please check the compatibility list.` **Their absence from the supported column is not an omission.**
 
-**Has any of this been on a real camera?** Yes — the **α7S II**, with nine brand packs installed side by side. Photographs of it running are in the [README](../README.md#on-a-real-camera). Everything else in the supported column is *platform* support: the body has the app channel. That is not the same claim as a body-by-body test, and it is written this way because it is not.
+**Has any of this been on a real camera?** Yes — the **α7S II**, with nine brand packs installed side by side. Photographs of it running are in the [README](../README-English.md#on-a-real-camera). Everything else in the supported column is *platform* support: the body has the app channel. That is not the same claim as a body-by-body test, and it is written this way because it is not.
 
 **Is there another way for those bodies?** One, but this project does not support it. A recipe is just a set of Creative Style values (base look + contrast / saturation / sharpness), white-balance fine tuning and DRO — every value is printed in [`catalog/index.html`](../catalog/index.html), so you can dial them in by hand in the camera menu. The NEX-7 has all of those controls (Creative Style contrast / saturation / sharpness ±3 each, WB fine tune A–B / G–M ±7 each, DRO Lv1–5). The cost: no one-key store, no in-app preview or bulk management, values beyond ±3 are clipped by the menu, and the Picture Effect (PE) tier mapping has not been tested.
 
@@ -107,7 +107,7 @@ Because the camera cannot do color grain, and its only grain source is the black
 
 Because they have not been on a camera. Of the 149 compiled recipes, **72 were written in this repository and none has been confirmed on hardware**; 77 are the upstream project's own recipes, matched value-for-value; and 15 are reference-only entries that compile into nothing. Each recipe carries its own answer in `catalog/filters.json`, in the `verified` field, and `tools/gen_recipes.py` writes a `// NOT VERIFIED ON HARDWARE` comment beside every entry where that field is false.
 
-**Where the marker is not: the app does not print it.** It is a comment in the generated `Recipes.java`, which is why nothing on screen says it. The badge on the main screen is not a verdict either — since v0.87 it carries the look's brand (宾得 / 柯达 / 徕卡 …; EN `PENTAX` / `KODAK` / `LEICA` …), not `ACTIVE` / `PREVIEW` / `PROTECTED`. The [photographs in the README](../README.md#on-a-real-camera) were shot on v0.86, which is why they still show the old status words beside recipes that are marked unverified.
+**Where the marker is not: the app does not print it.** It is a comment in the generated `Recipes.java`, which is why nothing on screen says it. The badge on the main screen is not a verdict either — since v0.87 it carries the look's brand (宾得 / 柯达 / 徕卡 …; EN `PENTAX` / `KODAK` / `LEICA` …), not `ACTIVE` / `PREVIEW` / `PROTECTED`. The [photographs in the README](../README-English.md#on-a-real-camera) were shot on v0.86, which is why they still show the old status words beside recipes that are marked unverified.
 
 > **Honest note.** Try an unverified recipe on discardable footage before trusting it on something you cannot reshoot. They are approximations built inside the engine's limits, not broken — just unconfirmed on a real body.
 

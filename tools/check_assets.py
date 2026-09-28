@@ -38,7 +38,8 @@ APP_ICON = ROOT / "assets" / "app-icon"
 PACK_ICONS = ROOT / "assets" / "app-icon-packs"
 
 SCAN = sorted(
-    [ROOT / "README.md", ROOT / "README.zh-CN.md", ROOT / "CHANGELOG.md"]
+    [ROOT / "README.md", ROOT / "README.zh-CN.md", ROOT / "README-English.md",
+     ROOT / "CHANGELOG.md"]
 ) + sorted((ROOT / "docs").glob("*.md")) + sorted(ASSETS.glob("*.md"))
 
 IMG_TAG = re.compile(r"""<img[^>]+src\s*=\s*["']([^"']+)["']""", re.I)
