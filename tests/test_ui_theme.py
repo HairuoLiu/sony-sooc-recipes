@@ -567,6 +567,29 @@ class TestEditorKeyAxes(unittest.TestCase):
         self.assertIn("else toggleLine();", new,
                       "the main screen's UP/DOWN (recipe line ↔ chip strip) must survive")
 
+    def test_saving_hides_the_editor(self):
+        """v1.0.0 bug: after storing from the editor, the settings panel stayed on screen.
+
+        The EditorView is a SIBLING of panel/picker, not a child of panel, so
+        panel.setVisibility(GONE) does NOT hide it. render() only set editor visibility
+        inside the `overlay == 0` branch, which the store path skips (it returns to overlay
+        3). So the editor stayed painted over the recipe list. The fix sets editor visibility
+        from bottomOnly ahead of the overlay branches, so it is correct on every overlay —
+        including the one the store returns to. This test pins that the line lives BEFORE the
+        `if (overlay == 3)` early-return in render(), so it actually runs on the store path."""
+        fork = ROOT / "build" / "recipe-lab-sony-pmca"
+        if not (fork / "AndroidManifest.xml").is_file():
+            self.skipTest("no upstream checkout — nothing to compare the anchors against")
+        text = patch_ui.find_source(fork, "MainActivity.java").read_text(encoding="utf-8")
+        vis_line = "editor.setVisibility(bottomOnly ? View.VISIBLE : View.GONE);"
+        self.assertIn(vis_line, text, "render() no longer controls the editor's visibility")
+        i_vis = text.index(vis_line)
+        i_guard = text.index("picker.setSelected(recipe, browserCol); return;")
+        self.assertLess(i_vis, i_guard,
+                        "the editor-visibility line sits AFTER the `if (overlay == 3)` "
+                        "early-return, so it never runs on the store-return path (overlay 3) "
+                        "— the editor would stay painted over the recipe list again")
+
     def test_left_right_dials_the_value_in_the_editor(self):
         new = self._new("editor: left/right dials the value")
         self.assertIn("if (bottomOnly) stepValue(dir);", new,

@@ -710,15 +710,27 @@ def anchors(theme: dict) -> list[tuple[str, str, str, str]]:
          "        if (FONT != null && !fontApplied) { title.setTypeface(FONT); body.setTypeface(FONT); opt.setTypeface(FONT); note.setTypeface(FONT); fontApplied = true; }\n"
          "        float w = getWidth(), h = getHeight(), pad = 16 * d;",
          "font: PromptView paints"),
-        # Storing used to leave the panel on screen. Now every commit returns to the pure
-        # viewfinder: focused chip, recipe line, pill or hidden — all of them. v1.0.0: it
-        # also returns to the screen the editor opened FROM (overlayPrev, normally the recipe
-        # list at overlay 3) rather than a blank view — saving from the editor used to land
-        # on overlay 2 (everything hidden) and the user had to press again to get the list.
+        # Storing used to leave the panel on screen. Now every commit returns to the screen
+        # the editor opened FROM (overlayPrev, normally the recipe list at overlay 3) rather
+        # than a blank view — saving from the editor used to land on overlay 2 (everything
+        # hidden) and the user had to press again to get the list. The companion anchor
+        # "editor: hide editor outside editor mode" hides the EditorView itself (it is a
+        # sibling of panel, so panel.setGone does not touch it) on every render.
         ("MainActivity.java",
          "            case K_ENTER: if (row == 0 || overlay != 0) writeAll(); else setFocus(!focus); return true;",
          "            case K_ENTER: if (bottomOnly || row == 0 || overlay != 0 || focus) { writeAll(); bottomOnly = false; focus = false; row = 0; overlay = overlayPrev; render(); } else setFocus(true); return true;",
          "auto-hide after store"),
+        # Companion to "auto-hide after store": the editor (EditorView) is a SIBLING of
+        # panel/picker, not a child of panel — so panel.setVisibility(GONE) does NOT hide it.
+        # render() only set editor visibility inside the overlay == 0 branch, which the
+        # store path skips (it returns to overlay 3 / 1 / 2). So after saving, the editor
+        # panel stayed painted on top of the browser. Bind editor visibility to bottomOnly
+        # up here, ahead of the overlay branches, so it is always correct no matter which
+        # overlay the store returns to.
+        ("MainActivity.java",
+         "        picker.setVisibility(overlay == 3 ? View.VISIBLE : View.GONE);",
+         "        picker.setVisibility(overlay == 3 ? View.VISIBLE : View.GONE);\n        editor.setVisibility(bottomOnly ? View.VISIBLE : View.GONE);",
+         "editor: hide editor outside editor mode"),
     ] + STRENGTH + font_java(theme) + label_java() + perf() + editor_ux()
 
 

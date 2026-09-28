@@ -18,7 +18,7 @@ self-test that proves the gates still fail on broken input.
 
 ## 1.0.1 — editor fixes from the α7S II
 
-Three fixes from testing 1.0.0 on a real body, all inside the settings editor.
+Four fixes from testing 1.0.0 on a real body, all inside the settings editor.
 
 - **The read-only note rides the value, not a second line under it.** A parameter a Picture
   Effect overrides now reads `标准（不能改动）` / `Standard (read-only)` on one line, the
@@ -27,9 +27,14 @@ Three fixes from testing 1.0.0 on a real body, all inside the settings editor.
 - **Overridden rows are now selectable.** The editor's ↑ ↓ used to skip a PE-overridden row
   entirely, so you could never land the cursor on it to see what was there. It now walks the
   whole list — you can move onto a disabled row, you just can't dial it.
-- **Saving returns to the recipe list.** Pressing the centre key to store a recipe dropped
-  you onto a blank view (overlay `2`) and you had to press again. It now returns to the
-  screen the editor opened from — normally the recipe list — in one press.
+- **Saving returns to the recipe list — and the panel actually disappears.** v1.0.0 had a
+  real bug: after storing from the editor, the settings panel stayed painted on screen and
+  you couldn't get back to the list. The cause was two-fold — the store path returned to a
+  "hidden" overlay (`2`) whose `render()` branch never updated view visibility, and the
+  EditorView is a sibling of the panel (not a child), so hiding the panel did not hide it.
+  The store now returns to the screen the editor opened from (overlay `3`, the recipe list),
+  and `render()` binds the editor's visibility to `bottomOnly` ahead of the overlay branches,
+  so it is hidden on every overlay the store can land on. One press: panel gone, list back.
 
 ## 1.0.0 — first release
 
