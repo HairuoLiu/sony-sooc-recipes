@@ -41,7 +41,7 @@ The installer turns your Sony into other cameras. Each **brand pack** is one app
 | Ricoh GR Style | 11 | GR Positive Film · GR Hi-Contrast B&W · Moriyama |
 | Sony Style | 8 | FL (film-like) · IN (instant) · VV2 |
 
-The full lineup also includes **Leica, Hasselblad, Pentax, Cinema LUT and Monochrome** styles, plus an **all-in-one app that carries all 149 looks** — available separately.
+The six packs above (91 looks) are **everything the free installer carries today**. The rest of the lineup — **Leica, Hasselblad, Pentax, Cinema LUT and Monochrome** styles, plus an **all-in-one app that carries all 149 looks** — ships in later releases. **★ Star this repo** and you'll be notified when it lands.
 Every look, searchable and filterable: **[the filter browser](catalog/index.html)** (a single HTML file — download and open it locally rather than viewing the source on GitHub).
 
 ---
