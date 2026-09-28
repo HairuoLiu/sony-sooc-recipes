@@ -61,7 +61,7 @@ The line directly above it, `Switching to app install mode`, is **not** a succes
 
 **Has any of this been on a real camera?** Yes — the **α7S II**, with nine brand packs installed side by side. Photographs of it running are in the [README](../README-English.md#on-a-real-camera). Everything else in the supported column is *platform* support: the body has the app channel. That is not the same claim as a body-by-body test, and it is written this way because it is not.
 
-**Is there another way for those bodies?** One, but this project does not support it. A recipe is just a set of Creative Style values (base look + contrast / saturation / sharpness), white-balance fine tuning and DRO — every value is printed in [`catalog/index.html`](../catalog/index.html), so you can dial them in by hand in the camera menu. The NEX-7 has all of those controls (Creative Style contrast / saturation / sharpness ±3 each, WB fine tune A–B / G–M ±7 each, DRO Lv1–5). The cost: no one-key store, no in-app preview or bulk management, values beyond ±3 are clipped by the menu, and the Picture Effect (PE) tier mapping has not been tested.
+**Is there another way for those bodies?** One, but this project does not support it. A recipe is just a set of Creative Style values (base look + contrast / saturation / sharpness), white-balance fine tuning and DRO — all of them ordinary camera-menu controls, so you can dial a look in by hand. The NEX-7 has all of those controls (Creative Style contrast / saturation / sharpness ±3 each, WB fine tune A–B / G–M ±7 each, DRO Lv1–5). The cost: no one-key store, no in-app preview or bulk management, values beyond ±3 are clipped by the menu, and the Picture Effect (PE) tier mapping has not been tested.
 
 ### Why won't it run on my a6400 / a7 III? Is there any workaround?
 
@@ -105,9 +105,9 @@ Because the camera cannot do color grain, and its only grain source is the black
 
 ### Why do some recipes say NOT VERIFIED?
 
-Because they have not been on a camera. Of the 149 compiled recipes, **72 were written in this repository and none has been confirmed on hardware**; 77 are the upstream project's own recipes, matched value-for-value; and 15 are reference-only entries that compile into nothing. Each recipe carries its own answer in `catalog/filters.json`, in the `verified` field, and `tools/gen_recipes.py` writes a `// NOT VERIFIED ON HARDWARE` comment beside every entry where that field is false.
+Because they have not been on a camera. Of the 149 compiled recipes, **72 were written in this repository and none has been confirmed on hardware**; 77 are the upstream project's own recipes, matched value-for-value; and 15 are reference-only entries that compile into nothing. Verification is tracked per recipe: the ones this repository wrote itself are unverified, and each is marked as such in the generated recipe list.
 
-**Where the marker is not: the app does not print it.** It is a comment in the generated `Recipes.java`, which is why nothing on screen says it. The badge on the main screen is not a verdict either — since v0.87 it carries the look's brand (宾得 / 柯达 / 徕卡 …; EN `PENTAX` / `KODAK` / `LEICA` …), not `ACTIVE` / `PREVIEW` / `PROTECTED`. The [photographs in the README](../README-English.md#on-a-real-camera) were shot on v0.86, which is why they still show the old status words beside recipes that are marked unverified.
+**Where the marker is not: the app does not print it.** It lives inside the app's generated recipe list rather than on any screen, which is why nothing on screen says it. The badge on the main screen is not a verdict either — since v0.87 it carries the look's brand (宾得 / 柯达 / 徕卡 …; EN `PENTAX` / `KODAK` / `LEICA` …), not `ACTIVE` / `PREVIEW` / `PROTECTED`. The [photographs in the README](../README-English.md#on-a-real-camera) were shot on v0.86, which is why they still show the old status words beside recipes that are marked unverified.
 
 > **Honest note.** Try an unverified recipe on discardable footage before trusting it on something you cannot reshoot. They are approximations built inside the engine's limits, not broken — just unconfirmed on a real body.
 
@@ -133,14 +133,14 @@ You install the app once, and it carries all 164 recipes. You store **one** reci
 
 ### How many packs can I install at once? Will they all fit?
 
-**They coexist, and a whole installer's worth fits.** Every pack has its own Android package name (the all-in-one is `…sonysoocrecipes`, a pack is `…sonysoocrecipes.<brand>`), and Android identifies an app by its package name — so they never overwrite one another. **Base carries 6 packs, 91 looks** — Fujifilm, Fuji Film, Kodak, Niche Film, Ricoh GR and Sony — and you can untick any of them while installing. The other five packs and the all-in-one are distributed separately. The list, and why it is split that way, is in [Brand packs](BRAND-PACKS.md).
+**They coexist, and a whole installer's worth fits.** Every pack has its own Android package name (the all-in-one is `…sonysoocrecipes`, a pack is `…sonysoocrecipes.<brand>`), and Android identifies an app by its package name — so they never overwrite one another. **Base carries 6 packs, 91 looks** — Fujifilm, Fuji Film, Kodak, Niche Film, Ricoh GR and Sony — and you can untick any of them while installing. The other five packs and the all-in-one ship in later releases.
 
 The camera's own ceiling is a different order of magnitude: **Sony says approximately 20** PlayMemories Camera Apps can be stored (support article 00020843), and the real figure depends on how large the apps are, because they live in the camera's internal memory. Each of our apps is about 200 KB, so **every pack in the catalogue together comes to about 2 MB** — one to two orders of magnitude smaller than Sony's own apps, which start at several MB. Running out of room is not the problem you will hit.
 
 > **Honest note.** But "you can" is not "you should". Three costs, up front:
 >
 > 1. **The more apps the camera holds, the slower it powers on and off.** Sony states this itself (support article 00020845): the slowdown depends on free internal memory and on how many apps are stored, and it is normal behaviour, not a fault. Six apps is not free either.
-> 2. **Several packs is not several cameras.** The settings store is shared; only one recipe is active at a time, and switching packs does not switch recipes. See [Brand packs §3](BRAND-PACKS.md#3-the-shared-settings-caveat--one-camera-one-active-recipe).
+> 2. **Several packs is not several cameras.** The settings store is shared; only one recipe is active at a time, and switching packs does not switch recipes.
 > 3. **The all-in-one already contains every recipe, and a pack is a subset of it.** If you want "all of them", the all-in-one alone gets you there — the packs add no recipe, only separate icons and a slower boot.
 
 ### Does the app follow the camera's language? Do I need a Chinese version?
@@ -178,6 +178,6 @@ It is safe **only on a trusted network, used briefly**. Opening ADB (via OpenMem
 
 ## Where do I start if I just want a certain look?
 
-Open the filter browser at [`catalog/index.html`](../catalog/index.html) — a single-file, no-dependency page that lists all 164 recipes with their groups and tones. Filter by brand (Kodak, Fujifilm, Ricoh GR, Ilford…), by color vs. mono, or by engine, then find the recipe whose name matches the film you have in mind.
+Every look the installer carries is listed in the README's pack table, grouped by brand. Start there, then narrow it down to the film you have in mind.
 
 If you are unsure, start from the look you already like: a warm everyday negative? Try `kodak-portra-400` or `fuji-superia-400`. A moody cinematic night? Try `cinestill-800t`. A clean black-and-white? Try `ilford-hp5` or `acros`. Pick one, install it, shoot a roll, and switch from there — the whole point is that trying the next look costs you nothing but a dial turn.

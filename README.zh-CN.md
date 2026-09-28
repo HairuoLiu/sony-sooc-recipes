@@ -113,7 +113,7 @@ MENU → Application → Application Management → Manage and Remove → 选中
 
 **这是个人非官方项目，与任何厂商都无关联。** 不由索尼制作、认可或批准，也与配方名或包名里出现的富士、柯达、徕卡、哈苏、理光、宾得等品牌无关。
 所有商标归各自所有者；这里出现这些名字，只是为了说明某款配方**想模仿什么**。配方是社区推导的近似，不是官方色彩科学。第三方软件、无任何担保，风险自负。你若转发，风险随之转移给你。
-来源与许可：**[NOTICE.md](NOTICE.md)** · 图标：`assets/app-icon-packs/CREDITS.md`。
+来源与许可：**[NOTICE.md](NOTICE.md)**。
 
 ---
 

@@ -17,10 +17,8 @@ APK to fetch, no Sony-PMCA-RE to install first, and nothing to type.
   <br><sub>Figure: the whole path — one download, one click, a progress bar</sub>
 </p>
 
-The rest of this page is that flow in detail, then the manual route for macOS, Linux and anyone
-who would rather drive the tools themselves. Read [CHANNEL-COMPARISON.md](CHANNEL-COMPARISON.md)
-if you want to understand the two low-level channels the manual route offers — the installer takes
-the first of them for you, automatically.
+The rest of this page is that flow in detail, then what to do if the installer cannot see your
+camera, how to update or remove what you installed, and a troubleshooting table.
 
 ---
 
@@ -75,8 +73,7 @@ installed first, and nothing is left behind except the program itself.
 and Sony. Each is a separate app on the camera with its own Android package name, which is exactly
 what lets them sit side by side, and you can untick any of them during the install. The remaining
 packs — Leica, Pentax, Hasselblad, Cinema LUT and Monochrome, plus the all-in-one app that holds
-the whole catalog — are distributed separately. The full list and the reasoning are in
-[BRAND-PACKS.md](BRAND-PACKS.md).
+the whole catalog — ship in later releases.
 
 ### Run it
 
@@ -118,8 +115,8 @@ the whole catalog — are distributed separately. The full list and the reasonin
 >    camera can *do*.
 
 > **Some looks are not verified on hardware.** Every recipe answers this for itself, in the
-> `verified` field of `catalog/filters.json` — the ones this repository wrote itself are `false`,
-> and each is marked in the generated `Recipes.java`. Try those on discardable footage before
+> verification is tracked per recipe — the ones this repository wrote itself are unverified,
+> and each is marked as such in the generated recipe list. Try those on discardable footage before
 > trusting them on something you cannot reshoot. The marker is a source comment, not a label the
 > app draws; see the [FAQ](FAQ.md) for what the badge on the main screen actually means.
 
@@ -137,91 +134,6 @@ the whole catalog — are distributed separately. The full list and the reasonin
 | A **driver** error | In **Show Details**, switch the driver to `libusb` and retry. If it still fails on Windows, install the libusb-win32 driver with [Zadig](https://zadig.akeo.ie) and run again. |
 | It detects the camera, then fails part-way | The most common cause is an older Sony SOOC Recipes already on the body. Remove it in `MENU → Application → Application Management → Manage and Remove`, then install again. |
 | Nothing at all happens | Press `MENU` and look for an `Application` entry. If there is none, this body cannot run apps — see the model table above. No workaround exists. |
-
----
-
-## Doing it by hand (macOS, Linux, or the command line)
-
-The installer is Windows-only. Everything it does you can do yourself — and on macOS and Linux
-that is the only route, because the pre-built APKs are no longer published. So the manual route
-starts by building them from this repository, with the same tooling that produced the copies
-inside the installer:
-
-```bash
-git clone https://github.com/HairuoLiu/sony-sooc-recipes.git
-cd sony-sooc-recipes
-tools/build_all_local.sh          # every target; the script's header lists the toolchain
-```
-
-That writes `SonySOOCRecipes*.apk` into `dist/`. Which to install: the all-in-one carries every
-look, a pack carries one brand's. Both lists, and the reasoning, are in
-[BRAND-PACKS.md](BRAND-PACKS.md).
-
-What follows is the manual route in full. **Channel A** is the one the installer drives — USB,
-offline, and the only one a first install should use. **Channel B** (Wi-Fi ADB) is for repeated
-reinstalls, and it can never replace Channel A: enabling ADB needs OpenMemories:Tweak, which
-itself installs over Channel A.
-
----
-
-## Channel A: USB + Sony-PMCA-RE
-
-**What the installer automates, spelled out.** Fully offline, exposes no network
-service, works on every PMCA body, and requires no pre-installed app.
-
-### 1. Get the installer, Sony-PMCA-RE
-
-This is ma1co's tool. It uses the very same channel Sony's own app store used to push apps into
-the camera.
-
-- **Windows:** download `pmca-gui.exe` from
-  [ma1co/Sony-PMCA-RE releases](https://github.com/ma1co/Sony-PMCA-RE/releases). No install —
-  just run it. You also need the USB driver; install it per ma1co's README
-  (https://github.com/ma1co/Sony-PMCA-RE).
-- **macOS:** the same page has a macOS build, though it is less tested than Windows. **Close
-  every app that grabs the USB device first** (Photos, Image Capture, Dropbox, Google Drive…),
-  or they snatch the camera before the installer can.
-- **Linux:** use the Python source (also installs the libraries, including `libusb`):
-  ```bash
-  git clone https://github.com/ma1co/Sony-PMCA-RE.git
-  cd Sony-PMCA-RE && pip install -r requirements.txt
-  ```
-  Platform-specific driver/permission details follow ma1co's README; if `libusb` or device
-  permissions misbehave, that README is the authority.
-
-> **Honest note.** Exact driver and permission steps differ per OS and can change. When in
-> doubt, follow ma1co's README: https://github.com/ma1co/Sony-PMCA-RE
-
-### 2. Prepare the camera
-
-1. Charge the battery and **insert the memory card**.
-2. `Setup (the toolbox icon) → USB Connection → **Mass Storage**`.
-3. Power on, plug in the USB cable (a6000 is **micro-USB**; use the wire in the 3-in-1 kit that
-   actually transfers data).
-4. The screen shows **USB Mode** — you are ready.
-
-> **Honest note.** If you later follow Channel B, this setting changes to **MTP**. Keep it on
-> Mass Storage for Channel A.
-
-### 3. Install
-
-**Graphical interface:** open `pmca-gui.exe` → **Install app from file** → select the APK → wait.
-
-**Command line** (prefix with `sudo` on Linux):
-```bash
-python pmca-console.py install -f SonySOOCRecipes-<version>.apk
-```
-
-The camera will blank to black and switch modes a few times — **this is normal, do not press
-anything.** After about a minute the computer prints `Task completed successfully`.
-
-> **Honest note.** **Trust the computer's output.** The camera usually sits on an
-> `Application Download / Connecting via USB...` screen that looks frozen. It is not.
-
-### 4. Finish
-
-Unplug, **power off and on again.** The app now lives at
-`MENU → Application → Application List → Sony SOOC Recipes`.
 
 ---
 
@@ -246,59 +158,6 @@ One consequence worth knowing: the app no longer tells you on screen whether the
 setting storage is write-protected. If a write looks like it did not stick, that is still the
 first thing to check — install [OpenMemories-Tweak](https://github.com/ma1co/OpenMemories-Tweak)
 and turn off *Backup protection*.
-
----
-
-## Channel B: Wi-Fi ADB
-
-**Only use this after Channel A works and you need to reinstall repeatedly.** It is the
-developer fast lane, not something an end user needs.
-
-> **Honest note.** While ADB is on, any machine on the same LAN can run `adb` commands against
-> your camera. Turn it on only on a trusted network and turn it off the moment you are done —
-> see the Security note in [CHANNEL-COMPARISON.md](CHANNEL-COMPARISON.md).
-
-### 1. Install OpenMemories:Tweak via Channel A first
-
-Set the camera USB mode to **MTP** (not Mass Storage), connect, open `pmca-gui`:
-
-1. Go to the **Install app** tab.
-2. Pick **OpenMemories: Tweak** from the list.
-3. Click **Install selected app**.
-
-No firmware update or service mode needed.
-
-### 2. Enable ADB on the camera
-
-1. Safely disconnect USB, open **OpenMemories: Tweak** from
-   `MENU → Application → Application List`.
-2. Connect the camera to a Wi-Fi access point first.
-3. In Tweak's **Developer** page, enable **Enable Wifi** and **Enable ADB**, and **note the IP
-   shown**.
-4. Put the computer on the same LAN; lengthen the camera's sleep timer.
-
-> **Honest note.** This app needs only ADB. You do **not** need Telnet, setting protection
-> off, region change, record-limit removal, or firmware modification.
-
-### 3. Install over ADB
-
-```bash
-adb connect CAMERA_IP:5555      # replace with the camera's shown address, keep :5555
-adb devices                     # the target should show as "device"
-adb -s CAMERA_IP:5555 install -r SonySOOCRecipes-<version>.apk
-```
-
-The repository also ships a helper: `tools/install-wifi.sh <apk> <camera-ip>` — it connects,
-checks readiness, installs, and reminds you to shut ADB down afterward.
-
-### 4. Finish
-
-```bash
-adb disconnect CAMERA_IP:5555
-```
-
-**Then go back into Tweak and turn ADB off.** `adb disconnect` only drops the computer's side;
-the daemon on the camera keeps running until you disable it in Tweak.
 
 ---
 

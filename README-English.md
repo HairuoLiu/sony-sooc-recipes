@@ -111,7 +111,7 @@ to reset colours, in the app press **TRASH** + centre button, power-cycle, or
 ## Disclaimer
 
 **Unofficial personal project, not affiliated with anyone.** Not made, endorsed or approved by Sony, nor by Fujifilm, Kodak, Leica, Hasselblad, Ricoh, Pentax or any brand named in a recipe. Every trademark belongs to its owner; names are used only to describe the look a recipe aims at. The recipes are community-derived approximations, not official colour science. Third-party software with no warranty — install at your own risk. If you redistribute, the risk moves to you.
-Provenance and licences: **[NOTICE.md](NOTICE.md)** · icons: `assets/app-icon-packs/CREDITS.md`.
+Provenance and licences: **[NOTICE.md](NOTICE.md)**.
 
 ---
 

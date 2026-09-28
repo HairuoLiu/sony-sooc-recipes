@@ -15,8 +15,7 @@ Picture Effect、白平衡、DRO……）写进你的相机，让你的老索尼
   <br><sub>图：一次下载、一次点击、一条进度条</sub>
 </p>
 
-下面先把这条路径讲细，然后是给 macOS / Linux / 想自己开命令行的人的手动路线。想知道手动路线里
-那两条底层通道的差别，读 [通道对比](CHANNEL-COMPARISON.md)——安装器替你自动走的是其中第一条。
+下面先把这条路径讲细，然后是安装器看不到相机时怎么办、怎么更新或卸载，以及排错表。
 
 ---
 
@@ -64,7 +63,7 @@ https://github.com/HairuoLiu/sony-sooc-recipes/releases/latest
 **它带的是 Base——6 个包、91 款观感。** 富士、Fuji Film、柯达、Niche Film、理光 GR、索尼。
 每个包在相机上是独立应用，各有自己的 Android 包名，这正是它们能并存的原因；安装时你可以
 把不想要的勾掉。其余的包——徕卡、宾得、哈苏、Cinema LUT、单色，以及装着全量目录的
-all-in-one——单独分发。完整清单和取舍见 [BRAND-PACKS.md](BRAND-PACKS.md)。
+all-in-one——会在后续更新里陆续放出。
 
 ### 运行
 
@@ -98,8 +97,8 @@ all-in-one——单独分发。完整清单和取舍见 [BRAND-PACKS.md](BRAND-P
 > 2. **装多个包不等于多台相机。** 相机的设置存储是共享的，同一时间只有一个配方生效。
 >    包的差别在于**装进去什么**，不在于相机**能做什么**。
 
-> **部分观感没上机验证过。** 每条配方自己写在 `catalog/filters.json` 的 `verified` 字段里
-> ——本仓库自写的那些是 `false`，生成的 `Recipes.java` 里也逐条标了出来。先在可丢弃的素材上
+> **部分观感没上机验证过。** 验证状态是逐条记录的
+> ——本仓库自写的那些标着未经实机确认，生成的配方清单里也逐条标了出来。先在可丢弃的素材上
 > 试，别拿去拍不能重来的东西。**这个标记是源码注释，不是应用画的**——主屏徽标到底表示什么，
 > 见 [FAQ](FAQ.zh-CN.md)。
 
@@ -116,82 +115,6 @@ all-in-one——单独分发。完整清单和取舍见 [BRAND-PACKS.md](BRAND-P
 | **驱动**报错 | 在**显示详情**里把驱动切成 `libusb` 重试。Windows 上还不行，就用 [Zadig](https://zadig.akeo.ie) 装 libusb-win32 驱动再跑。 |
 | 识别到了，装到一半失败 | 最常见的原因是机身上已经有旧版 Sony SOOC Recipes。在 `MENU → Application → Application Management → Manage and Remove` 删掉，再装一次。 |
 | 一点反应都没有 | 按 `MENU` 看有没有 `Application` 这一项。没有的话这台机器跑不了应用——见上面的机型表。没有别的办法。 |
-
----
-
-## 手动路线（macOS / Linux / 命令行）
-
-安装器只有 Windows 版。它做的每一件事你自己也能做——而在 macOS 和 Linux 上这是*唯一*的路线，
-因为预编译的 APK 已经不再发布了。所以手动路线从本仓库里把它们构建出来，用的工具和安装器里
-那份一模一样：
-
-```bash
-git clone https://github.com/HairuoLiu/sony-sooc-recipes.git
-cd sony-sooc-recipes
-tools/build_all_local.sh          # 构建全部目标；脚本头部写了需要的工具链
-```
-
-构建完 `dist/` 里就是 `SonySOOCRecipes*.apk`。装哪个：全量版带全部观感，品牌包只带一个品牌的。
-两份清单和取舍都在 [BRAND-PACKS.md](BRAND-PACKS.md)。
-
-下面是完整的手动路线。**通道 A** 就是安装器在开的那条——走 USB、全程离线，第一次装只该用它。
-**通道 B**（Wi-Fi ADB）是给反复重装用的，而且它永远替代不了通道 A：开 ADB 要先装
-OpenMemories:Tweak，而 Tweak 本身就得走通道 A 装进去。
-
----
-
-## 通道 A：USB + Sony-PMCA-RE
-
-**安装器自动做的那件事，拆开讲。** 全程离线，不暴露任何网络服务，对所有 PMCA 机型通用，
-且不需要任何前置应用。
-
-### 1. 拿到 Sony-PMCA-RE
-
-这是 ma1co 做的工具，用索尼自家应用商店同一条通道把应用写进相机。
-
-- **Windows**：从 [ma1co/Sony-PMCA-RE releases](https://github.com/ma1co/Sony-PMCA-RE/releases)
-  下载 `pmca-gui.exe`。免安装，直接运行。你还需要装 USB 驱动，按 ma1co 的 README 来：
-  https://github.com/ma1co/Sony-PMCA-RE。
-- **macOS**：同一页面有 macOS 版，测试程度不如 Windows。**先关掉所有会占用 USB 设备的程序**
-  （照片、图像捕捉、Dropbox、Google Drive 等），否则相机会被它们先抢走。
-- **Linux**：用 Python 源码（同时装好依赖，含 `libusb`）：
-  ```bash
-  git clone https://github.com/ma1co/Sony-PMCA-RE.git
-  cd Sony-PMCA-RE && pip install -r requirements.txt
-  ```
-  驱动和权限等平台细节以 ma1co 的 README 为准；若 `libusb` 或设备权限出问题，那份 README 是
-  权威来源。
-
-> **实话实说。** 各系统的驱动、权限步骤不同，也可能随版本变化。不确定时，以 ma1co 的 README
-> 为准：https://github.com/ma1co/Sony-PMCA-RE
-
-### 2. 设置相机
-
-1. 电池充满，**装上存储卡**
-2. `Setup（工具箱图标）→ USB Connection → **Mass Storage**`
-3. 开机，插上 USB 线（a6000 是 **micro-USB**，三合一数据线里只有能传数据的那根能用）
-4. 相机屏幕显示 **USB Mode** 即为就绪
-
-> **实话实说。** 之后走通道 B 时这个设置要改成 **MTP**。通道 A 期间保持 Mass Storage。
-
-### 3. 安装
-
-**图形界面**：打开 `pmca-gui.exe` → **Install app from file** → 选 APK → 等待
-
-**命令行**（Linux 前加 `sudo`）：
-```bash
-python pmca-console.py install -f SonySOOCRecipes-<版本>.apk
-```
-
-过程中相机会闪黑、自己切换模式几次——**这是正常的，不要按任何键**。约一分钟后电脑
-打印 `Task completed successfully`。
-
-> **实话实说。** **以电脑的输出为准。** 相机通常停在 `Application Download / Connecting via
-> USB...` 的界面上，看起来像卡死，其实不是。
-
-### 4. 收尾
-
-拔线，**关机再开机**。应用现在位于 `MENU → Application → Application List → Sony SOOC Recipes`。
 
 ---
 
@@ -213,54 +136,6 @@ python pmca-console.py install -f SonySOOCRecipes-<版本>.apk
 一个要知道的后果：界面不再提示相机设置存储区是否处于写保护。如果某次写入看起来「没生效」，
 这仍然是要查的第一件事——装 [OpenMemories-Tweak](https://github.com/ma1co/OpenMemories-Tweak)
 关掉 *Backup protection*。
-
----
-
-## 通道 B：Wi-Fi ADB
-
-**只在通道 A 已打通、且你需要反复重装时才用。** 它是开发快车道，不是给终端用户准备的。
-
-> **实话实说。** ADB 打开期间，同一局域网内任何机器都能对相机执行 adb 命令。只在可信网络上
-> 开，用完立刻关。见 [通道对比 §安全提示](CHANNEL-COMPARISON.md#安全提示)。
-
-### 1. 先用通道 A 装上 OpenMemories:Tweak
-
-相机 USB 模式设为 **MTP**（注意不是 Mass Storage），接上电脑，打开 `pmca-gui`：
-
-1. 选 **Install app** 页
-2. 在应用列表里选 **OpenMemories: Tweak**
-3. 点 **Install selected app**
-
-不需要用固件更新或服务模式。
-
-### 2. 在相机上开 ADB
-
-1. 安全断开 USB，在 `MENU → Application → Application List` 打开 **OpenMemories: Tweak**
-2. 相机先配好 Wi-Fi 接入点
-3. 进 Tweak 的 **Developer** 页，打开 **Enable Wifi** 和 **Enable ADB**，**记下显示的 IP**
-4. 电脑连同一个局域网，把相机休眠时间调长
-
-> **实话实说。** 本应用只需要 ADB。**不用**开 Telnet、不用解除设置保护、不用改地区、不用解除
-> 录制时限、不用改固件。
-
-### 3. 用 adb 安装
-
-```bash
-adb connect CAMERA_IP:5555      # 换成相机此刻显示的地址，保留 :5555
-adb devices                     # 目标应显示为 device
-adb -s CAMERA_IP:5555 install -r SonySOOCRecipes-<版本>.apk
-```
-
-仓库自带一个把手：`tools/install-wifi.sh <apk> <相机IP>`，会做连接、就绪检查、安装、并提醒你
-收尾关掉 ADB。
-
-### 4. 收尾
-
-```bash
-adb disconnect CAMERA_IP:5555
-```
-
-**再去 Tweak 里关掉 ADB。** `adb disconnect` 只断开电脑这一侧，相机上的守护进程还在跑。
 
 ---
 
