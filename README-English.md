@@ -8,12 +8,6 @@
   <img src="https://img.shields.io/badge/license-MIT-3fb950" alt="MIT licence">
 </p>
 
-<p align="center">
-  <b>Turn your Sony into a Leica, Hasselblad, Fujifilm, Ricoh or Pentax — with 164 film and camera looks, straight out of camera.</b>
-  <br>
-  <sub>164 looks · 149 installable · 15 groups — film stocks &amp; other cameras' colour, SOOC JPEG</sub>
-</p>
-
 <!-- counts: total=164 compiled=149 -->
 
 <p align="center">
@@ -23,6 +17,7 @@
 </p>
 
 **One Windows file, one click.** Download the installer, run it, plug the camera in — it finds the body by itself and writes the looks across USB behind a single progress bar. **No APK to fetch, no toolchain, no command line.** The recipes ship *inside* the installer.
+The looks are written into the camera's own settings, so **JPEG or RAW+JPEG both give you a finished SOOC image**: the JPEG carries the look, the RAW stays unstyled, and looks marked **PE** only appear on JPEG.
 
 ---
 
@@ -41,8 +36,7 @@ The installer turns your Sony into other cameras. Each **brand pack** is one app
 | Ricoh GR Style | 11 | GR Positive Film · GR Hi-Contrast B&W · Moriyama |
 | Sony Style | 8 | FL (film-like) · IN (instant) · VV2 |
 
-The six packs above (91 looks) are **what the free installer carries today**. The project catalogues **164 looks** in all, of which **149 are installable**; the rest ship gradually once the remaining changes and design testing are done — **the all-in-one app is still under research** and is not released yet. **★ Star this repo** and you'll be notified when it lands.
-Every look, searchable and filterable: **[the filter browser](catalog/index.html)** (a single HTML file — download and open it locally rather than viewing the source on GitHub).
+The six packs above (91 looks) are **what the free installer carries today**. The project catalogues **164 looks** in all — **149 installable** into a body — and the rest ship gradually once the remaining changes and design testing are done; **the all-in-one app is still under research** and is not released yet. **★ Star this repo** and you'll be notified when it lands.
 
 ---
 
