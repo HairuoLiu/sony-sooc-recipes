@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 320" width="780" height="320" role="img" aria-label="What the camera can store versus what it cannot">
+  <title>Parameter space</title>
+  <style>
+    .bg  { fill: #ffffff; }
+    .yes { fill: #dafbe1; stroke: #4ac26b; }
+    .no  { fill: #ffebe9; stroke: #ff8182; }
+    .t   { font: 600 14px -apple-system, "Segoe UI", Arial, sans-serif; fill: #1f2328; }
+    .h   { font: 600 12px -apple-system, "Segoe UI", Arial, sans-serif; fill: #1f2328; }
+    .s   { font: 11px -apple-system, "Segoe UI", Arial, sans-serif; fill: #656d76; }
+    .m   { font: 11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #57606a; }
+    .foot{ font: 11px -apple-system, "Segoe UI", Arial, sans-serif; fill: #57606a; }
+    @media (prefers-color-scheme: dark) {
+      .bg  { fill: #0d1117; }
+      .yes { fill: #0f2913; stroke: #3fb950; }
+      .no  { fill: #25171c; stroke: #f85149; }
+      .t { fill: #e6edf3; } .h { fill: #e6edf3; }
+      .s { fill: #8b949e; } .m { fill: #8b949e; } .foot { fill: #8b949e; }
+    }
+  </style>
+  <rect class="bg" width="780" height="320" rx="8"/>
+
+  <!-- can -->
+  <rect class="yes" x="24" y="24" width="356" height="240" rx="9"/>
+  <text class="t" x="44" y="52">What a look can be made of</text>
+  <text class="s" x="44" y="70">everything the body can store</text>
+
+  <text class="h" x="44" y="102">Creative Style</text>
+  <text class="m" x="44" y="118">STD VIVID NEUTRAL PORTRAIT LANDSCAPE MONO</text>
+  <text class="m" x="44" y="132">CLEAR DEEP LIGHT SUNSET NIGHT AUTUMN SEPIA</text>
+
+  <text class="h" x="44" y="158">Three sliders</text>
+  <text class="s" x="44" y="174">saturation · contrast · sharpness</text>
+
+  <text class="h" x="44" y="200">White balance</text>
+  <text class="s" x="44" y="216">AUTO or a kelvin value, plus A-B and G-M trim</text>
+
+  <text class="h" x="44" y="242">Exposure, DRO, Picture Effect</text>
+  <text class="s" x="44" y="258">and one colour matrix Sony never put in a menu</text>
+
+  <!-- cannot -->
+  <rect class="no" x="400" y="24" width="356" height="240" rx="9"/>
+  <text class="t" x="420" y="52">What no recipe here can do</text>
+  <text class="s" x="420" y="70">not a preference — there is nowhere to put it</text>
+
+  <text class="s" x="420" y="102">colour grain</text>
+  <text class="s" x="420" y="122">light leaks</text>
+  <text class="s" x="420" y="142">vignetting</text>
+  <text class="s" x="420" y="162">a tone curve, Log, or any LUT file</text>
+  <text class="s" x="420" y="182">per-hue HSL adjustment</text>
+  <text class="s" x="420" y="202">true split toning</text>
+  <text class="s" x="420" y="222">local or masked adjustment</text>
+  <text class="s" x="420" y="242">clarity, glow, dust, scratches</text>
+
+  <text class="foot" x="24" y="288">An a6000 has no Picture Profile menu and cannot store a curve. Every look in this repository is</text>
+  <text class="foot" x="24" y="304">built out of the left column, which is why it is an approximation of a film stock and not a copy of one.</text>
+</svg>

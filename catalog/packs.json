@@ -1,0 +1,152 @@
+{
+  "$comment": [
+    "Brand packs: one APK per brand, built from the SAME codebase and the SAME catalog.",
+    "A pack is not a fork. tools/apply_pack.py rewrites the package name and the app name",
+    "inside a fresh upstream checkout, and tools/gen_recipes.py --pack emits only that",
+    "pack's groups into Recipes.java. Everything else is byte-identical to the all-in-one app.",
+    "",
+    "Two things make a pack work that are easy to miss:",
+    "  1. The Android package name MUST differ per pack, or the packages cannot be installed",
+    "     side by side (Android identifies an app by its package name; same name = an update).",
+    "  2. The camera's settings store is shared between packs. Each pack keeps its own",
+    "     snapshot (getFilesDir() is per-package), but only one recipe can be active on the",
+    "     camera at a time. Installing three packs does NOT give you three cameras.",
+    "",
+    "app_name is the string that lands in res/values/strings.xml. It is deliberately kept to",
+    "a <brand> + adjective form rather than a bare brand name or a camera model number:",
+    "naming a distributed app after a trademark implies endorsement, which is the risk that",
+    "actually gets a project taken down. See docs/BRAND-PACKS.md.",
+    "",
+    "publish: false keeps a pack OUT of the release matrix (and out of build_apk.sh",
+    "--all-packs) without deleting it — it stays in the catalog, its tests still run, and it",
+    "can still be built one-off with tools/build_apk.sh <id> or looked up with",
+    "tools/build_matrix.py --apk-for <id>. Flip it back to true to ship it again."
+  ],
+  "package_base": "com.hairuoliu.sonysoocrecipes",
+  "packs": [
+    {
+      "id": "leica",
+      "app_name": "Leica Style",
+      "app_name_zh": "徕卡风格",
+      "groups": ["leica"],
+      "icon_set": "leica",
+      "publish": false
+    },
+    {
+      "id": "fujifilm",
+      "app_name": "Fujifilm Style",
+      "app_name_zh": "富士模拟",
+      "groups": ["fuji-sim"],
+      "icon_set": "fujifilm"
+    },
+    {
+      "id": "filmstocks",
+      "app_name": "Fuji Film Style",
+      "app_name_zh": "富士胶片",
+      "groups": ["fuji-film"],
+      "icon_set": "filmstocks"
+    },
+    {
+      "id": "ricoh",
+      "app_name": "Ricoh GR Style",
+      "app_name_zh": "理光 GR 风格",
+      "groups": ["ricoh-gr"],
+      "icon_set": "ricoh",
+      "publish": false
+    },
+    {
+      "id": "kodak",
+      "app_name": "Kodak Style",
+      "app_name_zh": "柯达风格",
+      "groups": ["kodak"],
+      "icon_set": "kodak"
+    },
+    {
+      "id": "pentax",
+      "app_name": "Pentax Style",
+      "app_name_zh": "宾得风格",
+      "groups": ["pentax"],
+      "icon_set": "pentax"
+    },
+    {
+      "id": "nichefilm",
+      "app_name": "Niche Film Style",
+      "app_name_zh": "小众胶片",
+      "groups": ["ilford", "cine", "other-stocks"],
+      "icon_set": "nichefilm"
+    },
+    {
+      "id": "hasselblad",
+      "app_name": "Hasselblad Style",
+      "app_name_zh": "哈苏风格",
+      "groups": ["hasselblad"],
+      "icon_set": "hasselblad",
+      "publish": false
+    },
+    {
+      "id": "sony",
+      "app_name": "Sony Style",
+      "app_name_zh": "索尼风格",
+      "groups": ["sony"],
+      "icon_set": "sony"
+    },
+    {
+      "id": "cinema",
+      "app_name": "Cinema LUT",
+      "app_name_zh": "电影滤镜",
+      "groups": ["kino"],
+      "icon_set": "cinema"
+    },
+    {
+      "id": "monochrome",
+      "app_name": "Monochrome",
+      "app_name_zh": "单色",
+      "groups": [],
+      "publish": false,
+      "filters": [
+        "acros", "acros-ye", "acros-r", "acros-g", "sepia", "fs-acros",
+        "kodak-trix-400", "kodak-tmax", "kodak-trix-1600-pushed",
+        "kodak-double-x-5222", "kodak-plus-x-125",
+        "gr-hi-contrast-bw", "gr-hard-monotone", "gr-soft-monotone",
+        "gr-moriyama", "fs-gr-hcbw", "fs-gr-moriyama",
+        "leica-monochrom", "leica-bw-hc", "leica-bw-nat", "leica-greg-wlm",
+        "leica-ia", "leica-blu", "leica-sel", "leica-sep",
+        "pana-l-monochrome-d",
+        "ambrotype", "polaroid-type100-sepia", "rollei-ortho-25", "svema-type-42",
+        "ilford-hp5", "ilford-fp4", "ilford-delta-100", "ilford-delta-3200",
+        "ilford-pan-f-50"
+      ],
+      "icon_set": "monochrome",
+      "short_names": {
+        "leica-monochrom": { "name": "Monochrom", "name_zh": "Monochrom" },
+        "leica-bw-hc": { "name": "B&W HC", "name_zh": "黑白高反差" },
+        "leica-bw-nat": { "name": "B&W Natural", "name_zh": "黑白自然" },
+        "leica-greg-wlm": { "name": "Greg WLM", "name_zh": "Greg WLM（暖调黑白）" },
+        "leica-ia": { "name": "IA", "name_zh": "IA（硬黑白）" },
+        "leica-blu": { "name": "Blu", "name_zh": "Blu（冷调黑白）" },
+        "leica-sel": { "name": "Sel", "name_zh": "Sel（淡银）" },
+        "leica-sep": { "name": "Sepia", "name_zh": "褐调" },
+        "ilford-hp5": { "name": "HP5", "name_zh": "HP5" },
+        "ilford-fp4": { "name": "FP4", "name_zh": "FP4" },
+        "ilford-delta-100": { "name": "Delta 100", "name_zh": "Delta 100" },
+        "ilford-delta-3200": { "name": "Delta 3200", "name_zh": "Delta 3200" },
+        "ilford-pan-f-50": { "name": "Pan F 50", "name_zh": "Pan F 50" },
+        "gr-hi-contrast-bw": { "name": "Hi-Contrast B&W", "name_zh": "高反差黑白" },
+        "gr-hard-monotone": { "name": "Hard Monotone", "name_zh": "硬调黑白" },
+        "gr-soft-monotone": { "name": "Soft Monotone", "name_zh": "柔调黑白" },
+        "gr-moriyama": { "name": "Moriyama", "name_zh": "森山风" },
+        "pana-l-monochrome-d": { "name": "L.Monochrome D", "name_zh": "L.单色D" }
+      }
+    }
+  ],
+  "unassigned_groups": {
+    "$comment": [
+      "Groups deliberately left out of every pack. They stay reachable in the all-in-one",
+      "app, which is still built and still published. Assigned here rather than silently",
+      "dropped, so the gap is visible in the data instead of in a bug report."
+    ],
+    "canon-nikon": "spans two brands - needs one pack each before it can be split",
+    "pana-olympus": "spans two brands - needs one pack each before it can be split",
+    "app-look": "not a camera brand - social/app filter looks"
+  }
+}
