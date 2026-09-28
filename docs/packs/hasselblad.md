@@ -1,5 +1,4 @@
-# Hasselblad Style — SonySOOCRecipes-hasselblad.apk
-
+# Hasselblad Style
 <p align="center"><b>English</b> · <a href="hasselblad.zh-CN.md">简体中文</a></p>
 
 ## Summary
@@ -8,7 +7,7 @@
 |---|---|
 | App name | Hasselblad Style |
 | Package name | com.hairuoliu.sonysoocrecipes.hasselblad |
-| APK filename | SonySOOCRecipes-hasselblad.apk |
+| **Ships in** | the full installer only — not in the free Base one |
 | Compiled recipes | 4 |
 | Source groups | Hasselblad |
 | Catalog version | 0.6.0 (updated 2026-09-13) |

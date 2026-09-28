@@ -1,5 +1,4 @@
-# Fujifilm Style — SonySOOCRecipes-fujifilm.apk
-
+# Fujifilm Style
 <p align="center"><b>English</b> · <a href="fujifilm.zh-CN.md">简体中文</a></p>
 
 ## Summary
@@ -8,7 +7,7 @@
 |---|---|
 | **App name** | Fujifilm Style |
 | **Package name** | com.hairuoliu.sonysoocrecipes.fujifilm |
-| **APK filename** | SonySOOCRecipes-fujifilm.apk |
+| **Ships in** | the free Base installer — tick it during install |
 | **Compiled recipes** | 16 |
 | **Source groups** | Fuji Sim (`fuji-sim`) |
 | **Catalog version** | 0.6.0 (updated 2026-09-13) |

@@ -903,6 +903,19 @@ def label_java() -> list[tuple[str, str, str, str]]:
          "            case K_RIGHT: openEditor(); return true;\n"
          "            case K_LEFT: openBrowser(false); return true;",
          "editor: RIGHT opens, LEFT closes"),
+        # --- FN in the browser closes straight back to the shooting screen -----------------
+        # The browser is an overlay on the live view. Pressing FN inside it used to call
+        # openBrowser(false), which restored overlayPrev — i.e. it dropped the user back onto
+        # the full two-bar main panel (overlay 0) even when the browser was opened from the
+        # pure viewfinder (overlay 2). The user reads that as "FN never returns to the shooting
+        # screen". FN now sets overlay = 2 directly (the hidden / pure viewfinder), so it always
+        # returns to a clean shooting frame. AEL / DISP keep openBrowser(false) so they remain a
+        # generic back / cycle key.
+        ("MainActivity.java",
+         "            case K_FN: case K_AEL: case K_DISP: openBrowser(false); return true;",
+         '''            case K_FN: { overlay = 2; bottomOnly = false; row = 0; focus = false; browserCol = 1; render(); return true; }   // v1.x: FN returns to the shooting screen
+            case K_AEL: case K_DISP: openBrowser(false); return true;''',
+         "browser: FN closes to the viewfinder"),
 
         # --- the one-line summary under the recipe name ------------------------------------
         ("MainActivity.java",

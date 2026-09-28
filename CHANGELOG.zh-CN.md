@@ -12,6 +12,24 @@
 
 ---
 
+## 未发布 — 一个文件，一次点击
+
+分发方式换了：APK 下载撤掉，改成 Windows 安装器。*（还没定版本号——这一条描述的是 `main`
+当前的状态。）*
+
+- **要下的东西就是安装器。** `SonySOOCRecipes-Base-<语言>.exe` 里既有配方，也有
+  `pmca-console`（跟相机走 USB 通信的 Sony-PMCA-RE 引擎），所以没有 APK 要下、没有工具要先装、
+  也没有命令要敲。三屏：连接、勾选想要的包、安装。
+- **Base 是 6 个包、91 款观感。** 富士、Fuji Film、柯达、Niche Film、理光 GR、索尼。
+  `catalog/packs.json` 里的 `publish` 现在的意思是*是否进免费的 Base 安装器*，所以 `ricoh` 进来
+  了、`pentax` 与 `cinema` 移出去了；其余五个包和全量版装在完整版安装器里。
+- **APK 下载撤掉。** 早期发布会按品牌发布一个个 APK，让你自己用 Sony-PMCA-RE 装。那些资产已删，
+  本仓库不再发布任何 APK。macOS / Linux / 命令行用户仍可从源码构建——`tools/build_all_local.sh`
+  会把全部目标写进 `dist/`。
+- **`release.yml` 删掉了。** 发布不再走 GitHub Actions 的 release 任务，于是构建管道只剩一份：
+  `tools/build_apk.sh`。原来把两份钉在一起的测试，留下的一半是 `TestBuildPipelineSteps`，现在
+  断言脚本把每个变换工具都跑了一遍、且顺序是对的。
+
 ## 1.0.1 — 来自 α7S II 的编辑器修复
 
 真机测试 1.0.0 后的四处修复，都在设置编辑器里。

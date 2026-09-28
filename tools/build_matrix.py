@@ -1,22 +1,27 @@
 #!/usr/bin/env python3
-"""Derive the release build matrix from catalog/packs.json.
+"""Derive the build matrix from catalog/packs.json.
 
     python tools/build_matrix.py            # the matrix, as JSON, one line
-    python tools/build_matrix.py --ids      # just the pack ids, one per line
+    python tools/build_matrix.py --ids      # the public pack ids, one per line
     python tools/build_matrix.py --apk-for ID  # the expected APK filename for one target
 
-Consumed by .github/workflows/release.yml and tools/build_apk.sh.
+Consumed by tools/build_apk.sh — `--all-packs` loops over `--ids`, and the output-name check
+resolves through `--apk-for`. Read by hand when the installer's own pack list is rebuilt.
 
-This is a script in the repository rather than an inline `python -c` in the workflow for a
-concrete reason, not a stylistic one: inside a YAML `run: |` block the code has to be
-indented to sit under the block scalar, and when that code is passed through `python -c`
-inside a shell substitution the indentation is part of the string. Python then dies on the
-first statement with `IndentationError: unexpected indent` — the workflow fails before it
-builds anything, and nothing local catches it. A file has no such ambiguity.
+It used to be consumed by .github/workflows/release.yml, which is gone. The rationale below is
+about YAML substitution rather than about that workflow, so it stays: the next person to reach
+for an inline `python -c` in a workflow runs into exactly the same wall.
+
+A script in the repository rather than an inline `python -c` in YAML for a concrete reason,
+not a stylistic one: inside a `run: |` block the code has to be indented to sit under the block
+scalar, and when that code is passed through `python -c` inside a shell substitution the
+indentation is part of the string. Python then dies on the first statement with
+`IndentationError: unexpected indent` — the workflow fails before it builds anything, and
+nothing local catches it. A file has no such ambiguity.
 
 The matrix is *derived*. The pack list lives in catalog/packs.json and nowhere else; a
-literal copy here or in the workflow would drift the first time someone adds a pack. The
-entry list is the all-in-one app plus one entry per pack, and the APK filename comes from
+literal copy here would drift the first time someone adds a pack. The entry list is the
+all-in-one app plus one entry per public pack, and the APK filename comes from
 apply_pack.apk_name() so there is exactly one definition of what a pack's build produces.
 """
 
@@ -51,10 +56,10 @@ def entries(packs_file: Path, *, include_unpublished: bool = False) -> list[dict
         seen.add(p["id"])
         if p["id"] == "all":
             raise SystemExit('"all" is reserved for the all-in-one app; rename that pack')
-        # publish:false keeps a pack out of the RELEASE without deleting it: it still
+        # publish:false keeps a pack out of the public set without deleting it: it still
         # builds one-off (build_apk.sh <id>) and still answers --apk-for, but it must not
-        # enter the workflow matrix or the --all-packs id list, or CI would publish an APK
-        # the owner is deliberately holding back.
+        # enter the matrix or the --all-packs id list, or a build of "everything published"
+        # would quietly include packs that are not in the free installer.
         if p.get("publish") is False and not include_unpublished:
             continue
         n_groups = len(p["groups"])
@@ -87,7 +92,7 @@ def main() -> int:
     if args.apk_for:
         # --apk-for answers for EVERY pack, published or not: build_apk.sh <id> must be
         # able to build a held-back pack one-off, and it resolves the APK name through this
-        # lookup. Only the release matrix and --ids apply the publish filter.
+        # lookup. Only the matrix and --ids apply the publish filter.
         all_rows = entries(DEFAULT_PACKS, include_unpublished=True)
         for r in all_rows:
             if r["id"] == args.apk_for:

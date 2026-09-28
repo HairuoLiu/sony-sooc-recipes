@@ -1,5 +1,4 @@
-# Pentax Style — SonySOOCRecipes-pentax.apk
-
+# Pentax Style
 <p align="center"><b>English</b> · <a href="pentax.zh-CN.md">简体中文</a></p>
 
 ## Summary
@@ -8,7 +7,7 @@
 |---|---|
 | **App name** | Pentax Style |
 | **Package name** | com.hairuoliu.sonysoocrecipes.pentax |
-| **APK filename** | SonySOOCRecipes-pentax.apk |
+| **Ships in** | the full installer only — not in the free Base one |
 | **Compiled recipes** | 11 |
 | **Source groups** | Pentax (`pentax`) |
 | **Catalog version** | 0.6.0 (updated 2026-09-13) |

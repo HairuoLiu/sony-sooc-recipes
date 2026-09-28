@@ -16,18 +16,25 @@ The launcher icon the release build drops into the fork's `res/drawable-*/ic_lau
 python tools/build_app_icon.py     # needs Pillow + numpy
 ```
 
-## Why the icons are committed rather than generated in CI
+## Why the icons are committed rather than generated at build time
 
-`release.yml` clones upstream fresh at a pinned revision, so anything living only in the
-fork's working tree is gone by the time the build runs. The icon is a **build input**, the
-same way `catalog/filters.json` is: it belongs to this repository, and both the release
-workflow and `tools/build_apk.sh` copy it into the checkout.
+`tools/build_apk.sh` clones upstream fresh at a pinned revision, so anything living only in
+the fork's working tree is gone by the time the build runs. The icon is a **build input**, the
+same way `catalog/filters.json` is: it belongs to this repository, and the build copies it
+into the checkout.
 
 ## Format
 
 Transparent RGBA at all five sizes, matching what upstream ships — the camera's app menu
 draws its own tile behind each icon, so a baked-in background would fight it. The set is
 **not** adaptive-icon (`<adaptive-icon>` landed in API 26; this app targets API 10).
+
+**The eleven pack icons take the opposite trade-off on purpose.** Each is composited onto a
+solid dark rounded tile (RGB(28,28,30) ≈ #1C1C1E) so a dark body — the Leica M9, the
+Hasselblad body — does not vanish into a dark wallpaper; measured at `xxhdpi` they are 2.6%
+fully transparent against this set's 54.2%. See `../app-icon-packs/README.md`. So this file
+describes the all-in-one only: its reasoning is why the *default* icon stays a bare cut-out,
+and it does not extend to the packs.
 
 ## The keying, in one paragraph
 

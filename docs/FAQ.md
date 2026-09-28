@@ -59,7 +59,7 @@ The line directly above it, `Switching to app install mode`, is **not** a succes
 
 **The boundary is autumn 2012.** The PMCA app platform starts with the **NEX-5R / NEX-6** (announced August–September 2012) — the first bodies with the Android subsystem. The earlier **NEX-7** (August 2011), NEX-3 / NEX-5 / NEX-5N / NEX-F3, and the a3000 / a3500 have no such subsystem and no `Application` menu at all. They look a lot like the "supported" column above, but they cannot take an app — which is exactly what the installer means when it prints `This camera does not support apps. Please check the compatibility list.` **Their absence from the supported column is not an omission.**
 
-**Has any of this been on a real camera?** Yes — the **α7S II**, with four brand packs installed side by side. Photographs of it running are in the [README](../README.md#on-a-real-camera). Everything else in the supported column is *platform* support: the body has the app channel. That is not the same claim as a body-by-body test, and it is written this way because it is not.
+**Has any of this been on a real camera?** Yes — the **α7S II**, with nine brand packs installed side by side. Photographs of it running are in the [README](../README.md#on-a-real-camera). Everything else in the supported column is *platform* support: the body has the app channel. That is not the same claim as a body-by-body test, and it is written this way because it is not.
 
 **Is there another way for those bodies?** One, but this project does not support it. A recipe is just a set of Creative Style values (base look + contrast / saturation / sharpness), white-balance fine tuning and DRO — every value is printed in [`catalog/index.html`](../catalog/index.html), so you can dial them in by hand in the camera menu. The NEX-7 has all of those controls (Creative Style contrast / saturation / sharpness ±3 each, WB fine tune A–B / G–M ±7 each, DRO Lv1–5). The cost: no one-key store, no in-app preview or bulk management, values beyond ±3 are clipped by the menu, and the Picture Effect (PE) tier mapping has not been tested.
 
@@ -71,7 +71,7 @@ Those bodies have no `Application` menu — Sony removed the PMCA app channel an
 
 ### Do I need an internet connection? Do I need a computer?
 
-You need a computer (Windows, macOS, or Linux) for the first install over USB, but the install itself is **fully offline** — the installer talks to the camera directly, no network involved. You do **not** need internet during installation. (You only need internet once, on the computer, to download the APK and the installer.)
+You need a computer (Windows, macOS, or Linux) for the first install over USB, but the install itself is **fully offline** — the installer talks to the camera directly, no network involved. You do **not** need internet during installation. (You only need internet once, on the computer, to download the installer.)
 
 ### After installing, can I still use the camera normally? Does it affect video?
 
@@ -133,21 +133,40 @@ You install the app once, and it carries all 164 recipes. You store **one** reci
 
 ### How many packs can I install at once? Will they all fit?
 
-**They coexist, and a whole release's worth fits.** Every pack has its own Android package name (the all-in-one is `…sonysoocrecipes`, a pack is `…sonysoocrecipes.<brand>`), and Android identifies an app by its package name — so they never overwrite one another. The number of APKs in a release is the number of *published* brand packs in `catalog/packs.json` plus one for the all-in-one: currently 7 + 1 = **8** (four more packs — Leica, Hasselblad, Monochrome, Ricoh GR — are marked `publish: false` and ship separately).
+**They coexist, and a whole installer's worth fits.** Every pack has its own Android package name (the all-in-one is `…sonysoocrecipes`, a pack is `…sonysoocrecipes.<brand>`), and Android identifies an app by its package name — so they never overwrite one another. **Base carries 6 packs, 91 looks** — Fujifilm, Fuji Film, Kodak, Niche Film, Ricoh GR and Sony — and you can untick any of them while installing. The other five packs and the all-in-one are distributed separately. The list, and why it is split that way, is in [Brand packs](BRAND-PACKS.md).
 
-The camera's own ceiling is a different order of magnitude: **Sony says approximately 20** PlayMemories Camera Apps can be stored (support article 00020843), and the real figure depends on how large the apps are, because they live in the camera's internal memory. Our APK is about 200 KB each, so **all eight together come to under 2 MB** — one to two orders of magnitude smaller than Sony's own apps, which start at several MB. Running out of room is not the problem you will hit.
+The camera's own ceiling is a different order of magnitude: **Sony says approximately 20** PlayMemories Camera Apps can be stored (support article 00020843), and the real figure depends on how large the apps are, because they live in the camera's internal memory. Each of our apps is about 200 KB, so **every pack in the catalogue together comes to about 2 MB** — one to two orders of magnitude smaller than Sony's own apps, which start at several MB. Running out of room is not the problem you will hit.
 
 > **Honest note.** But "you can" is not "you should". Three costs, up front:
 >
-> 1. **The more apps the camera holds, the slower it powers on and off.** Sony states this itself (support article 00020845): the slowdown depends on free internal memory and on how many apps are stored, and it is normal behaviour, not a fault. Eight apps is not free.
+> 1. **The more apps the camera holds, the slower it powers on and off.** Sony states this itself (support article 00020845): the slowdown depends on free internal memory and on how many apps are stored, and it is normal behaviour, not a fault. Six apps is not free either.
 > 2. **Several packs is not several cameras.** The settings store is shared; only one recipe is active at a time, and switching packs does not switch recipes. See [Brand packs §3](BRAND-PACKS.md#3-the-shared-settings-caveat--one-camera-one-active-recipe).
-> 3. **The all-in-one already contains every recipe, and a pack is a subset of it.** If you want "all of them", the all-in-one alone gets you there — seven more packs add no recipe, only seven icons and a slower boot.
+> 3. **The all-in-one already contains every recipe, and a pack is a subset of it.** If you want "all of them", the all-in-one alone gets you there — the packs add no recipe, only separate icons and a slower boot.
+
+### Does the app follow the camera's language? Do I need a Chinese version?
+
+**No separate download — every app already carries both languages.** There is no "Chinese build";
+each app ships one binary that holds both, and the language is chosen at run time.
+
+Which language you see is decided by the **camera**, not by a setting inside the app:
+
+- the **app's name in the camera's app list** comes from the Android resource system —
+  `res/values/` is English, `res/values-zh/` is Chinese, and Android picks one from the locale;
+- **everything drawn inside the app** — recipe names, group names, parameter labels, toasts —
+  keys off the camera's Android locale, which is read **once, when the app starts**.
+
+> **Honest note.** Because it is read at start-up, changing the camera's language while the app
+> is already running does not re-translate it — the app keeps the language it started in. Close
+> the app and open it again (if the body was already on when you changed the language,
+> power-cycle it) so it starts fresh and re-reads the locale. Nothing needs reinstalling. If the
+> app name in the camera's list is *also* still Chinese, then the body is not reporting your
+> menu language to the app at all — that is a camera-side limitation, not a missing download.
 
 ### What should I watch out for when updating to a new version?
 
-The APK is built by CI with a **fresh, throwaway signing key every time** (there is no keystore). An APK signed with a different key **cannot overwrite** an existing install — you will see `INSTALL_FAILED_UPDATE_INCOMPATIBLE`. Fix: uninstall the same-package app in the camera's app management first, then install the new one (uninstalling clears the app's stored settings, so re-store your recipe afterward).
+The packs inside one installer are signed with **one shared key**, so they upgrade over one another cleanly. An app signed with a *different* key **cannot overwrite** an existing install — you will see `INSTALL_FAILED_UPDATE_INCOMPATIBLE`. That is what happens if the camera already carries a Sony SOOC Recipes from an older, differently-signed build. Fix: uninstall the same-package app in the camera's app management first, then install the new one (uninstalling clears the app's stored settings, so re-store your recipe afterward).
 
-> **Honest note.** The version number shown inside the app is the **upstream** version, not this repository's tag. Trust the GitHub release tag, not the in-app number.
+> **Honest note.** The version number shown inside the app is the **upstream** version, not this repository's tag. Trust the installer you downloaded, not the in-app number.
 
 ### Is Wi-Fi ADB safe?
 

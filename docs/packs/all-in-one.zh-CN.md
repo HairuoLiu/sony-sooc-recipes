@@ -1,5 +1,4 @@
-# Sony SOOC Recipes — SonySOOCRecipes.apk
-
+# Sony SOOC Recipes
 <p align="center"><a href="all-in-one.md">English</a> · <b>简体中文</b></p>
 
 ## 概述
@@ -8,7 +7,7 @@
 |---|---|
 | 应用名称 | Sony SOOC Recipes |
 | 包名 | com.hairuoliu.sonysoocrecipes |
-| APK 文件名 | SonySOOCRecipes.apk |
+| **随哪一档分发** | 完整版安装器 —— 它就是装着全部观感的那个 App |
 | 已编译配方 | 149 |
 | 来源分组 | Sony、Fuji Sim、Fuji Film、Kodak、Cine、Ricoh GR、Leica、Hasselblad、Canon / Nikon、Pentax、Pana / Olympus、Other Stocks、Ilford、Kino LUT、App Look |
 | 目录版本 | 0.6.0（更新于 2026-09-13） |

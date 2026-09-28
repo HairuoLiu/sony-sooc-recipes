@@ -331,14 +331,13 @@ for a Path A recipe, run `check_fidelity.py` manually as shown in §4.
   Closes #NN
   ```
   Use `feat(recipes):` for additions. Reference the issue that established the empty band.
-- **Tag → CI builds the APK.** Pushing a tag triggers the release workflow, which clones
-  upstream at the pinned commit, regenerates `Recipes.java`, builds the APK, and attaches
-  it to the GitHub Release. The pinned upstream SHA lives in both
+- **Build → the installer carries it.** `tools/build_all_local.sh` clones upstream at the
+  pinned commit, regenerates `Recipes.java`, and builds every target into `dist/`, which is
+  what the Windows installer packs. The pinned upstream SHA lives in both
   `catalog/filters.json` (`sources.recipe-lab.fetched_rev`) and
-  `.github/workflows/release.yml` (`UPSTREAM_SHA`); `TestPinnedUpstream` fails if they
-  drift. You normally do not edit `.github/` — if the pin must move, coordinate with the
-  maintainer.
-- **On-camera verification is still on you.** CI green proves the file is consistent, not
+  `tools/build_apk.sh` (`UPSTREAM_SHA`); `TestPinnedUpstream` fails if they drift. If the
+  pin must move, change both — the test will not let you move one.
+- **On-camera verification is still on you.** Green gates prove the file is consistent, not
   that the colour is correct. Install via the USB / Sony-PMCA-RE channel (`INSTALL.md`),
   store the recipe, power-cycle the camera (a recipe that vanishes after reboot was never
   written), shoot JPEGs on disposable subjects, then flip `verified` to `true` and record

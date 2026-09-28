@@ -1,12 +1,11 @@
-# Sony Style — SonySOOCRecipes-sony.apk
-
+# Sony Style
 <p align="center"><b>English</b> · <a href="sony.zh-CN.md">简体中文</a></p>
 
 ## Summary
 
 - **App name:** Sony Style
 - **Package name:** com.hairuoliu.sonysoocrecipes.sony
-- **APK filename:** SonySOOCRecipes-sony.apk
+- **Ships in:** the free Base installer — tick it during install
 - **Compiled recipes:** 8
 - **Source group(s):** Sony (`sony`)
 - **Catalog version:** 0.6.0 (updated 2026-09-13)

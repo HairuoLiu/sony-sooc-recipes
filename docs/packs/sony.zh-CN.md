@@ -1,12 +1,11 @@
-# Sony Style — SonySOOCRecipes-sony.apk
-
+# Sony Style
 <p align="center"><a href="sony.md">English</a> · <b>简体中文</b></p>
 
 ## 概要
 
 - **应用名称：** Sony Style
 - **包名：** com.hairuoliu.sonysoocrecipes.sony
-- **APK 文件名：** SonySOOCRecipes-sony.apk
+- **随哪一档分发：** 免费的 Base 安装器 —— 安装时勾上即可
 - **已编译配方数：** 8
 - **来源分组：** Sony（`sony`）
 - **目录版本：** 0.6.0（更新于 2026-09-13）

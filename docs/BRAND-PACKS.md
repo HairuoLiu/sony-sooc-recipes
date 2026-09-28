@@ -5,7 +5,7 @@
 > **Honest note up front.** A brand pack is *still the same app with the same recipes* —
 > it is just built once per brand with its own launcher icon and its own Android package
 > name, so you can install only the brand you actually use. The all-in-one app is **not
-> going away**; it stays brand-neutral and remains the default download. Read
+> going away**; it stays brand-neutral and is still the one that carries every look. Read
 > [§3](#3-the-shared-settings-caveat--one-camera-one-active-recipe) before you install
 > three packs expecting three cameras — you will not get them.
 
@@ -28,7 +28,9 @@ all-in-one app and a single brand pack is three things:
 2. the **`app_name`** string (e.g. `Leica Style`);
 3. the **launcher icon** — three packs show that brand's most famous camera body; six depict film
    stock; the `cinema` and `monochrome` packs carry user-supplied cover art (both shipped as
-   original drawn artwork until 2026-09-27, because neither has a single product to photograph).
+   original drawn artwork until 2026-09-27, because neither has a single product to photograph;
+   as of 2026-09-28 `monochrome`'s is a film-strip drawing and `cinema`'s a cine camera, and
+   both were keyed out of their backgrounds onto the same dark tile the other packs use).
 
 `tools/apply_pack.py` performs the transform on a fresh, already-rebranded checkout;
 `tools/gen_recipes.py --pack <id>` then emits only that pack's groups into `Recipes.java`.
@@ -90,10 +92,11 @@ because this is the single most common point of confusion.
 
 ## 4. The pack table
 
-Eleven packs today, built from the catalog — seven of them in this release
-(`fujifilm`, `filmstocks`, `kodak`, `pentax`, `nichefilm`, `sony`, `cinema`), and four
-(`leica`, `ricoh`, `hasselblad`, `monochrome`) marked `publish: false` so they are held
-back and ship separately. The *compiled recipe count* is the number
+Eleven packs today, built from the catalog — six of them in the free **Base** installer
+(`fujifilm`, `filmstocks`, `kodak`, `nichefilm`, `sony`, `ricoh`), and five
+(`leica`, `pentax`, `hasselblad`, `cinema`, `monochrome`) marked `publish: false` so they are
+held back for the full installer. `publish` is read by `tools/build_matrix.py`, which is where
+the installer's pack list comes from — it is not a CI switch. The *compiled recipe count* is the number
 actually emitted into `Recipes.java` for that pack — after dropping entries that belong to
 the other engine (`film-studio-matrix`, reference-only) and entries that are reference-only
 for another brand. It is **not** the same as the group's total entry count, and a smaller
@@ -110,8 +113,8 @@ number is not a bug (see the notes below the table).
 | `nichefilm` | Niche Film Style | `ilford`, `cine`, `other-stocks` | 26 |
 | `hasselblad` | Hasselblad Style | `hasselblad` | 4 |
 | `sony` | Sony Style | `sony` | 8 |
-| `cinema` | Cinema LUT | `kino` | 9 |
-| `monochrome` | Monochrome | `fuji-sim`, `kodak`, `ricoh-gr`, `leica`, `pana-olympus`, `other-stocks`, `ilford` (filter whitelist) | 32 |
+| `cinema` | Cinema LUT Style | `kino` | 9 |
+| `monochrome` | Monochrome Style | `fuji-sim`, `kodak`, `ricoh-gr`, `leica`, `pana-olympus`, `other-stocks`, `ilford` (filter whitelist) | 32 |
 
 Three counts are smaller than — or add up differently from — their group sizes, and that is expected:
 
@@ -137,9 +140,9 @@ all belong to one brand**, because the pack's icon and its `app_name` (`<Brand> 
 advertise exactly one brand. A pack that mixed Leica and Kodak recipes under a "Leica
 Style" name would be lying about what it contains.
 
-**The one deliberate exception is `monochrome`.** Its `app_name` is *Monochrome* (单色),
-not a `<Brand> Style`, and it is built as a **filter whitelist** — a hand-picked list of 32
-individual filter ids — rather than as a group. It spans seven groups (`fuji-sim`, `kodak`,
+**The one deliberate exception is `monochrome`.** Its `app_name` takes the same `<…> Style`
+form as everyone else (`Monochrome Style` / 单色风格), but it is built as a **filter whitelist**
+— a hand-picked list of 32 individual filter ids — rather than as a group. It spans seven groups (`fuji-sim`, `kodak`,
 `ricoh-gr`, `leica`, `pana-olympus`, `other-stocks`, `ilford`) precisely because a
 black-and-white look is something several brands each contribute, not one brand's territory.
 It therefore *shares* recipes with the brand packs on purpose — Leica Style still contains
@@ -243,13 +246,13 @@ checkout. `--dry-run` reports every change without writing.
 Each pack's launcher icon is built from an image the user supplied. **Three** packs
 depict a camera body — `leica` (the M9), `fujifilm` (the X100VI) and `hasselblad` (the X2D II
 100C) — while **six** depict film: `filmstocks`, `kodak`, `nichefilm`, `pentax`,
-`ricoh` and `sony` (those six packs are named after film stock, not a body). The `cinema` and `monochrome` packs are cross-brand selections with no single product to photograph, so they shipped as original drawn artwork until 2026-09-27, when cover art was supplied for both. **All eleven packs** now use **all-rights-reserved
+`ricoh` and `sony` (those six packs are named after film stock, not a body). The `cinema` and `monochrome` packs are cross-brand selections with no single product to photograph, so they shipped as original drawn artwork until 2026-09-27, when cover art was supplied for both (`monochrome`'s is a film-strip drawing and `cinema`'s a cine camera; as of 2026-09-28 both are keyed out of their backgrounds and placed on the same dark tile as the other nine packs). **All eleven packs** now use **all-rights-reserved
 commercial images supplied by the user**, with no licence granted — `ricoh` and `pentax`
 were the last two Wikimedia Commons photographs and have been swapped out too, so no
-free-licensed image ships in any APK. The provenance of each one and the relaxed licence rule
+free-licensed image ships in any app. The provenance of each one and the relaxed licence rule
 are recorded in
-`assets/app-icon-packs/CREDITS.md`, and — because the icon ships inside the APK — licences and
-credits must **travel with the APK**: `NOTICE.md` and the per-pack release notes carry them.
+`assets/app-icon-packs/CREDITS.md`, and — because the icon ships inside the app — licences and
+credits must **travel with the app**: `NOTICE.md` and the per-pack notes carry them.
 
 The icon sets are generated by `tools/build_pack_icons.py` (the per-pack counterpart of
 `tools/build_app_icon.py`, which builds the all-in-one set). Each set is five files at
@@ -264,12 +267,16 @@ fixed pixel sizes:
 | `icon-512.png` | store listing | 512 |
 
 **Be honest about the keying.** The all-in-one icon, built by `tools/build_app_icon.py`,
-is **keyed out of its plain-white background** (a transparent RGBA drawable). As of this
-release the pack icons are **also** keyed — each is a transparent silhouette cut from its
-source photograph, matching the all-in-one's style rather than keeping the rectangular photo.
-Do not describe the pack icons as rectangular photographic tiles; they are not.
+is **keyed out of its plain-white background**: a transparent RGBA drawable with no backdrop —
+at `xxhdpi` 54.2% of its pixels are fully transparent, corner `(0,0,0,0)`. The pack icons are
+keyed **too** — each is a silhouette cut from its source image rather than a rectangular photo —
+but they go one step further and are **composited onto a solid dark rounded tile**
+(RGB(28,28,30) ≈ #1C1C1E), which leaves only 2.6% of the pixels fully transparent, corner
+`(28,28,30,0)`. So: do not describe the pack icons as rectangular photographic tiles (they are
+not), and do not describe the two icon families as rendering identically (they do not — the
+all-in-one carries no tile).
 
-**The attribution obligation currently applies to none of the packs — but it comes back the moment a licensed image does.** The nine photographic packs use all-rights-reserved commercial photographs supplied by the user; the `cinema` and `monochrome` packs are original artwork and need no licence. No licence was granted, so there is no attribution
+**The attribution obligation currently applies to none of the packs — but it comes back the moment a licensed image does.** The nine photographic packs use all-rights-reserved commercial photographs supplied by the user; the `cinema` and `monochrome` packs use user-supplied drawings — a cine camera and a film-strip — rather than photographs, so no third-party licence is involved for either. No licence was granted, so there is no attribution
 obligation — only the publisher's risk of distributing them. `ricoh` and `pentax` used to be
 the exception: they carried Wikimedia Commons **CC BY 2.0** photographs (Ricoh GR by
 Kārlis Dambrāns, Pentax K1000 by Terry Presley) and had to be credited. Both have since been
@@ -279,7 +286,7 @@ photograph that no longer ships would be a false attribution, which is its own d
 
 That makes the obligation dormant rather than abolished. `CC BY` permits commercial use
 **only with attribution**: any future CC BY image must be credited in `NOTICE.md` and in the
-per-pack release notes, and the licence text must ship with the APK. `CC BY-SA` is
+per-pack notes, and the licence text must ship with the app. `CC BY-SA` is
 deliberately **excluded** from the pack icons: its share-alike term would reach the whole
 app, not just the icon. The default all-in-one icon needs no such attribution because it is
 original artwork in this repo.
@@ -298,10 +305,10 @@ would suggest Leica made or blessed it.
 a brand name in an app's name is still trademark use. Nominative or descriptive use —
 truthfully saying what the app is *for* — is a *defence* in some jurisdictions, not a
 *permission*, and app stores are stricter than courts. The all-in-one app stays
-brand-neutral (`Sony SOOC Recipes`) and remains the default download precisely so the
-project's main distribution carries no single brand's name.
+brand-neutral (`Sony SOOC Recipes`) precisely so the app that carries the whole catalogue
+carries no single brand's name.
 
-Anyone who **redistributes** these packs — republishing the APKs, or shipping them inside
+Anyone who **redistributes** these packs — republishing the apps, or shipping them inside
 another product — takes on that trademark risk themselves. This document does not make that
 risk go away; it only makes it visible.
 
@@ -309,7 +316,8 @@ risk go away; it only makes it visible.
 
 ## 9. Building a pack
 
-You rarely have to. CI builds every pack on a `v*` tag (see below). But locally:
+You rarely have to — `tools/build_all_local.sh` builds every pack, and that is what fills the
+installer. But locally, one at a time:
 
 ```bash
 tools/build_apk.sh --pack leica        # build one brand pack, in its own checkout
@@ -320,24 +328,22 @@ tools/build_apk.sh --all-packs         # the all-in-one app + every pack from pa
 in-place transform cannot clobber the all-in-one. `--all-packs` builds the all-in-one
 first, then every pack read from `catalog/packs.json` (not hardcoded).
 
-### How CI does it
+### How the installer build does it
 
-`.github/workflows/release.yml` builds the APKs on a `v*` tag. The build matrix is
-**derived at run time from `catalog/packs.json`** by a `targets` job: it emits one entry
-for the all-in-one plus one per pack. A second `apk` job then runs **one job per matrix
-entry**, each on an independent runner, each cloning upstream fresh at the pinned revision
-and applying that pack's transform. Two properties follow:
+`tools/build_all_local.sh` builds every target and drops the APKs in `dist/`, which is what
+the Windows installer packs up. The target list is **derived at run time from
+`catalog/packs.json`** by `tools/build_matrix.py`: one entry for the all-in-one plus one per
+pack, so the list is never copied into a script. Two properties follow:
 
-- **Failure isolation.** `fail-fast: false` means a broken pack fails on its own; it does
-  not block the other packs or the all-in-one.
-- **No YAML drift.** The pack list lives only in `catalog/packs.json`. Adding a pack there
-  is picked up by the next tag with **no edit to the workflow file** — the repo forbids
-  copying the list into the YAML, because that copy would drift the moment someone edits
-  the JSON.
+- **One source of truth.** The pack list lives only in `catalog/packs.json`. Adding a pack
+  there is picked up by the next build with **no edit to any script** — the repo forbids
+  copying the list, because that copy would drift the moment someone edits the JSON.
+- **Isolated checkouts.** `tools/build_apk.sh --pack <id>` gives every pack its own checkout
+  (`build/recipe-lab-sony-pmca-<id>`), each cloning upstream fresh at the pinned revision and
+  applying that pack's transform, so a broken pack cannot corrupt the others.
 
-Per-pack release notes (generated in the `release` job) restate the shared-settings caveat
-from [§3](#3-the-shared-settings-caveat--one-camera-one-active-recipe) and list every pack
-APK with its SHA-256.
+The per-pack notes restate the shared-settings caveat from
+[§3](#3-the-shared-settings-caveat--one-camera-one-active-recipe).
 
 ---
 
@@ -361,21 +367,23 @@ Say you want a `contax` pack. Step by step:
 3. **Generate the icon set.** Produce `assets/app-icon-packs/contax/` with the five files
    at 48 / 72 / 96 / 144 / 512 px (§7). Preferred: drop a keyed `contax.png` cut-out into
    `camera-covers/cutout/` (see `tools/cut_camera_covers.py`) — `tools/build_pack_icons.py`
-   picks it up and renders a transparent silhouette. With no cut-out it falls back to the
-   framed `master.jpg`. Record the source's provenance and licence in
-   `assets/app-icon-packs/CREDITS.md`, `NOTICE.md` and the per-pack release notes. Do
+   picks it up and composites it onto the dark rounded tile every other pack sits on
+   (`--no-bg` gives a bare transparent silhouette instead). With no cut-out it falls back to
+   the framed `master.jpg`. Record the source's provenance and licence in
+   `assets/app-icon-packs/CREDITS.md`, `NOTICE.md` and the per-pack notes. Do
    **not** use a `CC BY-SA` photo — the icon is an adaptation of the photograph, so
    share-alike would reach the whole app.
 
 4. **Run the gate.** `tools/check_assets.py` now checks icon sets. A missing set directory
    is a *note* (the pack falls back to the default icon), but a set that exists with a
-   missing or wrong-size file is an *error*. The gate must pass before you tag.
+   missing or wrong-size file is an *error*. The gate must pass before you build.
 
 5. **Build locally to sanity-check.** `tools/build_apk.sh --pack contax`, then confirm the
-   APK's package name with `apply_pack.py --check` if you kept the checkout.
+   app's package name with `apply_pack.py --check` if you kept the checkout.
 
-6. **Tag to publish.** Push a `v*` tag. The `release.yml` matrix picks the new pack up
-   automatically — no workflow edit needed. The per-pack release notes will name it.
+6. **Put it in an installer.** Set `publish: true` in `catalog/packs.json` and the pack joins
+   the free Base installer's list on the next `tools/build_all_local.sh` run; leave it `false`
+   and it ships only in the full installer. No script edit needed — the list is derived.
 
 That is the whole change surface: one JSON entry, an icon set, and an attribution line.
 Nothing else in the codebase moves.

@@ -1,14 +1,13 @@
-# Monochrome — SonySOOCRecipes-monochrome.apk
-
+# Monochrome Style
 <p align="center"><b>English</b> · <a href="monochrome.zh-CN.md">简体中文</a></p>
 
 ## Summary
 
 | | |
 |---|---|
-| App name | Monochrome |
+| App name | Monochrome Style |
 | Package name | com.hairuoliu.sonysoocrecipes.monochrome |
-| APK filename | SonySOOCRecipes-monochrome.apk |
+| **Ships in** | the full installer only — not in the free Base one |
 | Compiled recipes | 32 |
 | Source groups | 7 (a whitelist spanning Fuji Sim, Kodak, Ricoh GR, Leica, Pana / Olympus, Other Stocks, Ilford) |
 | Catalog version | 0.6.0 (updated 2026-09-13) |
@@ -51,7 +50,7 @@ exactly why this pack exists as a whitelist rather than as a normal group pack.
 Every recipe here is a black-and-white or sepia look. All but a handful sit on the camera's
 **MONO** or **SEPIA** Creative Style (the exceptions lean on the **rough-mono** Picture
 Effect, `pe=7`, for a grainy B&W). The key settings below are taken straight from the
-catalog, so they match what the APK actually applies.
+catalog, so they match what the app actually applies.
 
 | Name | 中文 | Type | What it is / key settings |
 |------|------|------|---------------------------|
@@ -120,7 +119,9 @@ catalog that the all-in-one and every brand pack already ship — the same param
 same sources (77 upstream recipes matched value-for-value, 72 authored-here), just gathered
 by `tone: mono` instead of by brand. The launcher icon is **user-supplied cover art**: the pack
 is a cross-brand selection with no single product to photograph honestly, so it shipped an
-in-repo drawing (an aperture, in the same spirit as the `cinema` pack's icon) until 2026-09-27.
+in-repo drawing (an aperture, in the same spirit as the `cinema` pack's icon) until 2026-09-27,
+and a supplied cover until 2026-09-28 — since then it has been a supplied black-and-white
+film-strip drawing, cut out and placed on the same dark rounded tile as every other pack.
 Full provenance and the standing licence rules are in **[NOTICE.md](../../NOTICE.md)**.
 
 ---

@@ -54,8 +54,8 @@
 
   <rect class="box" x="582" y="48" width="174" height="62" rx="7"/>
   <text class="t" x="669" y="72" text-anchor="middle">SonySOOCRecipes.apk</text>
-  <text class="s" x="669" y="89" text-anchor="middle">built by CI, JDK 17 +</text>
-  <text class="s" x="669" y="102" text-anchor="middle">build-tools 30.0.3 + NDK r16b</text>
+  <text class="s" x="669" y="89" text-anchor="middle">built by tools/build_apk.sh,</text>
+  <text class="s" x="669" y="102" text-anchor="middle">then packed into the installer</text>
 
   <path class="arrow" d="M669 114 L669 148"/>
 

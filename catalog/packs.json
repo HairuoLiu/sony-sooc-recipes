@@ -17,10 +17,16 @@
     "naming a distributed app after a trademark implies endorsement, which is the risk that",
     "actually gets a project taken down. See docs/BRAND-PACKS.md.",
     "",
-    "publish: false keeps a pack OUT of the release matrix (and out of build_apk.sh",
-    "--all-packs) without deleting it — it stays in the catalog, its tests still run, and it",
-    "can still be built one-off with tools/build_apk.sh <id> or looked up with",
-    "tools/build_matrix.py --apk-for <id>. Flip it back to true to ship it again."
+    "publish: false keeps a pack out of the public distribution without deleting it — it",
+    "stays in the catalog, its tests still run, it can still be built one-off with",
+    "tools/build_apk.sh <id>, and tools/build_matrix.py --apk-for still resolves its name.",
+    "",
+    "What the flag tracks is the FREE installer's pack list. publish: true means the pack",
+    "ships inside the Base installer anyone can download from Releases; publish: false means",
+    "it is distributed separately. This file is the only place in the repository where that",
+    "split is written down — the installer itself is built elsewhere and carries its own copy",
+    "of the list, so the two have to be moved together. docs/BRAND-PACKS.md names the split",
+    "for a reader; it is not derived from here and nothing checks it, so change both."
   ],
   "package_base": "com.hairuoliu.sonysoocrecipes",
   "packs": [
@@ -37,14 +43,16 @@
       "app_name": "Fujifilm Style",
       "app_name_zh": "富士模拟",
       "groups": ["fuji-sim"],
-      "icon_set": "fujifilm"
+      "icon_set": "fujifilm",
+      "publish": true
     },
     {
       "id": "filmstocks",
       "app_name": "Fuji Film Style",
-      "app_name_zh": "富士胶片",
+      "app_name_zh": "富士胶片风格",
       "groups": ["fuji-film"],
-      "icon_set": "filmstocks"
+      "icon_set": "filmstocks",
+      "publish": true
     },
     {
       "id": "ricoh",
@@ -52,28 +60,31 @@
       "app_name_zh": "理光 GR 风格",
       "groups": ["ricoh-gr"],
       "icon_set": "ricoh",
-      "publish": false
+      "publish": true
     },
     {
       "id": "kodak",
       "app_name": "Kodak Style",
       "app_name_zh": "柯达风格",
       "groups": ["kodak"],
-      "icon_set": "kodak"
+      "icon_set": "kodak",
+      "publish": true
     },
     {
       "id": "pentax",
       "app_name": "Pentax Style",
       "app_name_zh": "宾得风格",
       "groups": ["pentax"],
-      "icon_set": "pentax"
+      "icon_set": "pentax",
+      "publish": false
     },
     {
       "id": "nichefilm",
       "app_name": "Niche Film Style",
-      "app_name_zh": "小众胶片",
+      "app_name_zh": "小众胶片风格",
       "groups": ["ilford", "cine", "other-stocks"],
-      "icon_set": "nichefilm"
+      "icon_set": "nichefilm",
+      "publish": true
     },
     {
       "id": "hasselblad",
@@ -88,19 +99,21 @@
       "app_name": "Sony Style",
       "app_name_zh": "索尼风格",
       "groups": ["sony"],
-      "icon_set": "sony"
+      "icon_set": "sony",
+      "publish": true
     },
     {
       "id": "cinema",
-      "app_name": "Cinema LUT",
-      "app_name_zh": "电影滤镜",
+      "app_name": "Cinema LUT Style",
+      "app_name_zh": "电影滤镜风格",
       "groups": ["kino"],
-      "icon_set": "cinema"
+      "icon_set": "cinema",
+      "publish": false
     },
     {
       "id": "monochrome",
-      "app_name": "Monochrome",
-      "app_name_zh": "单色",
+      "app_name": "Monochrome Style",
+      "app_name_zh": "单色风格",
       "groups": [],
       "publish": false,
       "filters": [

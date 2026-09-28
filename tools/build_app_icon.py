@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the launcher icons the release workflow drops into the fork's res/drawable-*.
+"""Build the launcher icons the build drops into the fork's res/drawable-*.
 
     python tools/build_app_icon.py
 

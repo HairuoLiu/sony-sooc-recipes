@@ -1,12 +1,11 @@
-# Leica Style — SonySOOCRecipes-leica.apk
-
+# Leica Style
 <p align="center"><a href="leica.md">English</a> · <b>简体中文</b></p>
 
 ## 概要
 
 - **应用名称：** Leica Style
 - **包名：** com.hairuoliu.sonysoocrecipes.leica
-- **APK 文件名：** SonySOOCRecipes-leica.apk
+- **随哪一档分发：** 仅完整版安装器 —— 免费的 Base 里没有
 - **已编译配方数：** 20
 - **来源分组：** Leica（`leica`）
 - **目录版本：** 0.6.0（更新于 2026-09-13）

@@ -1,12 +1,11 @@
-# Kodak Style — SonySOOCRecipes-kodak.apk
-
+# Kodak Style
 <p align="center"><b>English</b> · <a href="kodak.zh-CN.md">简体中文</a></p>
 
 ## Summary
 
 - **App name:** Kodak Style
 - **Package name:** com.hairuoliu.sonysoocrecipes.kodak
-- **APK filename:** SonySOOCRecipes-kodak.apk
+- **Ships in:** the free Base installer — tick it during install
 - **Compiled recipes:** 20
 - **Source group(s):** Kodak (`kodak`)
 - **Catalog version:** 0.6.0 (updated 2026-09-13)

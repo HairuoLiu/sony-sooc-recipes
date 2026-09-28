@@ -266,24 +266,28 @@ SonySOOCRecipes-<tag>.apk          ──  签名密钥只在本机，永不入�
    （状态徽章除外）、或 `docs/assets/samples/` 下命名错误的样例时失败。
 8. 关卡 7 检查双语文档集：每份文档要么有 `.zh-CN.md` 双生、要么在 `ENGLISH_ONLY` 里说明原因；
    共用的 `docs/assets/*.svg` 图里不得出现译文（图是两种语言共用的）；图里画着的数字仍与注册表一致。
-9. 推送 `v*` tag 时，`release.yml` 重跑关卡 1+1b，然后按**固定的 `UPSTREAM_SHA`** 克隆上游、
-   改包名、应用品牌包变换与启动图标、重放磨砂主屏（`patch_ui.py`）、重新生成、用 JDK 17 +
-   build-tools 30.0.3 + NDK r16b 构建，并把 `SonySOOCRecipes-<tag>.apk` 与 SHA-256 校验和挂到
-   GitHub Release。
+9. `tools/build_apk.sh` 构建它：重跑关卡 1+1b，按**固定的 `UPSTREAM_SHA`** 克隆上游、
+   改包名、应用品牌包变换与启动图标、重放磨砂主屏（`patch_ui.py`）、重新生成，用 JDK 17 +
+   build-tools 30.0.3 + NDK r16b 构建。它产出的 APK 就是 Windows 安装器带到相机上的那份 ——
+   **本仓库自己不再发布 APK**。
 
 > **实话实说。** 上游版本固定在**两处**——`catalog/filters.json`（`sources.recipe-lab.fetched_rev`）
-> 和 `release.yml`（`UPSTREAM_SHA`）——而且 `test_catalog.py`（`TestPinnedUpstream`）会在两处不一致时
-> 失败。一个 tag 必须构建在它被验证过的那个上游版本上；不固定版本，下个月可能构建出不同的 APK。
+> 和 `tools/build_apk.sh`（`UPSTREAM_SHA`）——而且 `test_catalog.py`（`TestPinnedUpstream`）会在两处
+> 不一致时失败。构建必须跑在它被验证过的那个上游版本上；不固定版本，下个月可能构建出不同的 APK。
 >
-> **构建步骤本身**也因为同样的理由被写了两遍，并带着同样的风险：一遍在 `tools/build_apk.sh`，一遍在
-> `release.yml`。同文件里的 `TestBuildPipelinesAgree` 把两者钉在一起，而这个测试不是假想的——它之所以
-> 存在，是因为这种漂移已经发生过：`release.yml` 漏了 `patch_ui.py` 这一步，于是 **v0.7.0 的 APK 装的是
-> 上游的主屏**，而本文件、CHANGELOG 和 README 都写着磨砂双栏主屏已经发布。当时所有关卡都是绿的：主题的
-> 工具本身都被测过，但没有任何东西测过「发布构建到底跑没跑它们」。
+> **构建步骤本身**过去也被写了两遍——一遍在 `tools/build_apk.sh`，一遍在
+> `.github/workflows/release.yml`——而两者漂移了，所以有个测试把两边钉在一起。那个工作流已经删掉：
+> 发布改由 Windows 安装器负责，`build_apk.sh` 是仅剩的一条管道。那个测试留下来的一半，是
+> `TestBuildPipelineSteps`（同文件）：断言这个脚本把 `tools/` 里每一个变换工具都跑了一遍，
+> **而且顺序是对的**。
+>
+> 这个测试不是假想的。`release.yml` 当年漏了 `patch_ui.py` 这一步，于是 **v0.7.0 的 APK 装的是
+> 上游的主屏**，而本文件、CHANGELOG 和 README 都写着磨砂双栏主屏已经发布。当时所有关卡都是绿的：
+> 主题的工具本身都被测过，但没有任何东西测过「发布构建到底跑没跑它们」。
 
-**品牌包。** 同一条管道也按品牌各构建一份 App。`catalog/packs.json` 列出各包，`release.yml` 在
-运行时从这份文件推导构建矩阵 —— 每个包一项加全量版一项，每项各自全新克隆上游并依次跑 `apply_pack.py`、
-`patch_ui.py`、`gen_recipes.py --pack <id>`。一个包与全量版的区别只在包名、`app_name` 与启动图标；
+**品牌包。** 同一条管道也按品牌各构建一份 App。`catalog/packs.json` 列出各包与它们所在的档位，
+`tools/build_all_local.sh` 逐包各全新克隆上游并依次跑 `apply_pack.py`、`patch_ui.py`、
+`gen_recipes.py --pack <id>`。一个包与全量版的区别只在包名、`app_name` 与启动图标；
 *为什么*见 [docs/BRAND-PACKS.zh-CN.md](BRAND-PACKS.zh-CN.md)。关卡 6（`check_assets.py`）现在也覆盖
 `assets/app-icon/` 与每个 `assets/app-icon-packs/<icon_set>/`，所以缺一个密度或一套孤儿图标集会
 让构建失败。
@@ -335,14 +339,13 @@ sony-sooc-recipes/
 │   └── build_apk.sh          调上游 build.sh；--pack / --all-packs 构建品牌包
 ├── tests/
 │   ├── test_catalog.py       33 条用例 + 不变量（CI 关卡 1b）
-│   ├── test_packs.py         包转换、发布矩阵与子集用例（CI + release）
+│   ├── test_packs.py         包转换、构建矩阵与子集用例
 │   ├── test_gates.py         自测：给每道关卡喂坏输入，断言失败
 │   ├── test_ui_theme.py      磨砂双栏主屏：view id、drawable / string、#AARRGGBB 颜色（25 个用例）
 │   ├── cases.json            自写配方的钉死值
 │   └── smoke_browser.js      浏览器冒烟测试（CI 关卡 4）
 ├── .github/workflows/
-│   ├── ci.yml                全部门关，按 job 拆分
-│   └── release.yml           推 tag 自动构建 APK 挂 Release
+│   └── ci.yml                全部门关，按 job 拆分（唯一一个工作流——没有发布任务）
 ├── LICENSE                   MIT（本仓库代码）
 └── NOTICE.md                 上游归属与许可边界
 ```
@@ -359,7 +362,8 @@ sony-sooc-recipes/
 
 **生成物不入库。** `Recipes.java` 和 APK 都是构建产物。提交它们会让它们与注册表漂移——而 CI 的
 关卡 1b / 关卡 3 正是为了抓这种漂移而存在。生成的 Java 在 CI（以及本地按需）产出并作为 artifact
-上传；APK 只由 `release.yml` 产出并挂到 GitHub Release，从不入库。签名密钥只在本机，永不入库。
+上传；APK 只由 `tools/build_apk.sh` 产出、落进 `dist/`、再打进 Windows 安装器。两者都从不入库，
+签名密钥只在本机。
 
 **来源诚实是「测出来」的，不是「写出来」的。** MIT（上游项目，逐值抄录、由保真检查锁死）与
 PolyForm Noncommercial（胶片工坊，只记名字）之间的那条线，是一个**测试**，不是一段话。模糊它
@@ -386,8 +390,8 @@ PolyForm Noncommercial（胶片工坊，只记名字）之间的那条线，是�
 只有被跟踪的输入，而布局的唯一写手是 `patch_ui.py`。这和 `filters.json` → `Recipes.java` 的「单一
 事实来源」纪律一脉相承，只是又往下沉了一层。
 
-`patch_ui.py` 在**两条管道**里都跑——本地是 `build_apk.sh`，打 tag 时是 `release.yml`，这正是
-`TestBuildPipelinesAgree` 存在的意义——位置是 **`apply_pack` 之后、`gen_recipes` 之前**。这个顺序不是随便的：
+`patch_ui.py` 是构建的一步——`release.yml` 删掉之后只剩这一条管道了，而 `TestBuildPipelineSteps`
+就是为此存在——位置是 **`apply_pack` 之后、`gen_recipes` 之前**。这个顺序不是随便的：
 布局用全限定类名引用应用的自定义 view，而 `apply_pack` 会按品牌包重命名那个类名、并从 checkout 自带的
 `AndroidManifest.xml` 里填包名。一份在重命名之前就写死类名的布局，会匹配不上该包实际打出来的任何类。
 

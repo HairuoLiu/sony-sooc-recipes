@@ -3,7 +3,7 @@
 <p align="center">
   <b>Turn a Sony camera Sony stopped updating into the cameras you wish it were — Leica, Hasselblad, Fujifilm, Ricoh, Pentax and more — with 164 film and camera looks, straight out of camera.</b>
   <br>
-  <sub>164 looks · 149 compiled into the APK · 15 groups — film stocks &amp; other cameras' colour, straight-out-of-camera JPEG</sub>
+  <sub>164 looks · 149 installable · 15 groups — film stocks &amp; other cameras' colour, straight-out-of-camera JPEG</sub>
 </p>
 
 <!-- counts: total=164 compiled=149 -->
@@ -16,8 +16,7 @@
 
 <p align="center">
   <a href="https://github.com/HairuoLiu/sony-sooc-recipes/actions/workflows/ci.yml"><img src="https://github.com/HairuoLiu/sony-sooc-recipes/actions/workflows/ci.yml/badge.svg" alt="catalog gates"></a>
-  <a href="https://github.com/HairuoLiu/sony-sooc-recipes/actions/workflows/release.yml"><img src="https://github.com/HairuoLiu/sony-sooc-recipes/actions/workflows/release.yml/badge.svg" alt="release build"></a>
-  <a href="https://github.com/HairuoLiu/sony-sooc-recipes/releases/latest"><img src="https://img.shields.io/badge/download-SonySOOCRecipes.apk-2f81f7" alt="download APK"></a>
+  <a href="https://github.com/HairuoLiu/sony-sooc-recipes/releases/latest"><img src="https://img.shields.io/badge/download-Windows%20installer-2f81f7" alt="download the Windows installer"></a>
   <img src="https://img.shields.io/badge/license-MIT-3fb950" alt="MIT licence">
 </p>
 
@@ -34,14 +33,24 @@ Sony closed its PlayMemories Camera Apps store in 2021, and every body made befo
 lost its app channel. Those bodies still run an Android userspace, which means they can still
 be given a new personality. This project turns a Sony into the cameras you reach for — a Leica
 monochrome, a Hasselblad natural, a Fujifilm colour, a Ricoh GR contrast, a Pentax reversal — and
-folds 164 film looks in besides. All of it lands in one APK you install once. If that is more than
-you want to scroll through on a 3-inch screen, **seven per-brand APKs ship the same code with only
-one camera's looks inside** — install Leica Style and the list reads Leica. After that the look is
-not an app running in the background — it is simply what the camera does. Close the app,
-power-cycle, and your JPEG comes out graded in **P, A, S, M and video**.
+folds 164 film looks in besides.
+
+**It installs from one Windows file, in one click.** Download the installer, run it, plug the
+camera in: it finds the body by itself, shows the packs it carries with every one already
+ticked, and writes them across USB behind a single progress bar. There is no APK to fetch, no
+Sony-PMCA-RE to install first, and no command line — **the recipes ship inside the installer.**
+
+The free installer is **Base — 6 packs, 91 looks**: Fujifilm, Fuji Film, Kodak, Niche Film,
+Ricoh GR and Sony. Each pack carries its own recipe table under its own package name, so they
+install side by side and you take only the brands you actually shoot. The remaining packs —
+Leica, Pentax, Hasselblad, Cinema LUT and Monochrome, plus the all-in-one app that holds the
+whole catalog — ship separately.
+
+After that the look is not an app running in the background — it is simply what the camera
+does. Close the app, power-cycle, and your JPEG comes out graded in **P, A, S, M and video**.
 
 **Language follows the camera.** Put the body into 简体中文 and every recipe name, group
-and on-screen label switches to Chinese — the same APK, no separate download to hunt for.
+and on-screen label switches to Chinese — the same app, no separate download to hunt for.
 A body left in English stays English.
 
 > **Honest note.** These are approximations, not anybody's colour science. An a6000 has no
@@ -63,7 +72,7 @@ Press `MENU` and look for an **`Application`** entry.
 signed firmware. Not this project, not Sony's own store. Reports of this working on an a6400
 are misreports.
 
-**Confirmed on a real body: the α7S II** — installs, launches, four packs side by side. Photographs
+**Confirmed on a real body: the α7S II** — installs, launches, nine packs side by side. Photographs
 in [On a real camera](#on-a-real-camera). The rest of the left column is supported by the
 platform rather than tested body by body, and the two are not the same claim.
 
@@ -71,22 +80,57 @@ platform rather than tested body by body, and the two are not the same claim.
 
 ## Install
 
+**One file. One click. No APK, no toolchain, no command line.**
+
 <p align="center">
   <img src="docs/assets/install-flow.svg" width="760" alt="installation flow">
 </p>
 
-1. Download an APK from [Releases](https://github.com/HairuoLiu/sony-sooc-recipes/releases) —
-   the all-in-one `SonySOOCRecipes.apk`, or a per-brand pack if you only want that brand
-   ([docs/BRAND-PACKS.md](docs/BRAND-PACKS.md)).
-2. Make sure the body has `MENU → Application`. If it does not, stop.
-3. Install over **USB** with [Sony-PMCA-RE](https://github.com/ma1co/Sony-PMCA-RE). Offline, universal, no prerequisites.
-4. Open the app, pick a look with the control wheel, store it with the centre button, **power-cycle the body**.
+1. **Download** `SonySOOCRecipes-Base-EN.exe` from
+   [Releases](https://github.com/HairuoLiu/sony-sooc-recipes/releases/latest). It is the only
+   download there is: the recipes and the install channel both live inside it. *(Reading
+   Chinese? `SonySOOCRecipes-Base-CN.exe` is the same installer in Chinese.)*
+2. **Prepare the body** — battery charged, memory card in, a **data-capable** USB cable, and
+   `Setup (the toolbox icon) → USB Connection → **Mass Storage**`. Power on, plug in, and wait
+   for the screen to say `USB Mode`.
+3. **Run the installer and click through it.** It finds the camera by itself, then lists the
+   packs it carries — every one already ticked. Untick anything you do not want and press
+   **Next**. About **10–15 minutes** for the lot; the window can be minimised.
+4. **Unplug, power off and on, and shoot.** `MENU → Application → Application List` now holds
+   one entry per pack, and the looks are simply how the camera behaves in **P, A, S, M and
+   video**.
 
-> **Before you install.** CI signs each APK with the key it generates for that build, so a
-> new APK **cannot be installed over an existing one**. If the body already has a Sony SOOC
-> Recipes from somewhere else, remove it first — [Uninstall](#uninstall).
+<p align="center">
+  <img src="docs/assets/install/en/01-connect-camera.png" width="250" alt="Step 1 of the installer: it reports Camera connected and offers a Detect Again button">
+  <img src="docs/assets/install/en/02-choose-packs.png" width="250" alt="Step 2 of the installer: a table of the packs it carries, every one ticked, with a Select All box">
+  <img src="docs/assets/install/en/03-installing.png" width="250" alt="Step 3 of the installer: a progress bar reading Installing 1/6, with a Cancel button and a Show Details checkbox">
+  <br><sub>
+  <b>1 · Connect</b> — it finds the body itself. <b>2 · Choose</b> — every pack it carries,
+  ticked; untick what you do not want. <b>3 · Install</b> — one progress bar, 10–15 minutes.
+  </sub>
+</p>
 
-Detailed walkthrough with per-OS prerequisites and a troubleshooting table:
+> **Windows only.** The installer is a Windows program, Windows 7 SP1 through 11. There is no
+> macOS or Linux build of it, and the pre-built APKs are no longer published — on those
+> platforms the route is to build from this repository, where `tools/build_apk.sh` turns
+> `catalog/filters.json` into the same APKs and
+> [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) documents the pipeline.
+
+> **The APK downloads are withdrawn.** Earlier versions of this project published a per-brand
+> APK for you to install yourself with Sony-PMCA-RE. That download is gone: the installer does
+> the same job in place, and shipping the recipes pre-built is what makes the install a single
+> click. A guide that points at `SonySOOCRecipes-<brand>.apk` is describing a version this
+> repository no longer publishes.
+
+> **Before you install.** If the body already carries a Sony SOOC Recipes from somewhere else,
+> remove it first — an app signed with a different key cannot overwrite one that is already
+> there. See [Uninstall](#uninstall).
+
+Mid-install the camera blanks to black and switches modes a few times. That is normal: do not
+press anything and do not unplug. If the installer reports no camera, check the cable, the
+Mass Storage setting and the card, then press **Detect Again**.
+
+Detailed walkthrough, per-OS prerequisites and a troubleshooting table:
 **[docs/INSTALL.md](docs/INSTALL.md)**. Already have Wi-Fi ADB running? It is faster for
 reinstalls, and it can never replace USB — **[docs/CHANNEL-COMPARISON.md](docs/CHANNEL-COMPARISON.md)**
 says why in six lines.
@@ -127,11 +171,11 @@ locally rather than viewing the source on GitHub.
 | **Kino LUT** | 9 | Kino Cool 4 … Kino Warm 4 |
 | **App Look** | 5 | Toy Camera warm/cool · Part Color red · Posterization · Teal Mood |
 
-**149** of those compile into an APK; the rest are registered by name only. Rather have one
-brand than everything? The eight APKs — the all-in-one plus seven brand packs — are in
-**[docs/BRAND-PACKS.md](docs/BRAND-PACKS.md)**, and what each one actually contains is listed
-in **[docs/packs/README.md](docs/packs/README.md)**. Four more brand packs (Leica, Hasselblad,
-Monochrome, Ricoh GR) are held back from the release and ship separately.
+**149** of those are installable; the rest are registered by name only. Rather have one brand
+than everything? Each pack carries one brand's looks under its own package name, so they sit
+side by side on the body — the free installer ships six of them. What each pack contains is
+listed in **[docs/packs/README.md](docs/packs/README.md)**, and the full pack list, with the
+reasoning behind it, is in **[docs/BRAND-PACKS.md](docs/BRAND-PACKS.md)**.
 
 </details>
 
@@ -140,7 +184,8 @@ Monochrome, Ricoh GR) are held back from the release and ship separately.
 > has been confirmed on hardware yet. The app prints none of that — the marker survives only
 > as a comment in the generated source, which is why nothing above says it either. The badge
 > on the main screen is the look's brand — 宾得 / 柯达 / 徕卡 … (EN `PENTAX` / `KODAK` /
-> `LEICA` …); since v0.87 it no longer reports camera status.
+> `LEICA` …), and it reports nothing else: the old `ACTIVE` / `PREVIEW` / `PROTECTED` status
+> words are gone.
 
 ---
 
@@ -170,7 +215,7 @@ the parameters — the selected one is marked with an outlined capsule; **left /
 then move between parameters.
 
 Press **Fn** and you get the **recipe browser**: one white single-column list holding every
-look this APK carries, grouped by category. Each row carries its name, a one-line summary of
+look this app carries, grouped by category. Each row carries its name, a one-line summary of
 what it does to the image, and whether it is `CS` or `PE` — Creative Style also applies to
 RAW, Picture Effect only reaches JPEG. The highlighted row also carries a **设置** / `SET` chip.
 
@@ -215,7 +260,7 @@ the label is localised. Leave the app first — get back to the shooting screen 
 removing it while it is open.
 
 **Sony-PMCA-RE cannot uninstall, and that is not an oversight you can work around.** The tool
-that installs these APKs has no uninstall command: its entire command set is `info`,
+the installer drives underneath has no uninstall command: its entire command set is `info`,
 `install`, `market`, `apk2spk`, `spk2apk`, `firmware`, `updatershell`, `serviceshell`,
 `guess_firmware`, `gps`, `stream`, `wifi`, `print_backup`. If that menu item is missing or
 greyed out, the route is ADB — turn it on with
@@ -315,6 +360,27 @@ is needed to put a look on a camera.
 | [ukiki0718-netizen/sony-a5100-film-studio](https://github.com/ukiki0718-netizen/sony-a5100-film-studio) | names and provenance of 15 looks | PolyForm Noncommercial | ✘ name only |
 | [bonyback1/sony-pmca-ricoh-mod](https://github.com/bonyback1/sony-pmca-ricoh-mod) | the hardware matrix + shared gamma method | Apache-2.0 | ✘ reference only |
 
+**Audited 2026-09-28: upstream has moved on, and the pin is deliberate.** The build is pinned to
+`6b5c8aa` (2026-09-12, `v1.1.0-dev.8` on upstream's `development` branch); voxivoid has since
+released through **v1.4.0** (2026-09-27). What changed there is **value re-tuning, not new looks**:
+
+- **No recipe was added or removed.** 77 recipes in the same 12 groups at the pin, at v1.4.0, and
+  on `main` today. No Pentax group was added either, and upstream's `Hasselblad` group still holds
+  a single recipe — ours holds four (1 upstream + 3 written here).
+- **21 of the 77 were re-tuned** — largely pulling saturation back from values that render as flat
+  grey on an α7S II (`−9`/`−8`/`−6` → `−6`/`−4`) and re-picking the Creative Style base
+  (*Classic Chrome* `Neutral −5` → `Standard −1`; *Kodak Ultra Max 400* `+3/+1` → `0/0`;
+  *Classic Cinema* `Neutral −4` + `5000 K` → `Standard` + `6000 K`). By group: Sony 1, Fuji Sim 6,
+  Fuji Film 2, Kodak 8, Cine 3, Ricoh GR 1.
+- **The `SEPIA` enum was corrected**: upstream had guessed `13`, it is `14`, and `13` is now
+  marked unidentified — so a recipe storing `13` no longer displays as "Sepia".
+
+**Those 21 re-tunings are not in this build.** The catalog reproduces the *pinned* revision, so
+these packs shoot the pre-v1.2.0 values. `tools/check_fidelity.py` compares against that same
+pinned SHA and therefore reports **0 drift** — green by construction, not proof that we match
+upstream's newest release. Porting the 21 is a deliberate decision, not a bug fix: it changes what
+21 recipes do on the body.
+
 Brand names in recipe names — Sony, Fujifilm, Kodak, Ricoh, Leica, Hasselblad, Canon, Nikon,
 Panasonic, Olympus, Agfa, Ilford, Cinestill, Polaroid, Instax — are trademarks of their
 owners, used here only to describe the look a recipe aims at. **This project is not affiliated
@@ -323,6 +389,33 @@ official colour science. Full provenance: **[NOTICE.md](NOTICE.md)** ·
 **[CHANGELOG](CHANGELOG.md)**.
 
 </details>
+
+---
+
+## Disclaimer
+
+**This is an unofficial personal project, and it is not affiliated with anyone.** It is not
+made, endorsed, sponsored or approved by Sony, nor by Fujifilm, Kodak, Leica, Hasselblad,
+Ricoh, Pentax, Canon, Nikon, Panasonic, Olympus, Ilford, Cinestill or any other brand named
+in a recipe or a pack. Every trademark belongs to its owner; those names are used here only
+to describe the look a recipe aims at.
+
+- **The recipes are approximations, not anybody's colour science.** They are community-derived
+  and, where they imitate a film or another camera, they imitate it by eye — see the `verified`
+  field in `catalog/filters.json` for which ones have even been checked on a body. Nobody has
+  measured them against the thing they name.
+- **The `<Brand> Style` pack names are risk reduction, not clearance.** Naming an app after a
+  trademark is still trademark use. The reasoning, and what it does *not* buy you, is in
+  [docs/BRAND-PACKS.md §8](docs/BRAND-PACKS.md).
+- **Third-party software, no warranty, on hardware with no supported update path.** Nothing
+  here touches firmware or unlocks anything — it writes values you could set by hand — but it
+  is still unsupported software. Back up your card, test on footage you can lose, and install
+  at your own risk.
+- **If you redistribute these apps, the risk moves to you.** The icons are user-supplied,
+  all-rights-reserved images and the names are trademarks; republishing the packs — or shipping
+  them inside another product — is your call and your exposure.
+
+Provenance and licences: **[NOTICE.md](NOTICE.md)** · icons: `assets/app-icon-packs/CREDITS.md`.
 
 ---
 

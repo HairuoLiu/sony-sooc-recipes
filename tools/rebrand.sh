@@ -9,8 +9,8 @@
 # APK. Miss any one and the build dies, or the app crashes on launch.
 #
 # This used to be two copies of the same sed block — one in tools/build_apk.sh and one in
-# .github/workflows/release.yml — which is exactly how a local build and a tagged CI run
-# drift apart. One script, called from both, is the fix.
+# the release workflow, which no longer exists — which is exactly how two callers drift
+# apart. One script, called by anyone who needs it, is the fix.
 #
 # 'voxivoid' -> 'hairuoliu' in a single pass rewrites every separator form
 # (com.voxivoid.recipelab, com/voxivoid/recipelab, com\voxivoid\recipelab,

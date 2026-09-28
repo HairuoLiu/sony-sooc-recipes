@@ -220,11 +220,22 @@ def render_frame(theme: dict, catalog: dict, bump: int, selected_flat: int,
     draw_flat = 0
     for gg in range(ng):
         if draw_flat >= first and y < bottom:
+            # v1.x: the brand name is as big as the recipe names (item 13px, ink, bold), with
+            # the count right-aligned on the same baseline — metadata, not a label. The
+            # full-width divider sits BELOW the name (an underline), so the caption is above
+            # the line. Mirrors PickerView's y+27d underline.
             rows.append(
-                f'<div style="position:absolute;left:{pad}px;top:{y + 2 * d}px;'
-                f'font-size:{head_sz}px;font-weight:700;letter-spacing:.05em;'
-                f'color:{dim};font-family:{fam_css}">'
-                f'{html.escape(labels[gg])}  ·  {counts[gg]}</div>')
+                f'<div style="position:absolute;left:{pad}px;top:{y + 5 * d}px;'
+                f'font-size:{item_sz}px;font-weight:700;letter-spacing:.03em;'
+                f'color:{ink};font-family:{fam_css}">{html.escape(labels[gg])}</div>')
+            rows.append(
+                f'<div style="position:absolute;right:{pad}px;top:{y + 6 * d}px;'
+                f'font-size:{small_sz}px;color:{dim};font-family:{fam_css}">'
+                f'{counts[gg]}</div>')
+            if y + 27 * d < bottom:
+                rows.append(
+                    f'<div style="position:absolute;left:{pad}px;top:{y + 27 * d}px;'
+                    f'width:{SCREEN_W - 2 * pad}px;height:1px;background:{rule}"></div>')
         draw_flat += 1
         y += row_h
         for k in range(counts[gg]):
@@ -268,25 +279,25 @@ def render_frame(theme: dict, catalog: dict, bump: int, selected_flat: int,
         if y > bottom and draw_flat >= first + visible:
             break
 
-    legend = (f'<div style="position:absolute;left:{pad}px;right:{pad}px;'
-              f'bottom:{pad}px;display:flex;gap:{18 * d}px;align-items:center;'
+    legend = (f'<div style="position:absolute;right:{pad}px;top:{pad + 5 * d}px;'
+              f'display:flex;gap:{14 * d}px;align-items:center;'
               f'font-size:{9 * d}px;color:{dim};font-family:{fam_css}">'
               f'<span><b style="font-size:{10 * d}px">&#8597;</b> move</span>'
-              f'<span><b style="font-size:{10 * d}px">&#9166;</b> pick</span>'
+              f'<span><b style="font-size:{10 * d}px">&#9166;</b> settings</span>'
               f'<span><b style="font-size:{10 * d}px">Fn</b> close</span></div>')
 
-    header = (f'<div style="position:absolute;left:{pad}px;top:{pad + 1 * d}px;'
-              f'font-size:{head_sz}px;font-weight:700;color:{ink};'
+    header = (f'<div style="position:absolute;left:{pad}px;top:{pad + 5 * d}px;'
+              f'font-size:{item_sz}px;font-weight:700;color:{ink};'
               f'font-family:{fam_css}">RECIPES&nbsp;&nbsp;·&nbsp;&nbsp;'
               f'{len(all_recipes)}</div>')
 
     return f"""<div class="stage" style="background:{bg}">
   <div class="frame" style="font-family:{fam_css}">
     {header}
+    {legend}
     <div style="position:absolute;left:{pad}px;right:{pad}px;top:{top - 5 * d}px;
          height:1px;background:{rule}"></div>
     {''.join(rows)}
-    {legend}
   </div>
 </div>"""
 

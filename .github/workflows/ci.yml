@@ -69,11 +69,12 @@ jobs:
       - name: run UI theme test cases
         run: python tests/test_ui_theme.py
 
-      # The pack transform and the release matrix are only exercised on release tags
-      # otherwise — a bug there would first surface as a failed release, which is the
-      # worst possible time. test_gates.py is the self-test: it breaks one thing per
-      # gate and asserts the gate actually fails, so a refactor that silently loosened
-      # a gate cannot pass CI green.
+      # The pack transform and the build matrix used to be exercised only on release tags,
+      # where a bug would first surface as a failed release — the worst possible time. There
+      # are no release tags any more (publishing goes through the Windows installer), so this
+      # step is the only place they run at all. test_gates.py is the self-test: it breaks one
+      # thing per gate and asserts the gate actually fails, so a refactor that silently
+      # loosened a gate cannot pass CI green.
       - name: run pack and gate self-tests
         run: |
           python tests/test_packs.py
@@ -89,7 +90,7 @@ jobs:
       #          on a parse error instead of saying "not found", and main went red with
       #          nothing in this repository having changed. -f makes an HTTP error fail the
       #          step outright, and the SHA is read back out of the catalog so the pin still
-      #          has exactly one home (test_catalog.py holds filters.json and release.yml
+      #          has exactly one home (test_catalog.py holds filters.json and build_apk.sh
       #          together; this step reads the former rather than adding a third copy).
       - name: fetch upstream Recipes.java
         run: |

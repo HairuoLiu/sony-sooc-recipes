@@ -34,8 +34,8 @@
   <!-- 1 -->
   <rect class="box" x="60" y="26" width="300" height="52" rx="7"/>
   <text class="n" x="76" y="46">1</text>
-  <text class="t" x="96" y="48">Download SonySOOCRecipes.apk</text>
-  <text class="s" x="96" y="64">from Releases — all-in-one, or one pack per brand</text>
+  <text class="t" x="96" y="48">Download the installer</text>
+  <text class="s" x="96" y="64">one .exe — the recipes and the USB channel are inside</text>
 
   <path class="arrow" d="M210 82 L210 106"/>
 
@@ -57,8 +57,8 @@
   <!-- 3 -->
   <rect class="box-g" x="60" y="194" width="300" height="52" rx="7"/>
   <text class="n" x="76" y="214">3</text>
-  <text class="t" x="96" y="216">Install over USB</text>
-  <text class="s" x="96" y="232">Sony-PMCA-RE · offline · no prerequisites</text>
+  <text class="t" x="96" y="216">Install over USB, one click</text>
+  <text class="s" x="96" y="232">powered by Sony-PMCA-RE · offline · no prerequisites</text>
 
   <path class="aside" d="M360 220 L430 220"/>
   <rect class="box" x="430" y="194" width="290" height="52" rx="7"/>

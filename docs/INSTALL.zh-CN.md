@@ -7,16 +7,16 @@
 这份指南带你把 **Sony SOOC Recipes** 装进相机——这个应用会把一整份胶片风格配方（Creative Style、
 Picture Effect、白平衡、DRO……）写进你的相机，让你的老索尼微单直出就有胶片味。
 
-**预计耗时：** 第一次走 USB 约 10–15 分钟，加上你从没在相机上装过任何东西时的几分钟准备。
-通道 B（Wi-Fi ADB）只在之后反复重装时用，每次几秒。
-
-想先弄明白*为什么*有两条路，先读 [通道对比](CHANNEL-COMPARISON.md)。简版结论：**第一次装走
-通道 A，需要反复重装再开通道 B。**
+**预计耗时：** 在 Windows 上一次性约 10–15 分钟。**下载一个文件、运行它、把相机插上** ——
+配方和安装通道都打包在里头了，没有 APK 要下、不用先装 Sony-PMCA-RE、也没有命令要敲。
 
 <p align="center">
   <img src="assets/install-flow.svg" width="720" alt="安装流程图">
-  <br><sub>图：从下载 APK 到装进相机的完整路径</sub>
+  <br><sub>图：一次下载、一次点击、一条进度条</sub>
 </p>
+
+下面先把这条路径讲细，然后是给 macOS / Linux / 想自己开命令行的人的手动路线。想知道手动路线里
+那两条底层通道的差别，读 [通道对比](CHANNEL-COMPARISON.md)——安装器替你自动走的是其中第一条。
 
 ---
 
@@ -39,60 +39,113 @@ Apps（PMCA）通道，能收应用；没有，就到此为止——本仓库没
 > NEX-3 / 5 / 5N / F3、以及 a3000 / a3500 没有 Android 子系统，同样没有 `Application`
 > 菜单——它们不在上表「支持」那一列里，**不是漏写**。
 
-**已在真机确认的机型：α7S II**，同时装着四个品牌包。真机照片见
+**已在真机确认的机型：α7S II**，同时装着九个品牌包。真机照片见
 [README 的真机实拍](../README.zh-CN.md#真机实拍)。左列其余机型是**平台层面**支持
 （机器有这个应用通道），不是逐台实测过——这两件事不是一回事。
 
 ### 你需要准备
 
-- 一台电脑（Windows / macOS / Linux 都行）。
+- 一台电脑（**一键安装只支持 Windows**；macOS / Linux 走下面的手动路线）。
 - 一根**能传数据**的 USB 线（a6000 是 micro-USB；三合一数据线里只有能传数据的那根能用）。
 - 相机里**插好存储卡**。
 - **充满电的电池。** 安装过程中相机会切几次模式。装到一半没电，恢复起来很难看——先充。
 
-### 拿到 APK
+### 下载安装器
 
-从本仓库的 Releases 下载：
+`SonySOOCRecipes-Base-CN.exe`，从本项目的 Releases 页面下：
 
-https://github.com/HairuoLiu/sony-sooc-recipes/releases
+https://github.com/HairuoLiu/sony-sooc-recipes/releases/latest
 
-一次发布里是 **每个品牌包一个 APK，外加全量版**。它们是同一个 App、同一份 catalog 编译的；
-差别只在某个包含哪些组、Android 包名（这才让几个包能在相机上并存）、以及启动图标。
-完整清单与取舍见 [BRAND-PACKS.md](BRAND-PACKS.md)。
+*（想要英文界面就下 `SonySOOCRecipes-Base-EN.exe`，内容一样。）*
 
-| 你想要 | 装哪个 |
-|---|---|
-| 全部都要，想翻整个目录 | `SonySOOCRecipes-<版本>.apk` |
-| 只要某个品牌的观感 | `SonySOOCRecipes-<品牌>-<版本>.apk` |
+**就这一个文件，也只有这一个下载。** 配方已经编译进去，跟相机走 USB 通信的 `pmca-console`
+（也就是 Sony-PMCA-RE 的引擎）也打包在里面。不用先装任何东西，装完除了程序本身也不留残渣。
 
-当前发布是 `1.0.0`。包只比全量版小几 KB——配方数据是 APK 里最小的东西，大头是引擎。
-包的意义是「要翻的少」，不是「下载的小」。本仓库只发布配方数据和构建工具；APK 由 CI
-依据 `catalog/filters.json` 生成。若还没有发布版本，见 [架构说明](ARCHITECTURE.md) 自行构建。
+**它带的是 Base——6 个包、91 款观感。** 富士、Fuji Film、柯达、Niche Film、理光 GR、索尼。
+每个包在相机上是独立应用，各有自己的 Android 包名，这正是它们能并存的原因；安装时你可以
+把不想要的勾掉。其余的包——徕卡、宾得、哈苏、Cinema LUT、单色，以及装着全量目录的
+all-in-one——单独分发。完整清单和取舍见 [BRAND-PACKS.md](BRAND-PACKS.md)。
 
-> **实话实说。** 三条会真咬人的：
+### 运行
+
+<p align="center">
+  <img src="assets/install/zh-CN/01-connect-camera.png" width="250" alt="第 1 步：已识别到相机，下方有「重新检测」按钮">
+  <img src="assets/install/zh-CN/02-choose-packs.png" width="250" alt="第 2 步：它带的包全部勾上，右上角有全选框">
+  <img src="assets/install/zh-CN/03-installing.png" width="250" alt="第 3 步：进度条显示正在安装 1/6">
+  <br><sub>连接 · 选择 · 安装 —— 从 .exe 到一机器观感，就这三屏。</sub>
+</p>
+
+1. **连接。** 插上准备好的相机，安装器自己会识别，这一步变绿。没识别到就按**重新检测**，
+   排查清单在[下面](#如果安装器看不到相机)。
+2. **选择。** 它带的包默认全勾。去掉不想要的；右上角的**全选**框可以一键清空/全选。
+3. **安装。** 一条进度条加剩余计数，**大约十分钟**。干活的时候窗口可以最小化。
+4. **完成。** 拔线、关机再开机，开拍。
+
+> **实话实说。** 写包的时候相机屏幕会黑几次、自己切几次模式。这是正常的——别按键、别拔线。
+> 某个包失败的话，完成页会点名；勾上**显示详情**可以看底层日志。
+
+### 装之前先看一眼
+
+> **不再提供 APK 下载。** 早期版本会发布一个个品牌包 APK，让你自己用 Sony-PMCA-RE 装。
+> 那个下载撤掉了：安装器当场就把同样的事做完。要是哪篇教程让你去下
+> `SonySOOCRecipes-<品牌>.apk`，它讲的是本仓库已经不再发布的版本。
+
+> **两条真会咬人的：**
 >
-> 1. **签名用的一次性 key。** CI 没配 keystore，每次构建临时生成一把。用不同 key 签的 APK
->    **无法覆盖安装**——如果相机上已经装过别处来的 Sony SOOC Recipes，得先在相机里把它删掉再装这个。
->    品牌包同理：`SonySOOCRecipes-leica` 和全量版是**不同的包**、可以并存，但同一个包装两份不行。
-> 2. **本仓库自写的配方全部没上机验证过** —— 今天是 164 款里的 72 款。这件事逐条写在
->    `catalog/filters.json` 的 `verified` 字段里，`tools/gen_recipes.py` 会把 false 的那些变成
->    生成的 `Recipes.java` 里的一行 `// NOT VERIFIED ON HARDWARE` 注释。先在可丢弃的素材上试，
->    别拿去拍不能重来的东西。**这个标记是源码注释，不是应用画的**——主屏徽标到底表示什么，
->    见 [FAQ](FAQ.zh-CN.md)。
-> 3. **装多个包不等于多台相机。** 相机的设置存储是共享的，同一时间只有一个配方生效。
+> 1. **相机上如果已经装了别处来的 Sony SOOC Recipes，先删掉。** 用不同 key 签的应用
+>    **无法覆盖安装**。包之间同理：`…sonysoocrecipes.ricoh` 和 `…sonysoocrecipes.sony`
+>    是*不同的包*、能并存，但同一个包装两份不行。
+> 2. **装多个包不等于多台相机。** 相机的设置存储是共享的，同一时间只有一个配方生效。
 >    包的差别在于**装进去什么**，不在于相机**能做什么**。
->
+
+> **部分观感没上机验证过。** 每条配方自己写在 `catalog/filters.json` 的 `verified` 字段里
+> ——本仓库自写的那些是 `false`，生成的 `Recipes.java` 里也逐条标了出来。先在可丢弃的素材上
+> 试，别拿去拍不能重来的东西。**这个标记是源码注释，不是应用画的**——主屏徽标到底表示什么，
+> 见 [FAQ](FAQ.zh-CN.md)。
+
 > APK 里显示的版本号是**基础应用**的，不是本仓库的 tag。基础应用从 `AndroidManifest.xml` 读版本，
-> 本仓库只替换配方表；认 tag 就行。
+> 本仓库只替换配方表；认你下载的那个安装器，别认应用里的数字。
+
+---
+
+## 如果安装器看不到相机
+
+| 你看到 | 怎么办 |
+|---|---|
+| **没识别到相机** | 依次查：线是**能传数据**的（不是纯充电）· `Setup → USB Connection` 在 **Mass Storage**、不是 PC Remote · 插了存储卡 · 相机开着且屏幕显示 `USB Mode` · 没有别的东西占着 USB 设备（照片、图像捕捉、Dropbox、Imaging Edge）。然后**重新检测**。 |
+| **驱动**报错 | 在**显示详情**里把驱动切成 `libusb` 重试。Windows 上还不行，就用 [Zadig](https://zadig.akeo.ie) 装 libusb-win32 驱动再跑。 |
+| 识别到了，装到一半失败 | 最常见的原因是机身上已经有旧版 Sony SOOC Recipes。在 `MENU → Application → Application Management → Manage and Remove` 删掉，再装一次。 |
+| 一点反应都没有 | 按 `MENU` 看有没有 `Application` 这一项。没有的话这台机器跑不了应用——见上面的机型表。没有别的办法。 |
+
+---
+
+## 手动路线（macOS / Linux / 命令行）
+
+安装器只有 Windows 版。它做的每一件事你自己也能做——而在 macOS 和 Linux 上这是*唯一*的路线，
+因为预编译的 APK 已经不再发布了。所以手动路线从本仓库里把它们构建出来，用的工具和安装器里
+那份一模一样：
+
+```bash
+git clone https://github.com/HairuoLiu/sony-sooc-recipes.git
+cd sony-sooc-recipes
+tools/build_all_local.sh          # 构建全部目标；脚本头部写了需要的工具链
+```
+
+构建完 `dist/` 里就是 `SonySOOCRecipes*.apk`。装哪个：全量版带全部观感，品牌包只带一个品牌的。
+两份清单和取舍都在 [BRAND-PACKS.md](BRAND-PACKS.md)。
+
+下面是完整的手动路线。**通道 A** 就是安装器在开的那条——走 USB、全程离线，第一次装只该用它。
+**通道 B**（Wi-Fi ADB）是给反复重装用的，而且它永远替代不了通道 A：开 ADB 要先装
+OpenMemories:Tweak，而 Tweak 本身就得走通道 A 装进去。
 
 ---
 
 ## 通道 A：USB + Sony-PMCA-RE
 
-**这是所有人第一次安装都应该走的通道。** 全程离线，不暴露任何网络服务，对所有 PMCA 机型通用，
+**安装器自动做的那件事，拆开讲。** 全程离线，不暴露任何网络服务，对所有 PMCA 机型通用，
 且不需要任何前置应用。
 
-### 1. 拿到安装器 Sony-PMCA-RE
+### 1. 拿到 Sony-PMCA-RE
 
 这是 ma1co 做的工具，用索尼自家应用商店同一条通道把应用写进相机。
 
@@ -155,7 +208,7 @@ python pmca-console.py install -f SonySOOCRecipes-<版本>.apk
 
 | 徽标 | 含义 |
 |---|---|
-| 品牌名 —— `PENTAX`、`KODAK`、`LEICA` …（中文：宾得 / 柯达 / 徕卡 …） | 这款观感所属的类目。自 v0.87 起徽标只说这一件事；旧的 `ACTIVE` / `PREVIEW` / `PROTECTED` 状态词已移除。 |
+| 品牌名 —— `PENTAX`、`KODAK`、`LEICA` …（中文：宾得 / 柯达 / 徕卡 …） | 这款观感所属的类目。徽标只说这一件事；旧的 `ACTIVE` / `PREVIEW` / `PROTECTED` 状态词已移除。 |
 
 一个要知道的后果：界面不再提示相机设置存储区是否处于写保护。如果某次写入看起来「没生效」，
 这仍然是要查的第一件事——装 [OpenMemories-Tweak](https://github.com/ma1co/OpenMemories-Tweak)
@@ -215,9 +268,10 @@ adb disconnect CAMERA_IP:5555
 
 - **USB 更新（通道 A）**：直接再跑一次安装即可。
 - **ADB 更新（通道 B）**：`adb install -r` 秒级完成。
-- **签名警告（重要）**：因为 CI 用一次性 key 签名，不同 key 签的 APK **无法覆盖安装**。若看到
-  `INSTALL_FAILED_UPDATE_INCOMPATIBLE`，要么用同一密钥重建，要么**先卸载同包名的旧应用**
-  （见下方「卸载」；卸载会清掉应用设置），再重装。
+- **签名警告（重要）**：用*不同* key 签的 APK **无法覆盖安装**。安装器带的这些包共用一把 key，
+  互相之间能干净升级；但任何来自旧版、签名不同的构建都换不掉。看到
+  `INSTALL_FAILED_UPDATE_INCOMPATIBLE`，就**先卸载同包名的旧应用**（见下方「卸载」；卸载会清掉
+  应用设置），再重装。
 - **卸载**：用**相机自己的菜单**，不是安装器。
   `MENU → Application → Application Management → Manage and Remove` → 选中要删的那一项 → 移除。
   部分机型的 `Application Management` 在 `Application List` 下面（多一层），标签是本地化的
@@ -257,7 +311,7 @@ adb disconnect CAMERA_IP:5555
 | 装完找不到应用 | 找错菜单 | 它在 `MENU → Application → Application List → Sony SOOC Recipes` |
 | 应用打不开 / `no live preview: ...` | 有别程序占着相机 | 退出照片/图像捕捉等，重开应用 |
 | 存了但风格没生效 | 相机还没重读设置 | **关机再开机** |
-| 文字显示 `Â·` | 旧版本 | 装最新 Release 的 APK |
+| 文字显示 `Â·` | 装的是修好文字编码之前的版本 | 用当前的安装器重装 |
 | `adb: offline` / 超时 / 找不到设备 | 相机休眠、IP 变了、不在同一 Wi-Fi、ADB 没开，或访客网络隔离/VPN/终端本地网络权限 | `adb disconnect` 后重连；检查访客网络隔离、VPN、终端本地网络权限 |
 | MTP 正常但 adb 找不到 | MTP 和 Wi-Fi ADB 是**两条不同的连接** | 按通道 B 第 2 步开 ADB |
 | `INSTALL_FAILED_UPDATE_INCOMPATIBLE` | 签名不同 | 用同一密钥重建；或备份后在相机应用管理里卸载同包名旧应用（**卸载会清掉应用设置**） |

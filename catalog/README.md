@@ -114,9 +114,9 @@ python tools/gen_recipes.py --stdout  # 看生成结果
 
 ## 品牌包元数据（`packs.json`）
 
-`filters.json` 描述「有哪些配方」；`packs.json` 描述「这些配方怎么按品牌切成一份份独立 APK」。
-它也是品牌包构建矩阵的**唯一事实来源**：`.github/workflows/release.yml` 在运行时从这份文件
-推导矩阵，绝不把包列表抄进 YAML。详见 [../docs/BRAND-PACKS.md](../docs/BRAND-PACKS.md)。
+`filters.json` 描述「有哪些配方」；`packs.json` 描述「这些配方怎么按品牌切成一份份独立 App」。
+它也是品牌包列表的**唯一事实来源**：`tools/build_matrix.py` 在运行时从这份文件推导构建目标，
+绝不把包列表抄进任何脚本。详见 [../docs/BRAND-PACKS.md](../docs/BRAND-PACKS.md)。
 
 ### 顶层字段
 
@@ -131,10 +131,11 @@ python tools/gen_recipes.py --stdout  # 看生成结果
 | 字段 | 必填 | 说明 |
 |---|---|---|
 | `id` | ✔ | 包标识，也是包名后缀、源码子目录名、图标集目录名 |
-| `app_name` | ✔ | 装到相机上显示的名字，约定用 `<Brand> Style` 形式（见 BRAND-PACKS §8） |
+| `app_name` | ✔ | 装到相机上显示的名字（英文），**必须**用 `<Brand> Style` 形式（见 BRAND-PACKS §8） |
+| `app_name_zh` | ✔ | 同上，中文名，**必须**以「风格」或「模拟」结尾（如 `徕卡风格`、`富士模拟`） |
 | `groups` | ✔ | 该包编译进的 `groups[].id` 列表，**必须同属一个品牌** |
 | `icon_set` | ✔ | 图标集目录名，对应 `assets/app-icon-packs/<icon_set>/` |
-| `publish` | | `false` 时该包**不进发布矩阵**（也不进 `build_apk.sh --all-packs`），但仍在 catalog 里、测试仍跑、仍可用 `build_apk.sh <id>` 单独构建。省略 = 发布 |
+| `publish` | | `false` 时该包**不进免费的 Base 安装器**（也不进 `build_apk.sh --all-packs`），但仍在 catalog 里、测试仍跑、仍可用 `build_apk.sh <id>` 单独构建，也仍进完整版安装器。省略 = 进 Base |
 
 `groups` 引用的组必须存在于 `filters.json` 的 `groups`，且是单品牌组。**跨两个品牌的组**
 （如 `canon-nikon`、`pana-olympus`）不能直接做包，要先拆成每个品牌一个组。`film-studio-matrix`
@@ -150,4 +151,4 @@ python tools/gen_recipes.py --stdout  # 看生成结果
 | `pana-olympus` | 跨两个品牌——同理要拆 |
 | `app-look` | 不是相机品牌，是社交 / App 滤镜风 |
 
-新增一个包时，往 `packs` 加一项即可；`release.yml` 的矩阵会自动纳入，无需改工作流。
+新增一个包时，往 `packs` 加一项即可；`tools/build_matrix.py` 会自动纳入，无需改任何脚本。

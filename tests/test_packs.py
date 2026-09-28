@@ -22,9 +22,10 @@ guarding three different failure modes:
    checkout. Skipped (loudly) when the checkout is absent, because a missing clone is not
    a broken pack.
 
-4. TestBuildMatrix — tools/build_matrix.py feeds the release workflow, where a wrong answer
-   fails late and quietly (a wrapped JSON value truncates in $GITHUB_OUTPUT; a stale APK
-   filename fails a ten-minute build at the final step).
+4. TestBuildMatrix — tools/build_matrix.py feeds tools/build_all_local.sh, which is what
+   fills the Windows installer. A wrong answer there fails late and quietly: a wrapped JSON
+   value breaks the shell pipeline that reads it, and a stale app filename makes the
+   installer look for a file the build never wrote.
 """
 
 from __future__ import annotations
@@ -415,12 +416,12 @@ class TestApplyPack(unittest.TestCase):
 
 
 class TestBuildMatrix(unittest.TestCase):
-    """tools/build_matrix.py feeds the release workflow, so its output is a contract.
+    """tools/build_matrix.py feeds tools/build_all_local.sh, so its output is a contract.
 
-    The workflow consumes this through `$GITHUB_OUTPUT`, which takes one line per key, and
-    the matrix then decides the APK filename the `collect` step asserts exists. Both are
-    silent failures when they break: a multi-line value truncates the JSON, and a renamed
-    APK fails a ten-minute build at the last step. Hence the checks below.
+    The script reads this as a single line of JSON, and the matrix then decides the app
+    filename the installer expects to find in dist/. Both are silent failures when they
+    break: a multi-line value breaks the shell pipeline that reads it, and a renamed app
+    leaves the installer pointing at a file the build never wrote. Hence the checks below.
     """
 
     def run_tool(self, *args: str) -> str:
@@ -431,16 +432,16 @@ class TestBuildMatrix(unittest.TestCase):
 
     def test_json_is_a_single_line(self):
         out = self.run_tool()
-        self.assertEqual(out.count("\n"), 1, "$GITHUB_OUTPUT would truncate a wrapped matrix")
+        self.assertEqual(out.count("\n"), 1, "a wrapped matrix breaks the script that reads it")
         self.assertTrue(out.rstrip("\n").startswith("["), out[:80])
 
     def test_every_published_pack_has_exactly_one_entry(self):
         """The matrix is all-in-one + every pack whose publish is not false.
 
-        publish:false keeps a pack out of the RELEASE without deleting it — it still
-        builds one-off, its tests still run, and --apk-for still resolves its name, but
-        it must not enter the workflow matrix or the --all-packs list, or CI would publish
-        an APK the owner is deliberately holding back.
+        publish:false keeps a pack out of the free Base installer without deleting it —
+        it still builds one-off, its tests still run, and --apk-for still resolves its
+        name, but it must not enter the matrix or the --all-packs list, or the installer
+        would ship an app the owner is deliberately holding back from Base.
         """
         rows = json.loads(self.run_tool())
         published = [p for p in PACK_LIST if p.get("publish") is not False]

@@ -4,7 +4,7 @@
 
 > **先把实话放在最前面。** 品牌包**仍然是用同一份配方、同一个 App** —— 只是按品牌各构建
 > 一次，各自带一张启动图标和各自的 Android 包名，好让你只装自己真正用的那个品牌。全量版
-> App **不会消失**；它保持品牌中立，仍是默认下载。装三个包之前，请先读
+> App **不会消失**；它保持品牌中立，仍是装着全部观感的那个。装三个包之前，请先读
 > [§3](#3-设置存储是共享的--一台相机同一时间只能有一个配方生效)，别指望装三个包就得到三台相机 —— 你得不到。
 
 本文说明品牌包是什么、为什么必须那样构建、它能装什么不能装什么、转换到底怎么发生、图标从哪来、
@@ -20,7 +20,7 @@
 
 1. Android **包名** —— `com.hairuoliu.sonysoocrecipes` 变成 `com.hairuoliu.sonysoocrecipes.<id>`；
 2. **`app_name`** 字符串（例如 `Leica Style`）；
-3. **启动图标** —— 其中三个包展示该品牌最知名的机身，六个展示胶片；`cinema` 与 `monochrome` 包用用户提供的封面图（两者此前用原创手绘图标，2026-09-27 起换成用户来图）。
+3. **启动图标** —— 其中三个包展示该品牌最知名的机身，六个展示胶片；`cinema` 与 `monochrome` 包用用户提供的封面图（两者此前用原创手绘图标，2026-09-27 起换成用户来图；自 2026-09-28 起，`monochrome` 的是一张胶片条绘图、`cinema` 的是一台电影摄影机，两者都抠掉背景、放到与其他包相同的深色底板上）。
 
 `tools/apply_pack.py` 在一个全新的、已经改过包名的 checkout 上做这个转换；
 `tools/gen_recipes.py --pack <id>` 随后只把该包的组写进 `Recipes.java`。其余一切 —— 引擎、
@@ -35,7 +35,7 @@
 
 ## 2. 为什么包名必须不同（并存安装）
 
-Android 用**包名**来识别一个已装应用，而不是用图标或显示名。两个共享同一包名的 APK 无法并存：
+Android 用**包名**来识别一个已装应用，而不是用图标或显示名。两个共享同一包名的应用无法并存：
 装第二个会被系统当作**对第一个的更新**，静默覆盖掉它。全量版已经占着
 `com.hairuoliu.sonysoocrecipes`，所以一个用同名构建的 Leica 包会覆盖它，而一个用同名构建的
 Fujifilm 包又会覆盖 Leica 包 —— 最后你只剩一个 App，且是最后装的那一个。
@@ -70,7 +70,7 @@ Fujifilm 包又会覆盖 Leica 包 —— 最后你只剩一个 App，且是最�
 
 ## 4. 品牌包一览
 
-今天共 11 个包，都从 catalog 构建，其中 7 个随本次发布（`fujifilm`、`filmstocks`、`kodak`、`pentax`、`nichefilm`、`sony`、`cinema`），另 4 个（`leica`、`ricoh`、`hasselblad`、`monochrome`）标了 `publish: false` 暂缓发布、之后单独打包。「**编译进的配方数**」是该包实际写进 `Recipes.java` 的数量 ——
+今天共 11 个包，都从 catalog 构建，其中 6 个进了免费的 **Base** 安装器（`fujifilm`、`filmstocks`、`kodak`、`nichefilm`、`sony`、`ricoh`），另 5 个（`leica`、`pentax`、`hasselblad`、`cinema`、`monochrome`）标了 `publish: false`、留给完整版安装器。`publish` 由 `tools/build_matrix.py` 读取，安装器的包列表就从这里来——它不是 CI 开关。「**编译进的配方数**」是该包实际写进 `Recipes.java` 的数量 ——
 扣掉属于另一套引擎（`film-studio-matrix`，仅登记）以及仅登记给其他品牌的条目之后。它**不等于**
 该组的总条目数，数字偏小不是 bug（见下表下方的说明）。
 
@@ -85,8 +85,8 @@ Fujifilm 包又会覆盖 Leica 包 —— 最后你只剩一个 App，且是最�
 | `nichefilm` | Niche Film Style | `ilford`, `cine`, `other-stocks` | 26 |
 | `hasselblad` | Hasselblad Style | `hasselblad` | 4 |
 | `sony` | Sony Style | `sony` | 8 |
-| `cinema` | Cinema LUT | `kino` | 9 |
-| `monochrome` | 单色 | `fuji-sim`、`kodak`、`ricoh-gr`、`leica`、`pana-olympus`、`other-stocks`、`ilford`（滤镜白名单） | 32 |
+| `cinema` | Cinema LUT Style | `kino` | 9 |
+| `monochrome` | Monochrome Style | `fuji-sim`、`kodak`、`ricoh-gr`、`leica`、`pana-olympus`、`other-stocks`、`ilford`（滤镜白名单） | 32 |
 
 有三个数字比组的总条目小（或两组合计），这是预期的：
 
@@ -110,7 +110,7 @@ Fujifilm 包又会覆盖 Leica 包 —— 最后你只剩一个 App，且是最�
 `app_name`（`<Brand> Style`）标榜的就是这一个品牌。一个包把 Leica 和 Kodak 配方塞在「Leica
 Style」名下，等于对自己的内容撒谎。
 
-**唯一的刻意例外是 `monochrome`。** 它的 `app_name` 是 *单色*（Monochrome），不是 `<Brand> Style`，而且它是以**滤镜白名单**的方式构建的——一份手挑的 32 个滤镜 id——而不是一个组。它横跨七个组（`fuji-sim`、`kodak`、`ricoh-gr`、`leica`、`pana-olympus`、`other-stocks`、`ilford`），正是因为黑白观感是多个品牌各自贡献的东西，而非某一家的领地。所以它**刻意与品牌包共享配方**——Leica Style 里仍有 Leica Monochrom，这个包又把它收了进来——并顺带从 `pana-olympus` 与 `other-stocks`（出于商标原因不进任何品牌包的那两组）按 id 各取几款。白名单包类型是唯一被允许这么做的包；其余所有包仍遵守上面的单品牌铁律。
+**唯一的刻意例外是 `monochrome`。** 它的 `app_name` 与其他包一样用 `<…> Style` 形式（`Monochrome Style` / 单色风格），但它是以**滤镜白名单**的方式构建的——一份手挑的 32 个滤镜 id——而不是一个组。它横跨七个组（`fuji-sim`、`kodak`、`ricoh-gr`、`leica`、`pana-olympus`、`other-stocks`、`ilford`），正是因为黑白观感是多个品牌各自贡献的东西，而非某一家的领地。所以它**刻意与品牌包共享配方**——Leica Style 里仍有 Leica Monochrom，这个包又把它收了进来——并顺带从 `pana-olympus` 与 `other-stocks`（出于商标原因不进任何品牌包的那两组）按 id 各取几款。白名单包类型是唯一被允许这么做的包；其余所有包仍遵守上面的单品牌铁律。
 
 **刻意不进任何包的组。** 这些仍可在全量版 App 里用到，全量版照常构建、照常发布。`catalog/packs.json`
 把它们记在 `unassigned_groups` 里并附理由，而不是悄悄删掉，好让这个缺口显在数据里，而不是藏在
@@ -190,11 +190,11 @@ src/com/hairuoliu/sonysoocrecipes/        （基包）
 
 每个包的启动图标，都用**用户提供的图片**构建。**三个**包展示相机机身（`leica` 的 M9、
 `fujifilm` 的 X100VI、`hasselblad` 的 X2D II 100C），另外**六个**展示胶片：`filmstocks`、
-`kodak`、`nichefilm`、`pentax`、`ricoh`、`sony`（这六个包按胶片命名，不是按机身）。`cinema` 与 `monochrome` 是跨品牌选集、没有单一产品可拍，所以在 2026-09-27 之前用原创手绘图标，此后换成用户提供的封面图。**十一个包现在全部**用**用户专门提供的、
+`kodak`、`nichefilm`、`pentax`、`ricoh`、`sony`（这六个包按胶片命名，不是按机身）。`cinema` 与 `monochrome` 是跨品牌选集、没有单一产品可拍，所以在 2026-09-27 之前用原创手绘图标，此后换成用户提供的封面图（`monochrome` 的是一张胶片条绘图、`cinema` 的是一台电影摄影机；自 2026-09-28 起两者都抠掉背景、放到与其他九个包相同的深色底板上）。**十一个包现在全部**用**用户专门提供的、
 保留全部权利的商业图片，未授予任何许可** —— `ricoh` 与 `pentax` 是最后两张 Wikimedia Commons
-照片，也已换成用户来图，所以**没有任何自由许可图片随任一 APK 发布**。逐张来源与「放宽许可」的约定记在
-`assets/app-icon-packs/CREDITS.md` 里；而因为图标随 APK 一起发布，许可与署名必须**随 APK 走**：它进
-`NOTICE.md`，也进每个包的发布说明。
+照片，也已换成用户来图，所以**没有任何自由许可图片随任一应用发布**。逐张来源与「放宽许可」的约定记在
+`assets/app-icon-packs/CREDITS.md` 里；而因为图标随应用一起发布，许可与署名必须**随应用走**：它进
+`NOTICE.md`，也进每个包的说明。
 
 图标集由 `tools/build_pack_icons.py` 生成（它是 `tools/build_app_icon.py` 的按包对应版，后者构建
 全量版那套）。每套是五个固定像素尺寸的文件：
@@ -207,19 +207,21 @@ src/com/hairuoliu/sonysoocrecipes/        （基包）
 | `ic_launcher-xxhdpi.png` | xxhdpi | 144 |
 | `icon-512.png` | 商店列表图 | 512 |
 
-**对抠图要诚实。** 全量版图标由 `tools/build_app_icon.py` 构建，**抠掉了纯白背景**（透明 RGBA
-可绘制）。本版本起，品牌包图标**也**做了抠图——每张都是从源照片里裁出的透明剪影，与全量版风格一致，
-而非保留整张矩形照片。不要说品牌包图标是矩形照片；它们不是。
+**对抠图要诚实。** 全量版图标由 `tools/build_app_icon.py` 构建，**抠掉了纯白背景**：一张没有底板的
+透明 RGBA 图，`xxhdpi` 下 54.2% 的像素全透明，角落像素为 `(0,0,0,0)`。品牌包图标**也**做了抠图——
+每张都是从源图里裁出的剪影而非整张矩形照片——但它们多走了一步，**合成到统一的深色圆角底板**上
+（RGB(28,28,30) ≈ #1C1C1E），于是只剩 2.6% 的像素全透明，角落为 `(28,28,30,0)`。所以：既不要说品牌包
+图标是矩形照片（它们不是），也不要说两套图标渲染得一样（并不一样 —— 全量版没有底板）。
 
 **归属义务目前所有包都不适用——但只要再用带许可的图，它立刻回来。** 九个摄影类包用用户提供的、
-保留全部权利的商业照片，`cinema` 与 `monochrome` 包是原创作品、无需许可；未授予任何许可，因此没有署名义务，只有发布方承担分发风险。`ricoh` 与
+保留全部权利的商业照片，`cinema` 与 `monochrome` 包用的是用户提供的**绘图**（一台电影摄影机、一张胶片条）而非照片，因此也不涉及任何第三方许可；未授予任何许可，因此没有署名义务，只有发布方承担分发风险。`ricoh` 与
 `pentax` 过去是例外：它们用的是 Wikimedia Commons 上的 **CC BY 2.0** 照片（Ricoh GR，作者
 Kārlis Dambrāns；Pentax K1000，作者 Terry Presley），必须署名。这两张如今也都换成了用户来图，
 所以当下发布的素材里没有任何带许可的内容。相应的署名行也已在 `NOTICE.md` 与 `CREDITS.md` 里同步删掉 ——
 **为一张早已不发布的照片保留署名，是另一种形式的虚假标注，同样是缺陷。**
 
 因此这条义务是「休眠」而非「废除」。`CC BY` 只有**带署名**才允许商用，将来若引入 CC BY 素材，署名
-必须随行于 `NOTICE.md` 和每个包的发布说明，许可全文也要随 APK 发布。`CC BY-SA`
+必须随行于 `NOTICE.md` 和每个包的说明，许可全文也要随应用发布。`CC BY-SA`
 被**刻意排除**在品牌包图标之外：它的相同方式共享条款会波及整个 App，而不只是图标。全量版默认图标
 是原创作，无需此类署名。
 
@@ -233,17 +235,18 @@ App 拿 Leica 的味道做了什么；单独的 `Leica` 会让人以为 Leica �
 
 **直说：`<Brand> Style` 形式是降低风险，不是获得许可。** 在 App 名里用品牌名仍然是商标使用。指示性
 或描述性使用 —— 如实说明这个 App 是*为*什么用的 —— 在某些司法辖区是一种*抗辩*，不是*许可*，而应用
-商店比法院更严。全量版 App 保持品牌中立（`Sony SOOC Recipes`）并仍是默认下载，正是为了让项目的主分发
+商店比法院更严。全量版 App 保持品牌中立（`Sony SOOC Recipes`），正是为了让装着整个目录的那个 App
 不挂任何一个品牌的名。
 
-任何**再分发**这些包的人 —— 重新发布 APK，或把它们塞进别的产品里 —— 自己承担那份商标风险。本文档
+任何**再分发**这些包的人 —— 重新发布应用，或把它们塞进别的产品里 —— 自己承担那份商标风险。本文档
 不会让那风险消失，只是让它显形。
 
 ---
 
 ## 9. 构建一个包
 
-你多半不必自己构建。CI 在一个 `v*` tag 上构建每个包（见下）。但本地：
+你多半不必自己构建。`tools/build_all_local.sh` 会把每个包都构建出来，安装器里装的就是它产出的东西。
+但本地一个一个来：
 
 ```bash
 tools/build_apk.sh --pack leica        # 构建一个品牌包，在它自己的 checkout 里
@@ -253,19 +256,19 @@ tools/build_apk.sh --all-packs         # 全量版 App + packs.json 里的每个
 `--pack <id>` 给这个包单独的 checkout（`build/recipe-lab-sony-pmca-<id>`），就地转换不会踩到全量版。
 `--all-packs` 先构建全量版，再构建从 `catalog/packs.json` 读出的每个包（不是写死的）。
 
-### CI 怎么做
+### 安装器的构建怎么做
 
-`.github/workflows/release.yml` 在一个 `v*` tag 上构建 APK。构建矩阵**在运行时从
-`catalog/packs.json` 推导**：一个 `targets` 作业产出全量版一项 + 每个包一项。随后一个 `apk` 作业
-**每个矩阵项跑一个作业**，各自在独立 runner 上、各自全新克隆到固定版本的上游并套用该包的转换。由此
-得到两个性质：
+`tools/build_all_local.sh` 构建全部目标并把 APK 落到 `dist/`，Windows 安装器打包的就是这个目录。
+目标列表**在运行时由 `tools/build_matrix.py` 从 `catalog/packs.json` 推导**：全量版一项 + 每个包一项，
+所以这份列表从不被抄进任何脚本。由此得到两个性质：
 
-- **失败隔离。** `fail-fast: false` 意味着一个坏包只自己失败；它不会挡住其他包，也不会挡住全量版。
-- **无 YAML 漂移。** 包列表只存在于 `catalog/packs.json`。在那儿加一个包，下一次 tag 自动被纳入，**无需
-  改动工作流文件** —— 本仓库禁止把这份列表抄进 YAML，因为那份抄本会在一有人改 JSON 时就漂移。
+- **单一事实源。** 包列表只存在于 `catalog/packs.json`。在那儿加一个包，下一次构建自动被纳入，**无需
+  改动任何脚本** —— 本仓库禁止抄录这份列表，因为抄本会在一有人改 JSON 时就漂移。
+- **checkout 隔离。** `tools/build_apk.sh --pack <id>` 给每个包单独的 checkout
+  （`build/recipe-lab-sony-pmca-<id>`），各自全新克隆到固定版本的上游并套用该包的转换，所以一个坏包
+  不会污染其他包。
 
-每个包的发布说明（在 `release` 作业里生成）重申 [§3](#3-设置存储是共享的--一台相机同一时间只能有一个配方生效)
-的共享设置警告，并列出每个包 APK 与其 SHA-256。
+每个包的说明都会重申 [§3](#3-设置存储是共享的--一台相机同一时间只能有一个配方生效) 的共享设置警告。
 
 ---
 
@@ -285,16 +288,19 @@ tools/build_apk.sh --all-packs         # 全量版 App + packs.json 里的每个
 
 3. **生成图标集。** 产出 `assets/app-icon-packs/contax/`，五个文件分别为 48 / 72 / 96 / 144 / 512 px（§7）。
    首选：把抠好的 `contax.png` 放进 `camera-covers/cutout/`（见 `tools/cut_camera_covers.py`），
-   `tools/build_pack_icons.py` 会自动采用并渲染成透明剪影；没有抠图则回退到加边框的 `master.jpg`。
-   把来源与许可记进 `assets/app-icon-packs/CREDITS.md`、`NOTICE.md` 和该包发布说明。
+   `tools/build_pack_icons.py` 会自动采用并合成到其余包共用的深色圆角底板上（加 `--no-bg` 则改为
+   纯透明剪影）；没有抠图则回退到加边框的 `master.jpg`。
+   把来源与许可记进 `assets/app-icon-packs/CREDITS.md`、`NOTICE.md` 和该包说明。
    **不要**用 `CC BY-SA` 照片——图标是对照片的改编，相同方式共享会波及整个应用。
 
 4. **跑关卡。** `tools/check_assets.py` 现在会检查图标集。缺整套目录只是*note*（该包回退到默认图标），
-   但一套已存在却缺文件或尺寸不对就是*error*。打 tag 前关卡必须过。
+   但一套已存在却缺文件或尺寸不对就是*error*。构建前关卡必须过。
 
 5. **本地构建做 sanity check。** `tools/build_apk.sh --pack contax`，若留着 checkout，再用
-   `apply_pack.py --check` 确认 APK 的包名。
+   `apply_pack.py --check` 确认应用的包名。
 
-6. **打 tag 发布。** 推一个 `v*` tag。`release.yml` 的矩阵自动纳入新包 —— 无需改工作流。发布说明会点名它。
+6. **把它放进安装器。** 在 `catalog/packs.json` 里把 `publish` 设为 `true`，下一次跑
+   `tools/build_all_local.sh` 时这个包就进了免费 Base 安装器的列表；留 `false` 则只进完整版安装器。
+   无需改任何脚本——列表是推导出来的。
 
 这就是全部的改动面：一条 JSON、一套图标、一行署名。代码库里别的都不动。

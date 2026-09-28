@@ -46,14 +46,21 @@ CATALOG = ROOT / "catalog" / "filters.json"
 MARKER = re.compile(r"<!--\s*counts:\s*total=(\d+)\s+compiled=(\d+)\s*-->")
 
 # name -> the two phrases a reader must be able to see, given (total, compiled)
+#
+# "installable", not "compiled into the APK". The second phrase used to name the APK, and
+# since the APK stopped being the download that is the one word a reader is most likely to
+# misread: the page now says in as many words that there is no APK to fetch. What the number
+# actually counts is the recipes this project can store in a body — engine `recipe-lab` in
+# catalog/filters.json, as against the film-studio-matrix ones that are registered by name
+# only. Say that, not the intermediate artifact.
 READMES = {
     "README.md": (
         "{total} looks",
-        "{compiled} compiled into the APK",
+        "{compiled} installable",
     ),
     "README.zh-CN.md": (
         "**{total} 款**",
-        "**{compiled} 款可直接编译进 APK**",
+        "**{compiled} 款可装进相机**",
     ),
 }
 
@@ -132,7 +139,7 @@ def main() -> int:
     if not ok:
         return 1
 
-    print(f"ok — {len(READMES)} READMEs advertise {total} catalogued, {compiled} compiled; "
+    print(f"ok — {len(READMES)} READMEs advertise {total} catalogued, {compiled} installable; "
           f"docs/ has no stale counts below {total}")
     return 0
 

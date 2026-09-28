@@ -37,11 +37,11 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 UPSTREAM_REPO="https://github.com/voxivoid/recipe-lab-sony-pmca.git"
-# Pinned rather than "development" on purpose — the same reason release.yml pins it: a tag
-# must build the identical upstream code every time. This is the local-build copy of that
-# pin, so a local `tools/build_apk.sh` and a tagged CI run now agree on what they compile.
-# Bump it in lockstep with .github/workflows/release.yml and the fetched_rev in
-# catalog/filters.json.
+# Pinned rather than "development" on purpose: every build has to compile the identical
+# upstream code, so the APKs inside the installer are reproducible. .github/workflows/
+# release.yml used to carry a second copy of this pin and no longer exists, so this line and
+# catalog/filters.json are the only two places left — and a mismatch between them is what
+# tests/test_catalog.py::TestPinnedUpstream fails on. Bump both.
 UPSTREAM_SHA=6b5c8aa2900019d98496c7047a90ce73d2d6a725
 FORK_DEFAULT="$ROOT/build/recipe-lab-sony-pmca"
 FORK="$FORK_DEFAULT"
@@ -79,7 +79,7 @@ fi
 
 # --- prepare one upstream checkout: clone at the pinned revision, fetch jni/platform,
 #     and rebrand voxivoid -> hairuoliu. Shared by the all-in-one and every pack so the
-#     two paths cannot drift. Mirrors .github/workflows/release.yml exactly.
+#     two paths cannot drift.
 prepare_fork() {
   local fork="$1"
   if [[ ! -d "$fork/.git" ]]; then
@@ -118,8 +118,8 @@ prepare_fork() {
   git -C "$fork" show "$UPSTREAM_SHA:src/com/voxivoid/recipelab/Recipes.java" \
     > "$fork/upstream-Recipes.java"
 
-  # Rebrand voxivoid -> hairuoliu. Shared with .github/workflows/release.yml through
-  # tools/rebrand.sh, so the two build paths cannot drift. The guard inside the script
+  # Rebrand voxivoid -> hairuoliu. Shared by every target through tools/rebrand.sh, so no
+  # build path can drift from another. The guard inside the script
   # (no src/com/voxivoid once done) makes it idempotent across re-runs.
   "$ROOT/tools/rebrand.sh" "$fork"
 }
@@ -137,8 +137,8 @@ build_target() {
     python "$ROOT/tools/apply_pack.py" --pack "$pack" --fork "$fork"
   else
     # A fresh clone carries upstream's icon; ours lives in assets/app-icon/ and is a build
-    # input of this repository, exactly like catalog/filters.json. Same step the release
-    # workflow runs for the all-in-one, so a local build and a tagged build look identical.
+    # input of this repository, exactly like catalog/filters.json. Every build runs this step
+    # for the all-in-one, so no checkout can silently ship upstream's icon instead.
     echo "==> applying assets/app-icon into the fork"
     for d in mdpi hdpi xhdpi xxhdpi; do
       cp "$ROOT/assets/app-icon/ic_launcher-$d.png" "$fork/res/drawable-$d/ic_launcher.png"
@@ -198,8 +198,9 @@ build_target() {
     fi
   )
 
-  # The expected output name comes from the same place the release workflow gets it, so a
-  # change to the naming rule cannot leave these two disagreeing.
+  # The expected output name comes from tools/build_matrix.py, which is also where
+  # apply_pack.apk_name() is reached from — one definition of the naming rule, so this check
+  # cannot end up disagreeing with the name the build actually produces.
   local want
   if [[ -n "$pack" ]]; then
     want="$(python "$ROOT/tools/build_matrix.py" --apk-for "$pack")"
@@ -232,8 +233,9 @@ if [[ -n "$PACK" ]]; then
   build_target "$fork" "$PACK"
 elif (( ALL_PACKS )); then
   # All-in-one first, then every pack. The list comes from tools/build_matrix.py --ids,
-  # which reads catalog/packs.json — one definition of what a pack is, shared with the
-  # release workflow, rather than a second copy of the rule here.
+  # which reads catalog/packs.json — one definition of what a pack is, rather than a second
+  # copy of the rule here. It lists the PUBLIC packs, i.e. the free installer's set; a
+  # held-back pack is built with `tools/build_apk.sh <id>`.
   build_target "$FORK" ""
   mapfile -t PACK_IDS < <(python "$ROOT/tools/build_matrix.py" --ids)
   for id in "${PACK_IDS[@]}"; do

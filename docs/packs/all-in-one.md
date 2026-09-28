@@ -1,5 +1,4 @@
-# Sony SOOC Recipes — SonySOOCRecipes.apk
-
+# Sony SOOC Recipes
 <p align="center"><b>English</b> · <a href="all-in-one.zh-CN.md">简体中文</a></p>
 
 ## Summary
@@ -8,7 +7,7 @@
 |---|---|
 | App name | Sony SOOC Recipes |
 | Package name | com.hairuoliu.sonysoocrecipes |
-| APK filename | SonySOOCRecipes.apk |
+| **Ships in** | the full installer — it is the app that carries every look |
 | Compiled recipes | 149 |
 | Source groups | Sony, Fuji Sim, Fuji Film, Kodak, Cine, Ricoh GR, Leica, Hasselblad, Canon / Nikon, Pentax, Pana / Olympus, Other Stocks, Ilford, Kino LUT, App Look |
 | Catalog version | 0.6.0 (updated 2026-09-13) |

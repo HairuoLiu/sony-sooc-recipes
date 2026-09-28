@@ -1,19 +1,18 @@
-# 电影滤镜 — SonySOOCRecipes-cinema.apk
-
+# 电影滤镜风格
 <p align="center"><a href="cinema.md">English</a> · <b>简体中文</b></p>
 
 ## 概述
 
 | | |
 |---|---|
-| 应用名称 | 电影滤镜 |
+| 应用名称 | 电影滤镜风格 |
 | 包名 | com.hairuoliu.sonysoocrecipes.cinema |
-| APK 文件名 | SonySOOCRecipes-cinema.apk |
+| **随哪一档分发** | 仅完整版安装器 —— 免费的 Base 里没有 |
 | 已编译配方 | 9 |
 | 来源分组 | Kino LUT |
 | 目录版本 | 0.6.0（更新于 2026-09-13） |
 
-**一句话概览：** 这个包把你购买的一款电影感 cine LUT——Kino 系列——**测量**成 9 款相机设置配方，每个白平衡变体一款，编译进 APK。
+**一句话概览：** 这个包把你购买的一款电影感 cine LUT——Kino 系列——**测量**成 9 款相机设置配方，每个白平衡变体一款，编译进应用。
 
 ## 这些数字从哪来
 
@@ -56,7 +55,7 @@
 
 ## 来源与许可
 
-这里的九套参数都是**本项目原创作品**，在 `catalog/filters.json` 里登记为 `source: authored-here`。没有任何 LUT 文件、表格或系数从购买的套装里被再分发——随包发出去的，是从那套参数测量得来的一组普通相机设置。那个 LUT 包本身是商业产品，**没有**包含在本仓库或任何 APK 里；要用它做 raw 流程，你仍需要自己的那份。见 [NOTICE.md](../../NOTICE.md)。
+这里的九套参数都是**本项目原创作品**，在 `catalog/filters.json` 里登记为 `source: authored-here`。没有任何 LUT 文件、表格或系数从购买的套装里被再分发——随包发出去的，是从那套参数测量得来的一组普通相机设置。那个 LUT 包本身是商业产品，**没有**包含在本仓库或我们分发的任何应用里；要用它做 raw 流程，你仍需要自己的那份。见 [NOTICE.md](../../NOTICE.md)。
 
 ---
 

@@ -729,16 +729,17 @@ class TestPickerBrowser(unittest.TestCase):
                       "not the old tight box")
 
     def test_each_brand_starts_with_a_divider(self):
-        """v0.89: scrolling past a brand boundary has to be visible, not just readable.
+        """v0.89 (amended v1.x): scrolling past a brand boundary has to be visible, not just readable.
 
         The list used to draw the brand name on its own with no separator, so on a long
         scroll the boundary between two brands looked like one more recipe row. The divider
-        is drawn at the top of every brand header row, except when that row is the first
-        thing in the viewport (a line with nothing above it reads as an artefact).
+        is drawn BELOW the brand name (an underline), so the brand caption sits ABOVE the
+        line rather than under it. It is skipped only when the underline would fall below
+        the viewport's bottom rule (the last partially-visible header row).
         """
         raw = patch_ui.PICKER_TEMPLATE.read_text(encoding="utf-8")
-        self.assertIn("c.drawLine(pad, y + d, w - pad, y + d, rule)", raw,
-                      "brand headers have no divider above them")
+        self.assertIn("c.drawLine(pad, y + 27 * d, w - pad, y + 27 * d, rule)", raw,
+                      "brand headers have no divider below (underline) their name")
         # v0.91: the brand name is now as big as the recipe names (item paint, not head), and
         # the count moved to the far right of the row — it is metadata, not part of the label.
         self.assertIn("c.drawText(Recipes.GROUPS[gg].toUpperCase(), x, y + 17 * d, item)", raw,

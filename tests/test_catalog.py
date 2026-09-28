@@ -22,12 +22,11 @@ Two kinds of tests live here, and they guard different failure modes:
    source=authored-here with no pinned case fails the suite. You cannot add a
    home-grown recipe without also writing down what it is supposed to be.
 
-3. What the catalog is built BY (TestPinnedUpstream, TestBuildPipelinesAgree)
-   The catalog is only half of what a tag produces; the other half is the two build
-   pipelines that turn it into an APK — tools/build_apk.sh for a local build,
-   .github/workflows/release.yml for a tag. Both live outside the catalog and nothing
-   else reads them, so these tests are what holds them to the catalog and to each other.
-   They run where it matters: release.yml runs this file as a gate BEFORE it builds.
+3. What the catalog is built BY (TestPinnedUpstream, TestBuildPipelineSteps)
+   The catalog is only half of what produces an APK; the other half is tools/build_apk.sh,
+   the pipeline that turns it into one. That script lives outside the catalog and nothing
+   else reads it, so these tests are what hold it to the catalog: the upstream pin the two
+   files both carry, and the transform tools the build has to run.
 """
 
 from __future__ import annotations
@@ -457,12 +456,17 @@ class TestFidelityParser(unittest.TestCase):
 
 
 class TestPinnedUpstream(unittest.TestCase):
-    """The release build clones upstream at a fixed commit.
+    """The build clones upstream at a fixed commit.
 
     If that pin drifts from the revision the catalog claims to have been validated
-    against, a tag can silently build against different upstream code than the one
+    against, a build can silently compile against different upstream code than the one
     the recipes were checked against. The two live in different files, so nothing
     but a test can hold them together.
+
+    There used to be three copies of the pin — the catalog, tools/build_apk.sh and
+    .github/workflows/release.yml. Publishing runs through the Windows installer now and
+    the release workflow is gone, so the build script is the only second copy left, and
+    the only one left to guard.
     """
 
     @staticmethod
@@ -474,23 +478,8 @@ class TestPinnedUpstream(unittest.TestCase):
         return None
 
     @staticmethod
-    def _sha_in_workflow() -> str | None:
-        path = ROOT / ".github" / "workflows" / "release.yml"
-        if not path.exists():
-            return None
-        for line in path.read_text(encoding="utf-8").splitlines():
-            if "UPSTREAM_SHA:" in line:
-                return line.split(":", 1)[1].strip().strip('"').lower()
-        return None
-
-    @staticmethod
     def _sha_in_build_script() -> str | None:
-        """The local half of the pipeline writes the pin as UPSTREAM_SHA=, not as YAML.
-
-        tools/build_apk.sh and release.yml are two spellings of the same checkout steps, and
-        _sha_in_workflow() looks for the YAML colon — so without this the shell copy is the
-        one pin nothing guards. See TestBuildPipelinesAgree for why that matters.
-        """
+        """The build script writes the pin as UPSTREAM_SHA=, not as YAML."""
         path = ROOT / "tools" / "build_apk.sh"
         if not path.exists():
             return None
@@ -498,13 +487,6 @@ class TestPinnedUpstream(unittest.TestCase):
             if line.startswith("UPSTREAM_SHA="):
                 return line.split("=", 1)[1].strip().strip('"').lower()
         return None
-
-    def test_release_workflow_pins_the_same_sha(self):
-        cat, wf = self._sha_in_catalog(), self._sha_in_workflow()
-        self.assertIsNotNone(wf, "release.yml has no UPSTREAM_SHA")
-        self.assertEqual(cat, wf,
-                         "upstream pin drifted: catalog says "
-                         f"{cat}, release.yml builds {wf}. Update both.")
 
     def test_catalog_pins_a_full_sha(self):
         self.assertIsNotNone(self._sha_in_catalog(),
@@ -514,39 +496,40 @@ class TestPinnedUpstream(unittest.TestCase):
         cat, local = self._sha_in_catalog(), self._sha_in_build_script()
         self.assertIsNotNone(local, "tools/build_apk.sh has no UPSTREAM_SHA")
         self.assertEqual(cat, local,
-                         "a local build would clone a different upstream than CI: catalog "
-                         f"says {cat}, tools/build_apk.sh builds {local}. The catalog pin, "
-                         "release.yml and this script all have to agree.")
+                         "a build would clone a different upstream than the catalog was "
+                         f"validated against: catalog says {cat}, tools/build_apk.sh builds "
+                         f"{local}. Update both.")
 
 
-class TestBuildPipelinesAgree(unittest.TestCase):
-    """One set of build steps, written out twice, kept in step by a test.
+class TestBuildPipelineSteps(unittest.TestCase):
+    """The build runs every transform tool, in the order that makes them work.
 
-    A pristine upstream checkout becomes an APK through tools/build_apk.sh locally and
-    through .github/workflows/release.yml on a tag. Neither file is generated from the
-    other, and both already carry a comment claiming they mirror each other — which is
-    precisely the promise a comment cannot keep.
+    A pristine upstream checkout becomes an APK through tools/build_apk.sh, and the steps
+    that transform it are written out there as commands. This test used to be
+    `TestBuildPipelinesAgree`, comparing that script against .github/workflows/release.yml:
+    the same steps were spelled out twice, and the two drifted.
 
-    It had already broken. build_apk.sh replayed tools/patch_ui.py; release.yml never did.
-    So the v0.7.0 APKs shipped upstream's main screen while CHANGELOG, README and both
-    architecture documents described the frosted two-bar screen as shipped — and every
-    gate stayed green, because the theme tools were all tested but nothing tested that the
-    release build RAN them. The omission is a missing line in a YAML file: invisible in
-    review, and invisible in the APK until it is on a camera and looked at.
+    It had already caught a real failure. build_apk.sh replayed tools/patch_ui.py and
+    release.yml never did, so the v0.7.0 APKs shipped upstream's main screen while CHANGELOG,
+    README and both architecture documents described the frosted two-bar screen as shipped —
+    and every gate stayed green, because the theme tools were all tested but nothing tested
+    that the release build RAN them. The omission was a missing line in a YAML file: invisible
+    in review, and invisible in the APK until it was on a camera and looked at.
 
-    So this does not judge whether either pipeline is right. It asserts the two run the
-    same transform tools in the same order. What counts as a transform tool is discovered
-    from tools/ rather than listed here: one accepting --fork (it operates on the checkout
-    being built) AND --check (it can verify a checkout already carries its change) is a
-    pipeline step by construction, so a new one is covered the day it lands. preview_ui.py
-    takes --fork too but has no --check — it renders a page, it does not transform a
-    checkout — and that rule, not a name in a list here, is what excludes it.
+    The workflow is gone — publishing runs through the Windows installer now — so there is
+    nothing left to compare against, and what survives is the half that still has a subject:
+    a transform tool this script does not call is a change that silently never reaches an
+    APK. What counts as a transform tool is discovered from tools/ rather than listed here:
+    one accepting --fork (it operates on the checkout being built) AND --check (it can verify
+    a checkout already carries its change) is a pipeline step by construction, so a new one
+    is covered the day it lands. preview_ui.py takes --fork too but has no --check — it
+    renders a page, it does not transform a checkout — and that rule, not a name in a list
+    here, is what excludes it.
     """
 
     BUILD_SH = ROOT / "tools" / "build_apk.sh"
-    RELEASE_YML = ROOT / ".github" / "workflows" / "release.yml"
-    # How far past an invocation to look for its flags: enough for a wrapped YAML line or
-    # a long argument list, short enough not to reach the next step's tool.
+    # How far past an invocation to look for its flags: enough for a wrapped line or a long
+    # argument list, short enough not to reach the next step's tool.
     FLAG_WINDOW = 200
 
     @classmethod
@@ -576,30 +559,40 @@ class TestBuildPipelinesAgree(unittest.TestCase):
 
     def test_the_transform_tools_are_still_discoverable(self):
         # Load-bearing: if a rename stopped the discovery above from matching anything,
-        # the parity test below would compare two empty lists and pass on nothing.
+        # the check below would compare an empty set and pass on nothing.
         found = self.transform_tools()
         self.assertIn("patch_ui.py", found, "the --fork/--check discovery rule matched no "
                                             "transform tools — fix the rule, not this line")
         self.assertIn("gen_recipes.py", found)
 
-    def test_both_pipelines_run_the_same_steps(self):
-        local = self.steps_of(self.BUILD_SH)
-        release = self.steps_of(self.RELEASE_YML)
-        self.assertTrue(local, f"no transform steps found in {self.BUILD_SH.name}")
+    def test_the_build_runs_every_transform_tool(self):
+        ran = self.steps_of(self.BUILD_SH)
+        self.assertTrue(ran, f"no transform steps found in {self.BUILD_SH.name}")
 
-        missing = [s for s in local if s not in release]
+        missing = sorted(self.transform_tools() - set(ran))
         self.assertFalse(
             missing,
-            "the release build never runs " + ", ".join(f"tools/{s}" for s in missing)
-            + f", which {self.BUILD_SH.name} does run. A tag would then ship an APK that "
-              "differs from the one built and tested locally — this is how the v0.7.0 APKs "
-              "lost the frosted two-bar theme while the documentation said it was there.")
+            "the build never runs " + ", ".join(f"tools/{m}" for m in missing)
+            + f", which is a step tools/ offers. A transform nothing calls is a change that "
+              "never reaches an APK — this is how the v0.7.0 APKs lost the frosted two-bar "
+              "theme while the documentation said it was there.")
 
-        self.assertEqual(
-            local, release,
-            "the two build pipelines run the same tools in a different order, and the order "
-            "is load-bearing: patch_ui.py fills the layout's {ui_package} token from the "
-            "manifest apply_pack.py has just rewritten")
+    def test_the_build_orders_its_steps(self):
+        ran = self.steps_of(self.BUILD_SH)
+        # apply_pack.py rewrites the manifest package name; patch_ui.py fills the layout's
+        # {ui_package} token from the manifest apply_pack has just rewritten.
+        self.assertIn("apply_pack.py", ran)
+        self.assertIn("patch_ui.py", ran)
+        self.assertLess(ran.index("apply_pack.py"), ran.index("patch_ui.py"),
+                        "patch_ui.py reads the manifest apply_pack.py has just rewritten, so "
+                        "apply_pack.py has to run first")
+        # gen_recipes.py regenerates Recipes.java from the catalog, so anything patch_ui.py
+        # wrote into that file would be overwritten — which is why the recipe-table strings
+        # it localises have to live in gen_recipes.py instead.
+        self.assertIn("gen_recipes.py", ran)
+        self.assertLess(ran.index("patch_ui.py"), ran.index("gen_recipes.py"),
+                        "patch_ui.py reverts the fork before gen_recipes.py regenerates "
+                        "Recipes.java; the other order would silently drop the UI patch")
 
 
 if __name__ == "__main__":

@@ -16,6 +16,28 @@ self-test that proves the gates still fail on broken input.
 
 ---
 
+## Unreleased — one file, one click
+
+Distribution changes hands: the APK downloads are withdrawn and replaced by a Windows
+installer. *(No version number yet — this entry describes what is on `main` today.)*
+
+- **The installer is the download.** `SonySOOCRecipes-Base-<lang>.exe` carries the recipes
+  *and* `pmca-console` — the Sony-PMCA-RE engine that talks to the camera over USB — so
+  there is no APK to fetch, no tool to install first, and nothing to type. Three screens:
+  connect, tick the packs you want, install.
+- **Base is 6 packs, 91 looks.** Fujifilm, Fuji Film, Kodak, Niche Film, Ricoh GR and Sony.
+  `publish` in `catalog/packs.json` now means *is in the free Base installer*, which is why
+  `ricoh` joined and `pentax` / `cinema` moved out; the other five packs and the all-in-one
+  ship in the full installer.
+- **The APK downloads are withdrawn.** Earlier releases published one APK per brand for you
+  to install with Sony-PMCA-RE yourself. Those assets are deleted and nothing in this
+  repository publishes an APK any more. macOS, Linux and command-line users still build from
+  source — `tools/build_all_local.sh` writes every target into `dist/`.
+- **`release.yml` is deleted.** Publishing no longer runs through a GitHub Actions release
+  job, so the build pipeline has exactly one copy: `tools/build_apk.sh`. What survives of
+  the test that used to hold the two copies together is `TestBuildPipelineSteps`, which now
+  asserts the script runs every transform tool in the order that makes them work.
+
 ## 1.0.1 — editor fixes from the α7S II
 
 Four fixes from testing 1.0.0 on a real body, all inside the settings editor.

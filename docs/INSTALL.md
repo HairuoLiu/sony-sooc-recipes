@@ -8,18 +8,19 @@ This guide walks you through installing **Sony SOOC Recipes** — an app that wr
 film-style recipes (Creative Style, Picture Effect, white balance, DRO…) into your camera,
 so older Sony bodies can produce film-like output straight out of the camera.
 
-**What this takes:** about 10–15 minutes for the first run over USB, plus a couple of minutes
-if you have never installed any app on your camera before. Channel B (Wi-Fi ADB) is only for
-later, repeated reinstalls and takes seconds each time.
-
-Read [CHANNEL-COMPARISON.md](CHANNEL-COMPARISON.md) first if you want to understand *why* there
-are two paths. The short version: **first install goes through Channel A; open Channel B only
-when you need to iterate.**
+**What this takes:** about 10–15 minutes, once, on Windows. **Download one file, run it, plug the
+camera in** — the installer carries the recipes and the install channel inside it, so there is no
+APK to fetch, no Sony-PMCA-RE to install first, and nothing to type.
 
 <p align="center">
   <img src="assets/install-flow.svg" width="720" alt="installation flow">
-  <br><sub>Figure: the complete path from downloading the APK to having it in your camera</sub>
+  <br><sub>Figure: the whole path — one download, one click, a progress bar</sub>
 </p>
+
+The rest of this page is that flow in detail, then the manual route for macOS, Linux and anyone
+who would rather drive the tools themselves. Read [CHANNEL-COMPARISON.md](CHANNEL-COMPARISON.md)
+if you want to understand the two low-level channels the manual route offers — the installer takes
+the first of them for you, automatically.
 
 ---
 
@@ -44,7 +45,7 @@ method in this repository can install anything on it.
 > The earlier NEX-7, NEX-3 / 5 / 5N / F3, and the a3000 / a3500 have no Android subsystem and
 > no `Application` menu either — their absence from the supported column above is **not an omission**.
 
-**Confirmed on a real body: the α7S II**, with four brand packs installed side by side. Photographs
+**Confirmed on a real body: the α7S II**, with nine brand packs installed side by side. Photographs
 of it running are in the [README](../README.md#on-a-real-camera). Everything else in the left
 column is *platform* support — the body has the app channel — rather than a body-by-body test,
 and those are not the same claim.
@@ -58,55 +59,114 @@ and those are not the same claim.
 - A **fully charged battery.** Installation toggles the camera's mode a few times. If power
   dies mid-install, recovery is unpleasant — charge first.
 
-### Get the APK
+### Download the installer
 
-Download from the project's Releases page:
+`SonySOOCRecipes-Base-EN.exe`, from the project's Releases page:
 
-https://github.com/HairuoLiu/sony-sooc-recipes/releases
+https://github.com/HairuoLiu/sony-sooc-recipes/releases/latest
 
-A release carries **one APK per brand pack, plus the all-in-one app**. They are the same app
-built from the same catalog; what differs is which groups of looks a pack carries, its
-Android package name (that is what lets several sit side by side on the camera), and its
-launcher icon. The full list and the reasoning are in [BRAND-PACKS.md](BRAND-PACKS.md).
+*(Reading Chinese? `SonySOOCRecipes-Base-CN.exe` is the same installer with a Chinese interface.)*
 
-| If you want | Install |
+**It is one file, and it is the only download.** The recipes are compiled in, and so is
+`pmca-console` — the Sony-PMCA-RE engine that talks to the camera over USB. Nothing has to be
+installed first, and nothing is left behind except the program itself.
+
+**What it carries: Base — 6 packs, 91 looks.** Fujifilm, Fuji Film, Kodak, Niche Film, Ricoh GR
+and Sony. Each is a separate app on the camera with its own Android package name, which is exactly
+what lets them sit side by side, and you can untick any of them during the install. The remaining
+packs — Leica, Pentax, Hasselblad, Cinema LUT and Monochrome, plus the all-in-one app that holds
+the whole catalog — are distributed separately. The full list and the reasoning are in
+[BRAND-PACKS.md](BRAND-PACKS.md).
+
+### Run it
+
+<p align="center">
+  <img src="assets/install/en/01-connect-camera.png" width="250" alt="Step 1: Camera connected, with a Detect Again button">
+  <img src="assets/install/en/02-choose-packs.png" width="250" alt="Step 2: the packs it carries, all ticked, with a Select All box">
+  <img src="assets/install/en/03-installing.png" width="250" alt="Step 3: a progress bar reading Installing 1/6">
+  <br><sub>Connect · Choose · Install — the three screens between the .exe and a camera full of looks.</sub>
+</p>
+
+1. **Connect.** Plug the prepared camera in; the installer detects it on its own and the step
+   turns green. If it does not, press **Detect Again** — the checklist is
+   [below](#if-the-installer-cannot-see-the-camera).
+2. **Choose.** Every pack it carries is ticked. Untick what you do not want; the **Select All**
+   box at the top right clears or restores the lot.
+3. **Install.** One progress bar and a count of what is left. **About ten minutes.** The window
+   can be minimised while it works.
+4. **Finish.** Unplug, power off and on again, and shoot.
+
+> **Honest note.** The camera blanks to black and switches modes a few times while the packs are
+> written. That is normal — do not press anything and do not unplug. If a pack fails, the finish
+> screen names it; tick **Show Details** for the underlying log.
+
+### Read these three before installing
+
+> **The APK downloads are withdrawn.** Earlier versions published a per-brand APK for you to
+> install yourself with Sony-PMCA-RE. That download is gone: the installer does the same job in
+> place. If a guide points you at `SonySOOCRecipes-<brand>.apk`, it describes a version this
+> repository no longer publishes.
+
+> **Two things actually bite people.**
+>
+> 1. **If the camera already has a Sony SOOC Recipes from somewhere else, remove it first.** An
+>    app signed with a different key **cannot overwrite** an existing install. That is also true
+>    between packs: `…sonysoocrecipes.ricoh` and `…sonysoocrecipes.sony` are *different packages*
+>    and install side by side, but two copies of the same one do not.
+> 2. **Several packs do not give you several cameras.** The camera's settings store is shared, and
+>    only one recipe can be active at a time. Packs differ in what they *ship*, not in what the
+>    camera can *do*.
+
+> **Some looks are not verified on hardware.** Every recipe answers this for itself, in the
+> `verified` field of `catalog/filters.json` — the ones this repository wrote itself are `false`,
+> and each is marked in the generated `Recipes.java`. Try those on discardable footage before
+> trusting them on something you cannot reshoot. The marker is a source comment, not a label the
+> app draws; see the [FAQ](FAQ.md) for what the badge on the main screen actually means.
+
+> The version number shown inside the app is the **base app's** version, not this project's. The
+> base app reads its version from `AndroidManifest.xml`; this repository only swaps the recipe
+> table. Trust the installer you downloaded, not the in-app number.
+
+---
+
+## If the installer cannot see the camera
+
+| What you see | What to do |
 |---|---|
-| Everything, and to browse the whole catalog | `SonySOOCRecipes-<version>.apk` |
-| One brand's looks only | `SonySOOCRecipes-<brand>-<version>.apk` |
+| **No camera detected** | Check, in this order: the cable is **data-capable** (not charge-only) · `Setup → USB Connection` is on **Mass Storage**, not PC Remote · a memory card is in · the camera is powered on and its screen says `USB Mode` · nothing else is holding the USB device (Photos, Image Capture, Dropbox, Imaging Edge). Then **Detect Again**. |
+| A **driver** error | In **Show Details**, switch the driver to `libusb` and retry. If it still fails on Windows, install the libusb-win32 driver with [Zadig](https://zadig.akeo.ie) and run again. |
+| It detects the camera, then fails part-way | The most common cause is an older Sony SOOC Recipes already on the body. Remove it in `MENU → Application → Application Management → Manage and Remove`, then install again. |
+| Nothing at all happens | Press `MENU` and look for an `Application` entry. If there is none, this body cannot run apps — see the model table above. No workaround exists. |
 
-The current release is `1.0.0`. A pack is only a few KB smaller than the all-in-one — the
-recipe data is the smallest thing in the APK, the engine is most of it. The point of a pack
-is fewer looks to step through, not a smaller download. The repository publishes only the
-recipe data and build tooling; the APKs are produced by CI from `catalog/filters.json`. If
-no release exists yet, build them yourself — see [ARCHITECTURE.md](ARCHITECTURE.md).
+---
 
-> **Honest note.** Three things actually bite people:
->
-> 1. **The signing key is single-use.** CI has no keystore configured, so every build generates
->    a fresh key. APKs signed with *different* keys **cannot overwrite** each other — if your
->    camera already has a Sony SOOC Recipes from somewhere else, remove it in the camera first, then
->    install this one. This applies to packs too: `SonySOOCRecipes-leica` and the all-in-one are
->    *different packages* and install side by side, but two copies of the same one do not.
-> 2. **Everything this repository wrote itself is unverified on real hardware** — that is 72
->    of the 164 recipes today, and it is written per recipe by the `verified` field in
->    `catalog/filters.json`, which `tools/gen_recipes.py` turns into a
->    `// NOT VERIFIED ON HARDWARE` comment in the generated `Recipes.java`. Try those on
->    discardable footage before trusting them on something you cannot reshoot. The marker is
->    a source comment, not a label the app draws; see the [FAQ](FAQ.md) for what the badge on
->    the main screen actually means.
-> 3. **Several packs do not give you several cameras.** The camera's settings store is
->    shared, and only one recipe can be active at a time. Packs differ in what they *ship*,
->    not in what the camera can *do*.
->
-> The version number shown inside the app is the **base app's** version, not this repository's
-> tag. The base app reads its version from `AndroidManifest.xml`; this repo only swaps the
-> recipe table. Trust the release tag, not the in-app number.
+## Doing it by hand (macOS, Linux, or the command line)
+
+The installer is Windows-only. Everything it does you can do yourself — and on macOS and Linux
+that is the only route, because the pre-built APKs are no longer published. So the manual route
+starts by building them from this repository, with the same tooling that produced the copies
+inside the installer:
+
+```bash
+git clone https://github.com/HairuoLiu/sony-sooc-recipes.git
+cd sony-sooc-recipes
+tools/build_all_local.sh          # every target; the script's header lists the toolchain
+```
+
+That writes `SonySOOCRecipes*.apk` into `dist/`. Which to install: the all-in-one carries every
+look, a pack carries one brand's. Both lists, and the reasoning, are in
+[BRAND-PACKS.md](BRAND-PACKS.md).
+
+What follows is the manual route in full. **Channel A** is the one the installer drives — USB,
+offline, and the only one a first install should use. **Channel B** (Wi-Fi ADB) is for repeated
+reinstalls, and it can never replace Channel A: enabling ADB needs OpenMemories:Tweak, which
+itself installs over Channel A.
 
 ---
 
 ## Channel A: USB + Sony-PMCA-RE
 
-**This is the path every first-time install should take.** Fully offline, exposes no network
+**What the installer automates, spelled out.** Fully offline, exposes no network
 service, works on every PMCA body, and requires no pre-installed app.
 
 ### 1. Get the installer, Sony-PMCA-RE
@@ -180,7 +240,7 @@ Badge you may see in the app:
 
 | Badge | Meaning |
 |---|---|
-| a brand name — `PENTAX`, `KODAK`, `LEICA` … (宾得 / 柯达 / 徕卡 … in Chinese) | the group this look belongs to. Since v0.87 that is all the badge says; the old `ACTIVE` / `PREVIEW` / `PROTECTED` status words are gone. |
+| a brand name — `PENTAX`, `KODAK`, `LEICA` … (宾得 / 柯达 / 徕卡 … in Chinese) | the group this look belongs to. That is all the badge says; the old `ACTIVE` / `PREVIEW` / `PROTECTED` status words are gone. |
 
 One consequence worth knowing: the app no longer tells you on screen whether the camera's
 setting storage is write-protected. If a write looks like it did not stick, that is still the
@@ -246,11 +306,11 @@ the daemon on the camera keeps running until you disable it in Tweak.
 
 - **Update over USB (Channel A):** just run the install again.
 - **Update over ADB (Channel B):** `adb install -r` is near-instant.
-- **Signature warning (important):** because CI signs with a throwaway key, an APK signed with
-  a *different* key cannot overwrite an existing install. If you see
-  `INSTALL_FAILED_UPDATE_INCOMPATIBLE`, either rebuild with the same key or **uninstall the
-  same-package-name app first** (see *Uninstall* below; uninstalling clears the app's stored
-  settings), then reinstall.
+- **Signature warning (important):** an APK signed with a *different* key cannot overwrite an
+  existing install. The packs the installer ships share one key, so they upgrade over one another
+  cleanly — but anything installed from an older, differently-signed build cannot be replaced.
+  If you see `INSTALL_FAILED_UPDATE_INCOMPATIBLE`, **uninstall the same-package-name app first**
+  (see *Uninstall* below; uninstalling clears the app's stored settings), then reinstall.
 - **Uninstall:** the camera's own menu, not the installer.
   `MENU → Application → Application Management → Manage and Remove` → pick the entry → remove.
   On some bodies `Application Management` sits one level deeper, under `Application List`, and
@@ -295,7 +355,7 @@ the daemon on the camera keeps running until you disable it in Tweak.
 | Installed but can't find the app | Looking in wrong menu | It is at `MENU → Application → Application List → Sony SOOC Recipes` |
 | App won't open / `no live preview: ...` | Another program holds the camera | Quit Photos/Image Capture/etc., reopen the app |
 | Stored a recipe but no effect | Camera hasn't re-read settings | **Power off and on** |
-| Garbled text `Â·` | Old APK build | Install the latest release APK |
+| Garbled text `Â·` | A build from before the text encoding was fixed | Reinstall from the current installer |
 | `adb: offline` / timeout / no device | Camera slept, IP changed, not same Wi-Fi, ADB off, or guest-network/VPN isolation | `adb disconnect` then reconnect; check guest isolation, VPN, and terminal local-network permission |
 | MTP works but `adb` can't find it | MTP and Wi-Fi ADB are **two different connections** | Enable ADB per Channel B step 2 |
 | `INSTALL_FAILED_UPDATE_INCOMPATIBLE` | Different signing key | Same key rebuild, or uninstall the same-package app first (clears settings) |

@@ -299,12 +299,12 @@ python tests/run_all.py
   Closes #NN
   ```
   新增用 `feat(recipes):`。引用确立该空白区间的 issue。
-- **打 tag → CI 构建 APK。** 推送 tag 触发 release workflow：它在钉死的 commit 上 clone 上游、
-  重新生成 `Recipes.java`、构建 APK，并挂到 GitHub Release 上。钉死的上游 SHA 同时存在于
-  `catalog/filters.json`（`sources.recipe-lab.fetched_rev`）和 `.github/workflows/release.yml`
-  （`UPSTREAM_SHA`）；`TestPinnedUpstream` 在两者漂移时失败。你通常不该改 `.github/`——若必须
-  移动 pin，请与维护者协调。
-- **上机验证仍归你。** CI 绿只证明文件一致，不证明颜色对。走 USB / Sony-PMCA-RE 通道
+- **构建 → 安装器带上它。** `tools/build_all_local.sh` 在钉死的 commit 上 clone 上游、重新生成
+  `Recipes.java`、把全部目标构建进 `dist/`，Windows 安装器打包的就是这个目录。钉死的上游 SHA
+  同时存在于 `catalog/filters.json`（`sources.recipe-lab.fetched_rev`）和 `tools/build_apk.sh`
+  （`UPSTREAM_SHA`）；`TestPinnedUpstream` 在两者漂移时失败。要移动 pin 就两处一起改——测试不会
+  让你只动一处。
+- **上机验证仍归你。** 关卡全绿只证明文件一致，不证明颜色对。走 USB / Sony-PMCA-RE 通道
   （`INSTALL.md`）装进去，存储配方，**关机再开机**（重启后消失的配方说明根本没写进去），
   在可丢弃素材上拍 JPEG，满意后把 `verified` 翻成 `true` 并在 `note` 记上机型 + 固件号。
 

@@ -1,5 +1,4 @@
-# Pentax Style — SonySOOCRecipes-pentax.apk
-
+# Pentax Style
 <p align="center"><a href="pentax.md">English</a> · <b>简体中文</b></p>
 
 ## 概要
@@ -8,7 +7,7 @@
 |---|---|
 | **应用名称** | Pentax Style |
 | **包名** | com.hairuoliu.sonysoocrecipes.pentax |
-| **APK 文件名** | SonySOOCRecipes-pentax.apk |
+| **随哪一档分发** | 仅完整版安装器 —— 免费的 Base 里没有 |
 | **已编译配方数** | 11 |
 | **来源分组** | Pentax（`pentax`） |
 | **目录版本** | 0.6.0（更新于 2026-09-13） |

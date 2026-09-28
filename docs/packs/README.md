@@ -1,11 +1,11 @@
-# APK catalog — what is inside every download
+# App catalog — what is inside every app
 
 <p align="center"><b>English</b> · <a href="README.zh-CN.md">简体中文</a></p>
 
-This folder documents **every APK the tree can build**: the all-in-one app
-plus eleven single-brand packs. Seven of the packs ship in the current release; the other
-four (`leica`, `ricoh`, `hasselblad`, `monochrome`) are marked `publish: false` in
-`catalog/packs.json` and are held back to ship separately. A brand pack is *the same app
+This folder documents **every app the tree can build**: the all-in-one app
+plus eleven single-brand packs. Six of the packs ship in the free **Base** installer; the other
+five (`leica`, `pentax`, `hasselblad`, `cinema`, `monochrome`) are marked `publish: false` in
+`catalog/packs.json` and ship only in the full installer. A brand pack is *the same app
 with the same recipes*, built once per brand with its own Android package name and its own
 launcher icon, so you can install only the brand you actually use. See
 **[../BRAND-PACKS.md](../BRAND-PACKS.md)** for what a pack is, why the package name must
@@ -13,14 +13,14 @@ differ, and the one-camera-one-active-recipe caveat before you install three pac
 three cameras.
 
 Every number below is computed from `catalog/filters.json` at catalog version **0.6.0**
-(updated 2026-09-13) and is checked by CI. A *compiled recipe* is one the APK can actually
-apply — it uses the settings-store engine (`recipe-lab`). The 15 `film-studio-matrix`
+(updated 2026-09-13) and is checked by the gates. A *compiled recipe* is one the app can
+actually apply — it uses the settings-store engine (`recipe-lab`). The 15 `film-studio-matrix`
 entries are recorded by name only (reference-only, non-redistributable) and appear in **no**
-APK, so they are excluded from every count here.
+app, so they are excluded from every count here.
 
-## The downloads
+## The apps
 
-| APK (app name) | Package name | Compiled recipes | Groups | Page |
+| App (app name) | Package name | Compiled recipes | Groups | Page |
 |---|---|---:|---|---|
 | **Sony SOOC Recipes** (all-in-one) | `com.hairuoliu.sonysoocrecipes` | **149** | 15 | [all-in-one](all-in-one.md) |
 | Leica Style | `com.hairuoliu.sonysoocrecipes.leica` | **20** | 1 | [leica](leica.md) |
@@ -32,8 +32,8 @@ APK, so they are excluded from every count here.
 | Niche Film Style | `com.hairuoliu.sonysoocrecipes.nichefilm` | **26** | 3 | [nichefilm](nichefilm.md) |
 | Hasselblad Style | `com.hairuoliu.sonysoocrecipes.hasselblad` | **4** | 1 | [hasselblad](hasselblad.md) |
 | Sony Style | `com.hairuoliu.sonysoocrecipes.sony` | **8** | 1 | [sony](sony.md) |
-| `cinema` | Cinema LUT | `com.hairuoliu.sonysoocrecipes.cinema` | **9** | 1 | [cinema](cinema.md) |
-| `monochrome` | Monochrome | `com.hairuoliu.sonysoocrecipes.monochrome` | **32** | 7 | [monochrome](monochrome.md) |
+| Cinema LUT Style | `com.hairuoliu.sonysoocrecipes.cinema` | **9** | 1 | [cinema](cinema.md) |
+| Monochrome Style | `com.hairuoliu.sonysoocrecipes.monochrome` | **32** | 7 | [monochrome](monochrome.md) |
 
 **149 + 20 + 16 + 10 + 11 + 20 + 11 + 26 + 4 + 8 + 9 + 32 = 316** recipe-listings, but the underlying
 catalog holds **164** filter entries (149 compiled + 15 reference-only). The sum exceeds
@@ -43,14 +43,14 @@ place instead of eleven.
 
 ## How to read a sub-page
 
-Each sub-page above states, for that APK:
+Each sub-page above states, for that app:
 
 - the exact **compiled recipe count** and the source group(s);
 - a one-to-two-sentence description of **what each recipe is** — the film or Creative Style
   it aims at, whether it is colour or black-and-white, and its dominant character;
 - the **key settings** behind each look (Creative Style, tone, and the notable saturation /
   contrast / sharpness / colour-matrix / picture-effect adjustments), drawn straight from the
-  catalog so they match what the APK actually applies.
+  catalog so they match what the app actually applies.
 
 > **Honest note.** These are community-derived *approximations*, not copies of any brand's
 > colour science. An a6000-class body has no Picture Profile menu and cannot store a tone

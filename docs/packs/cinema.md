@@ -1,14 +1,13 @@
-# Cinema LUT — SonySOOCRecipes-cinema.apk
-
+# Cinema LUT Style
 <p align="center"><b>English</b> · <a href="cinema.zh-CN.md">简体中文</a></p>
 
 ## Summary
 
 | | |
 |---|---|
-| App name | Cinema LUT |
+| App name | Cinema LUT Style |
 | Package name | com.hairuoliu.sonysoocrecipes.cinema |
-| APK filename | SonySOOCRecipes-cinema.apk |
+| **Ships in** | the full installer only — not in the free Base one |
 | Compiled recipes | 9 |
 | Source groups | Kino LUT |
 | Catalog version | 0.6.0 (updated 2026-09-13) |
@@ -99,7 +98,7 @@ The nine parameter sets here are **original work by this project** and are recor
 `catalog/filters.json` as `source: authored-here`. No LUT file, table or coefficient from the
 purchased pack is redistributed — what ships is a set of ordinary camera settings derived from
 measurements of that pack. The LUT pack itself is a commercial product and is **not** included
-in this repository or in any APK; you still need your own copy to use it in a raw workflow.
+in this repository or in any app we ship; you still need your own copy to use it in a raw workflow.
 See [NOTICE.md](../../NOTICE.md).
 
 ---

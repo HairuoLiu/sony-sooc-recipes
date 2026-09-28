@@ -17,6 +17,7 @@ ANDROID_KEY_PASSWORD
 *.apk
 *.idsig
 out/
+dist/
 
 # python
 __pycache__/

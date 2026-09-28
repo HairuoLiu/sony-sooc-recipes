@@ -61,9 +61,9 @@ def apk_name(pack: dict) -> str:
 
     A function rather than an inline f-string because it is the one piece of pack naming
     that two other places have to agree with: tools/build_matrix.py (which hands the name to
-    the release workflow, so the collect step knows what to pick up) and tests/test_packs.py.
-    Two copies of this rule is exactly how a release ends up asserting on a filename that
-    the build never produced.
+    tools/build_all_local.sh, so the installer picks up what the build wrote) and
+    tests/test_packs.py. Two copies of this rule is exactly how an installer ends up looking
+    for a filename that the build never produced.
     """
     return f"SonySOOCRecipes-{pack['id']}.apk"
 

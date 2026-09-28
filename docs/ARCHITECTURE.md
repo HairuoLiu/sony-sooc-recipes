@@ -255,10 +255,10 @@ brand together in the browser.
 
 ---
 
-## 7. The pipeline and its gates — from editing one number to a published APK
+## 7. The pipeline and its gates — from editing one number to a look on the camera
 
 This section traces one change from `filters.json` to a signed APK, and names every gate that can stop
-it. There are **eight CI gates** plus the release build.
+it. There are **eight CI gates**, and then the build itself.
 
 | # | Gate | Script | What it blocks |
 |---|---|---|---|
@@ -286,28 +286,34 @@ Steps in order:
 8. Gate 7 checks the bilingual document set: every document is either twinned or declared
    English-only, the shared `docs/assets/*.svg` diagrams carry no translated text, and the counts
    drawn inside those diagrams still match the catalog.
-9. On a `v*` tag, `release.yml` re-runs gates 1+1b, then clones upstream at the **pinned
+9. `tools/build_apk.sh` builds it: it re-runs gates 1 + 1b, clones upstream at the **pinned
    `UPSTREAM_SHA`**, rebrands the fork, applies the pack transform and the launcher icon, replays
-   the frosted main screen (`patch_ui.py`), regenerates, builds with JDK 17 + build-tools 30.0.3 +
-   NDK r16b, and attaches `SonySOOCRecipes-<tag>.apk` + a SHA-256 sum to the GitHub Release.
+   the frosted main screen (`patch_ui.py`), regenerates, and builds with JDK 17 + build-tools
+   30.0.3 + NDK r16b. The APK it produces is what the Windows installer carries to a camera —
+   this repository no longer publishes APKs of its own.
 
 > **Honest note.** The upstream revision is pinned in **two** places — `catalog/filters.json`
-> (`sources.recipe-lab.fetched_rev`) and `release.yml` (`UPSTREAM_SHA`) — and `test_catalog.py`
-> (`TestPinnedUpstream`) fails if they disagree. A tag must always build the exact upstream it was
-> validated against; an unpinned clone could build a different APK next month.
+> (`sources.recipe-lab.fetched_rev`) and `tools/build_apk.sh` (`UPSTREAM_SHA`) — and `test_catalog.py`
+> (`TestPinnedUpstream`) fails if they disagree. A build must always clone the exact upstream it was
+> validated against; an unpinned checkout could produce a different APK next month.
 >
-> The **build steps themselves** are written out twice for the same reason and carry the same risk:
-> once in `tools/build_apk.sh` and once in `release.yml`. `TestBuildPipelinesAgree` (same file) holds
-> them together, and that test is not theoretical — it exists because the drift had already happened.
-> `release.yml` was missing the `patch_ui.py` step, so the **v0.7.0 APKs shipped upstream's main
-> screen** while this file, the CHANGELOG and the README all described the frosted two-bar screen as
-> shipped. Every gate was green: the theme's tools were all tested, and nothing tested that the
-> release build ran them.
+> The **build steps themselves** used to be written out twice — once in `tools/build_apk.sh` and
+> once in `.github/workflows/release.yml` — and the two drifted, so a test held them together. That
+> workflow is gone: publishing runs through the Windows installer now, and `build_apk.sh` is the
+> only pipeline left. What survives of that test is `TestBuildPipelineSteps` (same file), which
+> asserts the script runs every transform tool `tools/` offers **in the order that makes them work**.
+>
+> It is not a theoretical test. `release.yml` was missing the `patch_ui.py` step, so the **v0.7.0
+> APKs shipped upstream's main screen** while this file, the CHANGELOG and the README all described
+> the frosted two-bar screen as shipped. Every gate was green: the theme's tools were all tested,
+> and nothing tested that the release build ran them.
 
-**Brand packs.** The same pipeline also builds one app per camera brand. `catalog/packs.json`
-lists the packs, and `release.yml` derives its build matrix from that file at run time — one
-job per pack plus the all-in-one, each cloning upstream fresh and running `apply_pack.py`, then
-`patch_ui.py`, then `gen_recipes.py --pack <id>`. A pack differs from the all-in-one only in package
+**Brand packs.** The same pipeline also builds one app per camera brand. `catalog/packs.json` lists
+the packs and which of them are public — the free installer's set — and `tools/build_matrix.py`
+derives a build list from that file. `tools/build_apk.sh --all-packs` walks the public set;
+`tools/build_all_local.sh` builds **all** of them, the held-back packs included, which is what has
+to run before the installer is rebuilt. Each target clones upstream fresh, then runs `apply_pack.py`,
+`patch_ui.py`, `gen_recipes.py --pack <id>`. A pack differs from the all-in-one only in package
 name, `app_name`, and launcher icon; the *why* is in [docs/BRAND-PACKS.md](BRAND-PACKS.md). Gate 6
 (`check_assets.py`) now also covers `assets/app-icon/` and every
 `assets/app-icon-packs/<icon_set>/`, so a missing density or an orphan icon set fails the build.
@@ -365,8 +371,7 @@ sony-sooc-recipes/
 │   ├── cases.json            pinned values for authored-here recipes
 │   └── smoke_browser.js      browser smoke test (CI gate 4)
 ├── .github/workflows/
-│   ├── ci.yml                all gates, split across jobs
-│   └── release.yml           tag → build APK → attach to Release
+│   └── ci.yml                all gates, split across jobs (the only workflow — no release job)
 ├── LICENSE                   MIT (this repo's code)
 └── NOTICE.md                 upstream attribution and licence boundaries
 ```
@@ -384,9 +389,9 @@ one thing to edit, review, and trust. The generator is the *only* writer of `Rec
 
 **Generated artifacts stay out of the repo.** `Recipes.java` and the APK are build outputs. Committing
 them would let them drift from the catalog — and CI gate 1b / gate 3 exist precisely to catch that drift.
-The generated Java is produced in CI (and locally, on demand) and uploaded as an artifact; the APK is
-produced only by `release.yml` and attached to a GitHub Release, never checked in. The signing key is
-local and never committed.
+The generated Java is produced in CI (and locally, on demand) and uploaded as a workflow artifact; the
+APK is produced only by `tools/build_apk.sh`, lands in `dist/`, and is packed into the Windows
+installer. Neither is ever checked in, and the signing key stays local.
 
 **Provenance is enforced, not documented.** The line between MIT (the upstream project, transcribed verbatim and
 locked by fidelity checks) and PolyForm Noncommercial (Film Studio, name-only) is a *test*, not a
@@ -417,8 +422,8 @@ survives exactly zero builds: the next build throws it away. So the only inputs 
 tracked ones, and the only writer of the layout is `patch_ui.py`. That is the same
 single-source-of-truth discipline as `filters.json` → `Recipes.java`, just one level further down.
 
-`patch_ui.py` runs in **both** pipelines — `build_apk.sh` locally, `release.yml` on a tag, which is
-what `TestBuildPipelinesAgree` exists to assert — **after** `apply_pack` and **before**
+`patch_ui.py` is a step of the build — the only one there is, now that `release.yml` is gone — which
+is what `TestBuildPipelineSteps` exists to assert, and it runs **after** `apply_pack` and **before**
 `gen_recipes`. The order
 is not arbitrary: the layout references the app's custom views by fully-qualified class name, and
 `apply_pack` renames that class name per brand pack and fills the package in from the checkout's own

@@ -14,11 +14,12 @@ image host — a README whose pictures rot is worse than a README with no pictur
 docs/assets/
   architecture.svg        how the catalog becomes camera settings
   engines.svg             the two engines compared
-  install-flow.svg        download → check → install → verify
+  install-flow.svg        download the installer → run it → one click
   parameters.svg          what a look can be made of, and what it cannot
   hardware/               photos of a real body running the app  ← contributed
   samples/                before/after photographs        ← contributed
-  install/                screenshots of the install flow  ← contributed
+  install/en/             screenshots of the Windows installer, English build
+  install/zh-CN/          the same three screens, Chinese build
   README.md               this file
 ```
 
@@ -56,11 +57,18 @@ enough that cloning the repository stays pleasant. Under ~600 KB per file.
 ## Install screenshots
 
 ```
-install/<NN>-<slug>.png
+install/<lang>/<NN>-<slug>.png        lang is en or zh-CN
 ```
 
-`01-connect-usb.png`, `02-pmca-re-install.png`, `03-app-on-camera.png`, … Numbered so a
-reader can follow the order without being told. PNG for UI captures — JPEG smears text.
+`en/01-connect-camera.png`, `en/02-choose-packs.png`, `en/03-installing.png`, and the same
+three names under `zh-CN/`, … Numbered so a reader can follow the order without being told.
+PNG for UI captures — JPEG smears text.
+
+**The language is a directory, not a filename suffix.** The two sets are the *same* three
+screens of the *same* installer, differing only in the language it renders; a suffix would
+let one set drift out of step with the other without anyone noticing that `03` no longer
+matches `03`. One directory per language keeps the pairing obvious, and it is what lets the
+English README show English screens while the Chinese README shows Chinese ones.
 
 Crop to the window or screen that matters. A 4K desktop screenshot where the relevant
 dialogue is 200 px wide is not a usable screenshot.
@@ -118,7 +126,9 @@ These are photographs of hardware, not screen captures, so the rule differs from
 - 示意图：`architecture.svg` / `engines.svg` / `install-flow.svg` / `parameters.svg`
 - 实拍样张：`samples/<配方 id>--off.jpg` 和 `--on.jpg` 成对，id 必须与
   `catalog/filters.json` 里的 `id` 完全一致
-- 安装截图：`install/<两位序号>-<英文短名>.png`，序号保证阅读顺序
+- 安装截图：`install/<语言>/<两位序号>-<英文短名>.png`，语言目录是 `en` 或 `zh-CN`，
+  序号保证阅读顺序。**语言做成目录、不做文件名后缀**：两套是同一个安装器的同样三屏，
+  只差渲染语言；用后缀的话某一天 `03` 和 `03` 不再对应也没人看得出来
 - 真机照片：`hardware/<两位序号>-<机身>-<英文短名>.jpg`，**机身名必须进文件名**——
   这张照片的全部价值就是"某一台**指名**的机器跑起来了"，不写机身的照片只能证明"某台机器跑起来了"
 

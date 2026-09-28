@@ -15,7 +15,8 @@ replaced with supplied cover art:
 - `pentax`, `ricoh` and `sony` are each a user-supplied film product image — the user has confirmed the picture, and no model or stock name is claimed for any of them.
 - `cinema` and `monochrome` are cross-brand selections with no single product to photograph
   honestly, so they shipped as drawn masters until 2026-09-27, when the user supplied a cover
-  image for each. They are now supplied images like the other nine.
+  image for each. They are now supplied images like the other nine. `monochrome`'s cover was
+  swapped once more on 2026-09-28, for a supplied black-and-white film-strip drawing.
 
 So the "famous camera" premise holds for only **three** of the eleven packs (`leica`, `fujifilm`,
 `hasselblad`); another **six** (`filmstocks`, `ricoh`, `kodak`, `pentax`, `nichefilm`, `sony`)
@@ -41,9 +42,9 @@ are excluded on purpose:
 
 CC BY remains acceptable in principle because it permits commercial use, at the cost of a
 mandatory attribution obligation. That obligation is discharged in three places, all of which
-must stay in sync: this file, `NOTICE.md`, and the release notes for the pack in question (a
-user who downloads only `SonySOOCRecipes-kodak.apk` never sees this repository, so the credits
-have to travel with the APK). **No CC BY image is currently in use**, so the obligation is
+must stay in sync: this file, `NOTICE.md`, and the notes shipped for the pack in question (a
+user who installs only the Kodak pack never sees this repository, so the credits have to travel
+with the app). **No CC BY image is currently in use**, so the obligation is
 dormant — it resumes the day a licensed photograph is added.
 
 ### The rule was deliberately relaxed for all eleven user-supplied images
@@ -59,13 +60,13 @@ domain) was granted:
 - **no licence was granted** by the rights holder — this is not "used with permission",
   because nothing was licensed;
 - the **publishing party carries the risk** of distributing all-rights-reserved photographs
-  inside the APK. That risk is the publisher's to accept or decline; it is recorded here
+  inside the app. That risk is the publisher's to accept or decline; it is recorded here
   rather than hidden.
 
 Because nothing licensed ships, the former CC BY credit lines for `ricoh` (Ricoh GR by
 Kārlis Dambrāns) and `pentax` (Pentax K1000 by Terry Presley) have been removed from this
 file, from `NOTICE.md` and from the release notes. Removing them is the honest move: keeping a
-credit for a photograph that no longer ships would attribute material the APK does not contain.
+credit for a photograph that no longer ships would attribute material the app does not contain.
 
 ## Attribution table
 
@@ -87,17 +88,17 @@ therefore no CC BY material in the table any more.
 | `nichefilm` | CineStill film product | user-supplied product photograph | **All rights reserved** — user-supplied, no licence granted | user-supplied (pasted image) |
 | `hasselblad` | Hasselblad X2D II 100C (2022) | cameraelectronic.com.au — official X2D II 100C render (Shopify CDN) | **All rights reserved** — user-supplied, no licence granted | cameraelectronic.com.au product page (Shopify CDN) |
 | `sony` | Sony film product (user-supplied) | user-supplied product photograph | **All rights reserved** — user-supplied, no licence granted | user-supplied (pasted image) |
-| `cinema` | supplied cover art (replaced the drawn 35 mm negative strip, 2026-09-27) | user-supplied cover image | **All rights reserved** — user-supplied, no licence granted | user-supplied (pasted image) |
-| `monochrome` | supplied cover art (replaced the drawn aperture, 2026-09-27) | user-supplied cover image | **All rights reserved** — user-supplied, no licence granted | user-supplied (pasted image) |
+| `cinema` | supplied cover art — a cine camera (drawn 35 mm negative strip until 2026-09-27; cut out onto the dark tile 2026-09-28) | user-supplied cover image | **All rights reserved** — user-supplied, no licence granted | user-supplied (pasted image) |
+| `monochrome` | supplied cover art — a black-and-white 35 mm film strip (drawn aperture until 2026-09-27; this drawing supplied 2026-09-28) | user-supplied cover image | **All rights reserved** — user-supplied, no licence granted | user-supplied (pasted image) |
 
 No pack currently needs a visible credit for its icon, because none ships licensed material;
 the whole set is user-supplied and unlicensed, and the distribution risk sits with the
 publisher instead. If a CC BY image is ever added again, it must be marked as such here, in
-`NOTICE.md` and in that pack's release notes — an APK is distributed on its own, so a credit
+`NOTICE.md` and in that pack's notes — an app is distributed on its own, so a credit
 that exists only in this repository does not travel with it.
 
 Removing the old CC BY entries was part of this change, not an oversight: a credit describing a
-photograph that is no longer in the APK would be inaccurate in exactly the way a missing
+photograph that is no longer in the app would be inaccurate in exactly the way a missing
 credit is.
 
 ## Rejected: the first Fujifilm pick
@@ -157,14 +158,19 @@ depicted. The reasoning, kept here so it can be argued with rather than rediscov
 - **cinema — supplied cover art** — this pack ships a commercial cine-LUT look, not a
   brand and not a stock: its recipes are a measured transcription of one purchased .cube set, so
   there is no camera and no film canister that would be honest to show. It therefore carried a
-  **drawn** master (an amber 35 mm negative strip on a near-black tile) from v0.82 until
+  **drawn** master (an amber 35 mm negative strip on a near-black tile) until
   2026-09-27, when the user supplied cover art for it. That drawing was the only artwork in the
   set with no rights holder at all; the pack now carries the same distribution risk as the other
-  ten, recorded in the table above rather than hidden.
+  ten, recorded in the table above rather than hidden. On 2026-09-28 that cover was cut out with
+  `rembg` — its background is pure white, so a plain segmentation is enough — and placed on the
+  same dark rounded tile as the rest, so all eleven packs now render identically.
 - **monochrome — supplied cover art** — this pack is a multi-brand filter whitelist, not a brand,
   so there is no single product to photograph honestly. It followed the `cinema` template with a
-  **drawn** aperture on the same near-black tile (RGB(28,28,30) ≈ #1C1C1E) from v0.84 until
-  2026-09-27, when the user supplied cover art for it too.
+  **drawn** aperture on the same near-black tile (RGB(28,28,30) ≈ #1C1C1E) until
+  2026-09-27, when the user supplied cover art for it too. That cover was itself replaced on
+  2026-09-28 by a supplied black-and-white film-strip drawing — a silhouette that reads as *film*
+  rather than as a product, matching the six film packs and the strip motif the `cinema` pack had
+  used before its own cover arrived.
 
 ## How the masters were produced
 
@@ -179,8 +185,20 @@ painted on the same near-black the renderer uses for its tiles (RGB(28,28,30) �
 the framing step finds the subject by comparing it against the master's own border colour, and a
 charcoal strip on a near-black background would have fallen inside its 26-per-channel tolerance
 and been read as background rather than as a subject. That is why the strip was amber. Both were
-replaced with user-supplied cover art on 2026-09-27 and are rendered exactly like the rest:
+replaced with user-supplied cover art on 2026-09-27, and on 2026-09-28 `cinema`'s cover was cut
+out with `tools/cut_camera_covers.py` — so both now sit on the dark tile as silhouettes and are
+rendered exactly like the rest:
 `python tools/build_pack_icons.py --pack cinema`.
+
+`monochrome`, re-sourced on 2026-09-28, is the one case where the cut-out is **not** produced by
+`tools/cut_camera_covers.py`: that script runs rembg (U2-Net), which is trained on photographs and
+does not segment an ink drawing. Its artwork is a black-and-white strip on pure white with a faint
+watermark in the paper, and the strip is enclosed by dark outlines — so the cut-out is made by
+labelling the bright mask and dropping every component that touches the image border, which removes
+the paper *and* the watermark while leaving the drawing's own white sprocket holes opaque (they are
+interior, so the border never reaches them). The subject is then centred at the same `FILL = 0.80`
+as `cut_camera_covers.py`, so `tools/build_pack_icons.py` renders it on the identical dark tile:
+`python tools/build_pack_icons.py --pack monochrome`.
 
 ```
 python tools/build_pack_icons.py --import <dir-of-<pack-id>.jpg>   # bring a master in

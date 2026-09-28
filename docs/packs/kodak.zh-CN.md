@@ -1,12 +1,11 @@
-# Kodak Style — SonySOOCRecipes-kodak.apk
-
+# Kodak Style
 <p align="center"><a href="kodak.md">English</a> · <b>简体中文</b></p>
 
 ## 概要
 
 - **应用名称：** Kodak Style
 - **包名：** com.hairuoliu.sonysoocrecipes.kodak
-- **APK 文件名：** SonySOOCRecipes-kodak.apk
+- **随哪一档分发：** 免费的 Base 安装器 —— 安装时勾上即可
 - **已编译配方数：** 20
 - **来源分组：** Kodak（`kodak`）
 - **目录版本：** 0.6.0（更新于 2026-09-13）

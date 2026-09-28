@@ -151,16 +151,29 @@ public class PickerView extends View {
         int first = Math.max(0, Math.min(flat - visible / 2, total - visible));
         if (summaries == null) summaries = new String[Recipes.ALL.length];
 
-        // top header
-        head.setColor({picker_ink});
-        c.drawText((Recipes.ZH ? "配方  ·  " : "RECIPES  ·  ") + Recipes.ALL.length, pad, pad + 7 * d, head);
+        // top header: "配方 · N" on the left, drawn at the list size (13sp) and bold so it
+        // reads as the same weight as the rows below; the key legend is flushed to the right.
+        item.setColor({picker_ink}); item.setFakeBoldText(true);
+        String title = (Recipes.ZH ? "配方  ·  " : "RECIPES  ·  ") + Recipes.ALL.length;
+        float titleW = item.measureText(title);
+        c.drawText(title, pad, pad + 9 * d, item);
+        item.setFakeBoldText(false);
         c.drawLine(pad, top - 5 * d, w - pad, top - 5 * d, rule);
+        // key legend (move / settings / close) flush to the right edge of the header band.
+        // Legend.draw fills whatever window it is given, so anchoring the window at xr right-aligns it.
+        float legW = xr - (pad + titleW + 14 * d);
+        if (legW > 40 * d) legend.draw(c, pad + titleW + 14 * d, pad + 5 * d, legW, ICONS, TEXT);
 
         // list
         // Anchor row `first` at the top of the viewport, so the window scrolls with the
         // selection. The naive version (y = listTop + drawFlat*rowH) draws every row at its
         // absolute offset, which pushes the selected recipe far below `bottom` the moment
         // you scroll past the first screenful — the panel renders blank.
+        // Clip the list to the band between the top rule and the bottom rule. Without this the
+        // last partially-visible row ran past the bottom line; now the menu always stays inside
+        // the two rules, matching the main screen's header/footer framing.
+        c.save();
+        c.clipRect(x - 6 * d, top, xr + 6 * d, bottom);
         float y = listTop - first * rowH;
         int drawFlat = 0;
         for (int gg = 0; gg < ng; gg++) {
@@ -168,14 +181,14 @@ public class PickerView extends View {
             if (count == 0) continue;                       // this APK carries none of them
             boolean headerVisible = drawFlat >= first && y < bottom;
             if (headerVisible) {
-                // v0.89: a full-width divider marks where a new brand starts, so scrolling
-                // past a boundary is visible instead of something you have to read. It is
-                // skipped only when the header is the first thing in the viewport, where a
-                // line with nothing above it reads as a stray artefact.
-                if (y > listTop + d) c.drawLine(pad, y + d, w - pad, y + d, rule);
-                // v0.91: the brand name is as big as the recipe names below it (item 13sp,
-                // not head 9sp), and the count moved to the far right of the row — it is
-                // metadata (how many are in this group), not a label.
+                // v0.89 (amended v1.x): a full-width divider marks where a new brand starts,
+                // so scrolling past a boundary is visible instead of something you have to read.
+                // It is placed BELOW the brand name (an underline), so the brand caption sits
+                // ABOVE the line rather than under it. The line is skipped only when it would
+                // fall below the viewport's bottom rule (the last partially-visible header row).
+                // v0.91: the brand name is as big as the recipe names below it (item 13sp, not
+                // head 9sp), and the count moved to the far right of the row — it is metadata
+                // (how many are in this group), not a label.
                 item.setColor({picker_ink});
                 item.setFakeBoldText(true);
                 c.drawText(Recipes.GROUPS[gg].toUpperCase(), x, y + 17 * d, item);
@@ -183,6 +196,7 @@ public class PickerView extends View {
                 small.setColor({picker_dim});
                 String cnt = String.valueOf(count);
                 c.drawText(cnt, xr - small.measureText(cnt), y + 17 * d, small);
+                if (y + 27 * d < bottom) c.drawLine(pad, y + 27 * d, w - pad, y + 27 * d, rule);
             }
             drawFlat++; y += rowH;
             for (int k = 0; k < count; k++, drawFlat++) {
@@ -242,6 +256,7 @@ public class PickerView extends View {
             }
             if (y > bottom && drawFlat >= first + visible) break;
         }
+        c.restore();
 
         // scrollbar
         if (total > visible) {
@@ -254,8 +269,8 @@ public class PickerView extends View {
             c.drawRoundRect(r, sbW / 2, sbW / 2, thumb);
         }
 
-        // footer: key legend
+        // footer rule — the bottom line the list must stay above. The key legend now lives in
+        // the header, so the browser's hints no longer sit beneath the list.
         c.drawLine(pad, h - pad - 20 * d, w - pad, h - pad - 20 * d, rule);
-        legend.draw(c, pad, h - pad - 10 * d, w - 2 * pad, ICONS, TEXT);
     }
 }
