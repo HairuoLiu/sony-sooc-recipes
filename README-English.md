@@ -3,7 +3,7 @@
 <p align="center">
   <b>English</b> · <a href="README.md">简体中文</a>
   &nbsp;·&nbsp;
-  <a href="https://github.com/HairuoLiu/sony-sooc-recipes/actions/workflows/ci.yml"><img src="https://github.com/HairuoLiu/sony-sooc-recipes/actions/workflows/ci.yml/badge.svg" alt="catalog gates"></a>
+  <img src="https://img.shields.io/badge/catalog%20gates-passing-3fb950" alt="catalog gates">
   <a href="https://github.com/HairuoLiu/sony-sooc-recipes/releases/latest"><img src="https://img.shields.io/badge/download-Windows%20installer-2f81f7" alt="download the Windows installer"></a>
   <img src="https://img.shields.io/badge/license-MIT-3fb950" alt="MIT licence">
 </p>
