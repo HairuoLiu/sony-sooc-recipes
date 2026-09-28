@@ -491,3 +491,55 @@ NDK r16b), so the rule is checked on the text instead.
 > **Honest note.** This is the one gate whose loss would not even turn CI red: the silent `-A
 > assets` fallback means a missing font ships as Droid Sans with no error anywhere. The layout and
 > colour checks are mechanical; the font flag is the part you have to notice by hand.
+
+---
+
+## 11. Using it on the camera
+
+This section is the user-facing half of the story — how a look is chosen and stored once the app is
+installed. The *why* (what a recipe writes, and what the hardware cannot do) is [§4](#4-what-a-recipe-actually-changes)
+and [§5](#5-the-engine-ceiling--what-this-camera-cannot-do); this is the *how*. It is kept out of the
+README on purpose: a visitor should see the film simulations and the install steps first.
+
+### Three screens
+
+Opening the app gives a **single frosted bar** straight away — one slim floating pill holding the whole
+readout on one line: the look's name, its brand badge (`PENTAX` / `KODAK` / `LEICA` …; ZH `宾得` / `柯达` /
+`徕卡` …) and its position. The pill hugs the text — no vertical padding, no font leading — and the live
+view keeps the rest of the frame. Press **AEL** or **DISP** to cycle the overlay: bar → compact pill →
+pure viewfinder → bar. Press **up** to move from the name onto the parameters — the selected one is marked
+with an outlined capsule; **left / right** then move between parameters.
+
+Press **Fn** for the **recipe browser**: one white single-column list of every look this pack carries,
+grouped by category. Each row carries its name, a one-line summary, and a `CS` / `PE` chip — Creative Style
+also reaches RAW, Picture Effect only lands on JPEG. The highlighted row also carries a `SET` chip.
+
+| Key | Does |
+| --- | --- |
+| ↑ ↓ or either dial | move through every look |
+| centre button · right | open the settings editor on the highlighted look |
+| ← · Fn · MENU · AEL · DISP | close the browser |
+
+The **editor** is a vertical list of every parameter — label on the left, its current value always on the
+right — shown on its own so the frame stays open while you dial a value. Rows a Picture Effect overrides
+(style, saturation, contrast, sharpness, matrix, strength) are still listed, greyed out, with their value
+readable and a *(read-only)* note — so a GR high-contrast look shows all its rows instead of looking like it
+lost half of them. Every route that stores a look ends with the overlay hidden.
+
+### The "Strength" dial
+
+A **Strength dial, 0–100 % (step 5, default 100 %)** scales the look's saturation, contrast, sharpness and
+EV offsets by that ratio before they reach the camera — 100 % is the recipe exactly as authored, 50 % halves
+every adjustment, 0 % is neutral. The value is remembered in the app's own settings and is **not** written to
+the camera.
+
+### Storing and reset
+
+Pick a group, scroll with the control wheel, press the centre button to store, then power-cycle — some
+settings only settle after a restart. **Picture Effect looks need JPEG**: with a Picture Effect active, RAW
+and RAW+JPEG quietly discard the effect. The **a5100 has no Fn or AEL button**, so brand-list browsing and
+the hidden panel are unreachable there; the control wheel still reaches every look.
+
+To remove a stored look: in the app press **TRASH** + centre button, then power-cycle, or from the camera
+`Setup → Setting Reset → Camera Settings Reset`. See [Uninstall](../README.md#uninstall) for removing the
+app itself.
