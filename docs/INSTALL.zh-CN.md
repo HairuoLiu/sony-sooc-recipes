@@ -68,6 +68,8 @@ all-in-one——单独分发。完整清单和取舍见 [BRAND-PACKS.md](BRAND-P
 
 ### 运行
 
+> 🖼️ **想要更大、能左右翻的版本？** 打开[交互式安装演示](install-walkthrough.html)——三步可翻页，底部说明同步滚动（用方向键或滑动）。
+
 <p align="center">
   <img src="assets/install/zh-CN/01-connect-camera.png" width="250" alt="第 1 步：已识别到相机，下方有「重新检测」按钮">
   <img src="assets/install/zh-CN/02-choose-packs.png" width="250" alt="第 2 步：它带的包全部勾上，右上角有全选框">
