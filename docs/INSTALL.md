@@ -80,12 +80,10 @@ the whole catalog — are distributed separately. The full list and the reasonin
 
 ### Run it
 
-> 🖼️ **Want a bigger, swipeable view?** Open the [interactive install walkthrough](install-walkthrough.html) — flip through the three steps with synced captions (arrow keys or swipe).
-
 <p align="center">
-  <img src="assets/install/en/01-connect-camera.png" width="250" alt="Step 1: Camera connected, with a Detect Again button">
-  <img src="assets/install/en/02-choose-packs.png" width="250" alt="Step 2: the packs it carries, all ticked, with a Select All box">
-  <img src="assets/install/en/03-installing.png" width="250" alt="Step 3: a progress bar reading Installing 1/6">
+  <img src="assets/install/en/01-connect-camera.png" width="330" alt="Step 1: Camera connected, with a Detect Again button">
+  <img src="assets/install/en/02-choose-packs.png" width="330" alt="Step 2: the packs it carries, all ticked, with a Select All box">
+  <img src="assets/install/en/03-installing.png" width="330" alt="Step 3: a progress bar reading Installing 1/6">
   <br><sub>Connect · Choose · Install — the three screens between the .exe and a camera full of looks.</sub>
 </p>
 
